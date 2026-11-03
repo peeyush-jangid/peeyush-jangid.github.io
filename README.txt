@@ -30,3 +30,12 @@ NOTES
 - This is a static HTML/CSS/JS site; no build tools or paid hosting are required.
 - Google Fonts and the sample project photos load from the internet. Replace sample photos with real project images for a stronger portfolio.
 - The current published resume URL was identified as a PDF. Add a copy of that PDF to the assets folder using the filename above.
+
+PRIVATE EXCEL & WORD UPLOAD MANAGER
+- Upload admin.html, admin.css, admin.js and work-files.js with the updated index.html and style.css.
+- Open https://peeyush-jangid.github.io/admin.html to manage work samples.
+- Create a GitHub fine-grained personal access token for ONLY this repository, with Contents: Read and write permission and a short expiry. Never commit or share the token.
+- Paste the token in the admin page when uploading. It is held in page memory only, not localStorage.
+- Files are committed to documents/ and listed automatically in the public Work Showcase.
+- GitHub Pages is static: GitHub repository permissions provide the upload gate. Keep the token private and revoke it when no longer needed. Published documents are public; do not upload confidential files.
+- Max upload size: 8 MB per file.
