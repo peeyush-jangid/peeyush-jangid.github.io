@@ -39,3 +39,4 @@ PRIVATE EXCEL & WORD UPLOAD MANAGER
 - Files are committed to documents/ and listed automatically in the public Work Showcase.
 - GitHub Pages is static: GitHub repository permissions provide the upload gate. Keep the token private and revoke it when no longer needed. Published documents are public; do not upload confidential files.
 - Max upload size: 8 MB per file.
+Website update
