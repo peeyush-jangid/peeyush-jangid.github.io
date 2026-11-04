@@ -13,8 +13,7 @@
   .hero{grid-template-columns:1.05fr .95fr;gap:40px;padding-top:58px}
 }
 .details-card {
-  margin: 28px 0 8px;
-  max-width: 640px;
+  margin: 0;
   border: 1px solid rgba(214, 177, 105, 0.3);
   background: rgba(255, 255, 255, 0.03);
 }
@@ -85,3 +84,12 @@
   .detail-item:nth-last-child(-n+2) { border-bottom: 1px solid rgba(255, 255, 255, 0.07); }
   .detail-item:last-child { border-bottom: none; }
 }
+
+/* About section */
+.about-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch}
+.about-text{background:linear-gradient(145deg,#151720,#0e1016);border:1px solid rgba(255,255,255,.08);padding:30px}
+.about-text p{font-size:13px;line-height:2;color:var(--muted);margin:0 0 16px}
+.about-text p:first-child{color:#e0d7c6;font-size:15px}
+.about-tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px}
+.about-tags span{padding:9px 11px;border:1px solid rgba(214,179,106,.17);color:#c8c1b4;font-size:10px;background:rgba(128,94,42,.06)}
+@media(max-width:760px){.about-layout{grid-template-columns:1fr}}
