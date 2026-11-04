@@ -36,3 +36,21 @@ if ('IntersectionObserver' in window) {
   document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
   document.querySelectorAll('.skill-row').forEach(row => row.style.setProperty('--level', `${row.dataset.level}%`));
 }
+
+// Side menu opened by clicking the P logo.
+(() => {
+  const toggle = document.querySelector('.side-toggle');
+  const side = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (!toggle || !side) return;
+  const setOpen = open => {
+    document.body.classList.toggle('side-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    side.setAttribute('aria-hidden', String(!open));
+  };
+  toggle.addEventListener('click', () => setOpen(!document.body.classList.contains('side-open')));
+  overlay?.addEventListener('click', () => setOpen(false));
+  side.querySelector('.sidebar-close')?.addEventListener('click', () => setOpen(false));
+  side.querySelectorAll('.sidebar-links a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+})();

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get in touch | Peeyush Kumar Jangid</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .form-page{min-height:100vh;display:grid;place-items:center;padding:60px 5%}
+    .form-card{width:min(560px,100%);background:linear-gradient(145deg,#151720,#0e1016);border:1px solid rgba(214,179,106,.3);padding:34px}
+    .form-card h1{font:800 30px var(--display);letter-spacing:-1px;margin:14px 0 8px}
+    .form-card>p{color:var(--muted);font-size:12px;line-height:1.8;margin:0 0 24px}
+    .form-card label{display:block;font-size:10px;letter-spacing:1.6px;color:var(--gold);font-weight:700;margin:16px 0 7px}
+    .form-card input,.form-card textarea{width:100%;padding:13px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);color:var(--ink);font:14px var(--body);outline:none}
+    .form-card input:focus,.form-card textarea:focus{border-color:var(--gold)}
+    .form-card textarea{min-height:120px;resize:vertical}
+    .form-card .btn{width:100%;margin-top:24px;border:0;cursor:pointer}
+    .form-back{display:inline-block;margin-top:18px;font-size:10px;letter-spacing:1.2px;color:#c6b58e}
+    .sent{display:none;padding:14px;margin-bottom:20px;border:1px solid rgba(143,240,180,.4);background:rgba(143,240,180,.08);color:#8ff0b4;font-size:12px}
+  </style>
+</head>
+<body>
+  <main class="form-page">
+    <div class="form-card">
+      <span class="section-kicker">OPEN TO WORK</span>
+      <h1>Let’s connect</h1>
+      <p>Share your details and I will get back to you about HVAC project engineering and site coordination opportunities.</p>
+      <div class="sent" id="sent">Thank you! Your message has been sent. I will reply soon.</div>
+      <form action="https://formsubmit.co/peeyush.jangid@outlook.com" method="POST">
+        <input type="hidden" name="_subject" value="New opportunity enquiry from portfolio" />
+        <input type="hidden" name="_next" value="https://peeyush-jangid.github.io/contact.html?sent=1" />
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+        <label for="name">YOUR NAME</label><input id="name" name="name" required />
+        <label for="company">COMPANY / ORGANISATION</label><input id="company" name="company" />
+        <label for="email">EMAIL</label><input id="email" name="email" type="email" required />
+        <label for="phone">PHONE</label><input id="phone" name="phone" type="tel" />
+        <label for="message">MESSAGE</label><textarea id="message" name="message" required></textarea>
+        <button class="btn btn-primary" type="submit">Send message <span>↗</span></button>
+      </form>
+      <a class="form-back" href="index.html">← BACK TO PORTFOLIO</a>
+    </div>
+  </main>
+  <script>if(new URLSearchParams(location.search).get('sent'))document.getElementById('sent').style.display='block';</script>
+</body>
+</html>
