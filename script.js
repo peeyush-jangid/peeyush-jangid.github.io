@@ -1,38 +1,22 @@
-// Premium portfolio interactions: mobile menu, reveal-on-scroll and skill meters.
-const menuButton = document.querySelector('.menu-toggle');
-const nav = document.querySelector('.nav-links');
-menuButton?.addEventListener('click', () => {
-  const open = nav.classList.toggle('open');
-  menuButton.setAttribute('aria-expanded', String(open));
-});
-nav?.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
-  nav.classList.remove('open');
-  menuButton?.setAttribute('aria-expanded', 'false');
-}));
-const year = document.getElementById('year');
-if (year) year.textContent = new Date().getFullYear();
-if ('IntersectionObserver' in window) {
-  const revealObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-  const skillObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const row = entry.target;
-        row.style.setProperty('--level', `${row.dataset.level}%`);
-        row.classList.add('in-view');
-        skillObserver.unobserve(row);
-      }
-    });
-  }, { threshold: 0.45 });
-  document.querySelectorAll('.skill-row').forEach(row => skillObserver.observe(row));
-} else {
-  document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
-  document.querySelectorAll('.skill-row').forEach(row => row.style.setProperty('--level', `${row.dataset.level}%`));
-}
+// Scroll reveal
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// Work Showcase: reads the list kept by admin.html (work-files.js).
+// Tries common global names; adjust here if your work-files.js uses a different one.
+(function(){
+  const box=document.getElementById('work-list');if(!box)return;
+  const src=window.WORK_FILES||window.workFiles||window.WORK_SHOWCASE||window.workShowcase||window.FILES||[];
+  const list=Array.isArray(src)?src:(src.files||[]);
+  if(!list.length)return; // keeps the "Coming soon" placeholder
+  box.innerHTML='';
+  list.forEach(f=>{
+    const url=f.path||f.url||f.href||(f.name?'documents/'+encodeURIComponent(f.name):'#');
+    const name=f.title||f.name||url.split('/').pop();
+    const ext=(f.type||name.split('.').pop()||'file').toUpperCase();
+    const a=document.createElement('a');a.className='card';a.href=url;a.setAttribute('download','');
+    a.innerHTML='<span class="badge"></span><h3 style="margin-top:14px"></h3><p></p><p style="color:var(--deep);font-weight:500;opacity:1;margin-top:18px">Download ↓</p>';
+    a.querySelector('.badge').textContent=ext;a.querySelector('h3').textContent=name;a.querySelector('p').textContent=f.description||f.note||'';
+    box.appendChild(a);
+  });
+})();
