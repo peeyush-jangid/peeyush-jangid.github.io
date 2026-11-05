@@ -4,6 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#071426" />
+  <script>
+    /* Intro loader shows once per browser session; skipped for reduced-motion users */
+    (function () {
+      var r = document.documentElement;
+      try {
+        if (!sessionStorage.getItem('pk-intro') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) { r.classList.add('has-loader'); }
+        else { r.classList.add('loaded'); }
+      } catch (e) { r.classList.add('loaded'); }
+    })();
+  </script>
   <meta name="description" content="Peeyush Kumar Jangid — HVAC Project Engineer with experience in site supervision, HVAC execution, AutoCAD 2D and project coordination." />
   <title>Peeyush Kumar Jangid | HVAC Project Engineer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -70,6 +80,59 @@
       *, *::before, *::after { animation: none !important; transition: none !important; }
       .cursor-glow { display: none; }
     }
+
+    /* ===== Premium motion layer ===== */
+    html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 90px; }
+
+    /* Intro loader: ring draws, name fades in, curtain lifts */
+    .preloader { position: fixed; inset: 0; z-index: 1000; display: none; place-items: center; background: #060b14; transition: transform .95s cubic-bezier(.77, 0, .18, 1); }
+    .has-loader .preloader { display: grid; }
+    .preloader.done { transform: translateY(-100%); }
+    .has-loader:not(.loaded) body { overflow: hidden; }
+    .pre-inner { display: grid; gap: 14px; justify-items: center; text-align: center; }
+    .pre-logo { position: relative; width: 96px; height: 96px; display: grid; place-items: center; font: 700 2rem 'Manrope', sans-serif; color: #f4efe6; }
+    .pre-logo b { color: #d6b36a; }
+    .pre-logo svg { position: absolute; inset: 0; width: 100%; height: 100%; rotate: -90deg; }
+    .pre-logo circle { fill: none; stroke: #d6b36a; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 289; stroke-dashoffset: 289; animation: drawRing 1.4s .1s cubic-bezier(.65, 0, .35, 1) forwards; }
+    .pre-name { margin-top: 10px; font: 600 .8rem 'Manrope', sans-serif; letter-spacing: .32em; color: #f4efe6; opacity: 0; animation: fadeUp .8s .5s ease forwards; }
+    .pre-sub { font: 500 .66rem 'Manrope', sans-serif; letter-spacing: .3em; color: #d6b36a; opacity: 0; animation: fadeUp .8s .7s ease forwards; }
+    .pre-bar { width: 160px; height: 2px; margin-top: 8px; background: rgba(255, 255, 255, .12); border-radius: 2px; overflow: hidden; }
+    .pre-bar i { display: block; width: 100%; height: 100%; background: linear-gradient(90deg, #b8975a, #f0d79a); scale: 0 1; transform-origin: left; animation: fillBar 1.7s .1s cubic-bezier(.65, 0, .35, 1) forwards; }
+    @keyframes drawRing { to { stroke-dashoffset: 0; } }
+    @keyframes fillBar { to { scale: 1 1; } }
+    @keyframes fadeUp { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
+
+    /* Hero entrance: staggered rise + blur-in, starts after the loader lifts */
+    @keyframes riseIn { from { opacity: 0; translate: 0 28px; filter: blur(6px); } to { opacity: 1; translate: 0 0; filter: blur(0); } }
+    @keyframes scaleIn { from { opacity: 0; scale: .94; translate: 0 24px; } to { opacity: 1; scale: 1; translate: 0 0; } }
+    .hero-copy > * { animation: riseIn 1s cubic-bezier(.2, .7, .2, 1) both; }
+    .hero-copy > :nth-child(1) { animation-delay: .15s; }
+    .hero-copy > :nth-child(2) { animation-delay: .27s; }
+    .hero-copy > :nth-child(3) { animation-delay: .39s; }
+    .hero-copy > :nth-child(4) { animation-delay: .51s; }
+    .hero-copy > :nth-child(5) { animation-delay: .63s; }
+    .hero-copy > :nth-child(6) { animation-delay: .75s; }
+    .hero-copy > :nth-child(7) { animation-delay: .87s; }
+    .hero-visual { animation: scaleIn 1.2s .4s cubic-bezier(.2, .7, .2, 1) both; }
+    .has-loader:not(.loaded) .hero-copy > *, .has-loader:not(.loaded) .hero-visual { animation-play-state: paused; }
+
+    /* Rotating typewriter line */
+    .typed-line { display: flex; align-items: center; gap: 10px; min-height: 1.7em; margin: 6px 0 0; font-family: 'Manrope', sans-serif; font-size: .92rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #e0c07f; }
+    .typed-label { color: rgba(244, 239, 230, .5); font-weight: 500; }
+    .typed-cursor { display: inline-block; width: 2px; height: 1.1em; background: #e0c07f; animation: blink 1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* Header state, active nav underline, magnetic buttons, 3D tilt */
+    .site-header { transition: box-shadow .35s ease; }
+    .site-header.scrolled { box-shadow: 0 12px 32px rgba(0, 0, 0, .4); }
+    .nav-links a:not(.nav-contact) { position: relative; transition: color .25s ease; }
+    .nav-links a:not(.nav-contact)::after { content: ""; position: absolute; left: 0; right: 0; bottom: -8px; height: 2px; background: #d6b36a; scale: 0 1; transform-origin: left; transition: scale .35s ease; }
+    .nav-links a.active:not(.nav-contact), .nav-links a:not(.nav-contact):hover { color: #e0c07f; }
+    .nav-links a.active:not(.nav-contact)::after, .nav-links a:not(.nav-contact):hover::after { scale: 1 1; }
+    .sidebar-links a.active { color: #e0c07f; }
+    .btn { transition: translate .2s ease, background-color .25s ease, border-color .25s ease, color .25s ease, box-shadow .25s ease; }
+    .hero-panel { transition: transform .35s ease-out; will-change: transform; }
   </style>
   <script defer src="script.js"></script>
   <script defer src="work-files.js"></script>
@@ -77,6 +140,14 @@
 <body>
   <div class="scroll-progress" id="scroll-progress"></div>
   <div class="cursor-glow" id="cursor-glow"></div>
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="pre-inner">
+      <div class="pre-logo"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46"></circle></svg><span>P<b>.</b></span></div>
+      <div class="pre-name">PEEYUSH KUMAR JANGID</div>
+      <div class="pre-sub">HVAC PROJECT ENGINEER</div>
+      <div class="pre-bar"><i></i></div>
+    </div>
+  </div>
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
   <div class="sidebar-overlay" id="sidebar-overlay"></div>
   <aside class="sidebar" id="sidebar" aria-label="Side menu" aria-hidden="true">
@@ -101,6 +172,7 @@
         <div class="eyebrow"><span class="status-dot"></span> HVAC PROFESSIONAL · JAIPUR, INDIA</div>
         <h1>Peeyush Kumar<br><span class="gradient-text">Jangid</span></h1>
         <p class="hero-role">Project Engineer <span class="role-divider">·</span> HVAC <span class="role-divider">·</span> Site Supervision</p>
+        <p class="typed-line"><span class="typed-label">FOCUS —</span><span class="typed-text" id="typed-text">HVAC Site Supervision</span><i class="typed-cursor"></i></p>
         <p class="hero-description">I bring hands-on HVAC project experience across site supervision, installation coordination, technical drawings and project documentation.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="Peeyush_Kumar_Jangid_Resume.pdf" download>Download CV <span>↓</span></a>
@@ -219,6 +291,109 @@
         window.addEventListener('mousemove', function (e) {
           tx = e.clientX; ty = e.clientY;
           if (!started) { started = true; x = tx; y = ty; glow.style.opacity = '1'; requestAnimationFrame(tick); }
+        });
+      }
+    })();
+  </script>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+      /* Rotating typewriter */
+      var words = ['HVAC Site Supervision', 'VRV / VRF Drawings', 'AutoCAD 2D Layouts', 'Pre-commissioning Reports', 'Billing & Documentation'];
+      var typedEl = document.getElementById('typed-text');
+      var typedStarted = false;
+      function startTyped() {
+        if (typedStarted || !typedEl || reduce) return;
+        typedStarted = true;
+        var wi = 0, ci = words[0].length, deleting = true;
+        function step() {
+          var word = words[wi];
+          ci += deleting ? -1 : 1;
+          typedEl.textContent = word.slice(0, ci);
+          var delay = deleting ? 35 : 70;
+          if (!deleting && ci === word.length) { deleting = true; delay = 1800; }
+          else if (deleting && ci === 0) { deleting = false; wi = (wi + 1) % words.length; delay = 250; }
+          setTimeout(step, delay);
+        }
+        setTimeout(step, 2200);
+      }
+
+      /* Intro loader */
+      var pre = document.getElementById('preloader');
+      function finishIntro() {
+        root.classList.add('loaded');
+        if (pre) { pre.classList.add('done'); setTimeout(function () { pre.style.display = 'none'; }, 1100); }
+        try { sessionStorage.setItem('pk-intro', '1'); } catch (e) {}
+        startTyped();
+      }
+      if (root.classList.contains('has-loader')) { setTimeout(finishIntro, 2000); } else { startTyped(); }
+
+      /* Header shadow + soft parallax on background glows */
+      var header = document.querySelector('.site-header');
+      var a1 = document.querySelector('.ambient-one');
+      var a2 = document.querySelector('.ambient-two');
+      function onScroll() {
+        var y = window.pageYOffset;
+        if (header) header.classList.toggle('scrolled', y > 40);
+        if (!reduce) {
+          if (a1) a1.style.translate = '0 ' + (y * 0.12) + 'px';
+          if (a2) a2.style.translate = '0 ' + (-y * 0.08) + 'px';
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      /* Active nav link (scroll spy) */
+      var links = document.querySelectorAll('.nav-links a[href^="#"], .sidebar-links a[href^="#"]');
+      var ids = ['about', 'process', 'experience', 'projects', 'skills', 'work-files', 'contact'];
+      if ('IntersectionObserver' in window) {
+        var spy = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (!en.isIntersecting) return;
+            links.forEach(function (l) { l.classList.toggle('active', l.getAttribute('href') === '#' + en.target.id); });
+          });
+        }, { rootMargin: '-45% 0px -50% 0px' });
+        ids.forEach(function (id) { var s = document.getElementById(id); if (s) spy.observe(s); });
+      }
+
+      /* Staggered reveal for card grids */
+      document.querySelectorAll('.process-grid, .project-grid').forEach(function (grid) {
+        var items = grid.querySelectorAll('.reveal');
+        function clearDelays() { items.forEach(function (it) { it.style.transitionDelay = ''; }); }
+        if (!('IntersectionObserver' in window)) return;
+        items.forEach(function (it, i) { it.style.transitionDelay = (i * 0.12) + 's'; });
+        var io = new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (e.isIntersecting) { setTimeout(clearDelays, 1600); io.disconnect(); }
+          });
+        }, { threshold: 0.1 });
+        io.observe(grid);
+      });
+
+      /* 3D tilt on hero card + magnetic buttons (desktop only) */
+      if (fine && !reduce) {
+        var hv = document.querySelector('.hero-visual');
+        var hp = document.querySelector('.hero-panel');
+        if (hv && hp) {
+          hv.addEventListener('mousemove', function (e) {
+            var r = hv.getBoundingClientRect();
+            var x = (e.clientX - r.left) / r.width - 0.5;
+            var y = (e.clientY - r.top) / r.height - 0.5;
+            hp.style.transform = 'perspective(900px) rotateX(' + (-y * 8) + 'deg) rotateY(' + (x * 10) + 'deg)';
+          });
+          hv.addEventListener('mouseleave', function () { hp.style.transform = ''; });
+        }
+        document.querySelectorAll('.btn').forEach(function (b) {
+          b.addEventListener('mousemove', function (e) {
+            var r = b.getBoundingClientRect();
+            var dx = (e.clientX - (r.left + r.width / 2)) * 0.22;
+            var dy = (e.clientY - (r.top + r.height / 2)) * 0.3;
+            b.style.translate = dx + 'px ' + dy + 'px';
+          });
+          b.addEventListener('mouseleave', function () { b.style.translate = ''; });
         });
       }
     })();
