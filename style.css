@@ -134,3 +134,15 @@ a.open-work{display:inline-flex;margin-top:24px;font-size:11px;letter-spacing:.2
     grid-template-columns: 1fr;
   }
 }
+/* Profile photo in starting loader */
+.pre-profile-photo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 20%;
+  border: 2px solid #d6b36a;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 20px rgba(214, 179, 106, 0.3);
+}
