@@ -250,3 +250,184 @@ a.open-work{display:inline-flex;margin-top:24px;font-size:11px;letter-spacing:.2
     padding: 16px;
   }
 }
+
+/* ===== CERTIFICATES SECTION ===== */
+
+#certificates {
+  padding-top: 110px;
+  padding-bottom: 40px;
+  scroll-margin-top: 90px;
+}
+
+#certificates .section-heading {
+  margin-bottom: 40px;
+}
+
+#certificates .certificate-admin {
+  padding: 30px;
+  margin: 30px 0;
+  background: linear-gradient(145deg, #151720, #0e1016);
+  border: 1px solid rgba(214,179,106,.3);
+}
+
+#certificates .certificate-admin h3 {
+  color: var(--gold2);
+  font: 700 20px var(--display);
+  margin: 0 0 25px;
+}
+
+/* Form fields */
+#certificate-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: end;
+}
+
+#certificate-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  color: #d6b36a;
+  font-size: 11px;
+  letter-spacing: .5px;
+  min-width: 0;
+}
+
+#certificate-form input {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 12px;
+  color: #f4f1e9;
+  background: #0b0d13;
+  border: 1px solid rgba(255,255,255,.17);
+  outline: none;
+  font: 12px var(--body);
+}
+
+#certificate-form input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(214,179,106,.12);
+}
+
+#certificate-form input[type="file"] {
+  padding: 9px;
+}
+
+#certificate-form button {
+  min-height: 46px;
+  width: fit-content;
+  padding: 13px 25px;
+  border: 0;
+  background: linear-gradient(110deg,#b88d43,#e3c27e);
+  color: #17130b;
+  font: 700 10px var(--display);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: .25s;
+}
+
+#certificate-form button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(214,179,106,.2);
+}
+
+#cert-message {
+  color: var(--gold2);
+  font-size: 12px;
+  margin-top: 15px;
+}
+
+.certificate-note {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.8;
+  margin-top: 20px;
+}
+
+/* Certificate cards */
+#certificate-list,
+.certificate-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 30px;
+}
+
+.certificate-card {
+  min-width: 0;
+  padding: 25px;
+  background: linear-gradient(145deg,#151720,#0e1016);
+  border: 1px solid rgba(214,179,106,.25);
+  transition: .3s;
+  overflow-wrap: anywhere;
+}
+
+.certificate-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--gold);
+}
+
+.certificate-card h3 {
+  color: var(--gold2);
+  font: 700 17px var(--display);
+  margin: 0 0 12px;
+}
+
+.certificate-card p {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.certificate-card a {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--gold2);
+  font-size: 11px;
+}
+
+.certificate-card button {
+  display: inline-block;
+  margin: 12px 0 0 15px;
+  padding: 8px 12px;
+  color: #e7c77f;
+  background: transparent;
+  border: 1px solid rgba(214,179,106,.3);
+  cursor: pointer;
+}
+
+/* Tablet */
+@media(max-width:900px) {
+  #certificate-list,
+  .certificate-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Mobile */
+@media(max-width:600px) {
+  #certificates {
+    padding-top: 80px;
+  }
+
+  #certificates .certificate-admin {
+    padding: 18px;
+  }
+
+  #certificate-form {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  #certificate-form button {
+    width: 100%;
+  }
+
+  #certificate-list,
+  .certificate-grid {
+    grid-template-columns: 1fr;
+  }
+}
