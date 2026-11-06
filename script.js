@@ -1,14 +1,56 @@
-(function(){
-var $=function(s){return document.querySelector(s)},$$=function(s){return [].slice.call(document.querySelectorAll(s))};
-var op=$('#opening'),seen=false;
-try{seen=sessionStorage.getItem('peeyush-series')==='1'}catch(e){}
-function closeOp(){if(!op)return;op.classList.add('out');document.body.classList.remove('lock');try{sessionStorage.setItem('peeyush-series','1')}catch(e){}setTimeout(function(){op.remove()},900)}
-if(seen||matchMedia('(prefers-reduced-motion: reduce)').matches){op&&op.remove()}else{document.body.classList.add('lock');$('#op-play').onclick=closeOp;$('#op-skip').onclick=closeOp;document.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key==='Escape')closeOp()})}
-var nav=$('#nav'),b=$('#burger'),l=$('#nav-links'),last=0;
-addEventListener('scroll',function(){var y=scrollY;nav.classList.toggle('solid',y>40);nav.classList.toggle('hide',y>400&&y>last&&!l.classList.contains('open'));last=y},{passive:true});
-b.onclick=function(){var o=l.classList.toggle('open');b.setAttribute('aria-expanded',o)};
-$$('#nav-links a').forEach(function(a){a.onclick=function(){l.classList.remove('open');b.setAttribute('aria-expanded',false)}});
-var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');var u=e.target.querySelector&&e.target.querySelector('u');if(u&&e.target.dataset.level)u.style.width=e.target.dataset.level+'%';io.unobserve(e.target)}})},{threshold:.15});
-$$('.reveal,.bar').forEach(function(el){io.observe(el)});
-var y=$('#year');if(y)y.textContent=new Date().getFullYear();
+// Premium portfolio interactions: mobile menu, reveal-on-scroll and skill meters.
+const menuButton = document.querySelector('.menu-toggle');
+const nav = document.querySelector('.nav-links');
+menuButton?.addEventListener('click', () => {
+  const open = nav.classList.toggle('open');
+  menuButton.setAttribute('aria-expanded', String(open));
+});
+nav?.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+  nav.classList.remove('open');
+  menuButton?.setAttribute('aria-expanded', 'false');
+}));
+const year = document.getElementById('year');
+if (year) year.textContent = new Date().getFullYear();
+if ('IntersectionObserver' in window) {
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  const skillObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const row = entry.target;
+        row.style.setProperty('--level', `${row.dataset.level}%`);
+        row.classList.add('in-view');
+        skillObserver.unobserve(row);
+      }
+    });
+  }, { threshold: 0.45 });
+  document.querySelectorAll('.skill-row').forEach(row => skillObserver.observe(row));
+} else {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+  document.querySelectorAll('.skill-row').forEach(row => row.style.setProperty('--level', `${row.dataset.level}%`));
+}
+
+// Side menu opened by clicking the P logo.
+(() => {
+  const toggle = document.querySelector('.side-toggle');
+  const side = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (!toggle || !side) return;
+  const setOpen = open => {
+    document.body.classList.toggle('side-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    side.setAttribute('aria-hidden', String(!open));
+  };
+  toggle.addEventListener('click', () => setOpen(!document.body.classList.contains('side-open')));
+  overlay?.addEventListener('click', () => setOpen(false));
+  side.querySelector('.sidebar-close')?.addEventListener('click', () => setOpen(false));
+  side.querySelectorAll('.sidebar-links a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
 })();
