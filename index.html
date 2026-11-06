@@ -1,448 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#071426" />
-  <script>
-    /* Intro loader shows once per browser session; skipped for reduced-motion users */
-    (function () {
-      var r = document.documentElement;
-      try {
-        if (!sessionStorage.getItem('pk-intro') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) { r.classList.add('has-loader'); }
-        else { r.classList.add('loaded'); }
-      } catch (e) { r.classList.add('loaded'); }
-    })();
-  </script>
-  <meta name="description" content="Peeyush Kumar Jangid — HVAC Project Engineer with experience in site supervision, HVAC execution, AutoCAD 2D and project coordination." />
-  <title>Peeyush Kumar Jangid | HVAC Project Engineer in Jaipur</title>
-  <link rel="canonical" href="https://peeyush-jangid.github.io/" />
-  <meta name="robots" content="index, follow" />
-  <meta name="author" content="Peeyush Kumar Jangid" />
-  <meta name="google-site-verification" content="905fUyCvyr4-2TmW570_RHRLtn8IwUfBvY5vRS6_KNg" />
-  <link rel="icon" href="profile-photo.jpg" type="image/jpeg" />
-  <link rel="apple-touch-icon" href="profile-photo.jpg" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Peeyush Kumar Jangid" />
-  <meta property="og:title" content="Peeyush Kumar Jangid | HVAC Project Engineer in Jaipur" />
-  <meta property="og:description" content="HVAC Project Engineer in Jaipur — site supervision, AutoCAD 2D, pre-commissioning and project coordination." />
-  <meta property="og:url" content="https://peeyush-jangid.github.io/" />
-  <meta property="og:image" content="https://peeyush-jangid.github.io/profile-photo.jpg" />
-  <meta name="twitter:card" content="summary" />
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Peeyush Kumar Jangid",
-    "alternateName": "Peeyush Jangid",
-    "jobTitle": "HVAC Project Engineer",
-    "description": "HVAC Project Engineer with experience in site supervision, HVAC execution, AutoCAD 2D and project coordination.",
-    "url": "https://peeyush-jangid.github.io/",
-    "image": "https://peeyush-jangid.github.io/profile-photo.jpg",
-    "email": "mailto:peeyush.jangid@outlook.com",
-    "address": { "@type": "PostalAddress", "addressLocality": "Jaipur", "addressRegion": "Rajasthan", "addressCountry": "IN" },
-    "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Rajasthan" },
-    "knowsAbout": ["HVAC", "VRV / VRF", "Chilled Water Systems", "AutoCAD 2D", "Pre-commissioning", "Site Supervision"],
-    "sameAs": ["https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/"]
-  }
-  </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    /* Soft skills panel (you can move this into style.css if you prefer) */
-    .soft-skills { margin-top: 24px; }
-    .soft-skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px 36px; }
-    @media (max-width: 720px) { .soft-skills-grid { grid-template-columns: 1fr; } }
-
-    /* Floating contact buttons: Email, LinkedIn, WhatsApp stacked at bottom-right */
-    .floating-contact { position: fixed; right: 20px; bottom: 20px; z-index: 90; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-    .floating-contact a { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(135deg, #b8975a, #e0c07f); color: #0b1220; text-decoration: none; box-shadow: 0 10px 24px rgba(0, 0, 0, .35); transition: transform .2s ease, box-shadow .2s ease; }
-    .floating-contact a:hover { transform: translateY(-3px) scale(1.06); box-shadow: 0 14px 30px rgba(0, 0, 0, .45); }
-    .floating-contact .floating-whatsapp { position: static; inset: auto; margin: 0; width: 52px; height: 52px; font-size: 22px; line-height: 1; }
-    .floating-contact svg { width: 24px; height: 24px; fill: currentColor; display: block; }
-    @media (max-width: 720px) { .floating-contact { right: 14px; bottom: 14px; gap: 10px; } .floating-contact a, .floating-contact .floating-whatsapp { width: 46px; height: 46px; } .floating-contact svg { width: 21px; height: 21px; } }
-
-    /* ===== Animations ===== */
-    /* Scroll progress bar + soft cursor glow */
-    .scroll-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 300; background: linear-gradient(90deg, #b8975a, #f0d79a); box-shadow: 0 0 12px rgba(214, 179, 106, .6); pointer-events: none; }
-    .cursor-glow { position: fixed; top: 0; left: 0; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(214, 179, 106, .14), transparent 65%); pointer-events: none; z-index: 1; opacity: 0; transition: opacity .4s ease; will-change: transform; }
-
-    /* Gentle floating on hero elements (uses `translate` so it never clashes with existing transforms) */
-    @keyframes floatY { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
-    .hero-panel { animation: floatY 8s ease-in-out infinite; }
-    .floating-chip.chip-top { animation: floatY 5s ease-in-out infinite; }
-    .floating-chip.chip-bottom { animation: floatY 6s ease-in-out -2s infinite; }
-
-    /* Card hover: lift + glow */
-    .process-card, .project-card, .timeline-card, .skill-panel, .tools-panel, .availability-card {
-      transition: opacity .8s ease, transform .8s ease, translate .35s ease, box-shadow .35s ease, border-color .35s ease;
-    }
-    .process-card:hover, .project-card:hover, .timeline-card:hover, .skill-panel:hover, .tools-panel:hover, .availability-card:hover {
-      translate: 0 -6px; border-color: rgba(214, 179, 106, .55); box-shadow: 0 18px 40px rgba(0, 0, 0, .4), 0 0 0 1px rgba(214, 179, 106, .15);
-    }
-    .step-icon { transition: rotate .5s ease, scale .5s ease; }
-    .process-card:hover .step-icon { rotate: 12deg; scale: 1.15; }
-
-    /* Project image zoom */
-    .project-image { overflow: hidden; }
-    .project-image img { transition: transform .8s ease; }
-    .project-card:hover .project-image img { transform: scale(1.07); }
-
-    /* Button shine sweep + arrow nudge */
-    .btn, .nav-contact { position: relative; overflow: hidden; }
-    .btn::after, .nav-contact::after { content: ""; position: absolute; top: 0; left: -120%; width: 60%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .35), transparent); transform: skewX(-20deg); transition: left .7s ease; pointer-events: none; }
-    .btn:hover::after, .nav-contact:hover::after { left: 140%; }
-    .btn span, .nav-contact span { display: inline-block; transition: translate .25s ease; }
-    .btn:hover span, .nav-contact:hover span { translate: 3px -3px; }
-
-    /* Tags and chips hover */
-    .tool-tags span, .about-tags span { transition: translate .25s ease, color .25s ease, border-color .25s ease, background-color .25s ease; }
-    .tool-tags span:hover, .about-tags span:hover { translate: 0 -3px; color: #e0c07f; border-color: rgba(214, 179, 106, .6); }
-
-    /* WhatsApp pulse ring */
-    @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(214, 179, 106, .55); } 70% { box-shadow: 0 0 0 16px rgba(214, 179, 106, 0); } 100% { box-shadow: 0 0 0 0 rgba(214, 179, 106, 0); } }
-    .floating-contact .floating-whatsapp { animation: pulseRing 2.4s ease-out infinite; }
-
-    /* Respect "reduce motion" settings */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
-      .cursor-glow { display: none; }
-    }
-
-    /* ===== Premium motion layer ===== */
-    html { scroll-behavior: smooth; }
-    section[id] { scroll-margin-top: 90px; }
-
-    /* Intro loader: ring draws, name fades in, curtain lifts */
-    .preloader { position: fixed; inset: 0; z-index: 1000; display: none; place-items: center; background: #060b14; transition: transform .95s cubic-bezier(.77, 0, .18, 1); }
-    .has-loader .preloader { display: grid; }
-    .preloader.done { transform: translateY(-100%); }
-    .has-loader:not(.loaded) body { overflow: hidden; }
-    .pre-inner { display: grid; gap: 14px; justify-items: center; text-align: center; }
-    .pre-logo { position: relative; width: 96px; height: 96px; display: grid; place-items: center; font: 700 2rem 'Manrope', sans-serif; color: #f4efe6; }
-    .pre-logo b { color: #d6b36a; }
-    .pre-logo svg { position: absolute; inset: 0; width: 100%; height: 100%; rotate: -90deg; }
-    .pre-logo circle { fill: none; stroke: #d6b36a; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 289; stroke-dashoffset: 289; animation: drawRing 1.4s .1s cubic-bezier(.65, 0, .35, 1) forwards; }
-    .pre-name { margin-top: 10px; font: 600 .8rem 'Manrope', sans-serif; letter-spacing: .32em; color: #f4efe6; opacity: 0; animation: fadeUp .8s .5s ease forwards; }
-    .pre-sub { font: 500 .66rem 'Manrope', sans-serif; letter-spacing: .3em; color: #d6b36a; opacity: 0; animation: fadeUp .8s .7s ease forwards; }
-    .pre-bar { width: 160px; height: 2px; margin-top: 8px; background: rgba(255, 255, 255, .12); border-radius: 2px; overflow: hidden; }
-    .pre-bar i { display: block; width: 100%; height: 100%; background: linear-gradient(90deg, #b8975a, #f0d79a); scale: 0 1; transform-origin: left; animation: fillBar 1.7s .1s cubic-bezier(.65, 0, .35, 1) forwards; }
-    @keyframes drawRing { to { stroke-dashoffset: 0; } }
-    @keyframes fillBar { to { scale: 1 1; } }
-    @keyframes fadeUp { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
-
-    /* Hero entrance: staggered rise + blur-in, starts after the loader lifts */
-    @keyframes riseIn { from { opacity: 0; translate: 0 28px; filter: blur(6px); } to { opacity: 1; translate: 0 0; filter: blur(0); } }
-    @keyframes scaleIn { from { opacity: 0; scale: .94; translate: 0 24px; } to { opacity: 1; scale: 1; translate: 0 0; } }
-    .hero-copy > * { animation: riseIn 1s cubic-bezier(.2, .7, .2, 1) both; }
-    .hero-copy > :nth-child(1) { animation-delay: .15s; }
-    .hero-copy > :nth-child(2) { animation-delay: .27s; }
-    .hero-copy > :nth-child(3) { animation-delay: .39s; }
-    .hero-copy > :nth-child(4) { animation-delay: .51s; }
-    .hero-copy > :nth-child(5) { animation-delay: .63s; }
-    .hero-copy > :nth-child(6) { animation-delay: .75s; }
-    .hero-copy > :nth-child(7) { animation-delay: .87s; }
-    .hero-visual { animation: scaleIn 1.2s .4s cubic-bezier(.2, .7, .2, 1) both; }
-    .has-loader:not(.loaded) .hero-copy > *, .has-loader:not(.loaded) .hero-visual { animation-play-state: paused; }
-
-    /* Rotating typewriter line */
-    .typed-line { display: flex; align-items: center; gap: 10px; min-height: 1.7em; margin: 6px 0 0; font-family: 'Manrope', sans-serif; font-size: .92rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #e0c07f; }
-    .typed-label { color: rgba(244, 239, 230, .5); font-weight: 500; }
-    .typed-cursor { display: inline-block; width: 2px; height: 1.1em; background: #e0c07f; animation: blink 1s steps(1) infinite; }
-    @keyframes blink { 50% { opacity: 0; } }
-
-    /* Header state, active nav underline, magnetic buttons, 3D tilt */
-    .site-header { transition: box-shadow .35s ease; }
-    .site-header.scrolled { box-shadow: 0 12px 32px rgba(0, 0, 0, .4); }
-    .nav-links a:not(.nav-contact) { position: relative; transition: color .25s ease; }
-    .nav-links a:not(.nav-contact)::after { content: ""; position: absolute; left: 0; right: 0; bottom: -8px; height: 2px; background: #d6b36a; scale: 0 1; transform-origin: left; transition: scale .35s ease; }
-    .nav-links a.active:not(.nav-contact), .nav-links a:not(.nav-contact):hover { color: #e0c07f; }
-    .nav-links a.active:not(.nav-contact)::after, .nav-links a:not(.nav-contact):hover::after { scale: 1 1; }
-    .sidebar-links a.active { color: #e0c07f; }
-    .btn { transition: translate .2s ease, background-color .25s ease, border-color .25s ease, color .25s ease, box-shadow .25s ease; }
-    .hero-panel { transition: transform .35s ease-out; will-change: transform; }
-  </style>
-  <script defer src="script.js"></script>
-  <script defer src="work-files.js"></script><script defer src="certificates.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#07070a" />
+<meta name="description" content="Peeyush Kumar Jangid — HVAC Project Engineer with experience in site supervision, HVAC execution, AutoCAD 2D and project coordination." />
+<title>Peeyush Kumar Jangid | HVAC Project Engineer — The Series</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+<script defer src="script.js"></script>
+<script defer src="work-files.js"></script>
 </head>
 <body>
-  <div class="scroll-progress" id="scroll-progress"></div>
-  <div class="cursor-glow" id="cursor-glow"></div>
-  <div class="preloader" id="preloader" aria-hidden="true">
-    <div class="pre-inner">
-      <div class="pre-logo">
-  <svg viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="46"></circle>
-  </svg>
+<div class="grain"></div>
 
-  <img
-    src="profile-photo.jpg"
-    alt="Peeyush Kumar Jangid"
-    class="pre-profile-photo"
-  />
+<div class="opening" id="opening" role="dialog" aria-label="Intro">
+<p class="op-studio">A PEEYUSH ORIGINAL</p>
+<h1 class="op-name">PEEYUSH</h1>
+<p class="op-series">THE SERIES</p>
+<button class="btn btn-red op-play" id="op-play" type="button">▶ PLAY</button>
+<button class="op-skip" id="op-skip" type="button">Skip intro</button>
 </div>
-      <div class="pre-name">PEEYUSH KUMAR JANGID</div>
-      <div class="pre-sub">HVAC PROJECT ENGINEER</div>
-      <div class="pre-bar"><i></i></div>
-    </div>
-  </div>
-  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
-  <div class="sidebar-overlay" id="sidebar-overlay"></div>
-  <aside class="sidebar" id="sidebar" aria-label="Side menu" aria-hidden="true">
-    <div class="sidebar-head"><span class="brand-mark brand-photo" style="width:44px;height:44px;overflow:hidden;border-radius:50%;padding:0;border:2px solid #d6b36a;background:#fff;flex:none;display:block"><img src="profile-photo.jpg" alt="Peeyush" width="44" height="44" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block" /></span><button class="sidebar-close" type="button" aria-label="Close side menu">✕</button></div>
-    <div class="sidebar-name">PEEYUSH KUMAR JANGID<small>Project Engineer · HVAC</small></div>
-    <nav class="sidebar-links">
-      <a href="#about">About</a><a href="#process">Process</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#work-files">Notes</a><a href="#contact">Contact Us</a>
-    </nav>
-  </aside>
 
-  <header class="site-header">
-    <div class="brand-wrap"><button class="brand-mark brand-photo side-toggle" type="button" aria-label="Open side menu" aria-controls="sidebar" aria-expanded="false" style="width:44px;height:44px;overflow:hidden;border-radius:50%;padding:0;border:2px solid #d6b36a;background:#fff;flex:none;cursor:pointer"><img src="profile-photo.jpg" alt="Peeyush" width="44" height="44" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block" /></button><a class="brand" href="#home" aria-label="Peeyush home"><span>PEEYUSH<span class="brand-muted"> / PORTFOLIO</span></span></a></div>
-    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
-    <nav class="nav-links" aria-label="Main navigation">
-      <a href="#about">About</a><a href="#process">Process</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#work-files">Notes</a><a href="#contact" class="nav-contact">Let's talk <span>↗</span></a>
-    </nav>
-  </header>
+<header class="nav" id="nav">
+<a class="logo" href="#home" aria-label="Peeyush home">PEEYUSH<small>SERIES</small></a>
+<nav class="nav-links" id="nav-links" aria-label="Main navigation">
+<a href="#home">Home</a><a href="#about">About</a><a href="#process">Process</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#work-files">Work</a><a href="#contact" class="nav-cta">Let's talk ↗</a>
+</nav>
+<button class="burger" id="burger" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
+</header>
 
-  <main>
-    <section class="hero section-wrap" id="home">
-      <div class="hero-copy reveal">
-        <div class="eyebrow"><span class="status-dot"></span> HVAC PROFESSIONAL · JAIPUR, INDIA</div>
-        <h1>Peeyush Kumar<br><span class="gradient-text">Jangid</span></h1>
-        <p class="hero-role">Project Engineer <span class="role-divider">·</span> HVAC <span class="role-divider">·</span> Site Supervision</p>
-        <p class="typed-line"><span class="typed-label">FOCUS —</span><span class="typed-text" id="typed-text">HVAC Site Supervision</span><i class="typed-cursor"></i></p>
-        <p class="hero-description">I bring hands-on HVAC project experience across site supervision, installation coordination, technical drawings and project documentation.</p>
-        <div class="open-to-work-banner" role="status">
-          <span class="open-work-indicator"></span>
-          <div><strong>OPEN TO WORK</strong><small>Currently exploring HVAC Project Engineer and Site Supervision opportunities.</small></div>
-          <a href="contact.html" aria-label="Open the job seeker application form">Share your profile <span>↗</span></a>
-        </div>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="Peeyush_Kumar_Jangid_Resume.pdf" download>Download CV <span>↓</span></a>
-          <a class="btn btn-ghost" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20visited%20your%20portfolio." target="_blank" rel="noopener">Contact on WhatsApp <span>↗</span></a>
-        </div>
-        <div class="hero-meta"><span><i class="meta-line"></i> AutoCAD 2D</span><span><i class="meta-line"></i> MS Excel</span><span><i class="meta-line"></i> HVAC Projects</span><span><i class="meta-line"></i> AI Knowledge (ChatGPT, Claude, GitHub)</span></div>
-      </div>
-      <div class="hero-visual reveal">
-        <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
-        <div class="hero-panel">
-          <div class="panel-top"><span>FIELD PROFILE</span><span class="panel-live"><i></i> OPEN TO OPPORTUNITIES</span></div>
-          <div class="blueprint-art profile-photo-wrap">
-            <img class="profile-photo" src="profile-photo.jpg" alt="Professional portrait of Peeyush Kumar Jangid" />
-          </div>
-          <div class="panel-bottom"><div><strong>HVAC</strong><small>PROJECT ENGINEERING</small></div><div class="panel-coordinate">26.9124° N<br>75.7873° E</div></div>
-        </div>
-        <div class="floating-chip chip-top"><span class="chip-icon">⌁</span><span><b>Plan to execution</b><small>Practical site coordination</small></span></div>
-        <div class="floating-chip chip-bottom"><span class="chip-icon">▤</span><span><b>Clear documentation</b><small>Reports · Measurements · Bills</small></span></div>
-      </div>
-      <div class="scroll-cue"><span></span> SCROLL TO EXPLORE</div>
-    </section>
+<main>
+<section class="hero" id="home">
+<div class="glow"></div><span class="streak s1"></span><span class="streak s2"></span>
+<div class="hero-img"><div class="ring"></div><img class="profile-photo" src="profile-photo.jpg" alt="Professional portrait of Peeyush Kumar Jangid" />
+<div class="chip c1"><b>Plan to execution</b><small>Practical site coordination</small></div>
+<div class="chip c2"><b>Clear documentation</b><small>Reports · Measurements · Bills</small></div></div>
+<div class="hero-copy gutter">
+<div class="eyebrow"><i class="dot"></i> HVAC PROFESSIONAL · JAIPUR, INDIA &nbsp;·&nbsp; OPEN TO OPPORTUNITIES</div>
+<h1 class="shimmer">PEEYUSH KUMAR<br>JANGID</h1>
+<p class="series-tag">THE SERIES</p>
+<p class="meta"><span class="badge">HVAC</span> 1 Year Experience <i></i> Project Engineer <i></i> 3 Originals</p>
+<p class="role">Project Engineer · HVAC · Site Supervision</p>
+<p class="lead">I bring hands-on HVAC project experience across site supervision, installation coordination, technical drawings and project documentation.</p>
+<div class="actions">
+<a class="btn btn-red" href="Peeyush_Kumar_Jangid_Resume.pdf" download>▶ Download CV ↓</a>
+<a class="btn btn-ghost" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20visited%20your%20portfolio." target="_blank" rel="noopener">Contact on WhatsApp ↗</a>
+</div>
+<p class="tools-line"><span>AutoCAD 2D</span><span>MS Excel</span><span>HVAC Projects</span><span>AI Knowledge (ChatGPT, Claude, GitHub)</span></p>
+<p class="coord">FIELD PROFILE · 26.9124° N, 75.7873° E</p>
+</div>
+</section>
 
-    <section class="ticker" aria-label="Areas of work"><div class="ticker-track"><span>VRV / VRF</span><b>✳</b><span>CHILLED WATER</span><b>✳</b><span>DUCTING</span><b>✳</b><span>AHU / FCU</span><b>✳</b><span>AUTOCAD 2D</span><b>✳</b><span>MS EXCEL</span><b>✳</b><span>PRE-COMMISSIONING</span><b>✳</b><span>VRV / VRF</span><b>✳</b><span>CHILLED WATER</span><b>✳</b><span>DUCTING</span><b>✳</b><span>AHU / FCU</span></div></section>
+<section class="ticker" aria-label="Areas of work"><div class="ticker-track"><span>VRV / VRF</span><b>✳</b><span>CHILLED WATER</span><b>✳</b><span>DUCTING</span><b>✳</b><span>AHU / FCU</span><b>✳</b><span>AUTOCAD 2D</span><b>✳</b><span>MS EXCEL</span><b>✳</b><span>PRE-COMMISSIONING</span><b>✳</b><span>VRV / VRF</span><b>✳</b><span>CHILLED WATER</span><b>✳</b><span>DUCTING</span><b>✳</b><span>AHU / FCU</span><b>✳</b><span>AUTOCAD 2D</span><b>✳</b><span>MS EXCEL</span><b>✳</b><span>PRE-COMMISSIONING</span><b>✳</b></div></section>
 
-    <section class="section section-wrap" id="about">
-      <div class="section-heading reveal"><div><span class="section-kicker">ABOUT ME</span><h2>Who I am<br><span class="muted-heading">&amp; what I do.</span></h2></div><p>A quick introduction to my background, skills and how I work.</p></div>
-      <div class="about-layout">
-        <div class="about-text reveal">
-          <p>I am Peeyush Kumar Jangid, a motivated and detail-oriented HVAC Project Engineer from Jaipur with hands-on experience in site supervision, billing, pre-commissioning, client coordination, and HVAC drafting.</p>
-          <p>Skilled in AutoCAD 2D, Advanced Excel, and project coordination, I am passionate about delivering quality work, solving problems, and continuously improving my professional skills.</p>
-          <div class="about-tags"><span>Site Supervision</span><span>Billing</span><span>Pre-Commissioning</span><span>Client Coordination</span><span>HVAC Drafting</span></div>
-          <a class="details-status open-work" id="open-to-work-link" href="contact.html" target="_blank" rel="noopener" aria-label="Open to work, opens form in new tab"><i></i> LOOKING FOR A JOB? APPLY HERE <span>↗</span></a>
-        </div>
-      </div>
-    </section>
+<section class="sec gutter" id="about">
+<div class="head"><span class="kicker">THE PILOT · ABOUT ME</span><h2>Who I am <em>&amp; what I do.</em></h2><p>A quick introduction to my background, skills and how I work.</p></div>
+<div class="about reveal">
+<p>I am a motivated and detail-oriented HVAC Project Engineer with hands-on experience in site supervision, billing, pre-commissioning, client coordination, and HVAC drafting.</p>
+<p>Skilled in AutoCAD 2D, Advanced Excel, and project coordination, I am passionate about delivering quality work, solving problems, and continuously improving my professional skills.</p>
+<div class="tags"><span>Site Supervision</span><span>Billing</span><span>Pre-Commissioning</span><span>Client Coordination</span><span>HVAC Drafting</span></div>
+<a class="open-work" id="open-to-work-link" href="contact.html" target="_blank" rel="noopener" aria-label="Open to work, opens form in new tab"><i class="dot"></i> OPEN TO WORK ↗</a>
+</div>
+</section>
 
-    <section class="section section-wrap" id="process">
-      <div class="section-heading reveal"><div><span class="section-kicker">01 / MY APPROACH</span><h2>How I work<br><span class="muted-heading">on a project.</span></h2></div><p>A practical approach to coordinating site activities, drawings, installation quality and project records.</p></div>
-      <div class="process-grid">
-        <article class="process-card reveal"><span class="step-no">01</span><div class="step-icon">⌖</div><h3>Plan</h3><p>Understand site requirements, drawings and execution priorities.</p></article>
-        <article class="process-card reveal"><span class="step-no">02</span><div class="step-icon">⌘</div><h3>Draw</h3><p>Prepare and review HVAC / VRV layouts using AutoCAD 2D.</p></article>
-        <article class="process-card reveal"><span class="step-no">03</span><div class="step-icon">⚙</div><h3>Coordinate</h3><p>Follow installation work, ducting and chilled-water piping activities.</p></article>
-        <article class="process-card reveal"><span class="step-no">04</span><div class="step-icon">▦</div><h3>Document</h3><p>Maintain site updates, checklists and pre-commissioning records.</p></article>
-      </div>
-    </section>
+<section class="sec gutter" id="process">
+<div class="head"><span class="kicker">01 / MY APPROACH</span><h2>How I work <em>on a project.</em></h2><p>A practical approach to coordinating site activities, drawings, installation quality and project records.</p></div>
+<div class="rail">
+<article class="card ep reveal"><span class="no">01</span><h3>Plan</h3><p>Understand site requirements, drawings and execution priorities.</p></article>
+<article class="card ep reveal"><span class="no">02</span><h3>Draw</h3><p>Prepare and review HVAC / VRV layouts using AutoCAD 2D.</p></article>
+<article class="card ep reveal"><span class="no">03</span><h3>Coordinate</h3><p>Follow installation work, ducting and chilled-water piping activities.</p></article>
+<article class="card ep reveal"><span class="no">04</span><h3>Document</h3><p>Maintain site updates, checklists and pre-commissioning records.</p></article>
+</div>
+</section>
 
-    <section class="section section-wrap" id="experience">
-      <div class="section-heading reveal"><div><span class="section-kicker">02 / CAREER</span><h2>Experience &<br><span class="muted-heading">education.</span></h2></div><p>Hands-on experience in HVAC project execution, site supervision and technical coordination.</p></div>
-      <div class="career-layout">
-        <div class="timeline-card reveal"><div class="timeline-label">PROFESSIONAL EXPERIENCE</div><div class="timeline-item"><span class="timeline-point"></span><div class="timeline-date">10 MONTHS EXPERIENCE</div>
-<h3>Project Engineer · HVAC</h3>
-<h4>Climatech Aircon Engineers Pvt Ltd · Jaipur</h4>
-<p class="experience-duration">Oct 2025 – Aug 2026</p><ul><li>Coordinated HVAC project activities and site execution.</li><li>Supported HVAC installation and site supervision.</li><li>Worked with AutoCAD 2D drawings and technical documentation.</li><li>Contributed to pre-commissioning activities across project sites.</li></ul></div></div>
-        <div class="education-stack reveal"><div class="timeline-card education-card"><div class="timeline-label">EDUCATION</div><div class="education-item"><span class="edu-year">BACHELOR'S DEGREE</span><h3>B.Sc. — PCM</h3><p>University of Rajasthan, Jaipur</p></div><div class="education-item"><span class="edu-year">CERTIFICATION · 2025</span><h3>RS-CIT</h3><p>Rajasthan State Certificate in Information Technology · VMOU, Kota</p></div><div class="education-item"><span class="edu-year">COURSE</span><h3>BCBF</h3><p>Parivartan Skills Academy, Jaipur</p></div></div><div class="availability-card"><span class="availability-icon">✦</span><div><b>Open to suitable opportunities</b><p>HVAC project engineering · Site supervision · Project coordination</p></div></div></div>
-      </div>
-    </section>
+<section class="sec gutter" id="experience">
+<div class="head"><span class="kicker">02 / CAREER · SEASON 1</span><h2>Experience &amp; <em>education.</em></h2><p>Hands-on experience in HVAC project execution, site supervision and technical coordination.</p></div>
+<div class="two">
+<div class="card reveal"><span class="label">PROFESSIONAL EXPERIENCE</span><span class="pill">1 YEAR EXPERIENCE</span><h3>Project Engineer · HVAC</h3><h4>Climatech Aircon Engineers Pvt Ltd · Jaipur</h4>
+<ul><li>Coordinated HVAC project activities and site execution.</li><li>Supported HVAC installation and site supervision.</li><li>Worked with AutoCAD 2D drawings and technical documentation.</li><li>Contributed to pre-commissioning activities across project sites.</li></ul></div>
+<div class="stack reveal"><div class="card"><span class="label">EDUCATION</span>
+<div class="edu"><span class="pill">BACHELOR'S DEGREE</span><h3>B.Sc. — PCM</h3><p>University of Rajasthan, Jaipur</p></div>
+<div class="edu"><span class="pill">CERTIFICATION · 2025</span><h3>RS-CIT</h3><p>Rajasthan State Certificate in Information Technology · VMOU, Kota</p></div>
+<div class="edu"><span class="pill">COURSE</span><h3>BCBF</h3><p>Parivartan Skills Academy, Jaipur</p></div></div>
+<div class="card avail"><b>✦ Open to suitable opportunities</b><p>HVAC project engineering · Site supervision · Project coordination</p></div></div>
+</div>
+</section>
 
-    <section class="section section-wrap" id="projects">
-      <div class="section-heading reveal"><div><span class="section-kicker">03 / SELECTED WORK</span><h2>Project <span class="muted-heading">experience.</span></h2></div><p>Selected project environments and on-site responsibilities across HVAC installation and pre-commissioning.</p></div>
-      <div class="project-grid">
-        <article class="project-card project-large reveal"><div class="project-image image-hospital"><img src="geetanjali-hospital.jpg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=1200&q=85'" alt="Geetanjali Hospital, Jaipur" loading="lazy"><span class="image-index">PROJECT 01</span><span class="image-tag">VRV · CHILLER · AHU</span></div><div class="project-info"><div><span class="project-type">HVAC INSTALLATION</span><h3>Geetanjali Hospital, Jaipur</h3></div><p>Supported centralized VRV, chiller and FCU installation, including ducting and AHU units, with attention to duct alignment and insulation.</p></div></article>
-        <article class="project-card reveal"><div class="project-image image-campus"><img src="jecrc-university.jpg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1000&q=85'" alt="JECRC University, Alwar" loading="lazy"><span class="image-index">PROJECT 02</span><span class="image-tag">BILLING · MS EXCEL</span></div><div class="project-info"><div><span class="project-type">BILLING EXECUTIVE · HVAC</span><h3>JECRC University, Alwar</h3></div><p>Handled daily billing operations using MS Excel, prepared and maintained bills, invoices and billing records, verified billing details, and updated daily billing reports.</p></div></article>
-        <article class="project-card reveal"><div class="project-image image-docs"><img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1000&q=85" alt="Engineering team reviewing technical work" loading="lazy"><span class="image-index">PROJECT 03</span><span class="image-tag">REPORTS · CHECKLISTS</span></div><div class="project-info"><div><span class="project-type">SITE DOCUMENTATION</span><h3>Pre-commissioning · Various sites</h3></div><p>Updated site reports, checklists and pre-commissioning records in coordination with project teams.</p></div></article>
-      </div>
+<section class="sec" id="projects">
+<div class="head gutter"><span class="kicker">03 / THE ORIGINALS</span><h2>Project <em>experience.</em></h2><p>Selected project environments and on-site responsibilities across HVAC installation and pre-commissioning.</p></div>
+<div class="rail gutter big">
+<article class="card poster reveal"><div class="pimg"><img src="geetanjali-hospital.jpg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=1200&q=85'" alt="Geetanjali Hospital, Jaipur" loading="lazy"><span class="idx">PROJECT 01</span><span class="ptag">VRV · CHILLER · AHU</span></div><div class="pinfo"><span class="label">HVAC INSTALLATION</span><h3>Geetanjali Hospital, Jaipur</h3><p>Supported centralized VRV, chiller and FCU installation, including ducting and AHU units, with attention to duct alignment and insulation.</p></div></article>
+<article class="card poster reveal"><div class="pimg"><img src="jecrc-university.jpg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1000&q=85'" alt="JECRC University, Alwar" loading="lazy"><span class="idx">PROJECT 02</span><span class="ptag">BILLING · MS EXCEL</span></div><div class="pinfo"><span class="label">BILLING EXECUTIVE · HVAC</span><h3>JECRC University, Alwar</h3><p>Handled daily billing operations using MS Excel, prepared and maintained bills, invoices and billing records, verified billing details, and updated daily billing reports.</p></div></article>
+<article class="card poster reveal"><div class="pimg"><img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1000&q=85" alt="Engineering team reviewing technical work" loading="lazy"><span class="idx">PROJECT 03</span><span class="ptag">REPORTS · CHECKLISTS</span></div><div class="pinfo"><span class="label">SITE DOCUMENTATION</span><h3>Pre-commissioning · Various sites</h3><p>Updated site reports, checklists and pre-commissioning records in coordination with project teams.</p></div></article>
+</div>
+</section>
 
-    </section>
+<section class="sec gutter" id="skills">
+<div class="head"><span class="kicker">04 / CAPABILITIES</span><h2>Skills that move <em>work forward.</em></h2><p>Core site responsibilities, HVAC system knowledge and the tools used to keep work organised.</p></div>
+<div class="two">
+<div class="card reveal"><span class="label">CORE &amp; TECHNICAL · FIELD</span>
+<div class="bar" data-level="86"><div><b>HVAC installation &amp; site supervision</b><span>86%</span></div><i><u></u></i></div>
+<div class="bar" data-level="82"><div><b>Site supervision &amp; coordination</b><span>82%</span></div><i><u></u></i></div>
+<div class="bar" data-level="78"><div><b>VRV / VRF drawing · AutoCAD 2D</b><span>78%</span></div><i><u></u></i></div>
+<div class="bar" data-level="76"><div><b>Pre-commissioning documentation</b><span>76%</span></div><i><u></u></i></div>
+<p class="note">Illustrative self-assessment levels — edit these percentages to reflect your actual proficiency.</p></div>
+<div class="card reveal"><span class="label">TOOLS &amp; SYSTEMS · TOOLKIT</span>
+<div class="tags"><span>AutoCAD 2D</span><span>MS Excel</span><span>MS Word</span><span>PowerPoint</span><span>Tally Prime</span><span>VRV / VRF</span><span>Chilled Water</span><span>Ducting</span><span>AHU</span><span>FCU</span><span>Site Reports</span><span>Pre-commissioning</span><span>ChatGPT</span><span>Claude AI</span><span>GitHub</span></div>
+<span class="label" style="margin-top:22px">LANGUAGES</span><div class="tags"><span>Hindi</span><span>English</span></div></div>
+</div>
+</section>
 
-    <section class="section section-wrap" id="skills">
-      <div class="section-heading reveal"><div><span class="section-kicker">04 / CAPABILITIES</span><h2>Skills that move<br><span class="muted-heading">work forward.</span></h2></div><p>Core site responsibilities, HVAC system knowledge and the tools used to keep work organised.</p></div>
-      <div class="skills-layout">
-        <div class="skill-panel reveal"><div class="skill-panel-head"><span>CORE & TECHNICAL</span><span>FIELD</span></div><div class="skill-row" data-level="86"><div><b>HVAC installation & site supervision</b><span>86%</span></div><div class="skill-track"><i></i></div></div><div class="skill-row" data-level="82"><div><b>Site supervision & coordination</b><span>82%</span></div><div class="skill-track"><i></i></div></div><div class="skill-row" data-level="78"><div><b>VRV / VRF drawing · AutoCAD 2D</b><span>78%</span></div><div class="skill-track"><i></i></div></div><div class="skill-row" data-level="76"><div><b>Pre-commissioning documentation</b><span>76%</span></div><div class="skill-track"><i></i></div></div></div>
-        <div class="tools-panel reveal"><div class="skill-panel-head"><span>TOOLS & SYSTEMS</span><span>TOOLKIT</span></div><div class="tool-tags"><span>AutoCAD 2D</span><span>MS Excel</span><span>MS Word</span><span>PowerPoint</span><span>Tally Prime</span><span>VRV / VRF</span><span>Chilled Water</span><span>Ducting</span><span>AHU</span><span>FCU</span><span>Site Reports</span><span>Pre-commissioning</span><span>ChatGPT</span><span>Claude AI</span><span>GitHub</span></div><div class="language-block"><span class="language-title">LANGUAGES</span><div><b>Hindi</b><b>English</b></div></div></div>
-      </div>
+<section class="sec gutter" id="work-files"><div class="head"><span class="kicker">05 / WORK SHOWCASE</span><h2>Notes, Drawing &amp; <em>Interview Questions.</em></h2><p>Selected notes, drawings and interview questions. Files added by the site owner appear here for visitors to view or download.</p></div>
+<div class="file-toolbar"><div class="file-tabs"><button class="file-tab active" data-file-filter="all">All files</button><button class="file-tab" data-file-filter="excel">Excel</button><button class="file-tab" data-file-filter="word">Word</button><button class="file-tab" data-file-filter="ppt">PowerPoint</button><button class="file-tab" data-file-filter="pdf">PDF</button><button class="file-tab" data-file-filter="cad">AutoCAD</button></div><span class="file-count" id="work-file-count">Loading files…</span></div>
+<div class="work-file-grid" id="work-file-grid"><div class="work-file-empty">Loading work samples…</div></div>
+<p class="note">Only the website owner can add files through the private Admin Upload page.</p></section>
 
-      <div class="skill-panel soft-skills reveal">
-        <div class="skill-panel-head"><span>SOFT &amp; FINANCE SKILLS</span><span>PEOPLE &amp; PROCESS</span></div>
-        <div class="soft-skills-grid">
-          <div class="skill-row" data-level="88"><div><b>Communication skills</b><span>88%</span></div><div class="skill-track"><i></i></div></div>
-          <div class="skill-row" data-level="85"><div><b>Time management</b><span>85%</span></div><div class="skill-track"><i></i></div></div>
-          <div class="skill-row" data-level="84"><div><b>Team management</b><span>84%</span></div><div class="skill-track"><i></i></div></div>
-          <div class="skill-row" data-level="87"><div><b>Problem solving</b><span>87%</span></div><div class="skill-track"><i></i></div></div>
-          <div class="skill-row" data-level="80"><div><b>Banking</b><span>80%</span></div><div class="skill-track"><i></i></div></div>
-          <div class="skill-row" data-level="82"><div><b>Accounting</b><span>82%</span></div><div class="skill-track"><i></i></div></div>
-        </div>
-      </div>
-    </section>
-    <section class="section section-wrap" id="work-files"><div class="section-heading reveal"><div><span class="section-kicker">06 / WORK SHOWCASE</span><h2>Notes, Drawing &<br><span class="muted-heading">Interview Questions.</span></h2></div><p>Selected notes, drawings and interview questions. Files added by the site owner appear here for visitors to view or download.</p></div><div class="file-toolbar"><div class="file-tabs"><button class="file-tab active" data-file-filter="all">All files</button><button class="file-tab" data-file-filter="excel">Excel</button><button class="file-tab" data-file-filter="word">Word</button><button class="file-tab" data-file-filter="ppt">PowerPoint</button><button class="file-tab" data-file-filter="pdf">PDF</button><button class="file-tab" data-file-filter="cad">AutoCAD</button></div><span class="file-count" id="work-file-count">Loading files…</span></div><div class="work-file-grid" id="work-file-grid"><div class="work-file-empty">Loading work samples…</div></div><p class="gallery-note">Only the website owner can add files through the private Admin Upload page.</p></section>
+<section class="finale" id="contact"><div class="gutter reveal"><span class="kicker">05 / GET IN TOUCH</span><h2>TO BE CONTINUED…</h2><p class="fin-sub">Let’s build something <em>that works better.</em></p><p>Open to HVAC project engineering and site coordination opportunities.</p>
+<div class="actions c"><a class="btn btn-red" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20would%20like%20to%20discuss%20an%20opportunity." target="_blank" rel="noopener">Message on WhatsApp ↗</a><a class="btn btn-ghost" href="mailto:peeyush.jangid@outlook.com">Send an Email ↗</a></div>
+<div class="links"><a href="mailto:peeyush.jangid@outlook.com">peeyush.jangid@outlook.com</a><a href="tel:+919928579369">+91 99285 79369</a><a href="https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/" target="_blank" rel="noopener">LinkedIn ↗</a></div></div></section>
+</main>
 
-    <section class="contact-section" id="contact"><div class="contact-inner section-wrap reveal"><span class="section-kicker">07 / GET IN TOUCH</span><h2>Let’s build something<br><span class="gold-text">that works better.</span></h2><p>Looking for your next opportunity? Share your profile and the role you are seeking through the job application form.</p><div class="contact-actions"><a class="btn btn-primary" href="contact.html">Submit Your Job Profile <span>↗</span></a><a class="btn btn-primary" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20would%20like%20to%20discuss%20an%20opportunity." target="_blank" rel="noopener">Message on WhatsApp <span>↗</span></a><a class="btn btn-ghost" href="mailto:peeyush.jangid@outlook.com">Send an Email <span>↗</span></a></div><div class="contact-details"><a href="mailto:peeyush.jangid@outlook.com">peeyush.jangid@outlook.com</a><a href="tel:+919928579369">+91 99285 79369</a><a href="https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/" target="_blank" rel="noopener">LinkedIn ↗</a></div></div></section>
-  </main>
-  <footer class="site-footer"><a class="brand" href="#home"><span class="brand-mark">P<span>.</span></span><span>PEEYUSH<span class="brand-muted"> / PORTFOLIO</span></span></a><span>© <span id="year"></span> Peeyush Kumar Jangid. Built with purpose.</span></footer>
-  <div class="floating-contact">
-    <a class="floating-email" href="mailto:peeyush.jangid@outlook.com" aria-label="Send an email" title="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4.2-8 5-8-5V6l8 5 8-5v2.2z"/></svg></a>
-    <a class="floating-linkedin" href="https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/" target="_blank" rel="noopener" aria-label="LinkedIn profile" title="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
-    <a class="floating-whatsapp" href="https://wa.me/919928579369?text=Hello%20Peeyush" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" title="WhatsApp">✆</a>
-  </div>
-  <script>
-    (function () {
-      var bar = document.getElementById('scroll-progress');
-      function onScroll() {
-        var h = document.documentElement;
-        var max = h.scrollHeight - h.clientHeight;
-        if (bar) bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
-      }
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-
-      var glow = document.getElementById('cursor-glow');
-      if (glow && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        var x = 0, y = 0, tx = 0, ty = 0, started = false;
-        var tick = function () {
-          x += (tx - x) * 0.12;
-          y += (ty - y) * 0.12;
-          glow.style.transform = 'translate(' + (x - 200) + 'px,' + (y - 200) + 'px)';
-          requestAnimationFrame(tick);
-        };
-        window.addEventListener('mousemove', function (e) {
-          tx = e.clientX; ty = e.clientY;
-          if (!started) { started = true; x = tx; y = ty; glow.style.opacity = '1'; requestAnimationFrame(tick); }
-        });
-      }
-    })();
-  </script>
-  <script>
-    (function () {
-      var root = document.documentElement;
-      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-      /* Rotating typewriter */
-      var words = ['HVAC Site Supervision', 'VRV / VRF Drawings', 'AutoCAD 2D Layouts', 'Pre-commissioning Reports', 'Billing & Documentation'];
-      var typedEl = document.getElementById('typed-text');
-      var typedStarted = false;
-      function startTyped() {
-        if (typedStarted || !typedEl || reduce) return;
-        typedStarted = true;
-        var wi = 0, ci = words[0].length, deleting = true;
-        function step() {
-          var word = words[wi];
-          ci += deleting ? -1 : 1;
-          typedEl.textContent = word.slice(0, ci);
-          var delay = deleting ? 35 : 70;
-          if (!deleting && ci === word.length) { deleting = true; delay = 1800; }
-          else if (deleting && ci === 0) { deleting = false; wi = (wi + 1) % words.length; delay = 250; }
-          setTimeout(step, delay);
-        }
-        setTimeout(step, 2200);
-      }
-
-      /* Intro loader */
-      var pre = document.getElementById('preloader');
-      function finishIntro() {
-        root.classList.add('loaded');
-        if (pre) { pre.classList.add('done'); setTimeout(function () { pre.style.display = 'none'; }, 1100); }
-        try { sessionStorage.setItem('pk-intro', '1'); } catch (e) {}
-        startTyped();
-      }
-      if (root.classList.contains('has-loader')) { setTimeout(finishIntro, 2000); } else { startTyped(); }
-
-      /* Header shadow + soft parallax on background glows */
-      var header = document.querySelector('.site-header');
-      var a1 = document.querySelector('.ambient-one');
-      var a2 = document.querySelector('.ambient-two');
-      function onScroll() {
-        var y = window.pageYOffset;
-        if (header) header.classList.toggle('scrolled', y > 40);
-        if (!reduce) {
-          if (a1) a1.style.translate = '0 ' + (y * 0.12) + 'px';
-          if (a2) a2.style.translate = '0 ' + (-y * 0.08) + 'px';
-        }
-      }
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-
-      /* Active nav link (scroll spy) */
-      var links = document.querySelectorAll('.nav-links a[href^="#"], .sidebar-links a[href^="#"]');
-      var ids = ['about', 'process', 'experience', 'projects', 'skills', 'work-files', 'contact'];
-      if ('IntersectionObserver' in window) {
-        var spy = new IntersectionObserver(function (entries) {
-          entries.forEach(function (en) {
-            if (!en.isIntersecting) return;
-            links.forEach(function (l) { l.classList.toggle('active', l.getAttribute('href') === '#' + en.target.id); });
-          });
-        }, { rootMargin: '-45% 0px -50% 0px' });
-        ids.forEach(function (id) { var s = document.getElementById(id); if (s) spy.observe(s); });
-      }
-
-      /* Staggered reveal for card grids */
-      document.querySelectorAll('.process-grid, .project-grid').forEach(function (grid) {
-        var items = grid.querySelectorAll('.reveal');
-        function clearDelays() { items.forEach(function (it) { it.style.transitionDelay = ''; }); }
-        if (!('IntersectionObserver' in window)) return;
-        items.forEach(function (it, i) { it.style.transitionDelay = (i * 0.12) + 's'; });
-        var io = new IntersectionObserver(function (es) {
-          es.forEach(function (e) {
-            if (e.isIntersecting) { setTimeout(clearDelays, 1600); io.disconnect(); }
-          });
-        }, { threshold: 0.1 });
-        io.observe(grid);
-      });
-
-      /* 3D tilt on hero card + magnetic buttons (desktop only) */
-      if (fine && !reduce) {
-        var hv = document.querySelector('.hero-visual');
-        var hp = document.querySelector('.hero-panel');
-        if (hv && hp) {
-          hv.addEventListener('mousemove', function (e) {
-            var r = hv.getBoundingClientRect();
-            var x = (e.clientX - r.left) / r.width - 0.5;
-            var y = (e.clientY - r.top) / r.height - 0.5;
-            hp.style.transform = 'perspective(900px) rotateX(' + (-y * 8) + 'deg) rotateY(' + (x * 10) + 'deg)';
-          });
-          hv.addEventListener('mouseleave', function () { hp.style.transform = ''; });
-        }
-        document.querySelectorAll('.btn').forEach(function (b) {
-          b.addEventListener('mousemove', function (e) {
-            var r = b.getBoundingClientRect();
-            var dx = (e.clientX - (r.left + r.width / 2)) * 0.22;
-            var dy = (e.clientY - (r.top + r.height / 2)) * 0.3;
-            b.style.translate = dx + 'px ' + dy + 'px';
-          });
-          b.addEventListener('mouseleave', function () { b.style.translate = ''; });
-        });
-      }
-    })();
-  </script>
+<footer class="foot gutter"><a class="logo" href="#home">PEEYUSH<small>SERIES</small></a><span>© <span id="year"></span> Peeyush Kumar Jangid. Built with purpose.</span><a href="admin.html">OWNER ADMIN ↗</a></footer>
+<a class="wa" href="https://wa.me/919928579369?text=Hello%20Peeyush" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">✆</a>
 </body>
 </html>
