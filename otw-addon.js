@@ -70,6 +70,10 @@
 .otw-admin .row{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--otw-mute);margin-bottom:8px}\
 .otw-admin .row input{width:auto;margin:0}\
 .otw-admin .msg{font-size:12px;margin-top:8px;color:var(--otw-mute);min-height:1em}\
+.otw-tabs{display:flex;gap:8px;margin:0 28px 18px 0}\
+.otw-tab{flex:1;background:transparent;color:var(--otw-mute);border:1px solid var(--otw-line);border-radius:10px;padding:10px 8px;font:700 13px system-ui,sans-serif;cursor:pointer}\
+.otw-tab.on{background:var(--otw-acc);color:#1a1200;border-color:var(--otw-acc)}\
+.otw-modal input[type=file]{padding:8px}\
 @media(max-width:560px){.otw-grid{grid-template-columns:1fr}.otw-modal{padding:24px 16px}}';
 
   var st = document.createElement('style');
@@ -95,6 +99,10 @@
   overlay.innerHTML = '\
 <div class="otw-modal">\
  <button class="otw-close" type="button" aria-label="Close">✕</button>\
+ <div class="otw-tabs" id="otwTabs">\
+  <button type="button" class="otw-tab on" data-tab="offer">Offer me a job</button>\
+  <button type="button" class="otw-tab" data-tab="apply">Apply for a job</button>\
+ </div>\
  <div id="otwFormBox">\
   <div class="otw-head"><span class="otw-dot"></span>OPEN TO WORK</div>\
   <h2>Hire Peeyush Kumar Jangid</h2>\
@@ -121,9 +129,34 @@
    <p class="otw-note">The message above is a ready professional template — edit it freely before sending.</p>\
   </form>\
  </div>\
+ <div id="otwApplyBox" hidden>\
+  <div class="otw-head"><span class="otw-dot"></span>NOW HIRING</div>\
+  <h2>Apply for a job</h2>\
+  <p class="otw-sub">Looking for an opportunity? Fill in your details and add your resume. I will review your application and contact you if shortlisted.</p>\
+  <form id="otwApply" novalidate>\
+   <div class="otw-grid">\
+    <div><label>Full name *</label><input name="aname" autocomplete="name"></div>\
+    <div><label>Position applying for *</label><input name="arole" placeholder="e.g. HVAC Site Supervisor"></div>\
+    <div><label>Email *</label><input name="aemail" type="email" autocomplete="email"></div>\
+    <div><label>Phone / WhatsApp</label><input name="aphone" type="tel" autocomplete="tel"></div>\
+    <div><label>Experience</label><input name="aexp" placeholder="e.g. 2 years"></div>\
+    <div><label>Current location</label><input name="aloc"></div>\
+    <div class="full"><label>Expected salary (optional)</label><input name="asalary"></div>\
+    <div class="full"><label>Resume file (PDF / DOC / DOCX)</label><input name="afile" type="file" accept=".pdf,.doc,.docx,application/pdf"></div>\
+    <div class="full"><label>OR resume link (Google Drive / LinkedIn)</label><input name="alink" type="url" placeholder="https://"></div>\
+    <div class="full"><label>Message</label><textarea name="amsg" rows="4" placeholder="Tell me briefly about yourself"></textarea></div>\
+   </div>\
+   <div class="otw-err" id="otwAErr"></div>\
+   <div class="otw-actions">\
+    <button class="otw-btn pri" type="submit">Submit Application</button>\
+    <button class="otw-btn ghost" type="button" id="otwACancel">Cancel</button>\
+   </div>\
+   <p class="otw-note">Resume is required: upload a file or paste a link.</p>\
+  </form>\
+ </div>\
  <div class="otw-done" id="otwDone" hidden>\
   <h3>✅ Thank you!</h3>\
-  <p class="otw-sub">Your hiring message is ready to send / has been sent. I will get back to you shortly.</p>\
+  <p class="otw-sub" id="otwDoneMsg">Thank you. I will get back to you shortly.</p>\
   <button class="otw-btn ghost" type="button" id="otwDoneClose">Close</button>\
  </div>\
 </div>';
@@ -138,9 +171,29 @@
     'Warm regards,';
   form.elements.message.value = DEFAULT_MSG;
 
-  function openModal() {
-    $('#otwFormBox', overlay).hidden = false;
+  function showTab(tab) {
+    var apply = tab === 'apply';
+    $('#otwTabs', overlay).hidden = false;
+    $('#otwFormBox', overlay).hidden = apply;
+    $('#otwApplyBox', overlay).hidden = !apply;
     $('#otwDone', overlay).hidden = true;
+    Array.prototype.forEach.call(overlay.querySelectorAll('.otw-tab'), function (b) {
+      b.classList.toggle('on', b.getAttribute('data-tab') === (apply ? 'apply' : 'offer'));
+    });
+  }
+  function showDone(msg) {
+    $('#otwTabs', overlay).hidden = true;
+    $('#otwFormBox', overlay).hidden = true;
+    $('#otwApplyBox', overlay).hidden = true;
+    $('#otwDoneMsg', overlay).textContent = msg;
+    $('#otwDone', overlay).hidden = false;
+  }
+  Array.prototype.forEach.call(overlay.querySelectorAll('.otw-tab'), function (b) {
+    b.addEventListener('click', function () { showTab(b.getAttribute('data-tab')); });
+  });
+
+  function openModal(tab) {
+    showTab(tab === 'apply' ? 'apply' : 'offer');
     overlay.hidden = false;
     document.body.style.overflow = 'hidden';
     setTimeout(function () { form.elements.name.focus(); }, 50);
@@ -186,8 +239,9 @@
     var btn = form.querySelector('button[type=submit]');
 
     function finish() {
-      $('#otwFormBox', overlay).hidden = true;
-      $('#otwDone', overlay).hidden = false;
+      showDone(CFG.formEndpoint
+        ? 'Your hiring message has been sent. I will get back to you shortly.'
+        : 'Your email app has opened with the message ready. Please press Send there to deliver it.');
     }
     if (CFG.formEndpoint) {
       btn.disabled = true;
@@ -212,6 +266,63 @@
     $('#otwErr', overlay).textContent = err;
     if (err) return;
     window.open('https://wa.me/' + CFG.whatsapp + '?text=' + encodeURIComponent(fullText(d)), '_blank', 'noopener');
+  });
+
+  /* ---------- Job application form (candidate + resume) ---------- */
+  var aform = $('#otwApply', overlay);
+  $('#otwACancel', overlay).addEventListener('click', closeModal);
+
+  aform.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var f = aform.elements, d = {}, errBox = $('#otwAErr', overlay);
+    ['aname', 'arole', 'aemail', 'aphone', 'aexp', 'aloc', 'asalary', 'alink', 'amsg']
+      .forEach(function (k) { d[k] = (f[k].value || '').trim(); });
+    var file = f.afile.files[0];
+    var err = '';
+    if (!d.aname || !d.arole) err = 'Please fill your name and the position you are applying for.';
+    else if (!/^\S+@\S+\.\S+$/.test(d.aemail)) err = 'Please enter a valid email address.';
+    else if (!file && !d.alink) err = 'Please upload your resume or paste a resume link.';
+    else if (file && !/\.(pdf|docx?)$/i.test(file.name)) err = 'Resume must be a PDF, DOC or DOCX file.';
+    else if (file && file.size > CFG.maxFileMB * 1024 * 1024) err = 'Resume is larger than ' + CFG.maxFileMB + ' MB.';
+    errBox.textContent = err;
+    if (err) return;
+
+    var subject = 'Job Application: ' + d.arole + ' - ' + d.aname;
+    var body = 'New job application\n\n' +
+      'Name: ' + d.aname + '\nPosition: ' + d.arole + '\nEmail: ' + d.aemail +
+      (d.aphone ? '\nPhone: ' + d.aphone : '') +
+      (d.aexp ? '\nExperience: ' + d.aexp : '') +
+      (d.aloc ? '\nLocation: ' + d.aloc : '') +
+      (d.asalary ? '\nExpected salary: ' + d.asalary : '') +
+      (d.alink ? '\nResume link: ' + d.alink : '') +
+      (file ? '\nResume file: ' + file.name : '') +
+      (d.amsg ? '\n\nMessage:\n' + d.amsg : '');
+    var btn = aform.querySelector('button[type=submit]');
+
+    if (CFG.formEndpoint) {
+      var fd = new FormData();
+      fd.append('_subject', subject);
+      fd.append('name', d.aname);
+      fd.append('email', d.aemail);
+      fd.append('message', body);
+      if (file) fd.append('resume', file, file.name);
+      btn.disabled = true;
+      fetch(CFG.formEndpoint, { method: 'POST', headers: { 'Accept': 'application/json' }, body: fd })
+        .then(function (r) {
+          if (!r.ok) throw new Error();
+          aform.reset();
+          showDone('Your application has been submitted. Thank you, I will contact you if you are shortlisted.');
+        })
+        .catch(function () {
+          errBox.textContent = 'Could not submit. Please email your resume to ' + CFG.email;
+        })
+        .then(function () { btn.disabled = false; });
+    } else {
+      window.location.href = 'mailto:' + CFG.email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      showDone(file
+        ? 'Your email app has opened with your details. Please attach your resume (' + file.name + ') to that email and press Send.'
+        : 'Your email app has opened with your details and resume link. Please press Send there to submit.');
+    }
   });
 
   /* Floating badge + hook existing "Open to work" links */
