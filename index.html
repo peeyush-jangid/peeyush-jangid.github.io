@@ -164,6 +164,50 @@
     .btn { transition: translate .2s ease, background-color .25s ease, border-color .25s ease, color .25s ease, box-shadow .25s ease; }
     .hero-panel { transition: transform .35s ease-out; will-change: transform; }
   </style>
+  <section class="section section-wrap" id="certificates">
+  <div class="section-heading reveal">
+    <div>
+      <span class="section-kicker">06 / CREDENTIALS</span>
+      <h2>Certificates &<br><span class="muted-heading">achievements.</span></h2>
+    </div>
+    <p>Professional certificates, training records and achievements.</p>
+  </div>
+
+  <div class="certificate-admin">
+    <h3>Add a Certificate</h3>
+
+    <form id="certificate-form">
+      <label>Certificate Title</label>
+      <input id="cert-title" type="text"
+        placeholder="Enter certificate name" required>
+
+      <label>Issuing Organisation</label>
+      <input id="cert-issuer" type="text"
+        placeholder="Enter organisation name" required>
+
+      <label>Issue Date</label>
+      <input id="cert-date" type="month">
+
+      <label>Upload Certificate (PDF / JPG / PNG)</label>
+      <input id="cert-file" type="file"
+        accept=".pdf,.jpg,.jpeg,.png" required>
+
+      <button class="btn btn-primary" type="submit">
+        Add Certificate +
+      </button>
+    </form>
+
+    <p class="certificate-note">
+      Browser uploads are saved locally. To publish a certificate for all
+      visitors, add its file to your GitHub repository and update certificates.json.
+    </p>
+    <p id="cert-message" role="status"></p>
+  </div>
+
+  <div class="certificate-grid" id="certificate-list">
+    <p>Loading certificates...</p>
+  </div>
+</section>
   <script defer src="script.js"></script>
   <script defer src="work-files.js"></script><script defer src="certificates.js"></script>
 </head>
