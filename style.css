@@ -159,3 +159,13 @@ a.open-work{display:inline-flex;margin-top:24px;font-size:11px;letter-spacing:.2
   display: block;
   box-shadow: 0 0 20px rgba(214, 179, 106, 0.3);
 }
+
+/* Professional Open to Work banner */
+.open-to-work-banner{display:flex;align-items:center;gap:14px;max-width:590px;margin:0 0 24px;padding:15px 16px;border:1px solid rgba(143,203,156,.32);background:linear-gradient(100deg,rgba(143,203,156,.09),rgba(214,179,106,.045));}
+.open-work-indicator{width:9px;height:9px;flex:none;border-radius:50%;background:#8fcb9c;box-shadow:0 0 0 5px rgba(143,203,156,.10),0 0 14px rgba(143,203,156,.55)}
+.open-to-work-banner>div{display:grid;gap:4px;flex:1}
+.open-to-work-banner strong{font-size:10px;letter-spacing:1.6px;color:#a9d9b2}
+.open-to-work-banner small{font-size:11px;line-height:1.5;color:var(--muted)}
+.open-to-work-banner>a{font-size:10px;letter-spacing:.7px;color:var(--gold2);white-space:nowrap;border-bottom:1px solid var(--line);padding-bottom:4px}
+.open-to-work-banner>a span{margin-left:5px}
+@media(max-width:560px){.open-to-work-banner{align-items:flex-start;flex-wrap:wrap}.open-to-work-banner>a{margin-left:23px}}
