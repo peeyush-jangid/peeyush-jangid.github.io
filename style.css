@@ -169,3 +169,84 @@ a.open-work{display:inline-flex;margin-top:24px;font-size:11px;letter-spacing:.2
 .open-to-work-banner>a{font-size:10px;letter-spacing:.7px;color:var(--gold2);white-space:nowrap;border-bottom:1px solid var(--line);padding-bottom:4px}
 .open-to-work-banner>a span{margin-left:5px}
 @media(max-width:560px){.open-to-work-banner{align-items:flex-start;flex-wrap:wrap}.open-to-work-banner>a{margin-left:23px}}
+.certificate-admin {
+  padding: 25px;
+  margin: 25px 0;
+  background: #151720;
+  border: 1px solid rgba(214,179,106,.3);
+}
+
+.certificate-admin h3 {
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+
+.certificate-admin label {
+  display: block;
+  color: var(--gold);
+  font-size: 11px;
+  margin: 15px 0 7px;
+}
+
+.certificate-admin input {
+  width: 100%;
+  padding: 12px;
+  background: #171922;
+  color: white;
+  border: 1px solid rgba(255,255,255,.2);
+}
+
+.certificate-admin button {
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.certificate-note {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+  margin-top: 15px;
+}
+
+.certificate-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
+  gap: 18px;
+  margin-top: 25px;
+}
+
+.certificate-card {
+  padding: 22px;
+  background: #151720;
+  border: 1px solid rgba(214,179,106,.3);
+}
+
+.certificate-card h3 {
+  color: var(--gold);
+  font-size: 17px;
+}
+
+.certificate-card p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.certificate-card a,
+.certificate-card button {
+  color: var(--gold);
+  margin-right: 12px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.certificate-card button {
+  background: transparent;
+  border: 0;
+}
+
+@media(max-width:560px) {
+  .certificate-admin {
+    padding: 16px;
+  }
+}
