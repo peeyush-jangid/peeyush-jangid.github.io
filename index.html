@@ -194,7 +194,7 @@
     <div class="sidebar-head"><span class="brand-mark brand-photo" style="width:44px;height:44px;overflow:hidden;border-radius:50%;padding:0;border:2px solid #d6b36a;background:#fff;flex:none;display:block"><img src="profile-photo.jpg" alt="Peeyush" width="44" height="44" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block" /></span><button class="sidebar-close" type="button" aria-label="Close side menu">✕</button></div>
     <div class="sidebar-name">PEEYUSH KUMAR JANGID<small>Project Engineer · HVAC</small></div>
     <nav class="sidebar-links">
-      <a href="#about">About</a><a href="#process">Process</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#work-files">Notes</a><a href="#contact">Contact Us</a>
+      <a href="#about">About</a><a href="#process">Process</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#work-files">Notes</a><a href="#contact">Contact Us</a><a href="#" class="auth-nav" data-auth-open>Sign in</a>
     </nav>
   </aside>
 
@@ -202,7 +202,7 @@
     <div class="brand-wrap"><button class="brand-mark brand-photo side-toggle" type="button" aria-label="Open side menu" aria-controls="sidebar" aria-expanded="false" style="width:44px;height:44px;overflow:hidden;border-radius:50%;padding:0;border:2px solid #d6b36a;background:#fff;flex:none;cursor:pointer"><img src="profile-photo.jpg" alt="Peeyush" width="44" height="44" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block" /></button><a class="brand" href="#home" aria-label="Peeyush home"><span>PEEYUSH<span class="brand-muted"> / PORTFOLIO</span></span></a></div>
     <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
     <nav class="nav-links" aria-label="Main navigation">
-      <a href="#about">About</a><a href="#process">Process</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#work-files">Notes</a><a href="#contact" class="nav-contact">Let's talk <span>↗</span></a>
+      <a href="#about">About</a><a href="#process">Process</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#work-files">Notes</a><a href="#" class="auth-nav" data-auth-open>Sign in</a><a href="#contact" class="nav-contact">Let's talk <span>↗</span></a>
     </nav>
   </header>
 
@@ -512,7 +512,8 @@
           <div><label for="h-exp">WORK EXPERIENCE</label><select id="h-exp" name="Work Experience"><option value="">Select experience</option><option>Fresher</option><option>Less than 1 year</option><option>1–2 years</option><option>2–5 years</option><option>5+ years</option></select></div>
           <div><label for="h-type">EMPLOYMENT TYPE</label><select id="h-type" name="Employment Type"><option value="">Select type</option><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Internship</option><option>Any suitable role</option></select></div>
           <div><label for="h-notice">AVAILABILITY / NOTICE PERIOD</label><input id="h-notice" name="Availability / Notice Period" type="text" placeholder="Immediate / 15 days / 30 days" /></div>
-          <div class="otw-full"><label for="h-cv">UPLOAD YOUR CV * (PDF / DOC / DOCX, MAX 5 MB)</label><input id="h-cv" name="attachment" type="file" accept=".pdf,.doc,.docx" required /></div>
+          <div class="otw-full cv-file-wrap"><label for="h-cv">UPLOAD YOUR CV * (PDF / DOC / DOCX, MAX 5 MB)</label><input id="h-cv" name="attachment" type="file" accept=".pdf,.doc,.docx" required /></div>
+          <div class="otw-full cv-link-wrap"><label for="h-cv-link">YOUR CV LINK * (GOOGLE DRIVE / DROPBOX)</label><input id="h-cv-link" name="CV Link" type="url" placeholder="https://drive.google.com/…  (sharing: Anyone with the link)" /></div>
           <div class="otw-full"><label for="h-message">SKILLS, QUALIFICATIONS & MESSAGE *</label><textarea id="h-message" name="Message" placeholder="Your key skills, education, preferred location and a short introduction…" required></textarea></div>
         </div>
         <button class="btn btn-primary" id="hire-submit" type="submit" data-label="Submit Job Application">Submit Job Application <span>↗</span></button>
@@ -549,7 +550,16 @@
     
     // ---- Reliable sending: Web3Forms (details, instant) + FormSubmit in a hidden frame (carries the file) ----
     // Paste your Google Apps Script web app URL here (see cv-receiver.gs). Leave as is to use the FormSubmit fallback.
-    var CV_SCRIPT_URL = 'PASTE_APPS_SCRIPT_URL_HERE';
+    var CV_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZaTHory5Ot9VWPibUVjU_Qc-nHb_M1zkafnVa9eBD9NzVkXchxB95hw5U6TlOBDmwTw/exec';
+
+    // Shows the CV file box when the Apps Script URL is set, otherwise asks for a CV link (always reaches your email)
+    function cvMode(form){
+      var configured = CV_SCRIPT_URL.indexOf('PASTE_') !== 0;
+      var fw = form.querySelector('.cv-file-wrap'), lw = form.querySelector('.cv-link-wrap');
+      var fi = fw.querySelector('input'), li = lw.querySelector('input');
+      fw.style.display = configured ? '' : 'none'; fi.disabled = !configured; fi.required = configured;
+      lw.style.display = configured ? 'none' : ''; li.disabled = configured; li.required = !configured;
+    }
     function fileToB64(file){
       return new Promise(function(res, rej){
         var r = new FileReader();
@@ -595,6 +605,17 @@
         .catch(function(){ clearTimeout(timer); return false; });
       return Promise.all([w3f, upload]).then(function(r){ return r[0]; });
     }
+    // Used by the sign-up / sign-in section to tell you about new accounts
+    window.PORTFOLIO_NOTIFY = function(title, fields){
+      var lines=[title]; Object.keys(fields).forEach(function(k){ if(fields[k]) lines.push(k+': '+fields[k]); });
+      var text=lines.join('\n');
+      var fd=new FormData(); fd.append('access_key',W3F_KEY); fd.append('subject',title+' — Peeyush Portfolio'); fd.append('from_name','Peeyush Portfolio');
+      Object.keys(fields).forEach(function(k){ if(fields[k]) fd.append(k,fields[k]); });
+      fetch('https://api.web3forms.com/submit',{method:'POST',body:fd}).catch(function(){});
+      if(WA_APIKEY!=='YOUR_CALLMEBOT_APIKEY'){
+        fetch('https://api.callmebot.com/whatsapp.php?phone='+encodeURIComponent(WA_PHONE)+'&text='+encodeURIComponent(text)+'&apikey='+encodeURIComponent(WA_APIKEY),{mode:'no-cors'}).catch(function(){});
+      }
+    };
     function addWaButton(box){
       var t=''; try{ t=sessionStorage.getItem('wa_summary')||''; sessionStorage.removeItem('wa_summary'); }catch(e){}
       if(!t) return;
@@ -617,6 +638,7 @@
           ok=document.getElementById(cfg.ok),err=document.getElementById(cfg.err),
           btn=document.getElementById(cfg.btn),last=null;
       var cvCheck=form.querySelector('input[type=file]')?cvInit(form):function(){return true;};
+      if(form.querySelector('.cv-file-wrap')) cvMode(form);
       function openM(e){ if(e) e.preventDefault();
         document.querySelectorAll('.otw-modal.open').forEach(function(m){m.classList.remove('open');});
         last=document.activeElement; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
@@ -651,6 +673,174 @@
     if(new URLSearchParams(location.search).get('hired')==='1'){ document.getElementById('hire-open').click(); document.getElementById('hire-ok').style.display='block'; addWaButton(document.getElementById('hire-ok')); history.replaceState(null,'',location.pathname); }
     window.addEventListener('pageshow',function(){ var ob=document.getElementById('otw-submit'); ob.disabled=false; ob.innerHTML=ob.getAttribute('data-label')+' <span>↗</span>'; });
     window.addEventListener('pageshow',function(){ var hb=document.getElementById('hire-submit'); hb.disabled=false; hb.innerHTML=hb.getAttribute('data-label')+' <span>↗</span>'; });
+  })();
+  </script>
+
+  <div class="otw-modal" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title" aria-hidden="true">
+    <div class="otw-box" style="max-width:440px">
+      <button class="otw-close" id="auth-close" type="button" aria-label="Close">✕</button>
+      <span class="otw-badge"><i></i> ACCOUNT</span>
+      <h2 id="auth-title">Sign in or create an account</h2>
+
+      <div id="auth-forms">
+        <div class="auth-tabs" role="tablist">
+          <button type="button" class="auth-tab active" id="tab-in" role="tab" aria-selected="true">Sign in</button>
+          <button type="button" class="auth-tab" id="tab-up" role="tab" aria-selected="false">Sign up</button>
+        </div>
+        <div class="otw-msg otw-err" id="auth-err" role="alert"></div>
+        <div class="otw-msg otw-ok" id="auth-ok" role="status"></div>
+
+        <form id="form-in" novalidate>
+          <label for="in-email">EMAIL</label><input id="in-email" type="email" autocomplete="email" required />
+          <label for="in-pass">PASSWORD</label><input id="in-pass" type="password" autocomplete="current-password" required />
+          <button class="btn btn-primary" id="in-btn" type="submit">Sign in <span>↗</span></button>
+          <a href="#" class="auth-link" id="forgot">Forgot password?</a>
+        </form>
+
+        <form id="form-up" novalidate style="display:none">
+          <label for="up-name">FULL NAME</label><input id="up-name" type="text" autocomplete="name" required />
+          <label for="up-email">EMAIL</label><input id="up-email" type="email" autocomplete="email" required />
+          <label for="up-pass">PASSWORD (MIN 6 CHARACTERS)</label><input id="up-pass" type="password" autocomplete="new-password" minlength="6" required />
+          <button class="btn btn-primary" id="up-btn" type="submit">Create account <span>↗</span></button>
+        </form>
+
+        <div class="auth-or"><span>or</span></div>
+        <button class="auth-google" id="auth-google" type="button">Continue with Google</button>
+        <p class="auth-note">Your password is handled securely by Google Firebase and is never stored on this website.</p>
+      </div>
+
+      <div id="auth-account" style="display:none">
+        <p class="auth-hello" id="auth-hello"></p>
+        <p class="auth-note" style="margin-top:0">You are signed in. Your name and email will be filled in automatically in the job forms.</p>
+        <button class="btn btn-primary" id="signout-btn" type="button">Sign out <span>↗</span></button>
+      </div>
+    </div>
+  </div>
+  <script>
+  (function(){
+    // ===== Firebase settings: paste yours from Firebase console > Project settings > Your apps =====
+    var FIREBASE_CONFIG = {
+      apiKey: 'YOUR_API_KEY',
+      authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
+      projectId: 'YOUR_PROJECT_ID',
+      appId: 'YOUR_APP_ID'
+    };
+    var configured = FIREBASE_CONFIG.apiKey.indexOf('YOUR_') !== 0;
+    var V = '10.14.1', fb = null;
+    var $ = function(id){ return document.getElementById(id); };
+    var modal=$('auth-modal'), errBox=$('auth-err'), okBox=$('auth-ok'), lastFocus=null;
+
+    function msg(type,t){ errBox.style.display='none'; okBox.style.display='none'; if(!t) return; var b=type==='err'?errBox:okBox; b.textContent=t; b.style.display='block'; }
+    function friendly(e){
+      var c=(e&&e.code)||'';
+      var m={ 'auth/email-already-in-use':'This email already has an account. Please sign in.',
+        'auth/invalid-email':'Please enter a valid email address.',
+        'auth/weak-password':'Password must be at least 6 characters.',
+        'auth/invalid-credential':'Email or password is incorrect.',
+        'auth/wrong-password':'Email or password is incorrect.',
+        'auth/user-not-found':'No account found with this email.',
+        'auth/too-many-requests':'Too many attempts. Please wait a few minutes and try again.',
+        'auth/popup-closed-by-user':'Google sign-in was closed before finishing.',
+        'auth/unauthorized-domain':'This website is not authorised in Firebase yet (Authentication > Settings > Authorized domains).',
+        'auth/operation-not-allowed':'This sign-in method is not turned on in Firebase yet.',
+        'auth/network-request-failed':'Network problem. Please check your internet and try again.' };
+      return m[c] || 'Something went wrong. Please try again.';
+    }
+    function open(e){ if(e) e.preventDefault();
+      document.querySelectorAll('.otw-modal.open').forEach(function(m){ m.classList.remove('open'); });
+      lastFocus=document.activeElement; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+      msg(); if(!configured) msg('err','Sign in is not set up yet. The site owner needs to add the Firebase settings.'); else load();
+    }
+    function close(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
+    function tab(which){
+      var up = which==='up';
+      $('form-in').style.display = up?'none':''; $('form-up').style.display = up?'':'none';
+      $('tab-in').classList.toggle('active',!up); $('tab-up').classList.toggle('active',up);
+      $('tab-in').setAttribute('aria-selected',String(!up)); $('tab-up').setAttribute('aria-selected',String(up));
+      $('auth-title').textContent = up ? 'Create your account' : 'Sign in to your account'; msg();
+    }
+    function load(){
+      if(!configured) return Promise.reject({code:'not-configured'});
+      if(fb) return Promise.resolve(fb);
+      return Promise.all([
+        import('https://www.gstatic.com/firebasejs/'+V+'/firebase-app.js'),
+        import('https://www.gstatic.com/firebasejs/'+V+'/firebase-auth.js')
+      ]).then(function(m){
+        var app=m[0].initializeApp(FIREBASE_CONFIG), au=m[1], auth=au.getAuth(app);
+        fb={au:au,auth:auth}; au.onAuthStateChanged(auth,render); return fb;
+      });
+    }
+    function prefill(user){
+      var n=user.displayName||'', em=user.email||'';
+      [['m-name',n],['m-email',em],['h-name',n],['h-email',em]].forEach(function(p){ var el=$(p[0]); if(el && !el.value) el.value=p[1]; });
+    }
+    function render(user){
+      var label = user ? 'Hi, '+((user.displayName||user.email||'').split(' ')[0]) : 'Sign in';
+      document.querySelectorAll('.auth-nav').forEach(function(a){ a.textContent=label; });
+      $('auth-forms').style.display = user?'none':''; $('auth-account').style.display = user?'':'none';
+      if(user){ $('auth-title').textContent='Your account'; $('auth-hello').textContent='Signed in as '+(user.displayName?user.displayName+' · ':'')+user.email; prefill(user); }
+      else { tab('in'); }
+    }
+    function busy(btn,on,label){ btn.disabled=on; btn.innerHTML = on ? 'Please wait…' : label+' <span>↗</span>'; }
+    function notifyNew(user,how){
+      if(window.PORTFOLIO_NOTIFY) window.PORTFOLIO_NOTIFY('NEW SIGN-UP',{ 'Name':user.displayName||'', 'Email':user.email||'', 'Method':how });
+    }
+
+    document.querySelectorAll('[data-auth-open]').forEach(function(a){ a.addEventListener('click',open); });
+    $('auth-close').addEventListener('click',close);
+    modal.addEventListener('click',function(e){ if(e.target===modal) close(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&modal.classList.contains('open')) close(); });
+    $('tab-in').addEventListener('click',function(){ tab('in'); });
+    $('tab-up').addEventListener('click',function(){ tab('up'); });
+
+    $('form-in').addEventListener('submit',function(e){
+      e.preventDefault(); msg();
+      var em=$('in-email').value.trim(), pw=$('in-pass').value;
+      if(!em||!pw){ msg('err','Please enter your email and password.'); return; }
+      busy($('in-btn'),true,'Sign in');
+      load().then(function(f){ return f.au.signInWithEmailAndPassword(f.auth,em,pw); })
+        .then(function(){ $('form-in').reset(); close(); })
+        .catch(function(x){ msg('err',friendly(x)); })
+        .then(function(){ busy($('in-btn'),false,'Sign in'); });
+    });
+
+    $('form-up').addEventListener('submit',function(e){
+      e.preventDefault(); msg();
+      var nm=$('up-name').value.trim(), em=$('up-email').value.trim(), pw=$('up-pass').value;
+      if(!nm||!em||pw.length<6){ msg('err','Please enter your name, email and a password of at least 6 characters.'); return; }
+      busy($('up-btn'),true,'Create account');
+      load().then(function(f){
+        return f.au.createUserWithEmailAndPassword(f.auth,em,pw).then(function(cred){
+          return f.au.updateProfile(cred.user,{displayName:nm}).then(function(){ return cred.user; });
+        });
+      }).then(function(user){ notifyNew({displayName:nm,email:em},'Email & password'); $('form-up').reset(); render(user); close(); })
+        .catch(function(x){ msg('err',friendly(x)); })
+        .then(function(){ busy($('up-btn'),false,'Create account'); });
+    });
+
+    $('auth-google').addEventListener('click',function(){
+      msg();
+      load().then(function(f){
+        return f.au.signInWithPopup(f.auth,new f.au.GoogleAuthProvider()).then(function(res){
+          var info=f.au.getAdditionalUserInfo(res); if(info && info.isNewUser) notifyNew(res.user,'Google');
+        });
+      }).then(close).catch(function(x){ msg('err', x&&x.code==='not-configured' ? 'Sign in is not set up yet.' : friendly(x)); });
+    });
+
+    $('forgot').addEventListener('click',function(e){
+      e.preventDefault(); msg();
+      var em=$('in-email').value.trim();
+      if(!em){ msg('err','Enter your email above first, then press "Forgot password?".'); return; }
+      load().then(function(f){ return f.au.sendPasswordResetEmail(f.auth,em); })
+        .then(function(){ msg('ok','Password reset email sent. Please check your inbox and spam folder.'); })
+        .catch(function(x){ msg('err',friendly(x)); });
+    });
+
+    $('signout-btn').addEventListener('click',function(){
+      load().then(function(f){ return f.au.signOut(f.auth); }).then(close).catch(function(){});
+    });
+
+    if(configured) load().catch(function(){});
   })();
   </script>
 </body>

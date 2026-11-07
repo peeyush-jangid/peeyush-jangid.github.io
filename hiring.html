@@ -50,7 +50,8 @@
           <div><label for="experience">WORK EXPERIENCE</label><select id="experience" name="Work Experience"><option value="">Select experience</option><option>Fresher</option><option>Less than 1 year</option><option>1–2 years</option><option>2–5 years</option><option>5+ years</option></select></div>
           <div><label for="type">EMPLOYMENT TYPE</label><select id="type" name="Employment Type"><option value="">Select type</option><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Internship</option><option>Any suitable role</option></select></div>
           <div><label for="notice">AVAILABILITY / NOTICE PERIOD</label><input id="notice" name="Availability / Notice Period" type="text" placeholder="Immediate / 15 days / 30 days" /></div>
-          <div class="field-full"><label for="cv">UPLOAD YOUR CV * (PDF / DOC / DOCX, MAX 5 MB)</label><input id="cv" name="attachment" type="file" accept=".pdf,.doc,.docx" required /></div>
+          <div class="field-full cv-file-wrap"><label for="cv">UPLOAD YOUR CV * (PDF / DOC / DOCX, MAX 5 MB)</label><input id="cv" name="attachment" type="file" accept=".pdf,.doc,.docx" required /></div>
+          <div class="field-full cv-link-wrap"><label for="cv-link">YOUR CV LINK * (GOOGLE DRIVE / DROPBOX)</label><input id="cv-link" name="CV Link" type="url" placeholder="https://drive.google.com/…  (sharing: Anyone with the link)" /></div>
           <div class="field-full"><label for="message">SKILLS, QUALIFICATIONS & MESSAGE *</label><textarea id="message" name="Message" placeholder="Share your key skills, education, preferred location, and a short introduction…" required></textarea></div>
         </div>
         <p class="required-note">* Required fields</p>
@@ -90,7 +91,16 @@
     
     // ---- Reliable sending: Web3Forms (details, instant) + FormSubmit in a hidden frame (carries the file) ----
     // Paste your Google Apps Script web app URL here (see cv-receiver.gs). Leave as is to use the FormSubmit fallback.
-    var CV_SCRIPT_URL = 'PASTE_APPS_SCRIPT_URL_HERE';
+    var CV_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZaTHory5Ot9VWPibUVjU_Qc-nHb_M1zkafnVa9eBD9NzVkXchxB95hw5U6TlOBDmwTw/exec';
+
+    // Shows the CV file box when the Apps Script URL is set, otherwise asks for a CV link (always reaches your email)
+    function cvMode(form){
+      var configured = CV_SCRIPT_URL.indexOf('PASTE_') !== 0;
+      var fw = form.querySelector('.cv-file-wrap'), lw = form.querySelector('.cv-link-wrap');
+      var fi = fw.querySelector('input'), li = lw.querySelector('input');
+      fw.style.display = configured ? '' : 'none'; fi.disabled = !configured; fi.required = configured;
+      lw.style.display = configured ? 'none' : ''; li.disabled = configured; li.required = !configured;
+    }
     function fileToB64(file){
       return new Promise(function(res, rej){
         var r = new FileReader();
@@ -152,10 +162,12 @@
       addWaButton(successBox);
       history.replaceState(null, '', location.pathname);
     }
+    cvMode(contactForm);
     contactForm.addEventListener('submit', event => {
       if (!contactForm.reportValidity()) { event.preventDefault(); return; }
-      const cv = document.getElementById('cv').files[0];
-      if (!cv || cv.size > MAX_CV) {
+      const cvInput = document.getElementById('cv');
+      const cv = cvInput.files[0];
+      if (!cvInput.disabled && (!cv || cv.size > MAX_CV)) {
         event.preventDefault();
         alert('Please attach your CV (PDF, DOC or DOCX, up to 5 MB).');
         return;
