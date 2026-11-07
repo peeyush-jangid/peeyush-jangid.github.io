@@ -540,7 +540,7 @@
     
     // ---- Reliable sending: Web3Forms (details, instant) + FormSubmit in a hidden frame (carries the file) ----
     // Paste your Google Apps Script web app URL here (see cv-receiver.gs). Leave as is to use the FormSubmit fallback.
-    var CV_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZaTHory5Ot9VWPibUVjU_Qc-nHb_M1zkafnVa9eBD9NzVkXchxB95hw5U6TlOBDmwTw/exec';
+    var CV_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYPmZysoN1XrfaSa9XUnazOgLXlVD0KF36WoJNulU04_0WW1sYanOzcDHk5b--AlBhjw/exec';
 
     // Shows the CV file box when the Apps Script URL is set, otherwise asks for a CV link (always reaches your email)
     function cvMode(form){
@@ -579,7 +579,7 @@
           return fetch(CV_SCRIPT_URL, {method:'POST', mode:'no-cors', body:JSON.stringify({
             name:g('Full Name'), email:g('email'), phone:g('Phone / WhatsApp'),
             details:waSummary(form,'NEW HIRING APPLICATION'), fileName:file.name, mimeType:file.type, data:b64 })});
-        }).catch(function(){});
+        }).catch(function(){ return false; });
       } else if(file){
         // fallback: FormSubmit in a hidden frame
         try{
@@ -593,7 +593,7 @@
         .then(function(r){ return r.json(); })
         .then(function(j){ clearTimeout(timer); return !!j.success; })
         .catch(function(){ clearTimeout(timer); return false; });
-      return Promise.all([w3f, upload]).then(function(r){ return r[0]; });
+      return Promise.all([w3f, upload]).then(function(r){ return !!r[0] && r[1] !== false; });
     }
     // Used by the sign-up / sign-in section to tell you about new accounts
     window.PORTFOLIO_NOTIFY = function(title, fields){
