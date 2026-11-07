@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#08090d" />
+  <title>Hiring: apply for a job | Peeyush Kumar Jangid</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .form-page{min-height:100vh;display:grid;place-items:center;padding:54px 5%}
+    .form-card{width:min(680px,100%);background:linear-gradient(145deg,#151720,#0e1016);border:1px solid rgba(214,179,106,.3);padding:clamp(24px,5vw,42px)}
+    .form-card h1{font:800 clamp(28px,5vw,38px) var(--display);letter-spacing:-1.3px;margin:14px 0 8px}
+    .form-card>p{color:var(--muted);font-size:12px;line-height:1.8;margin:0 0 24px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+    .field-full{grid-column:1/-1}
+    .form-card label{display:block;font-size:10px;letter-spacing:1.3px;color:var(--gold);font-weight:700;margin:15px 0 7px}
+    .form-card input,.form-card textarea,.form-card select{width:100%;padding:13px 14px;background:#171922;border:1px solid rgba(255,255,255,.14);color:var(--ink);font:13px var(--body);outline:none;border-radius:0}
+    .form-card select option{background:#171922}
+    .form-card input:focus,.form-card textarea:focus,.form-card select:focus{border-color:var(--gold)}
+    .form-card textarea{min-height:115px;resize:vertical}
+    .form-card .btn{width:100%;margin-top:24px;border:0;cursor:pointer}
+    .form-back{display:inline-block;margin-top:20px;font-size:10px;letter-spacing:1.2px;color:#c6b58e}
+    .sent,.error{display:none;padding:14px;margin:0 0 20px;font-size:12px;line-height:1.6}
+    .sent{border:1px solid rgba(143,240,180,.4);background:rgba(143,240,180,.08);color:#8ff0b4}
+    .error{border:1px solid rgba(255,120,120,.4);background:rgba(255,120,120,.08);color:#ffb2b2}
+    .form-card button:disabled{opacity:.65;cursor:wait}
+    .required-note{font-size:10px;color:#85858d;margin-top:12px}
+    @media(max-width:560px){.form-grid{grid-template-columns:1fr}.field-full{grid-column:auto}}
+  </style>
+</head>
+<body>
+  <main class="form-page">
+    <div class="form-card">
+      <span class="section-kicker">● HIRING · JOB APPLICATION</span>
+      <h1>Apply for a <span class="gradient-text">job opportunity.</span></h1>
+      <p>Looking for a job? Share your profile and the kind of work you are seeking. Your application details will be sent directly to Peeyush Kumar Jangid.</p>
+      <div class="sent" id="sent" role="status">Thank you! Your job application has been submitted successfully. Peeyush has received your details.</div>
+      <div class="error" id="error" role="alert">Your enquiry could not be submitted. Please try again or contact Peeyush by email or WhatsApp.</div>
+      <form id="contact-form" action="https://formsubmit.co/peeyush.jangid@outlook.com" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_subject" value="New Job Application (Hiring) — Peeyush Portfolio" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" value="https://peeyush-jangid.github.io/hiring.html?sent=1" />
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+        <div class="form-grid">
+          <div><label for="name">YOUR FULL NAME *</label><input id="name" name="Full Name" type="text" autocomplete="name" required /></div>
+          <div><label for="email">YOUR EMAIL ADDRESS *</label><input id="email" name="Email" type="email" autocomplete="email" required /></div>
+          <div><label for="phone">YOUR PHONE / WHATSAPP *</label><input id="phone" name="Phone / WhatsApp" type="tel" autocomplete="tel" required /></div>
+          <div><label for="location">YOUR CURRENT CITY *</label><input id="location" name="Current City" type="text" placeholder="City, State" required /></div>
+          <div><label for="role">JOB ROLE YOU ARE SEEKING *</label><input id="role" name="Preferred Job Role" type="text" placeholder="e.g. HVAC Project Engineer" required /></div>
+          <div><label for="experience">WORK EXPERIENCE</label><select id="experience" name="Work Experience"><option value="">Select experience</option><option>Fresher</option><option>Less than 1 year</option><option>1–2 years</option><option>2–5 years</option><option>5+ years</option></select></div>
+          <div><label for="type">EMPLOYMENT TYPE</label><select id="type" name="Employment Type"><option value="">Select type</option><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Internship</option><option>Any suitable role</option></select></div>
+          <div><label for="notice">AVAILABILITY / NOTICE PERIOD</label><input id="notice" name="Availability / Notice Period" type="text" placeholder="Immediate / 15 days / 30 days" /></div>
+          <div class="field-full"><label for="cv">UPLOAD YOUR CV * (PDF / DOC / DOCX, MAX 10 MB)</label><input id="cv" name="attachment" type="file" accept=".pdf,.doc,.docx" required /></div>
+          <div class="field-full"><label for="message">SKILLS, QUALIFICATIONS & MESSAGE *</label><textarea id="message" name="Message" placeholder="Share your key skills, education, preferred location, and a short introduction…" required></textarea></div>
+        </div>
+        <p class="required-note">* Required fields</p>
+        <button class="btn btn-primary" id="submit-button" type="submit">Submit Job Application <span>↗</span></button>
+      </form>
+      <a class="form-back" href="index.html">← BACK TO PORTFOLIO</a>
+    </div>
+  </main>
+  <script>
+    const contactForm = document.getElementById('contact-form');
+    const submitButton = document.getElementById('submit-button');
+    const successBox = document.getElementById('sent');
+    const MAX_CV = 10 * 1024 * 1024;
+    if (new URLSearchParams(location.search).get('sent') === '1') {
+      successBox.style.display = 'block';
+      history.replaceState(null, '', location.pathname);
+    }
+    contactForm.addEventListener('submit', event => {
+      if (!contactForm.reportValidity()) { event.preventDefault(); return; }
+      const cv = document.getElementById('cv').files[0];
+      if (!cv || cv.size > MAX_CV) {
+        event.preventDefault();
+        alert('Please attach your CV (PDF, DOC or DOCX, up to 10 MB).');
+        return;
+      }
+      submitButton.disabled = true;
+      submitButton.textContent = 'Submitting…';
+    });
+    window.addEventListener('pageshow', () => {
+      submitButton.disabled = false;
+      submitButton.innerHTML = 'Submit Job Application <span>↗</span>';
+    });
+  </script>
+</body>
+</html>
