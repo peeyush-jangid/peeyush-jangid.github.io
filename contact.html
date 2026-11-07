@@ -94,6 +94,15 @@
     }
     
     // ---- Reliable sending: Web3Forms (details, instant) + FormSubmit in a hidden frame (carries the file) ----
+    // Paste your Google Apps Script web app URL here (see cv-receiver.gs). Leave as is to use the FormSubmit fallback.
+    var CV_SCRIPT_URL = 'PASTE_APPS_SCRIPT_URL_HERE';
+    function fileToB64(file){
+      return new Promise(function(res, rej){
+        var r = new FileReader();
+        r.onload = function(){ res(String(r.result).split(',')[1]); };
+        r.onerror = rej; r.readAsDataURL(file);
+      });
+    }
     var W3F_KEY = '8ea43a97-57b9-4eea-a7dd-9256bdec0f98';
     function sendBoth(form){
       var fd = new FormData();
@@ -106,18 +115,31 @@
         if(el.value && el.value.trim()) fd.append(el.name, el.value);
       });
       var f = form.querySelector('input[type=file]');
-      if(f && f.files && f.files[0]) fd.append('File attached', f.files[0].name + ' (file arrives in the separate FormSubmit email)');
-      // best-effort delivery of the file by email, in a hidden frame so no error page is ever shown
-      try{
-        var fr = document.getElementById('fs_frame');
-        if(!fr){ fr = document.createElement('iframe'); fr.name='fs_frame'; fr.id='fs_frame'; fr.style.display='none'; fr.setAttribute('aria-hidden','true'); document.body.appendChild(fr); }
-        form.target = 'fs_frame'; form.submit(); form.target = '';
-      }catch(e){}
+      if(f && f.files && f.files[0]) fd.append('File attached', f.files[0].name + ' (CV is sent in a separate email)');
+      var file = f && f.files && f.files[0];
+      var upload = Promise.resolve();
+      if(file && CV_SCRIPT_URL.indexOf('PASTE_')!==0){
+        // reliable route: Google Apps Script saves the CV to your Drive and emails it to you
+        upload = fileToB64(file).then(function(b64){
+          var g = function(n){ var el=form.elements[n]; return el ? el.value : ''; };
+          return fetch(CV_SCRIPT_URL, {method:'POST', mode:'no-cors', body:JSON.stringify({
+            name:g('Full Name'), email:g('email'), phone:g('Phone / WhatsApp'),
+            details:waSummary(form,'NEW HIRING APPLICATION'), fileName:file.name, mimeType:file.type, data:b64 })});
+        }).catch(function(){});
+      } else if(file){
+        // fallback: FormSubmit in a hidden frame
+        try{
+          var fr = document.getElementById('fs_frame');
+          if(!fr){ fr = document.createElement('iframe'); fr.name='fs_frame'; fr.id='fs_frame'; fr.style.display='none'; fr.setAttribute('aria-hidden','true'); document.body.appendChild(fr); }
+          form.target = 'fs_frame'; form.submit(); form.target = '';
+        }catch(e){}
+      }
       var ctrl = new AbortController(); var timer = setTimeout(function(){ ctrl.abort(); }, 20000);
-      return fetch('https://api.web3forms.com/submit', {method:'POST', body:fd, signal:ctrl.signal})
+      var w3f = fetch('https://api.web3forms.com/submit', {method:'POST', body:fd, signal:ctrl.signal})
         .then(function(r){ return r.json(); })
         .then(function(j){ clearTimeout(timer); return !!j.success; })
         .catch(function(){ clearTimeout(timer); return false; });
+      return Promise.all([w3f, upload]).then(function(r){ return r[0]; });
     }
     function addWaButton(box){
       var t=''; try{ t=sessionStorage.getItem('wa_summary')||''; sessionStorage.removeItem('wa_summary'); }catch(e){}

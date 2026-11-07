@@ -512,7 +512,7 @@
           <div><label for="h-exp">WORK EXPERIENCE</label><select id="h-exp" name="Work Experience"><option value="">Select experience</option><option>Fresher</option><option>Less than 1 year</option><option>1–2 years</option><option>2–5 years</option><option>5+ years</option></select></div>
           <div><label for="h-type">EMPLOYMENT TYPE</label><select id="h-type" name="Employment Type"><option value="">Select type</option><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Internship</option><option>Any suitable role</option></select></div>
           <div><label for="h-notice">AVAILABILITY / NOTICE PERIOD</label><input id="h-notice" name="Availability / Notice Period" type="text" placeholder="Immediate / 15 days / 30 days" /></div>
-          <div class="otw-full"><label for="h-cv">UPLOAD YOUR CV * (PDF / DOC / DOCX, MAX 10 MB)</label><input id="h-cv" name="attachment" type="file" accept=".pdf,.doc,.docx" required /></div>
+          <div class="otw-full"><label for="h-cv">UPLOAD YOUR CV * (PDF / DOC / DOCX, MAX 5 MB)</label><input id="h-cv" name="attachment" type="file" accept=".pdf,.doc,.docx" required /></div>
           <div class="otw-full"><label for="h-message">SKILLS, QUALIFICATIONS & MESSAGE *</label><textarea id="h-message" name="Message" placeholder="Your key skills, education, preferred location and a short introduction…" required></textarea></div>
         </div>
         <button class="btn btn-primary" id="hire-submit" type="submit" data-label="Submit Job Application">Submit Job Application <span>↗</span></button>
@@ -548,6 +548,15 @@
     }
     
     // ---- Reliable sending: Web3Forms (details, instant) + FormSubmit in a hidden frame (carries the file) ----
+    // Paste your Google Apps Script web app URL here (see cv-receiver.gs). Leave as is to use the FormSubmit fallback.
+    var CV_SCRIPT_URL = 'PASTE_APPS_SCRIPT_URL_HERE';
+    function fileToB64(file){
+      return new Promise(function(res, rej){
+        var r = new FileReader();
+        r.onload = function(){ res(String(r.result).split(',')[1]); };
+        r.onerror = rej; r.readAsDataURL(file);
+      });
+    }
     var W3F_KEY = '8ea43a97-57b9-4eea-a7dd-9256bdec0f98';
     function sendBoth(form){
       var fd = new FormData();
@@ -560,18 +569,31 @@
         if(el.value && el.value.trim()) fd.append(el.name, el.value);
       });
       var f = form.querySelector('input[type=file]');
-      if(f && f.files && f.files[0]) fd.append('File attached', f.files[0].name + ' (file arrives in the separate FormSubmit email)');
-      // best-effort delivery of the file by email, in a hidden frame so no error page is ever shown
-      try{
-        var fr = document.getElementById('fs_frame');
-        if(!fr){ fr = document.createElement('iframe'); fr.name='fs_frame'; fr.id='fs_frame'; fr.style.display='none'; fr.setAttribute('aria-hidden','true'); document.body.appendChild(fr); }
-        form.target = 'fs_frame'; form.submit(); form.target = '';
-      }catch(e){}
+      if(f && f.files && f.files[0]) fd.append('File attached', f.files[0].name + ' (CV is sent in a separate email)');
+      var file = f && f.files && f.files[0];
+      var upload = Promise.resolve();
+      if(file && CV_SCRIPT_URL.indexOf('PASTE_')!==0){
+        // reliable route: Google Apps Script saves the CV to your Drive and emails it to you
+        upload = fileToB64(file).then(function(b64){
+          var g = function(n){ var el=form.elements[n]; return el ? el.value : ''; };
+          return fetch(CV_SCRIPT_URL, {method:'POST', mode:'no-cors', body:JSON.stringify({
+            name:g('Full Name'), email:g('email'), phone:g('Phone / WhatsApp'),
+            details:waSummary(form,'NEW HIRING APPLICATION'), fileName:file.name, mimeType:file.type, data:b64 })});
+        }).catch(function(){});
+      } else if(file){
+        // fallback: FormSubmit in a hidden frame
+        try{
+          var fr = document.getElementById('fs_frame');
+          if(!fr){ fr = document.createElement('iframe'); fr.name='fs_frame'; fr.id='fs_frame'; fr.style.display='none'; fr.setAttribute('aria-hidden','true'); document.body.appendChild(fr); }
+          form.target = 'fs_frame'; form.submit(); form.target = '';
+        }catch(e){}
+      }
       var ctrl = new AbortController(); var timer = setTimeout(function(){ ctrl.abort(); }, 20000);
-      return fetch('https://api.web3forms.com/submit', {method:'POST', body:fd, signal:ctrl.signal})
+      var w3f = fetch('https://api.web3forms.com/submit', {method:'POST', body:fd, signal:ctrl.signal})
         .then(function(r){ return r.json(); })
         .then(function(j){ clearTimeout(timer); return !!j.success; })
         .catch(function(){ clearTimeout(timer); return false; });
+      return Promise.all([w3f, upload]).then(function(r){ return r[0]; });
     }
     function addWaButton(box){
       var t=''; try{ t=sessionStorage.getItem('wa_summary')||''; sessionStorage.removeItem('wa_summary'); }catch(e){}
@@ -586,8 +608,8 @@
     function cvInit(form){
       var fi=form.querySelector('input[type=file]');
       return function(){ var f=fi.files[0];
-        if(fi.required&&!f){ alert('Please attach your CV (PDF, DOC or DOCX, up to 10 MB).'); return false; }
-        if(f&&f.size>10*1024*1024){ alert('The attached file is larger than 10 MB. Please attach a smaller file.'); return false; }
+        if(fi.required&&!f){ alert('Please attach your CV (PDF, DOC or DOCX, up to 5 MB).'); return false; }
+        if(f&&f.size>5*1024*1024){ alert('The attached file is larger than 5 MB. Please attach a smaller file.'); return false; }
         return true; };
     }
     function setup(cfg){
