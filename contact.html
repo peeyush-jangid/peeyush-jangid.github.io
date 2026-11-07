@@ -37,24 +37,27 @@
       <p><a class="form-back" style="margin:0 0 18px" href="Peeyush_Kumar_Jangid_Resume.pdf" target="_blank" rel="noopener">VIEW / DOWNLOAD MY CV ↓</a></p>
       <div class="sent" id="sent" role="status">Thank you! Your job offer has been sent. Peeyush has received your details and will contact you soon.</div>
       <div class="error" id="error" role="alert">Your message could not be sent. Please try again or contact Peeyush by email or WhatsApp.</div>
-      <form id="contact-form">
-        <input type="hidden" name="access_key" value="8ea43a97-57b9-4eea-a7dd-9256bdec0f98" />
-        <input type="hidden" name="subject" value="New Job Offer / Hiring Message — Peeyush Portfolio" />
-        <input type="hidden" name="from_name" value="Peeyush Portfolio Hiring Enquiry" />
-        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" />
+      <form id="contact-form" action="https://formsubmit.co/peeyush.jangid@outlook.com" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_subject" value="New Job Offer for Peeyush — Portfolio" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
         <div class="form-grid">
           <div><label for="name">YOUR NAME *</label><input id="name" name="Recruiter Name" type="text" autocomplete="name" required /></div>
+          <div><label for="desig">YOUR DESIGNATION</label><input id="desig" name="Designation" type="text" placeholder="HR / Hiring Manager / Director" /></div>
           <div><label for="company">COMPANY NAME *</label><input id="company" name="Company" type="text" autocomplete="organization" required /></div>
-          <div><label for="email">EMAIL ADDRESS *</label><input id="email" name="Email" type="email" autocomplete="email" required /></div>
+          <div><label for="web">COMPANY WEBSITE / LINKEDIN</label><input id="web" name="Company Website" type="url" placeholder="https://…" /></div>
+          <div><label for="email">EMAIL ADDRESS *</label><input id="email" name="email" type="email" autocomplete="email" required /></div>
           <div><label for="phone">PHONE / WHATSAPP *</label><input id="phone" name="Phone / WhatsApp" type="tel" autocomplete="tel" required /></div>
           <div><label for="role">JOB ROLE YOU ARE OFFERING *</label><input id="role" name="Job Role Offered" type="text" placeholder="e.g. HVAC Project Engineer" required /></div>
-          <div><label for="location">JOB LOCATION</label><input id="location" name="Job Location" type="text" placeholder="City / site" /></div>
+          <div><label for="loc">JOB LOCATION</label><input id="loc" name="Job Location" type="text" placeholder="City / site" /></div>
           <div><label for="type">EMPLOYMENT TYPE</label><select id="type" name="Employment Type"><option value="">Select type</option><option>Full-time</option><option>Contract</option><option>Part-time</option><option>Internship</option></select></div>
-          <div><label for="salary">SALARY RANGE (OPTIONAL)</label><input id="salary" name="Salary Range" type="text" placeholder="e.g. 3–4 LPA" /></div>
-          <div class="field-full"><label for="timeline">INTERVIEW / JOINING TIMELINE</label><input id="timeline" name="Timeline" type="text" placeholder="e.g. Interview this week, joining within 15 days" /></div>
-          <div class="field-full"><label for="jd">JOB DESCRIPTION LINK (OPTIONAL)</label><input id="jd" name="Job Description Link" type="url" placeholder="https://…" /></div>
-          <div class="field-full"><label for="pref">BEST WAY TO CONTACT YOU</label><select id="pref" name="Preferred Contact"><option value="">Select</option><option>WhatsApp</option><option>Phone call</option><option>Email</option></select></div>
-          <div class="field-full"><label for="message">JOB DETAILS OR MESSAGE *</label><textarea id="message" name="Message" placeholder="Responsibilities, requirements and anything else I should know…" required></textarea></div>
+          <div><label for="salary">SALARY / CTC OFFERED</label><input id="salary" name="Salary Offered" type="text" placeholder="e.g. 3–4 LPA" /></div>
+          <div><label for="mode">INTERVIEW MODE</label><select id="mode" name="Interview Mode"><option value="">Select</option><option>Online (video call)</option><option>Phone call</option><option>In person</option></select></div>
+          <div><label for="join">JOINING TIMELINE</label><input id="join" name="Joining Timeline" type="text" placeholder="e.g. Within 15 days" /></div>
+          <div class="field-full"><label for="contact">BEST WAY TO CONTACT YOU</label><select id="contact" name="Preferred Contact"><option value="">Select</option><option>WhatsApp</option><option>Phone call</option><option>Email</option></select></div>
+          <div class="field-full"><label for="msg">JOB DETAILS OR MESSAGE *</label><textarea id="msg" name="Message" placeholder="Responsibilities, requirements and anything else I should know…" required></textarea></div>
+          <div class="field-full"><label style="display:flex;gap:10px;align-items:center;letter-spacing:.5px;color:#e6e1d7;font-weight:600;cursor:pointer"><input type="checkbox" name="Interview Requested" value="Yes" style="width:auto" /> I would like to schedule an interview with Peeyush</label></div>
         </div>
         <p class="required-note">* Required fields</p>
         <button class="btn btn-primary" id="submit-button" type="submit">Send Job Offer <span>↗</span></button>
@@ -67,33 +70,87 @@
     const submitButton = document.getElementById('submit-button');
     const successBox = document.getElementById('sent');
     const errorBox = document.getElementById('error');
-    contactForm.addEventListener('submit', async event => {
+    // ---- WhatsApp notification (CallMeBot) ----
+    // Paste your CallMeBot API key below (see setup steps). Leave as is to disable.
+    var WA_PHONE = '+919928579369';
+    var WA_APIKEY = 'YOUR_CALLMEBOT_APIKEY';
+    function waSummary(form, title){
+      var lines = [title];
+      Array.prototype.forEach.call(form.elements, function(el){
+        if(!el.name || el.name.charAt(0)==='_' || el.disabled) return;
+        if(el.type==='file'){ if(el.files && el.files[0]) lines.push('File attached: '+el.files[0].name+' (see email)'); return; }
+        if((el.type==='checkbox'||el.type==='radio') && !el.checked) return;
+        var v=(el.value||'').trim(); if(v) lines.push(el.name+': '+v);
+      });
+      var t=lines.join('\n'); return t.length>1400 ? t.slice(0,1400)+'…' : t;
+    }
+    function sendWA(form, title){
+      var text = waSummary(form, title);
+      try{ sessionStorage.setItem('wa_summary', text); }catch(e){}
+      if(WA_APIKEY==='YOUR_CALLMEBOT_APIKEY') return Promise.resolve();
+      var url='https://api.callmebot.com/whatsapp.php?phone='+encodeURIComponent(WA_PHONE)+'&text='+encodeURIComponent(text)+'&apikey='+encodeURIComponent(WA_APIKEY);
+      var req=fetch(url,{mode:'no-cors',keepalive:true}).catch(function(){});
+      return Promise.race([req,new Promise(function(r){setTimeout(r,2500);})]);
+    }
+    
+    // ---- Reliable sending: Web3Forms (details, instant) + FormSubmit in a hidden frame (carries the file) ----
+    var W3F_KEY = '8ea43a97-57b9-4eea-a7dd-9256bdec0f98';
+    function sendBoth(form){
+      var fd = new FormData();
+      fd.append('access_key', W3F_KEY);
+      fd.append('subject', (form.elements['_subject'] && form.elements['_subject'].value) || 'New message — Peeyush Portfolio');
+      fd.append('from_name', 'Peeyush Portfolio');
+      Array.prototype.forEach.call(form.elements, function(el){
+        if(!el.name || el.name.charAt(0)==='_' || el.type==='file' || el.disabled) return;
+        if((el.type==='checkbox'||el.type==='radio') && !el.checked) return;
+        if(el.value && el.value.trim()) fd.append(el.name, el.value);
+      });
+      var f = form.querySelector('input[type=file]');
+      if(f && f.files && f.files[0]) fd.append('File attached', f.files[0].name + ' (file arrives in the separate FormSubmit email)');
+      // best-effort delivery of the file by email, in a hidden frame so no error page is ever shown
+      try{
+        var fr = document.getElementById('fs_frame');
+        if(!fr){ fr = document.createElement('iframe'); fr.name='fs_frame'; fr.id='fs_frame'; fr.style.display='none'; fr.setAttribute('aria-hidden','true'); document.body.appendChild(fr); }
+        form.target = 'fs_frame'; form.submit(); form.target = '';
+      }catch(e){}
+      var ctrl = new AbortController(); var timer = setTimeout(function(){ ctrl.abort(); }, 20000);
+      return fetch('https://api.web3forms.com/submit', {method:'POST', body:fd, signal:ctrl.signal})
+        .then(function(r){ return r.json(); })
+        .then(function(j){ clearTimeout(timer); return !!j.success; })
+        .catch(function(){ clearTimeout(timer); return false; });
+    }
+    function addWaButton(box){
+      var t=''; try{ t=sessionStorage.getItem('wa_summary')||''; sessionStorage.removeItem('wa_summary'); }catch(e){}
+      if(!t) return;
+      var a=document.createElement('a');
+      a.href='https://wa.me/919928579369?text='+encodeURIComponent(t);
+      a.target='_blank'; a.rel='noopener';
+      a.textContent='Also send these details on WhatsApp ↗';
+      a.style.cssText='display:inline-block;margin-top:10px;font-weight:700;text-decoration:underline';
+      box.appendChild(document.createElement('br')); box.appendChild(a);
+    }
+
+    if (new URLSearchParams(location.search).get('sent') === '1') {
+      successBox.style.display = 'block';
+      addWaButton(successBox);
+      history.replaceState(null, '', location.pathname);
+    }
+    contactForm.addEventListener('submit', event => {
+      if (!contactForm.reportValidity()) { event.preventDefault(); return; }
       event.preventDefault();
-      if (!contactForm.reportValidity()) return;
-      successBox.style.display = 'none';
-      errorBox.style.display = 'none';
       submitButton.disabled = true;
       submitButton.textContent = 'Sending…';
-      try {
-        const response = await fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          body: new FormData(contactForm)
-        });
-        const result = await response.json();
-        if (response.ok && result.success) {
-          successBox.style.display = 'block';
-          contactForm.reset();
-          successBox.scrollIntoView({behavior:'smooth',block:'center'});
-        } else {
-          throw new Error(result.message || 'Submission failed');
-        }
-      } catch (error) {
-        errorBox.style.display = 'block';
-        errorBox.scrollIntoView({behavior:'smooth',block:'center'});
-      } finally {
+      successBox.style.display = 'none'; errorBox.style.display = 'none';
+      Promise.all([sendWA(contactForm, 'NEW JOB OFFER (OPEN TO WORK)'), sendBoth(contactForm)]).then(res => {
         submitButton.disabled = false;
         submitButton.innerHTML = 'Send Job Offer <span>↗</span>';
-      }
+        if (res[1]) { successBox.style.display = 'block'; contactForm.reset(); addWaButton(successBox); successBox.scrollIntoView({behavior:'smooth', block:'center'}); }
+        else { errorBox.style.display = 'block'; addWaButton(errorBox); errorBox.scrollIntoView({behavior:'smooth', block:'center'}); }
+      });
+    });
+    window.addEventListener('pageshow', () => {
+      submitButton.disabled = false;
+      submitButton.innerHTML = 'Send Job Offer <span>↗</span>';
     });
   </script>
 </body>

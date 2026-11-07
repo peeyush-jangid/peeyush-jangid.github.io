@@ -463,24 +463,27 @@
       <p>HVAC Project Engineer · Site Supervision · Jaipur. Share the role details and Peeyush will contact you soon.</p><a class="otw-cv" href="Peeyush_Kumar_Jangid_Resume.pdf" target="_blank" rel="noopener">View / download my CV ↓</a>
       <div class="otw-msg otw-ok" id="otw-ok" role="status">Thank you! Your job offer has been sent. Peeyush will contact you soon.</div>
       <div class="otw-msg otw-err" id="otw-err" role="alert">Your message could not be sent. Please try again or use WhatsApp or email below.</div>
-      <form id="otw-form">
-        <input type="hidden" name="access_key" value="8ea43a97-57b9-4eea-a7dd-9256bdec0f98" />
-        <input type="hidden" name="subject" value="New Job Offer / Hiring Message — Peeyush Portfolio" />
-        <input type="hidden" name="from_name" value="Peeyush Portfolio Hiring Enquiry" />
-        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" />
+      <form id="otw-form" action="https://formsubmit.co/peeyush.jangid@outlook.com" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_subject" value="New Job Offer for Peeyush — Portfolio" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
         <div class="otw-grid">
           <div><label for="m-name">YOUR NAME *</label><input id="m-name" name="Recruiter Name" type="text" autocomplete="name" required /></div>
+          <div><label for="m-desig">YOUR DESIGNATION</label><input id="m-desig" name="Designation" type="text" placeholder="HR / Hiring Manager / Director" /></div>
           <div><label for="m-company">COMPANY NAME *</label><input id="m-company" name="Company" type="text" autocomplete="organization" required /></div>
-          <div><label for="m-email">EMAIL ADDRESS *</label><input id="m-email" name="Email" type="email" autocomplete="email" required /></div>
+          <div><label for="m-web">COMPANY WEBSITE / LINKEDIN</label><input id="m-web" name="Company Website" type="url" placeholder="https://…" /></div>
+          <div><label for="m-email">EMAIL ADDRESS *</label><input id="m-email" name="email" type="email" autocomplete="email" required /></div>
           <div><label for="m-phone">PHONE / WHATSAPP *</label><input id="m-phone" name="Phone / WhatsApp" type="tel" autocomplete="tel" required /></div>
           <div><label for="m-role">JOB ROLE YOU ARE OFFERING *</label><input id="m-role" name="Job Role Offered" type="text" placeholder="e.g. HVAC Project Engineer" required /></div>
-          <div><label for="m-location">JOB LOCATION</label><input id="m-location" name="Job Location" type="text" placeholder="City / site" /></div>
+          <div><label for="m-loc">JOB LOCATION</label><input id="m-loc" name="Job Location" type="text" placeholder="City / site" /></div>
           <div><label for="m-type">EMPLOYMENT TYPE</label><select id="m-type" name="Employment Type"><option value="">Select type</option><option>Full-time</option><option>Contract</option><option>Part-time</option><option>Internship</option></select></div>
-          <div><label for="m-salary">SALARY RANGE (OPTIONAL)</label><input id="m-salary" name="Salary Range" type="text" placeholder="e.g. 3–4 LPA" /></div>
-          <div><label for="m-contact">BEST WAY TO CONTACT YOU</label><select id="m-contact" name="Preferred Contact"><option value="">Select</option><option>WhatsApp</option><option>Phone call</option><option>Email</option></select></div>
-          <div><label for="m-timeline">INTERVIEW / JOINING TIMELINE</label><input id="m-timeline" name="Timeline" type="text" placeholder="e.g. Interview this week" /></div>
-          <div class="otw-full"><label for="m-jd">JOB DESCRIPTION LINK (OPTIONAL)</label><input id="m-jd" name="Job Description Link" type="url" placeholder="https://…" /></div>
-          <div class="otw-full"><label for="m-message">JOB DETAILS OR MESSAGE *</label><textarea id="m-message" name="Message" placeholder="Responsibilities, requirements, interview / joining timeline…" required></textarea></div>
+          <div><label for="m-salary">SALARY / CTC OFFERED</label><input id="m-salary" name="Salary Offered" type="text" placeholder="e.g. 3–4 LPA" /></div>
+          <div><label for="m-mode">INTERVIEW MODE</label><select id="m-mode" name="Interview Mode"><option value="">Select</option><option>Online (video call)</option><option>Phone call</option><option>In person</option></select></div>
+          <div><label for="m-join">JOINING TIMELINE</label><input id="m-join" name="Joining Timeline" type="text" placeholder="e.g. Within 15 days" /></div>
+          <div class="otw-full"><label for="m-contact">BEST WAY TO CONTACT YOU</label><select id="m-contact" name="Preferred Contact"><option value="">Select</option><option>WhatsApp</option><option>Phone call</option><option>Email</option></select></div>
+          <div class="otw-full"><label for="m-msg">JOB DETAILS OR MESSAGE *</label><textarea id="m-msg" name="Message" placeholder="Responsibilities, requirements and anything else I should know…" required></textarea></div>
+          <div class="otw-full"><label style="display:flex;gap:10px;align-items:center;letter-spacing:.5px;color:#e6e1d7;font-weight:600;cursor:pointer"><input type="checkbox" name="Interview Requested" value="Yes" style="width:auto" /> I would like to schedule an interview with Peeyush</label></div>
         </div>
         <button class="btn btn-primary" id="otw-submit" type="submit" data-label="Send Job Offer">Send Job Offer <span>↗</span></button>
       </form>
@@ -499,11 +502,10 @@
         <input type="hidden" name="_subject" value="New Job Application (Hiring) — Peeyush Portfolio" />
         <input type="hidden" name="_template" value="table" />
         <input type="hidden" name="_captcha" value="false" />
-        <input type="hidden" name="_next" value="https://peeyush-jangid.github.io/index.html?hired=1" />
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
         <div class="otw-grid">
           <div><label for="h-name">YOUR FULL NAME *</label><input id="h-name" name="Full Name" type="text" autocomplete="name" required /></div>
-          <div><label for="h-email">YOUR EMAIL ADDRESS *</label><input id="h-email" name="Email" type="email" autocomplete="email" required /></div>
+          <div><label for="h-email">YOUR EMAIL ADDRESS *</label><input id="h-email" name="email" type="email" autocomplete="email" required /></div>
           <div><label for="h-phone">YOUR PHONE / WHATSAPP *</label><input id="h-phone" name="Phone / WhatsApp" type="tel" autocomplete="tel" required /></div>
           <div><label for="h-city">YOUR CURRENT CITY *</label><input id="h-city" name="Current City" type="text" placeholder="City, State" required /></div>
           <div><label for="h-role">JOB ROLE YOU ARE SEEKING *</label><input id="h-role" name="Preferred Job Role" type="text" placeholder="e.g. HVAC Site Supervisor" required /></div>
@@ -521,10 +523,71 @@
   <script>
   (function(){
     
+    
+    // ---- WhatsApp notification (CallMeBot) ----
+    // Paste your CallMeBot API key below (see setup steps). Leave as is to disable.
+    var WA_PHONE = '+919928579369';
+    var WA_APIKEY = 'YOUR_CALLMEBOT_APIKEY';
+    function waSummary(form, title){
+      var lines = [title];
+      Array.prototype.forEach.call(form.elements, function(el){
+        if(!el.name || el.name.charAt(0)==='_' || el.disabled) return;
+        if(el.type==='file'){ if(el.files && el.files[0]) lines.push('File attached: '+el.files[0].name+' (see email)'); return; }
+        if((el.type==='checkbox'||el.type==='radio') && !el.checked) return;
+        var v=(el.value||'').trim(); if(v) lines.push(el.name+': '+v);
+      });
+      var t=lines.join('\n'); return t.length>1400 ? t.slice(0,1400)+'…' : t;
+    }
+    function sendWA(form, title){
+      var text = waSummary(form, title);
+      try{ sessionStorage.setItem('wa_summary', text); }catch(e){}
+      if(WA_APIKEY==='YOUR_CALLMEBOT_APIKEY') return Promise.resolve();
+      var url='https://api.callmebot.com/whatsapp.php?phone='+encodeURIComponent(WA_PHONE)+'&text='+encodeURIComponent(text)+'&apikey='+encodeURIComponent(WA_APIKEY);
+      var req=fetch(url,{mode:'no-cors',keepalive:true}).catch(function(){});
+      return Promise.race([req,new Promise(function(r){setTimeout(r,2500);})]);
+    }
+    
+    // ---- Reliable sending: Web3Forms (details, instant) + FormSubmit in a hidden frame (carries the file) ----
+    var W3F_KEY = '8ea43a97-57b9-4eea-a7dd-9256bdec0f98';
+    function sendBoth(form){
+      var fd = new FormData();
+      fd.append('access_key', W3F_KEY);
+      fd.append('subject', (form.elements['_subject'] && form.elements['_subject'].value) || 'New message — Peeyush Portfolio');
+      fd.append('from_name', 'Peeyush Portfolio');
+      Array.prototype.forEach.call(form.elements, function(el){
+        if(!el.name || el.name.charAt(0)==='_' || el.type==='file' || el.disabled) return;
+        if((el.type==='checkbox'||el.type==='radio') && !el.checked) return;
+        if(el.value && el.value.trim()) fd.append(el.name, el.value);
+      });
+      var f = form.querySelector('input[type=file]');
+      if(f && f.files && f.files[0]) fd.append('File attached', f.files[0].name + ' (file arrives in the separate FormSubmit email)');
+      // best-effort delivery of the file by email, in a hidden frame so no error page is ever shown
+      try{
+        var fr = document.getElementById('fs_frame');
+        if(!fr){ fr = document.createElement('iframe'); fr.name='fs_frame'; fr.id='fs_frame'; fr.style.display='none'; fr.setAttribute('aria-hidden','true'); document.body.appendChild(fr); }
+        form.target = 'fs_frame'; form.submit(); form.target = '';
+      }catch(e){}
+      var ctrl = new AbortController(); var timer = setTimeout(function(){ ctrl.abort(); }, 20000);
+      return fetch('https://api.web3forms.com/submit', {method:'POST', body:fd, signal:ctrl.signal})
+        .then(function(r){ return r.json(); })
+        .then(function(j){ clearTimeout(timer); return !!j.success; })
+        .catch(function(){ clearTimeout(timer); return false; });
+    }
+    function addWaButton(box){
+      var t=''; try{ t=sessionStorage.getItem('wa_summary')||''; sessionStorage.removeItem('wa_summary'); }catch(e){}
+      if(!t) return;
+      var a=document.createElement('a');
+      a.href='https://wa.me/919928579369?text='+encodeURIComponent(t);
+      a.target='_blank'; a.rel='noopener';
+      a.textContent='Also send these details on WhatsApp ↗';
+      a.style.cssText='display:inline-block;margin-top:10px;font-weight:700;text-decoration:underline';
+      box.appendChild(document.createElement('br')); box.appendChild(a);
+    }
     function cvInit(form){
       var fi=form.querySelector('input[type=file]');
       return function(){ var f=fi.files[0];
-        if(!f||f.size>10*1024*1024){ alert('Please attach your CV (PDF, DOC or DOCX, up to 10 MB).'); return false; }
+        if(fi.required&&!f){ alert('Please attach your CV (PDF, DOC or DOCX, up to 10 MB).'); return false; }
+        if(f&&f.size>10*1024*1024){ alert('The attached file is larger than 10 MB. Please attach a smaller file.'); return false; }
         return true; };
     }
     function setup(cfg){
@@ -543,7 +606,12 @@
       modal.addEventListener('click',function(e){ if(e.target===modal) closeM(); });
       document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&modal.classList.contains('open')) closeM(); });
       form.addEventListener('submit',async function(e){
-        if(cfg.native){ if(!form.reportValidity()||!cvCheck()){ e.preventDefault(); } else { btn.disabled=true; btn.textContent='Sending…'; } return; }
+        if(cfg.native){ if(!form.reportValidity()||!cvCheck()){ e.preventDefault(); } else { e.preventDefault(); btn.disabled=true; btn.textContent='Sending…'; ok.style.display='none'; err.style.display='none';
+          Promise.all([sendWA(form,cfg.title),sendBoth(form)]).then(function(res){
+            btn.disabled=false; btn.innerHTML=btn.getAttribute('data-label')+' <span>↗</span>';
+            if(res[1]){ ok.style.display='block'; form.reset(); addWaButton(ok); ok.scrollIntoView({behavior:'smooth',block:'center'}); }
+            else { err.style.display='block'; addWaButton(err); err.scrollIntoView({behavior:'smooth',block:'center'}); }
+          }); } return; }
         e.preventDefault(); if(!form.reportValidity()) return;
         ok.style.display='none'; err.style.display='none'; btn.disabled=true; btn.textContent='Sending…';
         try{
@@ -555,9 +623,11 @@
         finally{ btn.disabled=false; btn.innerHTML=btn.getAttribute('data-label')+' <span>↗</span>'; }
       });
     }
-    setup({modal:'otw-modal',form:'otw-form',ok:'otw-ok',err:'otw-err',btn:'otw-submit',close:'otw-close',fab:'otw-open',first:'m-name',href:'contact.html'});
-    setup({modal:'hire-modal',form:'hire-form',ok:'hire-ok',err:'hire-err',btn:'hire-submit',close:'hire-close',fab:'hire-open',first:'h-name',href:'hiring.html',native:true});
-    if(new URLSearchParams(location.search).get('hired')==='1'){ document.getElementById('hire-open').click(); document.getElementById('hire-ok').style.display='block'; history.replaceState(null,'',location.pathname); }
+    setup({modal:'otw-modal',form:'otw-form',ok:'otw-ok',err:'otw-err',btn:'otw-submit',close:'otw-close',fab:'otw-open',first:'m-name',href:'contact.html',native:true,title:'NEW JOB OFFER (OPEN TO WORK)'});
+    setup({modal:'hire-modal',form:'hire-form',ok:'hire-ok',err:'hire-err',btn:'hire-submit',close:'hire-close',fab:'hire-open',first:'h-name',href:'hiring.html',native:true,title:'NEW HIRING APPLICATION'});
+    if(new URLSearchParams(location.search).get('offered')==='1'){ document.getElementById('otw-open').click(); document.getElementById('otw-ok').style.display='block'; addWaButton(document.getElementById('otw-ok')); history.replaceState(null,'',location.pathname); }
+    if(new URLSearchParams(location.search).get('hired')==='1'){ document.getElementById('hire-open').click(); document.getElementById('hire-ok').style.display='block'; addWaButton(document.getElementById('hire-ok')); history.replaceState(null,'',location.pathname); }
+    window.addEventListener('pageshow',function(){ var ob=document.getElementById('otw-submit'); ob.disabled=false; ob.innerHTML=ob.getAttribute('data-label')+' <span>↗</span>'; });
     window.addEventListener('pageshow',function(){ var hb=document.getElementById('hire-submit'); hb.disabled=false; hb.innerHTML=hb.getAttribute('data-label')+' <span>↗</span>'; });
   })();
   </script>

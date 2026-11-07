@@ -34,17 +34,16 @@
       <span class="section-kicker">● HIRING · JOB APPLICATION</span>
       <h1>Apply for a <span class="gradient-text">job opportunity.</span></h1>
       <p>Looking for a job? Share your profile and the kind of work you are seeking. Your application details will be sent directly to Peeyush Kumar Jangid.</p>
-      <div class="sent" id="sent" role="status">Thank you! Your job application has been submitted successfully. Peeyush has received your details.</div>
+      <div class="sent" id="sent" role="status">Thank you! Your job application has been submitted. Peeyush has received your details, and your CV is being delivered by email.</div>
       <div class="error" id="error" role="alert">Your enquiry could not be submitted. Please try again or contact Peeyush by email or WhatsApp.</div>
       <form id="contact-form" action="https://formsubmit.co/peeyush.jangid@outlook.com" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="_subject" value="New Job Application (Hiring) — Peeyush Portfolio" />
         <input type="hidden" name="_template" value="table" />
         <input type="hidden" name="_captcha" value="false" />
-        <input type="hidden" name="_next" value="https://peeyush-jangid.github.io/hiring.html?sent=1" />
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
         <div class="form-grid">
           <div><label for="name">YOUR FULL NAME *</label><input id="name" name="Full Name" type="text" autocomplete="name" required /></div>
-          <div><label for="email">YOUR EMAIL ADDRESS *</label><input id="email" name="Email" type="email" autocomplete="email" required /></div>
+          <div><label for="email">YOUR EMAIL ADDRESS *</label><input id="email" name="email" type="email" autocomplete="email" required /></div>
           <div><label for="phone">YOUR PHONE / WHATSAPP *</label><input id="phone" name="Phone / WhatsApp" type="tel" autocomplete="tel" required /></div>
           <div><label for="location">YOUR CURRENT CITY *</label><input id="location" name="Current City" type="text" placeholder="City, State" required /></div>
           <div><label for="role">JOB ROLE YOU ARE SEEKING *</label><input id="role" name="Preferred Job Role" type="text" placeholder="e.g. HVAC Project Engineer" required /></div>
@@ -64,9 +63,71 @@
     const contactForm = document.getElementById('contact-form');
     const submitButton = document.getElementById('submit-button');
     const successBox = document.getElementById('sent');
+    const errorBox = document.getElementById('error');
     const MAX_CV = 10 * 1024 * 1024;
+    // ---- WhatsApp notification (CallMeBot) ----
+    // Paste your CallMeBot API key below (see setup steps). Leave as is to disable.
+    var WA_PHONE = '+919928579369';
+    var WA_APIKEY = 'YOUR_CALLMEBOT_APIKEY';
+    function waSummary(form, title){
+      var lines = [title];
+      Array.prototype.forEach.call(form.elements, function(el){
+        if(!el.name || el.name.charAt(0)==='_' || el.disabled) return;
+        if(el.type==='file'){ if(el.files && el.files[0]) lines.push('File attached: '+el.files[0].name+' (see email)'); return; }
+        if((el.type==='checkbox'||el.type==='radio') && !el.checked) return;
+        var v=(el.value||'').trim(); if(v) lines.push(el.name+': '+v);
+      });
+      var t=lines.join('\n'); return t.length>1400 ? t.slice(0,1400)+'…' : t;
+    }
+    function sendWA(form, title){
+      var text = waSummary(form, title);
+      try{ sessionStorage.setItem('wa_summary', text); }catch(e){}
+      if(WA_APIKEY==='YOUR_CALLMEBOT_APIKEY') return Promise.resolve();
+      var url='https://api.callmebot.com/whatsapp.php?phone='+encodeURIComponent(WA_PHONE)+'&text='+encodeURIComponent(text)+'&apikey='+encodeURIComponent(WA_APIKEY);
+      var req=fetch(url,{mode:'no-cors',keepalive:true}).catch(function(){});
+      return Promise.race([req,new Promise(function(r){setTimeout(r,2500);})]);
+    }
+    
+    // ---- Reliable sending: Web3Forms (details, instant) + FormSubmit in a hidden frame (carries the file) ----
+    var W3F_KEY = '8ea43a97-57b9-4eea-a7dd-9256bdec0f98';
+    function sendBoth(form){
+      var fd = new FormData();
+      fd.append('access_key', W3F_KEY);
+      fd.append('subject', (form.elements['_subject'] && form.elements['_subject'].value) || 'New message — Peeyush Portfolio');
+      fd.append('from_name', 'Peeyush Portfolio');
+      Array.prototype.forEach.call(form.elements, function(el){
+        if(!el.name || el.name.charAt(0)==='_' || el.type==='file' || el.disabled) return;
+        if((el.type==='checkbox'||el.type==='radio') && !el.checked) return;
+        if(el.value && el.value.trim()) fd.append(el.name, el.value);
+      });
+      var f = form.querySelector('input[type=file]');
+      if(f && f.files && f.files[0]) fd.append('File attached', f.files[0].name + ' (file arrives in the separate FormSubmit email)');
+      // best-effort delivery of the file by email, in a hidden frame so no error page is ever shown
+      try{
+        var fr = document.getElementById('fs_frame');
+        if(!fr){ fr = document.createElement('iframe'); fr.name='fs_frame'; fr.id='fs_frame'; fr.style.display='none'; fr.setAttribute('aria-hidden','true'); document.body.appendChild(fr); }
+        form.target = 'fs_frame'; form.submit(); form.target = '';
+      }catch(e){}
+      var ctrl = new AbortController(); var timer = setTimeout(function(){ ctrl.abort(); }, 20000);
+      return fetch('https://api.web3forms.com/submit', {method:'POST', body:fd, signal:ctrl.signal})
+        .then(function(r){ return r.json(); })
+        .then(function(j){ clearTimeout(timer); return !!j.success; })
+        .catch(function(){ clearTimeout(timer); return false; });
+    }
+    function addWaButton(box){
+      var t=''; try{ t=sessionStorage.getItem('wa_summary')||''; sessionStorage.removeItem('wa_summary'); }catch(e){}
+      if(!t) return;
+      var a=document.createElement('a');
+      a.href='https://wa.me/919928579369?text='+encodeURIComponent(t);
+      a.target='_blank'; a.rel='noopener';
+      a.textContent='Also send these details on WhatsApp ↗';
+      a.style.cssText='display:inline-block;margin-top:10px;font-weight:700;text-decoration:underline';
+      box.appendChild(document.createElement('br')); box.appendChild(a);
+    }
+
     if (new URLSearchParams(location.search).get('sent') === '1') {
       successBox.style.display = 'block';
+      addWaButton(successBox);
       history.replaceState(null, '', location.pathname);
     }
     contactForm.addEventListener('submit', event => {
@@ -77,8 +138,16 @@
         alert('Please attach your CV (PDF, DOC or DOCX, up to 10 MB).');
         return;
       }
+      event.preventDefault();
       submitButton.disabled = true;
       submitButton.textContent = 'Submitting…';
+      successBox.style.display = 'none'; errorBox.style.display = 'none';
+      Promise.all([sendWA(contactForm, 'NEW HIRING APPLICATION'), sendBoth(contactForm)]).then(res => {
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'Submit Job Application <span>↗</span>';
+        if (res[1]) { successBox.style.display = 'block'; contactForm.reset(); addWaButton(successBox); successBox.scrollIntoView({behavior:'smooth', block:'center'}); }
+        else { errorBox.style.display = 'block'; addWaButton(errorBox); errorBox.scrollIntoView({behavior:'smooth', block:'center'}); }
+      });
     });
     window.addEventListener('pageshow', () => {
       submitButton.disabled = false;
