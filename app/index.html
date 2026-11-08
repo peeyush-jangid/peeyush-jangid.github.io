@@ -30,11 +30,14 @@ body.boot header,body.boot main,body.boot nav,body.boot #auth{display:none}
 body.locked header,body.locked main,body.locked nav{display:none}
 #auth{display:none;min-height:100vh;padding:calc(28px + env(safe-area-inset-top,0px)) 20px 32px;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(600px 400px at 85% -5%,rgba(255,69,88,.22),transparent 60%),radial-gradient(500px 400px at 0% 100%,rgba(30,90,170,.28),transparent 60%),var(--bg)}
 body.locked #auth{display:flex}
+body.needphone header,body.needphone main,body.needphone nav,body.needphone #amenu{display:none!important}
+#pgate{display:none;position:fixed;inset:0;z-index:30;overflow:auto;padding:calc(28px + env(safe-area-inset-top,0px)) 20px 32px;align-items:center;justify-content:center;background:var(--bg)}
+body.needphone #pgate{display:flex}
 .acard{width:100%;max-width:420px}
 .brand{text-align:center;margin-bottom:22px}
 .brand img{width:76px;height:76px;border-radius:22px;box-shadow:0 10px 40px rgba(255,69,88,.3)}
 .brand h1{margin-top:14px}.brand p{margin-top:4px}
-#auth form{background:rgba(12,30,54,.85);border:1px solid var(--line);border-radius:20px;padding:6px 18px 20px}
+#auth form,#pform{background:rgba(12,30,54,.85);border:1px solid var(--line);border-radius:20px;padding:6px 18px 20px}
 .err{color:#ff9aa5;font-size:.88rem;min-height:1.3em;margin-top:10px}
 .lnk{background:none;border:0;color:var(--mute);font:inherit;font-size:.88rem;margin-top:12px;text-decoration:underline;cursor:pointer;width:100%}
 .or{display:flex;align-items:center;gap:10px;color:var(--mute);font-size:.82rem;margin:14px 0}.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
@@ -115,6 +118,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     <div class="seg" id="aseg"><button class="on" data-t="up" type="button">Create account</button><button data-t="in" type="button">Sign in</button></div>
     <form id="af" novalidate>
       <div id="nameRow"><label for="an">Full name</label><input id="an" autocomplete="name"></div>
+      <div id="phoneRow"><label for="aph">Mobile number (India) *</label><input id="aph" type="tel" autocomplete="tel-national" inputmode="numeric" placeholder="10-digit mobile number"></div>
       <label for="ae">Email</label><input id="ae" type="email" autocomplete="email" inputmode="email">
       <label for="ap">Password (min 6 characters)</label><input id="ap" type="password" autocomplete="new-password">
       <p class="err" id="aerr" role="alert"></p>
@@ -126,8 +130,22 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   </div>
 </div>
 
+<!-- Phone gate: shown when a signed-in user has no mobile number yet (e.g. Google sign-in) -->
+<div id="pgate">
+  <div class="acard">
+    <form id="pform" novalidate>
+      <h2>One more step</h2>
+      <p>Please add your mobile number to continue.</p>
+      <label for="pph">Mobile number (India)</label><input id="pph" type="tel" autocomplete="tel-national" inputmode="numeric" placeholder="10-digit mobile number">
+      <p class="err" id="perr" role="alert"></p>
+      <button class="btn pri" id="psub" type="submit">Save and continue</button>
+      <button class="lnk" id="pout" type="button">Sign out</button>
+    </form>
+  </div>
+</div>
+
 <header><img src="icons/icon-192.png" alt="" width="32" height="32"><b>Peeyush Jangid</b><button id="avatar" type="button" aria-label="Account" aria-expanded="false">P</button></header>
-<div id="amenu" role="dialog" aria-label="Your account"><div class="mh"><div class="mav" id="mav">P</div><div><b id="mName"></b><small id="mMail"></small></div></div><div id="mRows"></div><button class="btn" id="signout2" type="button" style="margin-top:12px">Sign out</button></div>
+<div id="amenu" role="dialog" aria-label="Your account"><div class="mh"><div class="mav" id="mav">P</div><div><b id="mName"></b><small id="mMail"></small></div></div><div id="mRows"></div><input type="file" id="pfile" accept="image/*" hidden><button class="btn" id="pchange" type="button" style="margin-top:12px">Add / change photo</button><button class="btn" id="signout2" type="button" style="margin-top:10px">Sign out</button><button class="btn" id="deact" type="button" style="margin-top:10px;color:#ff9aa5">Deactivate account</button></div>
 
 <main>
 <section class="view" id="v-home">
@@ -318,17 +336,22 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   var cfg=window.FIREBASE_CONFIG&&window.FIREBASE_CONFIG.apiKey?window.FIREBASE_CONFIG:null,mode='up',fbp;
   var me=null;
   function fmt(d){return d?new Date(d).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):'-'}
-  function lu(e,x){return{name:x.name,email:e,photo:'',provider:'This device',created:x.created,last:x.last}}
+  function lu(e,x){return{name:x.name,email:e,photo:x.photo||'',phone:x.phone||'',status:x.status||'active',provider:'This device',created:x.created,last:x.last}}
+  function normPhone(s){
+    var d=String(s||'').replace(/[^\d+]/g,'');
+    if(/^\+?91\d{10}$/.test(d))d=d.slice(-10); else if(/^0\d{10}$/.test(d))d=d.slice(1);
+    return /^[6-9]\d{9}$/.test(d)?'+91'+d:'';
+  }
   function fu(u){var p=(u.providerData&&u.providerData[0]&&u.providerData[0].providerId)||'password';
     return{name:u.displayName||u.email.split('@')[0],email:u.email,photo:u.photoURL||'',provider:p==='google.com'?'Google':'Email and password',created:u.metadata&&u.metadata.creationTime,last:u.metadata&&u.metadata.lastSignInTime,verified:u.emailVerified}}
   function note(t,ok){$('aerr').textContent=t;$('aerr').style.color=ok?'#8ff0b3':''}
   function setUser(u){
-    me=u; document.body.className=u?'':'locked';
+    me=u; var bc=document.body.classList; bc.remove('boot'); bc.toggle('locked',!u); bc.toggle('needphone',!!(u&&!u.phone));
     var av=u?(u.photo?'<img src="'+esc(u.photo)+'" alt="" referrerpolicy="no-referrer">':esc((u.name||u.email)[0].toUpperCase())):'P';
     $('avatar').innerHTML=av; $('mav').innerHTML=av;
     $('accName').textContent=$('mName').textContent=u?u.name:'Guest';
     $('accMail').textContent=$('mMail').textContent=u?u.email:'';
-    var r=u?[['Sign-in method',u.provider],['Member since',fmt(u.created)],['Last sign-in',fmt(u.last)]]:[];
+    var r=u?[['Mobile',u.phone||'-'],['Sign-in method',u.provider],['Member since',fmt(u.created)],['Last sign-in',fmt(u.last)]]:[];
     if(u&&u.verified!==undefined)r.push(['Email status',u.verified?'Verified':'Not verified']);
     $('mRows').innerHTML=r.map(function(x){return '<div class="mrow"><span>'+x[0]+'</span><b>'+esc(x[1])+'</b></div>'}).join('');
     if(u)Object.keys(ID).forEach(function(k){var n=$(k+ID[k].n),e=$(k+ID[k].e);if(n&&!n.value)n.value=u.name;if(e&&!e.value)e.value=u.email});
@@ -337,6 +360,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   }
   function msg(e){
     var c=(e&&e.code)||(e&&e.message)||'';
+    if(/deactivated/.test(c))return 'This account is deactivated. Contact Peeyush to reactivate it.';
     if(/email-already|exists/.test(c))return 'This email already has an account. Choose Sign in.';
     if(/invalid-credential|wrong-password|user-not-found|incorrect/.test(c))return 'Email or password is incorrect.';
     if(/weak-password|short/.test(c))return 'Use at least 6 characters for the password.';
@@ -350,22 +374,65 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   var db={get:function(){try{return JSON.parse(localStorage.getItem('pj_users')||'{}')}catch(e){return{}}},set:function(u){localStorage.setItem('pj_users',JSON.stringify(u))}};
   function fb(){
     if(fbp)return fbp;
-    var b='https://www.gstatic.com/firebasejs/10.12.2/';
-    fbp=Promise.all([import(b+'firebase-app.js'),import(b+'firebase-auth.js')]).then(function(r){var app=r[0].initializeApp(cfg);return{m:r[1],a:r[1].getAuth(app)}});
+    var b='https://www.gstatic.com/firebasejs/10.14.1/';
+    fbp=Promise.all([import(b+'firebase-app.js'),import(b+'firebase-auth.js'),import(b+'firebase-firestore.js')]).then(function(r){var app=r[0].initializeApp(cfg);return{m:r[1],a:r[1].getAuth(app),fs:r[2],db:r[2].getFirestore(app)}});
     return fbp;
+  }
+  function uref(f,uid){return f.fs.doc(f.db,'users',uid)}
+  function loadProfile(f,u){return f.fs.getDoc(uref(f,u.uid)).then(function(s){return s.exists()?s.data():{}}).catch(function(){return{}})}
+  function devInfo(){return (navigator.userAgent||'').slice(0,160)}
+  /* Saves every sign-up / sign-in to Firestore so the owner sees it in the admin page */
+  function recordLogin(f,u,how,isNew){
+    var fs=f.fs,d={name:u.displayName||'',email:u.email||'',provider:how,lastLogin:fs.serverTimestamp(),source:'app'};
+    if(isNew){d.createdAt=fs.serverTimestamp();d.status='active';if(u.photoURL)d.photo=u.photoURL}
+    return fs.setDoc(uref(f,u.uid),d,{merge:true})
+      .then(function(){return fs.addDoc(fs.collection(f.db,'users',u.uid,'logins'),{event:isNew?'NEW SIGN-UP':'SIGN-IN',provider:how,at:fs.serverTimestamp(),device:devInfo()})})
+      .catch(function(e){if(window.console)console.warn('Could not save user record',e)});
+  }
+  /* Blocks deactivated accounts, otherwise records the login */
+  function checkAndRecord(f,user,how,isNew){
+    return loadProfile(f,user).then(function(pr){
+      if(pr.status==='deactivated')return f.m.signOut(f.a).then(function(){return Promise.reject({code:'deactivated'})});
+      return recordLogin(f,user,how,isNew);
+    });
+  }
+  /* Saves profile changes (phone, photo, status) for the signed-in user */
+  function saveProfile(patch,quiet){
+    if(!me)return Promise.reject({code:'no-user'});
+    var p;
+    if(cfg){
+      p=fb().then(function(f){
+        var d=Object.assign({},patch,{updatedAt:f.fs.serverTimestamp()});
+        if(patch.status==='deactivated')d.deactivatedAt=f.fs.serverTimestamp();
+        return f.fs.setDoc(uref(f,me.uid),d,{merge:true});
+      });
+    }else{
+      var all=db.get(),lu_=all[me.email];
+      if(lu_){Object.assign(lu_,patch);db.set(all)}
+      p=Promise.resolve();
+    }
+    return p.then(function(){if(!quiet)setUser(Object.assign({},me,patch))});
   }
   var hold=false;
   function afterSignup(e){mode='in';drawMode();$('ae').value=e;$('ap').value='';note('Account created. Sign in to continue.',1)}
   var API={
-    up:function(n,e,p){
-      if(cfg){hold=true;return fb().then(function(f){return f.m.createUserWithEmailAndPassword(f.a,e,p).then(function(c){return f.m.updateProfile(c.user,{displayName:n})}).then(function(){return f.m.signOut(f.a)})}).then(function(){hold=false;afterSignup(e)},function(x){hold=false;throw x})}
+    up:function(n,e,p,ph){
+      if(cfg){hold=true;return fb().then(function(f){
+        return f.m.createUserWithEmailAndPassword(f.a,e,p).then(function(c){
+          return f.m.updateProfile(c.user,{displayName:n}).then(function(){
+            return f.fs.setDoc(uref(f,c.user.uid),{name:n,email:e,phone:ph,photo:'',status:'active',provider:'Email & password',createdAt:f.fs.serverTimestamp(),lastLogin:f.fs.serverTimestamp(),source:'app'});
+          }).then(function(){
+            return f.fs.addDoc(f.fs.collection(f.db,'users',c.user.uid,'logins'),{event:'NEW SIGN-UP',provider:'Email & password',at:f.fs.serverTimestamp(),device:devInfo()});
+          }).catch(function(er){if(window.console)console.warn('Could not save user record',er)});
+        }).then(function(){return f.m.signOut(f.a)});
+      }).then(function(){hold=false;afterSignup(e)},function(x){hold=false;throw x})}
       var u=db.get(); if(u[e])return Promise.reject({code:'exists'}); if(p.length<6)return Promise.reject({code:'short'});
-      return hash(p).then(function(h){u[e]={name:n,h:h,created:Date.now()};db.set(u);afterSignup(e)});
+      return hash(p).then(function(h){u[e]={name:n,phone:ph,photo:'',status:'active',h:h,created:Date.now()};db.set(u);afterSignup(e)});
     },
     in:function(e,p){
-      if(cfg)return fb().then(function(f){return f.m.signInWithEmailAndPassword(f.a,e,p)});
+      if(cfg)return fb().then(function(f){return f.m.signInWithEmailAndPassword(f.a,e,p).then(function(c){return checkAndRecord(f,c.user,'Email & password',false)})});
       var all=db.get(),u=all[e]; if(!u)return Promise.reject({code:'incorrect'});
-      return hash(p).then(function(h){if(h!==u.h)return Promise.reject({code:'incorrect'});u.last=Date.now();db.set(all);localStorage.setItem('pj_sess',e);setUser(lu(e,u))});
+      return hash(p).then(function(h){if(h!==u.h)return Promise.reject({code:'incorrect'});if(u.status==='deactivated')return Promise.reject({code:'deactivated'});u.last=Date.now();db.set(all);localStorage.setItem('pj_sess',e);setUser(lu(e,u))});
     },
     out:function(){
       mode='in';drawMode();
@@ -376,6 +443,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   function drawMode(){
     var up=mode==='up';
     $('nameRow').style.display=up?'block':'none';
+    $('phoneRow').style.display=up?'block':'none';
     $('asub').textContent=up?'Create account':'Sign in';
     $('ap').autocomplete=up?'new-password':'current-password';
     $('aforgot').style.display=!up&&cfg?'block':'none';
@@ -385,22 +453,56 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   $('aseg').addEventListener('click',function(e){if(e.target.dataset.t){mode=e.target.dataset.t;drawMode()}});
   $('af').addEventListener('submit',function(ev){
     ev.preventDefault();
-    var n=$('an').value.trim(),e=$('ae').value.trim().toLowerCase(),p=$('ap').value;
+    var n=$('an').value.trim(),e=$('ae').value.trim().toLowerCase(),p=$('ap').value,ph=normPhone($('aph').value);
     if(mode==='up'&&!n)return $('aerr').textContent='Enter your full name.';
+    if(mode==='up'&&!ph)return $('aerr').textContent='Enter a valid 10-digit mobile number.';
     if(!/^\S+@\S+\.\S+$/.test(e))return $('aerr').textContent='Enter a valid email address.';
     if(p.length<6)return $('aerr').textContent='Use at least 6 characters for the password.';
     $('aerr').textContent='';$('aerr').style.color=''; $('asub').disabled=true;
-    (mode==='up'?API.up(n,e,p):API.in(e,p)).catch(function(x){$('aerr').textContent=msg(x)}).then(function(){$('asub').disabled=false});
+    (mode==='up'?API.up(n,e,p,ph):API.in(e,p)).catch(function(x){$('aerr').textContent=msg(x)}).then(function(){$('asub').disabled=false});
   });
   $('aforgot').addEventListener('click',function(){
     var e=$('ae').value.trim(); if(!e)return $('aerr').textContent='Enter your email first.';
     fb().then(function(f){return f.m.sendPasswordResetEmail(f.a,e)}).then(function(){note('Reset link sent to '+e+'.',1)}).catch(function(x){$('aerr').textContent=msg(x)});
   });
   $('agoogle').addEventListener('click',function(){
-    fb().then(function(f){return f.m.signInWithPopup(f.a,new f.m.GoogleAuthProvider())}).catch(function(x){
+    fb().then(function(f){return f.m.signInWithPopup(f.a,new f.m.GoogleAuthProvider()).then(function(res){
+      var info=f.m.getAdditionalUserInfo(res);
+      return checkAndRecord(f,res.user,'Google',!!(info&&info.isNewUser));
+    })}).catch(function(x){
       if(/popup-blocked|operation-not-supported/.test((x&&x.code)||''))return fb().then(function(f){return f.m.signInWithRedirect(f.a,new f.m.GoogleAuthProvider())});
       $('aerr').textContent=msg(x);
     });
+  });
+  /* phone gate */
+  $('pform').addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var ph=normPhone($('pph').value); if(!ph){$('perr').textContent='Enter a valid 10-digit mobile number.';return}
+    $('perr').textContent='';$('psub').disabled=true;
+    saveProfile({phone:ph}).catch(function(){$('perr').textContent='Could not save. Please try again.'}).then(function(){$('psub').disabled=false});
+  });
+  $('pout').addEventListener('click',function(){API.out()});
+  /* photo: crop to a square, shrink to 256px, store in the profile */
+  $('pchange').addEventListener('click',function(){$('pfile').click()});
+  $('pfile').addEventListener('change',function(){
+    var inp=$('pfile'),file=inp.files&&inp.files[0]; inp.value=''; if(!file)return;
+    if(!/^image\//.test(file.type)){alert('Please choose an image file.');return}
+    var img=new Image(),url=URL.createObjectURL(file);
+    img.onload=function(){
+      var s=256,c=document.createElement('canvas');c.width=c.height=s;
+      var m=Math.min(img.width,img.height);
+      c.getContext('2d').drawImage(img,(img.width-m)/2,(img.height-m)/2,m,m,0,0,s,s);
+      URL.revokeObjectURL(url);
+      saveProfile({photo:c.toDataURL('image/jpeg',.8)}).catch(function(){alert('Could not save the photo. Please try again.')});
+    };
+    img.onerror=function(){alert('Could not read that image.')};
+    img.src=url;
+  });
+  /* deactivate: marks the account deactivated, signs out; only the owner can reactivate */
+  $('deact').addEventListener('click',function(){
+    if(!me)return;
+    if(!confirm('Deactivate your account? You will be signed out and cannot sign in again until Peeyush reactivates it.'))return;
+    saveProfile({status:'deactivated'},true).then(function(){return API.out()}).then(function(){note('Your account has been deactivated.',1)}).catch(function(){alert('Could not deactivate right now. Please try again.')});
   });
   $('signout').addEventListener('click',function(){API.out()});
   $('signout2').addEventListener('click',function(){API.out()});
@@ -412,7 +514,17 @@ body.locked #amenu,body.boot #amenu{display:none!important}
 
   if(cfg){
     $('gwrap').style.display='block';
-    fb().then(function(f){f.m.onAuthStateChanged(f.a,function(u){if(hold)return;setUser(u?fu(u):null)})}).catch(function(){setUser(null)});
+    fb().then(function(f){f.m.onAuthStateChanged(f.a,function(u){
+      if(hold)return;
+      if(!u){setUser(null);return}
+      loadProfile(f,u).then(function(p){
+        if(p.status==='deactivated'){
+          return f.m.signOut(f.a).then(function(){setUser(null);mode='in';drawMode();note('This account is deactivated. Contact Peeyush to reactivate it.')});
+        }
+        var x=fu(u);x.uid=u.uid;x.phone=p.phone||'';x.photo=p.photo||x.photo;x.status=p.status||'active';
+        setUser(x);
+      });
+    })}).catch(function(){setUser(null)});
   }else{
     $('amode').textContent='Your account is saved on this device.';
     var s=localStorage.getItem('pj_sess'),u=s&&db.get()[s];
