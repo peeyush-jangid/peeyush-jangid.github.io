@@ -1,392 +1,946 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Peeyush Kumar Jangid – HVAC Project Engineer</title>
-<meta name="description" content="HVAC Project Engineer in Jaipur: site supervision, AutoCAD 2D, pre-commissioning and project coordination.">
-<meta name="theme-color" content="#071426">
-<meta name="color-scheme" content="dark">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Peeyush">
-<style>
-:root{--bg:#071426;--panel:#0c1e36;--panel2:#10284a;--line:#1a3355;--ink:#eef3fa;--mute:#8fa3bf;--red:#ff4558;--red2:#e5132b;--wa:#25d366;
---top:calc(58px + env(safe-area-inset-top,0px));--bot:calc(66px + env(safe-area-inset-bottom,0px))}
-*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
-html,body{min-height:100%;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-a{color:inherit;text-decoration:none}
-h1{font-size:1.7rem;line-height:1.15;font-weight:800;letter-spacing:-.4px}
-h2{font-size:1.1rem;margin:28px 0 12px;font-weight:700;letter-spacing:-.1px}
-h3{font-size:1rem;font-weight:650}
-p{color:var(--mute)}
-svg.i{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
-/* gating */
-body.boot header,body.boot main,body.boot nav,body.boot #auth{display:none}
-body.locked header,body.locked main,body.locked nav{display:none}
-#auth{display:none;min-height:100vh;padding:calc(28px + env(safe-area-inset-top,0px)) 20px 32px;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(600px 400px at 85% -5%,rgba(255,69,88,.22),transparent 60%),radial-gradient(500px 400px at 0% 100%,rgba(30,90,170,.28),transparent 60%),var(--bg)}
-body.locked #auth{display:flex}
-.acard{width:100%;max-width:420px}
-.brand{text-align:center;margin-bottom:22px}
-.brand img{width:76px;height:76px;border-radius:22px;box-shadow:0 10px 40px rgba(255,69,88,.3)}
-.brand h1{margin-top:14px}.brand p{margin-top:4px}
-#auth form{background:rgba(12,30,54,.85);border:1px solid var(--line);border-radius:20px;padding:6px 18px 20px}
-.err{color:#ff9aa5;font-size:.88rem;min-height:1.3em;margin-top:10px}
-.lnk{background:none;border:0;color:var(--mute);font:inherit;font-size:.88rem;margin-top:12px;text-decoration:underline;cursor:pointer;width:100%}
-.or{display:flex;align-items:center;gap:10px;color:var(--mute);font-size:.82rem;margin:14px 0}.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
-/* shell */
-header{position:fixed;inset:0 0 auto;height:var(--top);padding:env(safe-area-inset-top,0px) 16px 0;display:flex;align-items:center;gap:10px;background:rgba(7,20,38,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);z-index:5}
-header img{width:32px;height:32px;border-radius:9px}
-header b{font-size:1rem}
-header a{margin-left:auto;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red2));display:grid;place-items:center;font-weight:700;font-size:.9rem}
-main{padding:calc(var(--top) + 18px) 18px calc(var(--bot) + 24px);max-width:640px;margin:auto}
-.view{display:none}.view.on{display:block;animation:in .22s ease-out}
-@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-@media(prefers-reduced-motion:reduce){.view.on{animation:none}}
-.hero{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:22px;padding:22px 18px;background:radial-gradient(380px 220px at 100% 0,rgba(255,69,88,.22),transparent 65%),linear-gradient(160deg,var(--panel2),var(--panel))}
-.hero .top{display:flex;gap:16px;align-items:center}
-.hero img{width:92px;height:92px;border-radius:50%;object-fit:cover;border:3px solid var(--red);flex:none;background:var(--panel)}
-.badge{display:inline-flex;align-items:center;gap:7px;font-size:.8rem;color:#bff5d3;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.35);padding:4px 11px;border-radius:99px;margin-top:10px}
-.badge i{width:7px;height:7px;border-radius:50%;background:var(--wa)}
-.hero>p{margin-top:16px}
-.btns{display:grid;gap:10px;margin:16px 0}
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;border-radius:14px;font-weight:650;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:1rem;font-family:inherit;width:100%;cursor:pointer}
-.btn.pri{background:linear-gradient(135deg,var(--red),var(--red2));border:0}
-.btn.wa{background:var(--wa);color:#052b14;border:0}
-.btn:active{transform:scale(.98)}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 8px;text-align:center}
-.stat b{display:block;font-size:1.02rem}.stat small{color:var(--mute);font-size:.74rem}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
-.card small{color:var(--mute);display:block}
-.card ul{margin:10px 0 0 18px;color:var(--mute)}.card li{margin:3px 0}
-.tl{position:relative;padding-left:18px}.tl::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:3px;background:linear-gradient(var(--red),var(--red2))}
-.proj{padding:0;overflow:hidden}.proj img{width:100%;height:150px;object-fit:cover;display:block;background:var(--panel2)}
-.proj div{padding:14px 16px 16px}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chips span,.chips button{font:inherit;font-size:.85rem;padding:7px 13px;border-radius:99px;background:var(--panel);border:1px solid var(--line);color:var(--ink)}
-.chips button{cursor:pointer;color:var(--mute)}.chips button.on{background:linear-gradient(135deg,var(--red),var(--red2));border-color:transparent;color:#fff}
-.bar{margin:14px 0}.bar div{display:flex;justify-content:space-between;font-size:.92rem;margin-bottom:6px}
-.bar i{display:block;height:8px;border-radius:9px;background:var(--line);overflow:hidden}
-.bar i::after{content:"";display:block;height:100%;width:var(--v);background:linear-gradient(90deg,var(--red),var(--red2));border-radius:9px}
-.row{display:flex;align-items:center;gap:14px;padding:14px 16px}
-.row .ic{width:42px;height:42px;border-radius:12px;background:var(--panel2);display:grid;place-items:center;color:var(--red);font-weight:800;flex:none}
-.row small{display:block;color:var(--mute);font-size:.82rem}
-.row .go{margin-left:auto;color:var(--mute)}
-.empty{text-align:center;padding:30px 16px;color:var(--mute);border:1px dashed var(--line);border-radius:18px}
-.file{display:flex;gap:12px;align-items:center}.file .ic{width:42px;height:42px;border-radius:12px;background:var(--panel2);display:grid;place-items:center;color:var(--red);font-size:.72rem;font-weight:800;flex:none}
-nav{position:fixed;inset:auto 0 0;height:var(--bot);padding-bottom:env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(5,1fr);background:rgba(7,20,38,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);z-index:5}
-nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--mute);font-size:.7rem}
-nav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-nav a.on{color:var(--red)}
-.seg{display:flex;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px;margin:14px 0}
-.seg button{flex:1;min-height:40px;border:0;border-radius:10px;background:none;color:var(--mute);font-weight:600;font-size:.88rem;font-family:inherit;cursor:pointer}
-.seg button.on{background:linear-gradient(135deg,var(--red),var(--red2));color:#fff}
-.pane{display:none}.pane.on{display:block}
-label{display:block;font-size:.85rem;color:var(--mute);margin:12px 0 5px}
-input,select,textarea{width:100%;min-height:46px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
-textarea{min-height:110px;resize:vertical}
-input:focus,select:focus,textarea:focus{outline:2px solid var(--red);border-color:transparent}
-.note{font-size:.82rem;color:var(--mute);margin-top:12px}
-a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
-#install{display:none}
-</style>
-<script src="firebase-config.js"></script>
-</head>
-<body class="boot">
-
-<!-- Sign up / Sign in -->
-<div id="auth">
-  <div class="acard">
-    <div class="brand"><img src="icons/icon-192.png" alt="" width="76" height="76"><h1>Peeyush Kumar Jangid</h1><p>HVAC Project Engineer · Jaipur</p></div>
-    <div class="seg" id="aseg"><button class="on" data-t="up" type="button">Create account</button><button data-t="in" type="button">Sign in</button></div>
-    <form id="af" novalidate>
-      <div id="nameRow"><label for="an">Full name</label><input id="an" autocomplete="name"></div>
-      <label for="ae">Email</label><input id="ae" type="email" autocomplete="email" inputmode="email">
-      <label for="ap">Password (min 6 characters)</label><input id="ap" type="password" autocomplete="new-password">
-      <p class="err" id="aerr" role="alert"></p>
-      <button class="btn pri" id="asub" type="submit">Create account</button>
-      <div id="gwrap" style="display:none"><div class="or">or</div><button class="btn" id="agoogle" type="button">Continue with Google</button></div>
-      <button class="lnk" id="aforgot" type="button" style="display:none">Forgot password?</button>
-    </form>
-    <p class="note" style="text-align:center" id="amode"></p>
-  </div>
-</div>
-
-<header><img src="icons/icon-192.png" alt="" width="32" height="32"><b>Peeyush Jangid</b><a href="#contact" id="avatar" aria-label="Account">P</a></header>
-
-<main>
-<section class="view" id="v-home">
-  <div class="hero">
-    <div class="top">
-      <img src="../profile-photo.jpg" alt="Peeyush Kumar Jangid" onerror="this.src='icons/icon-192.png'">
-      <div><h1>Peeyush Kumar Jangid</h1><p>HVAC Project Engineer</p></div>
-    </div>
-    <span class="badge"><i></i>Open to work</span>
-    <p>Hands-on HVAC project experience across site supervision, installation coordination, technical drawings and project documentation.</p>
-  </div>
-  <div class="btns">
-    <a class="btn pri" href="../Peeyush_Kumar_Jangid_Resume.pdf">Download CV</a>
-    <a class="btn wa" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20found%20your%20app.">Chat on WhatsApp</a>
-    <button class="btn" id="install" type="button">Install this app</button>
-  </div>
-  <div class="stats">
-    <div class="stat"><b>10 months</b><small>Experience</small></div>
-    <div class="stat"><b>AutoCAD</b><small>2D drawing</small></div>
-    <div class="stat"><b>VRV · AHU</b><small>Chilled water</small></div>
-  </div>
-  <h2>How I work</h2>
-  <div class="card tl"><h3>Plan</h3><p>Understand site requirements, drawings and execution priorities.</p></div>
-  <div class="card tl"><h3>Draw</h3><p>Prepare and review HVAC / VRV layouts in AutoCAD 2D.</p></div>
-  <div class="card tl"><h3>Coordinate</h3><p>Follow installation, ducting and chilled-water piping work.</p></div>
-  <div class="card tl"><h3>Document</h3><p>Keep site updates, checklists and pre-commissioning records.</p></div>
-</section>
-
-<section class="view" id="v-career">
-  <h1>Career</h1>
-  <h2>Experience</h2>
-  <div class="card"><h3>Project Engineer · HVAC</h3><small>Climatech Aircon Engineers Pvt Ltd, Jaipur</small><small>Oct 2025 – Aug 2026</small>
-    <ul><li>Coordinated HVAC project activities and site execution.</li><li>Supported installation and site supervision.</li><li>Worked with AutoCAD 2D drawings and technical documents.</li><li>Contributed to pre-commissioning across project sites.</li></ul></div>
-  <h2>Projects</h2>
-  <div class="card proj"><img src="../geetanjali-hospital.jpg" alt="" loading="lazy"><div><h3>Geetanjali Hospital, Jaipur</h3><p>Centralized VRV, chiller and FCU installation with ducting and AHU units; duct alignment and insulation checks.</p></div></div>
-  <div class="card proj"><img src="../jecrc-university.jpg" alt="" loading="lazy"><div><h3>JECRC University, Alwar</h3><p>Daily billing in MS Excel: bills, invoices, billing records and daily reports for HVAC work.</p></div></div>
-  <div class="card"><h3>Pre-commissioning · Various sites</h3><p>Site reports, checklists and pre-commissioning records, coordinated with project teams.</p></div>
-  <h2>Education</h2>
-  <div class="card"><h3>B.Sc. (PCM)</h3><small>University of Rajasthan, Jaipur</small></div>
-  <div class="card"><h3>RS-CIT · 2025</h3><small>Rajasthan State Certificate in IT, VMOU Kota</small></div>
-  <div class="card"><h3>BCBF</h3><small>Parivartan Skills Academy, Jaipur</small></div>
-</section>
-
-<section class="view" id="v-skills">
-  <h1>Skills</h1>
-  <h2>Field work</h2>
-  <div class="bar" style="--v:86%"><div><span>HVAC installation &amp; site supervision</span><b>86%</b></div><i></i></div>
-  <div class="bar" style="--v:82%"><div><span>Site supervision &amp; coordination</span><b>82%</b></div><i></i></div>
-  <div class="bar" style="--v:78%"><div><span>VRV / VRF drawing · AutoCAD 2D</span><b>78%</b></div><i></i></div>
-  <div class="bar" style="--v:76%"><div><span>Pre-commissioning documentation</span><b>76%</b></div><i></i></div>
-  <h2>People &amp; finance</h2>
-  <div class="bar" style="--v:88%"><div><span>Communication</span><b>88%</b></div><i></i></div>
-  <div class="bar" style="--v:87%"><div><span>Problem solving</span><b>87%</b></div><i></i></div>
-  <div class="bar" style="--v:85%"><div><span>Time management</span><b>85%</b></div><i></i></div>
-  <div class="bar" style="--v:84%"><div><span>Team management</span><b>84%</b></div><i></i></div>
-  <div class="bar" style="--v:82%"><div><span>Accounting</span><b>82%</b></div><i></i></div>
-  <div class="bar" style="--v:80%"><div><span>Banking</span><b>80%</b></div><i></i></div>
-  <h2>Tools &amp; systems</h2>
-  <div class="chips"><span>AutoCAD 2D</span><span>MS Excel</span><span>MS Word</span><span>PowerPoint</span><span>Tally Prime</span><span>VRV / VRF</span><span>Chilled water</span><span>Ducting</span><span>AHU</span><span>FCU</span><span>Site reports</span><span>ChatGPT</span><span>Claude</span><span>GitHub</span></div>
-  <h2>Languages</h2>
-  <div class="chips"><span>Hindi</span><span>English</span></div>
-</section>
-
-<section class="view" id="v-files">
-  <h1>Files</h1>
-  <div class="seg" data-seg="files"><button class="on" data-t="notes" type="button">Notes &amp; drawings</button><button data-t="certs" type="button">Certificates</button></div>
-  <div class="pane on" id="p-notes">
-    <div class="chips" id="ftypes" style="margin-bottom:14px"></div>
-    <div id="notes"></div>
-  </div>
-  <div class="pane" id="p-certs"><div id="certs"></div></div>
-</section>
-
-<section class="view" id="v-contact">
-  <h1>Contact</h1>
-  <div class="seg" data-seg="contact"><button class="on" data-t="reach" type="button">Reach me</button><button data-t="offer" type="button">Job offer</button><button data-t="apply" type="button">Apply</button></div>
-
-  <div class="pane on" id="p-reach">
-    <a class="card row" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20would%20like%20to%20discuss%20an%20opportunity."><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M21 12a8 8 0 01-11.6 7.1L3 21l1.9-6.4A8 8 0 1121 12z"/></svg></span><div><b>WhatsApp</b><small>+91 99285 79369</small></div></a>
-    <a class="card row" href="tel:+919928579369"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></span><div><b>Call</b><small>+91 99285 79369</small></div></a>
-    <a class="card row" href="mailto:peeyush.jangid@outlook.com?subject=Job%20opportunity"><span class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><div><b>Email</b><small>peeyush.jangid@outlook.com</small></div></a>
-    <a class="card row" href="https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/"><span class="ic">in</span><div><b>LinkedIn</b><small>Peeyush Kumar Jangid</small></div></a>
-    <div class="btns"><a class="btn pri" href="../Peeyush_Kumar_Jangid_Resume.pdf">Download CV</a></div>
-    <h2>Your account</h2>
-    <div class="card row"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0"/></svg></span><div><b id="accName">Guest</b><small id="accMail"></small></div></div>
-    <button class="btn" id="signout" type="button">Sign out</button>
-  </div>
-
-  <div class="pane" id="p-offer">
-    <h2 style="margin-top:6px">Send me your job offer</h2>
-    <p>HVAC Project Engineer · Site Supervision · Jaipur. Share the role and Peeyush will contact you.</p>
-    <form id="f-offer" data-title="Job offer"></form>
-  </div>
-
-  <div class="pane" id="p-apply">
-    <h2 style="margin-top:6px">Looking for a job? Apply here</h2>
-    <p>Share your profile and the work you are looking for. It goes straight to Peeyush.</p>
-    <form id="f-apply" data-title="Job application"></form>
-  </div>
-</section>
-</main>
-
-<nav aria-label="Main">
-  <a href="#home"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z"/></svg>Home</a>
-  <a href="#career"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V4h6v3"/></svg>Career</a>
-  <a href="#skills"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Skills</a>
-  <a href="#files"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>Files</a>
-  <a href="#contact"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0"/></svg>Contact</a>
-</nav>
-
-<script>
-(function(){
-  var $=function(i){return document.getElementById(i)};
-  /* ---------- routing ---------- */
-  var tabs=['home','career','skills','files','contact'];
-  function show(){
-    var h=(location.hash||'#home').slice(1); if(tabs.indexOf(h)<0)h='home';
-    tabs.forEach(function(t){$('v-'+t).classList.toggle('on',t===h)});
-    [].forEach.call(document.querySelectorAll('nav a'),function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+h)});
-    scrollTo(0,0);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#071426" />
+  <script>
+    /* Intro loader shows once per browser session; skipped for reduced-motion users */
+    (function () {
+      var r = document.documentElement;
+      try {
+        if (!sessionStorage.getItem('pk-intro') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) { r.classList.add('has-loader'); }
+        else { r.classList.add('loaded'); }
+      } catch (e) { r.classList.add('loaded'); }
+    })();
+  </script>
+  <meta name="description" content="Peeyush Kumar Jangid — HVAC Project Engineer with experience in site supervision, HVAC execution, AutoCAD 2D and project coordination." />
+  <title>Peeyush Kumar Jangid | HVAC Project Engineer in Jaipur</title>
+  <link rel="canonical" href="https://peeyush-jangid.github.io/" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Peeyush Kumar Jangid" />
+  <meta name="google-site-verification" content="905fUyCvyr4-2TmW570_RHRLtn8IwUfBvY5vRS6_KNg" />
+  <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="profile-photo.jpg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Peeyush Kumar Jangid" />
+  <meta property="og:title" content="Peeyush Kumar Jangid | HVAC Project Engineer in Jaipur" />
+  <meta property="og:description" content="HVAC Project Engineer in Jaipur — site supervision, AutoCAD 2D, pre-commissioning and project coordination." />
+  <meta property="og:url" content="https://peeyush-jangid.github.io/" />
+  <meta property="og:image" content="https://peeyush-jangid.github.io/profile-photo.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Peeyush Kumar Jangid",
+    "alternateName": "Peeyush Jangid",
+    "jobTitle": "HVAC Project Engineer",
+    "description": "HVAC Project Engineer with experience in site supervision, HVAC execution, AutoCAD 2D and project coordination.",
+    "url": "https://peeyush-jangid.github.io/",
+    "image": "https://peeyush-jangid.github.io/profile-photo.jpg",
+    "email": "mailto:peeyush.jangid@outlook.com",
+    "address": { "@type": "PostalAddress", "addressLocality": "Jaipur", "addressRegion": "Rajasthan", "addressCountry": "IN" },
+    "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Rajasthan" },
+    "knowsAbout": ["HVAC", "VRV / VRF", "Chilled Water Systems", "AutoCAD 2D", "Pre-commissioning", "Site Supervision"],
+    "sameAs": ["https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/"]
   }
-  addEventListener('hashchange',show); show();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Soft skills panel (you can move this into style.css if you prefer) */
+    .soft-skills { margin-top: 24px; }
+    .soft-skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px 36px; }
+    @media (max-width: 720px) { .soft-skills-grid { grid-template-columns: 1fr; } }
 
-  /* ---------- segmented tabs ---------- */
-  [].forEach.call(document.querySelectorAll('[data-seg]'),function(box){
-    box.addEventListener('click',function(e){
-      var t=e.target.dataset&&e.target.dataset.t; if(!t)return;
-      [].forEach.call(box.children,function(b){b.classList.toggle('on',b.dataset.t===t)});
-      [].forEach.call(box.parentNode.querySelectorAll(':scope > .pane'),function(p){p.classList.toggle('on',p.id==='p-'+t)});
-    });
-  });
+    /* Floating contact buttons: Email, LinkedIn, WhatsApp stacked at bottom-right */
+    .floating-contact { position: fixed; right: 20px; bottom: 78px; z-index: 50; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .floating-contact a { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(135deg, #b8975a, #e0c07f); color: #0b1220; text-decoration: none; box-shadow: 0 10px 24px rgba(0, 0, 0, .35); transition: transform .2s ease, box-shadow .2s ease; }
+    .floating-contact a:hover { transform: translateY(-3px) scale(1.06); box-shadow: 0 14px 30px rgba(0, 0, 0, .45); }
+    .floating-contact .floating-whatsapp { position: static; inset: auto; margin: 0; width: 52px; height: 52px; font-size: 22px; line-height: 1; }
+    .floating-contact svg { width: 24px; height: 24px; fill: currentColor; display: block; }
+    @media (max-width: 720px) { .floating-contact { right: 14px; bottom: 72px; gap: 10px; } .floating-contact a, .floating-contact .floating-whatsapp { width: 46px; height: 46px; } .floating-contact svg { width: 21px; height: 21px; } }
 
-  /* ---------- files (edit files.json to add items) ---------- */
-  var FT={xls:'Excel',xlsx:'Excel',doc:'Word',docx:'Word',ppt:'PowerPoint',pptx:'PowerPoint',pdf:'PDF',dwg:'AutoCAD',dxf:'AutoCAD'},cur='All',notes=[];
-  function ext(it){if(it.type)return it.type;var m=(it.url||'').split('?')[0].split('.').pop().toLowerCase();return FT[m]||'File'}
-  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-  function card(it,badge){return '<a class="card file" href="'+esc(it.url)+'" target="_blank" rel="noopener"><span class="ic">'+esc(badge)+'</span><div><b>'+esc(it.title)+'</b>'+(it.note?'<small>'+esc(it.note)+'</small>':'')+'</div></a>'}
-  function drawNotes(){
-    var types=['All'],list=notes.filter(function(n){return cur==='All'||ext(n)===cur});
-    notes.forEach(function(n){var t=ext(n);if(types.indexOf(t)<0)types.push(t)});
-    $('ftypes').innerHTML=types.length>1?types.map(function(t){return '<button type="button" class="'+(t===cur?'on':'')+'" data-t="'+esc(t)+'">'+esc(t)+'</button>'}).join(''):'';
-    $('notes').innerHTML=list.length?list.map(function(n){return card(n,ext(n).slice(0,3).toUpperCase())}).join(''):'<div class="empty">No notes or drawings yet. New files will appear here.</div>';
-  }
-  $('ftypes').addEventListener('click',function(e){if(e.target.dataset.t){cur=e.target.dataset.t;drawNotes()}});
-  fetch('files.json').then(function(r){return r.json()}).catch(function(){return{}}).then(function(d){
-    notes=d.notes||[]; drawNotes();
-    var c=d.certificates||[];
-    $('certs').innerHTML=c.length?c.map(function(x){return card(x,'CERT')}).join(''):'<div class="empty">No certificates added yet.</div>';
-  });
+    /* ===== Animations ===== */
+    /* Scroll progress bar + soft cursor glow */
+    .scroll-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 300; background: linear-gradient(90deg, #b8975a, #f0d79a); box-shadow: 0 0 12px rgba(214, 179, 106, .6); pointer-events: none; }
+    .cursor-glow { position: fixed; top: 0; left: 0; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(214, 179, 106, .14), transparent 65%); pointer-events: none; z-index: 1; opacity: 0; transition: opacity .4s ease; will-change: transform; }
 
-  /* ---------- job forms ---------- */
-  var yes=1,TY=['Full-time','Part-time','Contract','Internship'];
-  var F={
-   offer:[['Your name','text',yes],['Your designation','text'],['Company name','text',yes],['Company website / LinkedIn','text'],['Email address','email',yes],['Phone / WhatsApp','tel',yes],['Job role you are offering','text',yes],['Job location','text'],['Employment type','select',0,TY],['Salary / CTC offered','text'],['Interview mode','select',0,['Online (video call)','Phone call','In person']],['Joining timeline','text'],['Best way to contact you','select',0,['WhatsApp','Phone call','Email']],['Job details or message','textarea',yes]],
-   apply:[['Your full name','text',yes],['Your email address','email',yes],['Phone / WhatsApp','tel',yes],['Your current city','text',yes],['Job role you are seeking','text',yes],['Work experience','select',0,['Fresher','Less than 1 year','1-2 years','2-5 years','5+ years']],['Employment type','select',0,TY.concat(['Any suitable role'])],['Availability / notice period','text'],['Your CV link (Google Drive / Dropbox)','url',yes],['Skills, qualifications and message','textarea',yes]]
-  };
-  var ID={offer:{n:0,e:4},apply:{n:0,e:1}};
-  Object.keys(F).forEach(function(k){
-    var f=$('f-'+k),h='';
-    F[k].forEach(function(x,i){
-      var id=k+i,r=x[2]?' required':'',l='<label for="'+id+'">'+x[0]+(x[2]?' *':'')+'</label>';
-      if(x[1]==='select')h+=l+'<select id="'+id+'"><option value="">Select</option>'+x[3].map(function(o){return '<option>'+o+'</option>'}).join('')+'</select>';
-      else if(x[1]==='textarea')h+=l+'<textarea id="'+id+'"'+r+'></textarea>';
-      else h+=l+'<input id="'+id+'" type="'+x[1]+'"'+r+'>';
-    });
-    h+='<div class="btns"><button class="btn wa" type="button" data-m="wa">Send on WhatsApp</button><button class="btn" type="button" data-m="mail">Send by email</button></div><p class="note">Your message opens in WhatsApp or your email app, ready to send. To share a CV file, use the CV link field or send it in the chat.</p>';
-    f.innerHTML=h;
-    f.addEventListener('click',function(e){
-      var m=e.target.dataset&&e.target.dataset.m; if(!m)return;
-      if(!f.reportValidity())return;
-      var t=f.dataset.title,lines=[t+' via Peeyush app',''];
-      F[k].forEach(function(x,i){var v=$(k+i).value.trim();if(v)lines.push(x[0]+': '+v)});
-      var body=lines.join('\n');
-      location.href=m==='wa'?'https://wa.me/919928579369?text='+encodeURIComponent(body):'mailto:peeyush.jangid@outlook.com?subject='+encodeURIComponent(t)+'&body='+encodeURIComponent(body);
-    });
-  });
+    /* Gentle floating on hero elements (uses `translate` so it never clashes with existing transforms) */
+    @keyframes floatY { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+    .hero-panel { animation: floatY 8s ease-in-out infinite; }
+    .floating-chip.chip-top { animation: floatY 5s ease-in-out infinite; }
+    .floating-chip.chip-bottom { animation: floatY 6s ease-in-out -2s infinite; }
 
-  /* ---------- accounts ---------- */
-  var cfg=window.FIREBASE_CONFIG&&window.FIREBASE_CONFIG.apiKey?window.FIREBASE_CONFIG:null,mode='up',fbp;
-  function setUser(u){
-    document.body.className=u?'':'locked';
-    $('accName').textContent=u?u.name:'Guest'; $('accMail').textContent=u?u.email:'';
-    $('avatar').textContent=u?(u.name||u.email)[0].toUpperCase():'P';
-    if(u)Object.keys(ID).forEach(function(k){var n=$(k+ID[k].n),e=$(k+ID[k].e);if(n&&!n.value)n.value=u.name;if(e&&!e.value)e.value=u.email});
-    if(u)show();
-  }
-  function msg(e){
-    var c=(e&&e.code)||(e&&e.message)||'';
-    if(/email-already|exists/.test(c))return 'This email already has an account. Choose Sign in.';
-    if(/invalid-credential|wrong-password|user-not-found|incorrect/.test(c))return 'Email or password is incorrect.';
-    if(/weak-password|short/.test(c))return 'Use at least 6 characters for the password.';
-    if(/invalid-email|badmail/.test(c))return 'Enter a valid email address.';
-    if(/popup-closed|cancelled/.test(c))return 'Sign-in was cancelled.';
-    if(/network/.test(c))return 'No internet connection. Try again.';
-    if(/too-many/.test(c))return 'Too many attempts. Wait a minute and try again.';
-    return 'Something went wrong. Please try again.';
-  }
-  function hash(s){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)).then(function(b){return [].map.call(new Uint8Array(b),function(x){return x.toString(16).padStart(2,'0')}).join('')})}
-  var db={get:function(){try{return JSON.parse(localStorage.getItem('pj_users')||'{}')}catch(e){return{}}},set:function(u){localStorage.setItem('pj_users',JSON.stringify(u))}};
-  function fb(){
-    if(fbp)return fbp;
-    var b='https://www.gstatic.com/firebasejs/10.12.2/';
-    fbp=Promise.all([import(b+'firebase-app.js'),import(b+'firebase-auth.js')]).then(function(r){var app=r[0].initializeApp(cfg);return{m:r[1],a:r[1].getAuth(app)}});
-    return fbp;
-  }
-  var API={
-    up:function(n,e,p){
-      if(cfg)return fb().then(function(f){return f.m.createUserWithEmailAndPassword(f.a,e,p).then(function(c){return f.m.updateProfile(c.user,{displayName:n}).then(function(){setUser({name:n,email:e})})})});
-      var u=db.get(); if(u[e])return Promise.reject({code:'exists'}); if(p.length<6)return Promise.reject({code:'short'});
-      return hash(p).then(function(h){u[e]={name:n,h:h};db.set(u);localStorage.setItem('pj_sess',e);setUser({name:n,email:e})});
-    },
-    in:function(e,p){
-      if(cfg)return fb().then(function(f){return f.m.signInWithEmailAndPassword(f.a,e,p)});
-      var u=db.get()[e]; if(!u)return Promise.reject({code:'incorrect'});
-      return hash(p).then(function(h){if(h!==u.h)return Promise.reject({code:'incorrect'});localStorage.setItem('pj_sess',e);setUser({name:u.name,email:e})});
-    },
-    out:function(){
-      if(cfg)return fb().then(function(f){return f.m.signOut(f.a)});
-      localStorage.removeItem('pj_sess'); setUser(null); return Promise.resolve();
+    /* Card hover: lift + glow */
+    .process-card, .project-card, .timeline-card, .skill-panel, .tools-panel, .availability-card {
+      transition: opacity .8s ease, transform .8s ease, translate .35s ease, box-shadow .35s ease, border-color .35s ease;
     }
-  };
-  function drawMode(){
-    var up=mode==='up';
-    $('nameRow').style.display=up?'block':'none';
-    $('asub').textContent=up?'Create account':'Sign in';
-    $('ap').autocomplete=up?'new-password':'current-password';
-    $('aforgot').style.display=!up&&cfg?'block':'none';
-    $('aerr').textContent='';
-    [].forEach.call($('aseg').children,function(b){b.classList.toggle('on',b.dataset.t===mode)});
-  }
-  $('aseg').addEventListener('click',function(e){if(e.target.dataset.t){mode=e.target.dataset.t;drawMode()}});
-  $('af').addEventListener('submit',function(ev){
-    ev.preventDefault();
-    var n=$('an').value.trim(),e=$('ae').value.trim().toLowerCase(),p=$('ap').value;
-    if(mode==='up'&&!n)return $('aerr').textContent='Enter your full name.';
-    if(!/^\S+@\S+\.\S+$/.test(e))return $('aerr').textContent='Enter a valid email address.';
-    if(p.length<6)return $('aerr').textContent='Use at least 6 characters for the password.';
-    $('aerr').textContent=''; $('asub').disabled=true;
-    (mode==='up'?API.up(n,e,p):API.in(e,p)).catch(function(x){$('aerr').textContent=msg(x)}).then(function(){$('asub').disabled=false});
-  });
-  $('aforgot').addEventListener('click',function(){
-    var e=$('ae').value.trim(); if(!e)return $('aerr').textContent='Enter your email first.';
-    fb().then(function(f){return f.m.sendPasswordResetEmail(f.a,e)}).then(function(){$('aerr').textContent='Reset link sent to '+e+'.'}).catch(function(x){$('aerr').textContent=msg(x)});
-  });
-  $('agoogle').addEventListener('click',function(){
-    fb().then(function(f){return f.m.signInWithPopup(f.a,new f.m.GoogleAuthProvider())}).catch(function(x){
-      if(/popup-blocked|operation-not-supported/.test((x&&x.code)||''))return fb().then(function(f){return f.m.signInWithRedirect(f.a,new f.m.GoogleAuthProvider())});
-      $('aerr').textContent=msg(x);
+    .process-card:hover, .project-card:hover, .timeline-card:hover, .skill-panel:hover, .tools-panel:hover, .availability-card:hover {
+      translate: 0 -6px; border-color: rgba(214, 179, 106, .55); box-shadow: 0 18px 40px rgba(0, 0, 0, .4), 0 0 0 1px rgba(214, 179, 106, .15);
+    }
+    .step-icon { transition: rotate .5s ease, scale .5s ease; }
+    .process-card:hover .step-icon { rotate: 12deg; scale: 1.15; }
+
+    /* Project image zoom */
+    .project-image { overflow: hidden; }
+    .project-image img { transition: transform .8s ease; }
+    .project-card:hover .project-image img { transform: scale(1.07); }
+
+    /* Button shine sweep + arrow nudge */
+    .btn, .nav-contact { position: relative; overflow: hidden; }
+    .btn::after, .nav-contact::after { content: ""; position: absolute; top: 0; left: -120%; width: 60%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .35), transparent); transform: skewX(-20deg); transition: left .7s ease; pointer-events: none; }
+    .btn:hover::after, .nav-contact:hover::after { left: 140%; }
+    .btn span, .nav-contact span { display: inline-block; transition: translate .25s ease; }
+    .btn:hover span, .nav-contact:hover span { translate: 3px -3px; }
+
+    /* Tags and chips hover */
+    .tool-tags span, .about-tags span { transition: translate .25s ease, color .25s ease, border-color .25s ease, background-color .25s ease; }
+    .tool-tags span:hover, .about-tags span:hover { translate: 0 -3px; color: #e0c07f; border-color: rgba(214, 179, 106, .6); }
+
+    /* WhatsApp pulse ring */
+    @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(214, 179, 106, .55); } 70% { box-shadow: 0 0 0 16px rgba(214, 179, 106, 0); } 100% { box-shadow: 0 0 0 0 rgba(214, 179, 106, 0); } }
+    .floating-contact .floating-whatsapp { animation: pulseRing 2.4s ease-out infinite; }
+
+    /* Respect "reduce motion" settings */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .cursor-glow { display: none; }
+    }
+
+    /* ===== Premium motion layer ===== */
+    html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 90px; }
+
+    /* Intro loader: ring draws, name fades in, curtain lifts */
+    .preloader { position: fixed; inset: 0; z-index: 1000; display: none; place-items: center; background: #060b14; transition: transform .95s cubic-bezier(.77, 0, .18, 1); }
+    .has-loader .preloader { display: grid; }
+    .preloader.done { transform: translateY(-100%); }
+    .has-loader:not(.loaded) body { overflow: hidden; }
+    .pre-inner { display: grid; gap: 14px; justify-items: center; text-align: center; }
+    .pre-logo { position: relative; width: 96px; height: 96px; display: grid; place-items: center; font: 700 2rem 'Manrope', sans-serif; color: #f4efe6; }
+    .pre-logo b { color: #d6b36a; }
+    .pre-logo svg { position: absolute; inset: 0; width: 100%; height: 100%; rotate: -90deg; }
+    .pre-logo circle { fill: none; stroke: #d6b36a; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 289; stroke-dashoffset: 289; animation: drawRing 1.4s .1s cubic-bezier(.65, 0, .35, 1) forwards; }
+    .pre-name { margin-top: 10px; font: 600 .8rem 'Manrope', sans-serif; letter-spacing: .32em; color: #f4efe6; opacity: 0; animation: fadeUp .8s .5s ease forwards; }
+    .pre-sub { font: 500 .66rem 'Manrope', sans-serif; letter-spacing: .3em; color: #d6b36a; opacity: 0; animation: fadeUp .8s .7s ease forwards; }
+    .pre-bar { width: 160px; height: 2px; margin-top: 8px; background: rgba(255, 255, 255, .12); border-radius: 2px; overflow: hidden; }
+    .pre-bar i { display: block; width: 100%; height: 100%; background: linear-gradient(90deg, #b8975a, #f0d79a); scale: 0 1; transform-origin: left; animation: fillBar 1.7s .1s cubic-bezier(.65, 0, .35, 1) forwards; }
+    @keyframes drawRing { to { stroke-dashoffset: 0; } }
+    @keyframes fillBar { to { scale: 1 1; } }
+    @keyframes fadeUp { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
+
+    /* Hero entrance: staggered rise + blur-in, starts after the loader lifts */
+    @keyframes riseIn { from { opacity: 0; translate: 0 28px; filter: blur(6px); } to { opacity: 1; translate: 0 0; filter: blur(0); } }
+    @keyframes scaleIn { from { opacity: 0; scale: .94; translate: 0 24px; } to { opacity: 1; scale: 1; translate: 0 0; } }
+    .hero-copy > * { animation: riseIn 1s cubic-bezier(.2, .7, .2, 1) both; }
+    .hero-copy > :nth-child(1) { animation-delay: .15s; }
+    .hero-copy > :nth-child(2) { animation-delay: .27s; }
+    .hero-copy > :nth-child(3) { animation-delay: .39s; }
+    .hero-copy > :nth-child(4) { animation-delay: .51s; }
+    .hero-copy > :nth-child(5) { animation-delay: .63s; }
+    .hero-copy > :nth-child(6) { animation-delay: .75s; }
+    .hero-copy > :nth-child(7) { animation-delay: .87s; }
+    .hero-visual { animation: scaleIn 1.2s .4s cubic-bezier(.2, .7, .2, 1) both; }
+    .has-loader:not(.loaded) .hero-copy > *, .has-loader:not(.loaded) .hero-visual { animation-play-state: paused; }
+
+    /* Rotating typewriter line */
+    .typed-line { display: flex; align-items: center; gap: 10px; min-height: 1.7em; margin: 6px 0 0; font-family: 'Manrope', sans-serif; font-size: .92rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #e0c07f; }
+    .typed-label { color: rgba(244, 239, 230, .5); font-weight: 500; }
+    .typed-cursor { display: inline-block; width: 2px; height: 1.1em; background: #e0c07f; animation: blink 1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* Header state, active nav underline, magnetic buttons, 3D tilt */
+    .site-header { transition: box-shadow .35s ease; }
+    .site-header.scrolled { box-shadow: 0 12px 32px rgba(0, 0, 0, .4); }
+    .nav-links a:not(.nav-contact) { position: relative; transition: color .25s ease; }
+    .nav-links a:not(.nav-contact)::after { content: ""; position: absolute; left: 0; right: 0; bottom: -8px; height: 2px; background: #d6b36a; scale: 0 1; transform-origin: left; transition: scale .35s ease; }
+    .nav-links a.active:not(.nav-contact), .nav-links a:not(.nav-contact):hover { color: #e0c07f; }
+    .nav-links a.active:not(.nav-contact)::after, .nav-links a:not(.nav-contact):hover::after { scale: 1 1; }
+    .sidebar-links a.active { color: #e0c07f; }
+    .btn { transition: translate .2s ease, background-color .25s ease, border-color .25s ease, color .25s ease, box-shadow .25s ease; }
+    .hero-panel { transition: transform .35s ease-out; will-change: transform; }
+
+    /* Certificates gallery (filled automatically from the /certificates folder) */
+    .cert-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; margin-top: 8px; }
+    .cert-card { display: flex; flex-direction: column; border-radius: 18px; overflow: hidden; background: rgba(255,255,255,.04); border: 1px solid rgba(214,179,106,.22); text-decoration: none; color: inherit; transition: translate .35s ease, box-shadow .35s ease, border-color .35s ease; }
+    .cert-card:hover { translate: 0 -6px; border-color: rgba(214,179,106,.55); box-shadow: 0 18px 40px rgba(0,0,0,.4); }
+    .cert-thumb { aspect-ratio: 4 / 3; display: grid; place-items: center; background: #0b1626; overflow: hidden; }
+    .cert-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .8s ease; }
+    .cert-card:hover .cert-thumb img { transform: scale(1.06); }
+    .cert-pdf { display: grid; gap: 6px; justify-items: center; font: 700 .8rem 'Manrope', sans-serif; letter-spacing: .2em; color: #d6b36a; }
+    .cert-pdf b { font-size: 2.4rem; letter-spacing: 0; }
+    .cert-meta { padding: 14px 16px 16px; display: grid; gap: 4px; }
+    .cert-meta strong { font: 700 .98rem 'Manrope', sans-serif; color: #f4efe6; word-break: break-word; }
+    .cert-meta span { font-size: .78rem; letter-spacing: .12em; color: #e0c07f; }
+    .cert-empty { grid-column: 1 / -1; padding: 40px 20px; text-align: center; border: 1px dashed rgba(214,179,106,.35); border-radius: 18px; color: rgba(244,239,230,.6); }
+  </style>
+  <script defer src="script.js"></script>
+  <script defer src="work-files.js"></script><script defer src="certificate-gallery.js"></script>
+</head>
+<body>
+  <div class="scroll-progress" id="scroll-progress"></div>
+  <div class="cursor-glow" id="cursor-glow"></div>
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="pre-inner">
+      <div class="pre-logo">
+  <svg viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="46"></circle>
+  </svg>
+
+  <img
+    src="profile-photo.jpg"
+    alt="Peeyush Kumar Jangid"
+    class="pre-profile-photo"
+  />
+</div>
+      <div class="pre-name">PEEYUSH KUMAR JANGID</div>
+      <div class="pre-sub">HVAC PROJECT ENGINEER</div>
+      <div class="pre-bar"><i></i></div>
+    </div>
+  </div>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="sidebar" id="sidebar" aria-label="Side menu" aria-hidden="true">
+    <div class="sidebar-head"><span class="brand-mark brand-photo" style="width:44px;height:44px;overflow:hidden;border-radius:50%;padding:0;border:2px solid #d6b36a;background:#fff;flex:none;display:block"><img src="profile-photo.jpg" alt="Peeyush" width="44" height="44" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block" /></span><button class="sidebar-close" type="button" aria-label="Close side menu">✕</button></div>
+    <div class="sidebar-name">PEEYUSH KUMAR JANGID<small>Project Engineer · HVAC</small></div>
+    <nav class="sidebar-links">
+      <a href="#about">About</a><a href="#process">Process</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#work-files">Notes</a><a href="#certificates">Certificates</a><a href="#contact">Contact Us</a><a href="#" class="auth-nav" data-auth-open>Sign in</a>
+    </nav>
+  </aside>
+
+  <header class="site-header">
+    <div class="brand-wrap"><button class="brand-mark brand-photo side-toggle" type="button" aria-label="Open side menu" aria-controls="sidebar" aria-expanded="false" style="width:44px;height:44px;overflow:hidden;border-radius:50%;padding:0;border:2px solid #d6b36a;background:#fff;flex:none;cursor:pointer"><img src="profile-photo.jpg" alt="Peeyush" width="44" height="44" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block" /></button><a class="brand" href="#home" aria-label="Peeyush home"><span>PEEYUSH<span class="brand-muted"> / PORTFOLIO</span></span></a></div>
+    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#about">About</a><a href="#process">Process</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#work-files">Notes</a><a href="#certificates">Certificates</a><a href="#" class="auth-nav" data-auth-open>Sign in</a><a href="#contact" class="nav-contact">Let's talk <span>↗</span></a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero section-wrap" id="home">
+      <div class="hero-copy reveal">
+        <div class="eyebrow"><span class="status-dot"></span> HVAC PROFESSIONAL · JAIPUR, INDIA</div>
+        <h1>Peeyush Kumar<br><span class="gradient-text">Jangid</span></h1>
+        <p class="hero-role">Project Engineer <span class="role-divider">·</span> HVAC <span class="role-divider">·</span> Site Supervision</p>
+        <p class="typed-line"><span class="typed-label">FOCUS —</span><span class="typed-text" id="typed-text">HVAC Site Supervision</span><i class="typed-cursor"></i></p>
+        <p class="hero-description">I bring hands-on HVAC project experience across site supervision, installation coordination, technical drawings and project documentation.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="Peeyush_Kumar_Jangid_Resume.pdf" download>Download CV <span>↓</span></a>
+          <a class="btn btn-ghost" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20visited%20your%20portfolio." target="_blank" rel="noopener">Contact on WhatsApp <span>↗</span></a>
+        </div>
+        <div class="hero-meta"><span><i class="meta-line"></i> AutoCAD 2D</span><span><i class="meta-line"></i> MS Excel</span><span><i class="meta-line"></i> HVAC Projects</span><span><i class="meta-line"></i> AI Knowledge (ChatGPT, Claude, GitHub)</span></div>
+      </div>
+      <div class="hero-visual reveal">
+        <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
+        <div class="hero-panel">
+          <div class="panel-top"><span>FIELD PROFILE</span><span class="panel-live"><i></i> OPEN TO OPPORTUNITIES</span></div>
+          <div class="blueprint-art profile-photo-wrap">
+            <img class="profile-photo" src="profile-photo.jpg" alt="Professional portrait of Peeyush Kumar Jangid" />
+          </div>
+          <div class="panel-bottom"><div><strong>HVAC</strong><small>PROJECT ENGINEERING</small></div><div class="panel-coordinate">26.9124° N<br>75.7873° E</div></div>
+        </div>
+        <div class="floating-chip chip-top"><span class="chip-icon">⌁</span><span><b>Plan to execution</b><small>Practical site coordination</small></span></div>
+        <div class="floating-chip chip-bottom"><span class="chip-icon">▤</span><span><b>Clear documentation</b><small>Reports · Measurements · Bills</small></span></div>
+      </div>
+      <div class="scroll-cue"><span></span> SCROLL TO EXPLORE</div>
+    </section>
+
+    <section class="ticker" aria-label="Areas of work"><div class="ticker-track"><span>VRV / VRF</span><b>✳</b><span>CHILLED WATER</span><b>✳</b><span>DUCTING</span><b>✳</b><span>AHU / FCU</span><b>✳</b><span>AUTOCAD 2D</span><b>✳</b><span>MS EXCEL</span><b>✳</b><span>PRE-COMMISSIONING</span><b>✳</b><span>VRV / VRF</span><b>✳</b><span>CHILLED WATER</span><b>✳</b><span>DUCTING</span><b>✳</b><span>AHU / FCU</span></div></section>
+
+    <section class="section section-wrap" id="about">
+      <div class="section-heading reveal"><div><span class="section-kicker">ABOUT ME</span><h2>Who I am<br><span class="muted-heading">&amp; what I do.</span></h2></div><p>A quick introduction to my background, skills and how I work.</p></div>
+      <div class="about-layout">
+        <div class="about-text reveal">
+          <p>I am Peeyush Kumar Jangid, a motivated and detail-oriented HVAC Project Engineer from Jaipur with hands-on experience in site supervision, billing, pre-commissioning, client coordination, and HVAC drafting.</p>
+          <p>Skilled in AutoCAD 2D, Advanced Excel, and project coordination, I am passionate about delivering quality work, solving problems, and continuously improving my professional skills.</p>
+          <div class="about-tags"><span>Site Supervision</span><span>Billing</span><span>Pre-Commissioning</span><span>Client Coordination</span><span>HVAC Drafting</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-wrap" id="process">
+      <div class="section-heading reveal"><div><span class="section-kicker">01 / MY APPROACH</span><h2>How I work<br><span class="muted-heading">on a project.</span></h2></div><p>A practical approach to coordinating site activities, drawings, installation quality and project records.</p></div>
+      <div class="process-grid">
+        <article class="process-card reveal"><span class="step-no">01</span><div class="step-icon">⌖</div><h3>Plan</h3><p>Understand site requirements, drawings and execution priorities.</p></article>
+        <article class="process-card reveal"><span class="step-no">02</span><div class="step-icon">⌘</div><h3>Draw</h3><p>Prepare and review HVAC / VRV layouts using AutoCAD 2D.</p></article>
+        <article class="process-card reveal"><span class="step-no">03</span><div class="step-icon">⚙</div><h3>Coordinate</h3><p>Follow installation work, ducting and chilled-water piping activities.</p></article>
+        <article class="process-card reveal"><span class="step-no">04</span><div class="step-icon">▦</div><h3>Document</h3><p>Maintain site updates, checklists and pre-commissioning records.</p></article>
+      </div>
+    </section>
+
+    <section class="section section-wrap" id="experience">
+      <div class="section-heading reveal"><div><span class="section-kicker">02 / CAREER</span><h2>Experience &<br><span class="muted-heading">education.</span></h2></div><p>Hands-on experience in HVAC project execution, site supervision and technical coordination.</p></div>
+      <div class="career-layout">
+        <div class="timeline-card reveal"><div class="timeline-label">PROFESSIONAL EXPERIENCE</div><div class="timeline-item"><span class="timeline-point"></span><div class="timeline-date">10 MONTHS EXPERIENCE</div>
+<h3>Project Engineer · HVAC</h3>
+<h4>Climatech Aircon Engineers Pvt Ltd · Jaipur</h4>
+<p class="experience-duration">Oct 2025 – Aug 2026</p><ul><li>Coordinated HVAC project activities and site execution.</li><li>Supported HVAC installation and site supervision.</li><li>Worked with AutoCAD 2D drawings and technical documentation.</li><li>Contributed to pre-commissioning activities across project sites.</li></ul></div></div>
+        <div class="education-stack reveal"><div class="timeline-card education-card"><div class="timeline-label">EDUCATION</div><div class="education-item"><span class="edu-year">BACHELOR'S DEGREE</span><h3>B.Sc. — PCM</h3><p>University of Rajasthan, Jaipur</p></div><div class="education-item"><span class="edu-year">CERTIFICATION · 2025</span><h3>RS-CIT</h3><p>Rajasthan State Certificate in Information Technology · VMOU, Kota</p></div><div class="education-item"><span class="edu-year">COURSE</span><h3>BCBF</h3><p>Parivartan Skills Academy, Jaipur</p></div></div><div class="availability-card"><span class="availability-icon">✦</span><div><b>Open to suitable opportunities</b><p>HVAC project engineering · Site supervision · Project coordination</p></div></div></div>
+      </div>
+    </section>
+
+    <section class="section section-wrap" id="projects">
+      <div class="section-heading reveal"><div><span class="section-kicker">03 / SELECTED WORK</span><h2>Project <span class="muted-heading">experience.</span></h2></div><p>Selected project environments and on-site responsibilities across HVAC installation and pre-commissioning.</p></div>
+      <div class="project-grid">
+        <article class="project-card project-large reveal"><div class="project-image image-hospital"><img src="geetanjali-hospital.jpg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=1200&q=85'" alt="Geetanjali Hospital, Jaipur" loading="lazy"><span class="image-index">PROJECT 01</span><span class="image-tag">VRV · CHILLER · AHU</span></div><div class="project-info"><div><span class="project-type">HVAC INSTALLATION</span><h3>Geetanjali Hospital, Jaipur</h3></div><p>Supported centralized VRV, chiller and FCU installation, including ducting and AHU units, with attention to duct alignment and insulation.</p></div></article>
+        <article class="project-card reveal"><div class="project-image image-campus"><img src="jecrc-university.jpg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1000&q=85'" alt="JECRC University, Alwar" loading="lazy"><span class="image-index">PROJECT 02</span><span class="image-tag">BILLING · MS EXCEL</span></div><div class="project-info"><div><span class="project-type">BILLING EXECUTIVE · HVAC</span><h3>JECRC University, Alwar</h3></div><p>Handled daily billing operations using MS Excel, prepared and maintained bills, invoices and billing records, verified billing details, and updated daily billing reports.</p></div></article>
+        <article class="project-card reveal"><div class="project-image image-docs"><img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1000&q=85" alt="Engineering team reviewing technical work" loading="lazy"><span class="image-index">PROJECT 03</span><span class="image-tag">REPORTS · CHECKLISTS</span></div><div class="project-info"><div><span class="project-type">SITE DOCUMENTATION</span><h3>Pre-commissioning · Various sites</h3></div><p>Updated site reports, checklists and pre-commissioning records in coordination with project teams.</p></div></article>
+      </div>
+
+    </section>
+
+    <section class="section section-wrap" id="skills">
+      <div class="section-heading reveal"><div><span class="section-kicker">04 / CAPABILITIES</span><h2>Skills that move<br><span class="muted-heading">work forward.</span></h2></div><p>Core site responsibilities, HVAC system knowledge and the tools used to keep work organised.</p></div>
+      <div class="skills-layout">
+        <div class="skill-panel reveal"><div class="skill-panel-head"><span>CORE & TECHNICAL</span><span>FIELD</span></div><div class="skill-row" data-level="86"><div><b>HVAC installation & site supervision</b><span>86%</span></div><div class="skill-track"><i></i></div></div><div class="skill-row" data-level="82"><div><b>Site supervision & coordination</b><span>82%</span></div><div class="skill-track"><i></i></div></div><div class="skill-row" data-level="78"><div><b>VRV / VRF drawing · AutoCAD 2D</b><span>78%</span></div><div class="skill-track"><i></i></div></div><div class="skill-row" data-level="76"><div><b>Pre-commissioning documentation</b><span>76%</span></div><div class="skill-track"><i></i></div></div></div>
+        <div class="tools-panel reveal"><div class="skill-panel-head"><span>TOOLS & SYSTEMS</span><span>TOOLKIT</span></div><div class="tool-tags"><span>AutoCAD 2D</span><span>MS Excel</span><span>MS Word</span><span>PowerPoint</span><span>Tally Prime</span><span>VRV / VRF</span><span>Chilled Water</span><span>Ducting</span><span>AHU</span><span>FCU</span><span>Site Reports</span><span>Pre-commissioning</span><span>ChatGPT</span><span>Claude AI</span><span>GitHub</span></div><div class="language-block"><span class="language-title">LANGUAGES</span><div><b>Hindi</b><b>English</b></div></div></div>
+      </div>
+
+      <div class="skill-panel soft-skills reveal">
+        <div class="skill-panel-head"><span>SOFT &amp; FINANCE SKILLS</span><span>PEOPLE &amp; PROCESS</span></div>
+        <div class="soft-skills-grid">
+          <div class="skill-row" data-level="88"><div><b>Communication skills</b><span>88%</span></div><div class="skill-track"><i></i></div></div>
+          <div class="skill-row" data-level="85"><div><b>Time management</b><span>85%</span></div><div class="skill-track"><i></i></div></div>
+          <div class="skill-row" data-level="84"><div><b>Team management</b><span>84%</span></div><div class="skill-track"><i></i></div></div>
+          <div class="skill-row" data-level="87"><div><b>Problem solving</b><span>87%</span></div><div class="skill-track"><i></i></div></div>
+          <div class="skill-row" data-level="80"><div><b>Banking</b><span>80%</span></div><div class="skill-track"><i></i></div></div>
+          <div class="skill-row" data-level="82"><div><b>Accounting</b><span>82%</span></div><div class="skill-track"><i></i></div></div>
+        </div>
+      </div>
+    </section>
+    <section class="section section-wrap" id="work-files"><div class="section-heading reveal"><div><span class="section-kicker">06 / WORK SHOWCASE</span><h2>Notes, Drawing &<br><span class="muted-heading">Interview Questions.</span></h2></div><p>Selected notes, drawings and interview questions. Files added by the site owner appear here for visitors to view or download.</p></div><div class="file-toolbar"><div class="file-tabs"><button class="file-tab active" data-file-filter="all">All files</button><button class="file-tab" data-file-filter="excel">Excel</button><button class="file-tab" data-file-filter="word">Word</button><button class="file-tab" data-file-filter="ppt">PowerPoint</button><button class="file-tab" data-file-filter="pdf">PDF</button><button class="file-tab" data-file-filter="cad">AutoCAD</button></div><span class="file-count" id="work-file-count">Loading files…</span></div><div class="work-file-grid" id="work-file-grid"><div class="work-file-empty">Loading work samples…</div></div><p class="gallery-note">Only the website owner can add files through the private Admin Upload page.</p></section>
+
+    <section class="section section-wrap" id="certificates"><div class="section-heading reveal"><div><span class="section-kicker">05 / CREDENTIALS</span><h2>Certificates &<br><span class="muted-heading">achievements.</span></h2></div><p>Certificates added by the site owner appear here automatically.</p></div><div class="cert-grid" id="cert-grid"><div class="cert-empty">No certificates added yet.</div></div></section>
+
+    <section class="contact-section" id="contact"><div class="contact-inner section-wrap reveal"><span class="section-kicker">07 / GET IN TOUCH</span><h2>Let’s build something<br><span class="gold-text">that works better.</span></h2><p>Message me directly on WhatsApp or by email.</p><div class="contact-actions"><a class="btn btn-primary" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20would%20like%20to%20discuss%20an%20opportunity." target="_blank" rel="noopener">Message on WhatsApp <span>↗</span></a><a class="btn btn-ghost" href="mailto:peeyush.jangid@outlook.com">Send an Email <span>↗</span></a></div><div class="contact-details"><a href="mailto:peeyush.jangid@outlook.com">peeyush.jangid@outlook.com</a><a href="tel:+919928579369">+91 99285 79369</a><a href="https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/" target="_blank" rel="noopener">LinkedIn ↗</a></div></div></section>
+  </main>
+  <footer class="site-footer"><a class="brand" href="#home"><span class="brand-mark">P<span>.</span></span><span>PEEYUSH<span class="brand-muted"> / PORTFOLIO</span></span></a><span>© <span id="year"></span> Peeyush Kumar Jangid. Built with purpose.</span></footer>
+  <div class="floating-contact">
+    <a class="floating-email" href="mailto:peeyush.jangid@outlook.com" aria-label="Send an email" title="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4.2-8 5-8-5V6l8 5 8-5v2.2z"/></svg></a>
+    <a class="floating-linkedin" href="https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/" target="_blank" rel="noopener" aria-label="LinkedIn profile" title="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+    <a class="floating-whatsapp" href="https://wa.me/919928579369?text=Hello%20Peeyush" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" title="WhatsApp">✆</a>
+  </div>
+  <script>
+    (function () {
+      var bar = document.getElementById('scroll-progress');
+      function onScroll() {
+        var h = document.documentElement;
+        var max = h.scrollHeight - h.clientHeight;
+        if (bar) bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      var glow = document.getElementById('cursor-glow');
+      if (glow && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        var x = 0, y = 0, tx = 0, ty = 0, started = false;
+        var tick = function () {
+          x += (tx - x) * 0.12;
+          y += (ty - y) * 0.12;
+          glow.style.transform = 'translate(' + (x - 200) + 'px,' + (y - 200) + 'px)';
+          requestAnimationFrame(tick);
+        };
+        window.addEventListener('mousemove', function (e) {
+          tx = e.clientX; ty = e.clientY;
+          if (!started) { started = true; x = tx; y = ty; glow.style.opacity = '1'; requestAnimationFrame(tick); }
+        });
+      }
+    })();
+  </script>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+      /* Rotating typewriter */
+      var words = ['HVAC Site Supervision', 'VRV / VRF Drawings', 'AutoCAD 2D Layouts', 'Pre-commissioning Reports', 'Billing & Documentation'];
+      var typedEl = document.getElementById('typed-text');
+      var typedStarted = false;
+      function startTyped() {
+        if (typedStarted || !typedEl || reduce) return;
+        typedStarted = true;
+        var wi = 0, ci = words[0].length, deleting = true;
+        function step() {
+          var word = words[wi];
+          ci += deleting ? -1 : 1;
+          typedEl.textContent = word.slice(0, ci);
+          var delay = deleting ? 35 : 70;
+          if (!deleting && ci === word.length) { deleting = true; delay = 1800; }
+          else if (deleting && ci === 0) { deleting = false; wi = (wi + 1) % words.length; delay = 250; }
+          setTimeout(step, delay);
+        }
+        setTimeout(step, 2200);
+      }
+
+      /* Intro loader */
+      var pre = document.getElementById('preloader');
+      function finishIntro() {
+        root.classList.add('loaded');
+        if (pre) { pre.classList.add('done'); setTimeout(function () { pre.style.display = 'none'; }, 1100); }
+        try { sessionStorage.setItem('pk-intro', '1'); } catch (e) {}
+        startTyped();
+      }
+      if (root.classList.contains('has-loader')) { setTimeout(finishIntro, 2000); } else { startTyped(); }
+
+      /* Header shadow + soft parallax on background glows */
+      var header = document.querySelector('.site-header');
+      var a1 = document.querySelector('.ambient-one');
+      var a2 = document.querySelector('.ambient-two');
+      function onScroll() {
+        var y = window.pageYOffset;
+        if (header) header.classList.toggle('scrolled', y > 40);
+        if (!reduce) {
+          if (a1) a1.style.translate = '0 ' + (y * 0.12) + 'px';
+          if (a2) a2.style.translate = '0 ' + (-y * 0.08) + 'px';
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      /* Active nav link (scroll spy) */
+      var links = document.querySelectorAll('.nav-links a[href^="#"], .sidebar-links a[href^="#"]');
+      var ids = ['about', 'process', 'experience', 'projects', 'skills', 'work-files', 'certificates', 'contact'];
+      if ('IntersectionObserver' in window) {
+        var spy = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (!en.isIntersecting) return;
+            links.forEach(function (l) { l.classList.toggle('active', l.getAttribute('href') === '#' + en.target.id); });
+          });
+        }, { rootMargin: '-45% 0px -50% 0px' });
+        ids.forEach(function (id) { var s = document.getElementById(id); if (s) spy.observe(s); });
+      }
+
+      /* Staggered reveal for card grids */
+      document.querySelectorAll('.process-grid, .project-grid').forEach(function (grid) {
+        var items = grid.querySelectorAll('.reveal');
+        function clearDelays() { items.forEach(function (it) { it.style.transitionDelay = ''; }); }
+        if (!('IntersectionObserver' in window)) return;
+        items.forEach(function (it, i) { it.style.transitionDelay = (i * 0.12) + 's'; });
+        var io = new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (e.isIntersecting) { setTimeout(clearDelays, 1600); io.disconnect(); }
+          });
+        }, { threshold: 0.1 });
+        io.observe(grid);
+      });
+
+      /* 3D tilt on hero card + magnetic buttons (desktop only) */
+      if (fine && !reduce) {
+        var hv = document.querySelector('.hero-visual');
+        var hp = document.querySelector('.hero-panel');
+        if (hv && hp) {
+          hv.addEventListener('mousemove', function (e) {
+            var r = hv.getBoundingClientRect();
+            var x = (e.clientX - r.left) / r.width - 0.5;
+            var y = (e.clientY - r.top) / r.height - 0.5;
+            hp.style.transform = 'perspective(900px) rotateX(' + (-y * 8) + 'deg) rotateY(' + (x * 10) + 'deg)';
+          });
+          hv.addEventListener('mouseleave', function () { hp.style.transform = ''; });
+        }
+        document.querySelectorAll('.btn').forEach(function (b) {
+          b.addEventListener('mousemove', function (e) {
+            var r = b.getBoundingClientRect();
+            var dx = (e.clientX - (r.left + r.width / 2)) * 0.22;
+            var dy = (e.clientY - (r.top + r.height / 2)) * 0.3;
+            b.style.translate = dx + 'px ' + dy + 'px';
+          });
+          b.addEventListener('mouseleave', function () { b.style.translate = ''; });
+        });
+      }
+    })();
+  </script>
+
+
+  <div class="otw-fabs" style="display:none">
+    <button class="otw-fab" id="otw-open" type="button" aria-haspopup="dialog"><i></i> Open to work · Send job offer</button>
+    <button class="otw-fab otw-fab-gold" id="hire-open" type="button" style="display:none" aria-haspopup="dialog"><i></i> Hiring · Apply for a job</button>
+  </div>
+  <div class="otw-modal" id="otw-modal" role="dialog" aria-modal="true" aria-labelledby="otw-modal-t" aria-hidden="true">
+    <div class="otw-box">
+      <button class="otw-close" id="otw-close" type="button" aria-label="Close form">✕</button>
+      <span class="otw-badge"><i></i> OPEN TO WORK</span>
+      <h2 id="otw-modal-t">I am open to work. Send me your job offer.</h2>
+      <p>HVAC Project Engineer · Site Supervision · Jaipur. Share the role details and Peeyush will contact you soon.</p><a class="otw-cv" href="Peeyush_Kumar_Jangid_Resume.pdf" target="_blank" rel="noopener">View / download my CV ↓</a>
+      <div class="otw-msg otw-ok" id="otw-ok" role="status">Thank you! Your job offer has been sent. Peeyush will contact you soon.</div>
+      <div class="otw-msg otw-err" id="otw-err" role="alert">Your message could not be sent. Please try again or use WhatsApp or email below.</div>
+      <form id="otw-form" action="https://formsubmit.co/peeyush.jangid@outlook.com" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_subject" value="New Job Offer for Peeyush — Portfolio" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+        <div class="otw-grid">
+          <div><label for="m-name">YOUR NAME *</label><input id="m-name" name="Recruiter Name" type="text" autocomplete="name" required /></div>
+          <div><label for="m-desig">YOUR DESIGNATION</label><input id="m-desig" name="Designation" type="text" placeholder="HR / Hiring Manager / Director" /></div>
+          <div><label for="m-company">COMPANY NAME *</label><input id="m-company" name="Company" type="text" autocomplete="organization" required /></div>
+          <div><label for="m-web">COMPANY WEBSITE / LINKEDIN</label><input id="m-web" name="Company Website" type="url" placeholder="https://…" /></div>
+          <div><label for="m-email">EMAIL ADDRESS *</label><input id="m-email" name="email" type="email" autocomplete="email" required /></div>
+          <div><label for="m-phone">PHONE / WHATSAPP *</label><input id="m-phone" name="Phone / WhatsApp" type="tel" autocomplete="tel" required /></div>
+          <div><label for="m-role">JOB ROLE YOU ARE OFFERING *</label><input id="m-role" name="Job Role Offered" type="text" placeholder="e.g. HVAC Project Engineer" required /></div>
+          <div><label for="m-loc">JOB LOCATION</label><input id="m-loc" name="Job Location" type="text" placeholder="City / site" /></div>
+          <div><label for="m-type">EMPLOYMENT TYPE</label><select id="m-type" name="Employment Type"><option value="">Select type</option><option>Full-time</option><option>Contract</option><option>Part-time</option><option>Internship</option></select></div>
+          <div><label for="m-salary">SALARY / CTC OFFERED</label><input id="m-salary" name="Salary Offered" type="text" placeholder="e.g. 3–4 LPA" /></div>
+          <div><label for="m-mode">INTERVIEW MODE</label><select id="m-mode" name="Interview Mode"><option value="">Select</option><option>Online (video call)</option><option>Phone call</option><option>In person</option></select></div>
+          <div><label for="m-join">JOINING TIMELINE</label><input id="m-join" name="Joining Timeline" type="text" placeholder="e.g. Within 15 days" /></div>
+          <div class="otw-full"><label for="m-contact">BEST WAY TO CONTACT YOU</label><select id="m-contact" name="Preferred Contact"><option value="">Select</option><option>WhatsApp</option><option>Phone call</option><option>Email</option></select></div>
+          <div class="otw-full"><label for="m-msg">JOB DETAILS OR MESSAGE *</label><textarea id="m-msg" name="Message" placeholder="Responsibilities, requirements and anything else I should know…" required></textarea></div>
+          <div class="otw-full"><label style="display:flex;gap:10px;align-items:center;letter-spacing:.5px;color:#e6e1d7;font-weight:600;cursor:pointer"><input type="checkbox" name="Interview Requested" value="Yes" style="width:auto" /> I would like to schedule an interview with Peeyush</label></div>
+        </div>
+        <button class="btn btn-primary" id="otw-submit" type="submit" data-label="Send Job Offer">Send Job Offer <span>↗</span></button>
+      </form>
+      <div class="otw-alt"><a href="https://wa.me/919928579369" target="_blank" rel="noopener">WhatsApp ↗</a><a href="mailto:peeyush.jangid@outlook.com">Email ↗</a><a href="tel:+919928579369">+91 99285 79369</a></div>
+    </div>
+  </div>
+  <div class="otw-modal" id="hire-modal" role="dialog" aria-modal="true" aria-labelledby="hire-modal-t" aria-hidden="true">
+    <div class="otw-box">
+      <button class="otw-close" id="hire-close" type="button" aria-label="Close form">✕</button>
+      <span class="otw-badge" style="color:#e3c27e"><i style="background:#e3c27e;box-shadow:0 0 0 4px rgba(227,194,126,.15),0 0 12px rgba(227,194,126,.6)"></i> HIRING</span>
+      <h2 id="hire-modal-t">Looking for a job? Apply here.</h2>
+      <p>Share your profile and the kind of work you are seeking. Your application goes directly to Peeyush Kumar Jangid.</p>
+      <div class="otw-msg otw-ok" id="hire-ok" role="status">Thank you! Your job application has been submitted. Peeyush has received your details.</div>
+      <div class="otw-msg otw-err" id="hire-err" role="alert">Your message could not be sent. Please try again or use WhatsApp or email below.</div>
+      <form id="hire-form" action="https://formsubmit.co/peeyush.jangid@outlook.com" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_subject" value="New Job Application (Hiring) — Peeyush Portfolio" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+        <div class="otw-grid">
+          <div><label for="h-name">YOUR FULL NAME *</label><input id="h-name" name="Full Name" type="text" autocomplete="name" required /></div>
+          <div><label for="h-email">YOUR EMAIL ADDRESS *</label><input id="h-email" name="email" type="email" autocomplete="email" required /></div>
+          <div><label for="h-phone">YOUR PHONE / WHATSAPP *</label><input id="h-phone" name="Phone / WhatsApp" type="tel" autocomplete="tel" required /></div>
+          <div><label for="h-city">YOUR CURRENT CITY *</label><input id="h-city" name="Current City" type="text" placeholder="City, State" required /></div>
+          <div><label for="h-role">JOB ROLE YOU ARE SEEKING *</label><input id="h-role" name="Preferred Job Role" type="text" placeholder="e.g. HVAC Site Supervisor" required /></div>
+          <div><label for="h-exp">WORK EXPERIENCE</label><select id="h-exp" name="Work Experience"><option value="">Select experience</option><option>Fresher</option><option>Less than 1 year</option><option>1–2 years</option><option>2–5 years</option><option>5+ years</option></select></div>
+          <div><label for="h-type">EMPLOYMENT TYPE</label><select id="h-type" name="Employment Type"><option value="">Select type</option><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Internship</option><option>Any suitable role</option></select></div>
+          <div><label for="h-notice">AVAILABILITY / NOTICE PERIOD</label><input id="h-notice" name="Availability / Notice Period" type="text" placeholder="Immediate / 15 days / 30 days" /></div>
+          <div class="otw-full cv-file-wrap"><label for="h-cv">UPLOAD YOUR CV * (PDF / DOC / DOCX, MAX 5 MB)</label><input id="h-cv" name="attachment" type="file" accept=".pdf,.doc,.docx" required /></div>
+          <div class="otw-full cv-link-wrap"><label for="h-cv-link">YOUR CV LINK * (GOOGLE DRIVE / DROPBOX)</label><input id="h-cv-link" name="CV Link" type="url" placeholder="https://drive.google.com/…  (sharing: Anyone with the link)" /></div>
+          <div class="otw-full"><label for="h-message">SKILLS, QUALIFICATIONS & MESSAGE *</label><textarea id="h-message" name="Message" placeholder="Your key skills, education, preferred location and a short introduction…" required></textarea></div>
+        </div>
+        <button class="btn btn-primary" id="hire-submit" type="submit" data-label="Submit Job Application">Submit Job Application <span>↗</span></button>
+      </form>
+      <div class="otw-alt"><a href="https://wa.me/919928579369" target="_blank" rel="noopener">WhatsApp ↗</a><a href="mailto:peeyush.jangid@outlook.com">Email ↗</a><a href="tel:+919928579369">+91 99285 79369</a></div>
+    </div>
+  </div>
+  <script>
+  (function(){
+    
+    
+    // ---- WhatsApp notification (CallMeBot) ----
+    // Paste your CallMeBot API key below (see setup steps). Leave as is to disable.
+    var WA_PHONE = '+919928579369';
+    var WA_APIKEY = 'YOUR_CALLMEBOT_APIKEY';
+    function waSummary(form, title){
+      var lines = [title];
+      Array.prototype.forEach.call(form.elements, function(el){
+        if(!el.name || el.name.charAt(0)==='_' || el.disabled) return;
+        if(el.type==='file'){ if(el.files && el.files[0]) lines.push('File attached: '+el.files[0].name+' (see email)'); return; }
+        if((el.type==='checkbox'||el.type==='radio') && !el.checked) return;
+        var v=(el.value||'').trim(); if(v) lines.push(el.name+': '+v);
+      });
+      var t=lines.join('\n'); return t.length>1400 ? t.slice(0,1400)+'…' : t;
+    }
+    function sendWA(form, title){
+      var text = waSummary(form, title);
+      try{ sessionStorage.setItem('wa_summary', text); }catch(e){}
+      if(WA_APIKEY==='YOUR_CALLMEBOT_APIKEY') return Promise.resolve();
+      var url='https://api.callmebot.com/whatsapp.php?phone='+encodeURIComponent(WA_PHONE)+'&text='+encodeURIComponent(text)+'&apikey='+encodeURIComponent(WA_APIKEY);
+      var req=fetch(url,{mode:'no-cors',keepalive:true}).catch(function(){});
+      return Promise.race([req,new Promise(function(r){setTimeout(r,2500);})]);
+    }
+    
+    // ---- Reliable sending: Web3Forms (details, instant) + FormSubmit in a hidden frame (carries the file) ----
+    // Paste your Google Apps Script web app URL here (see cv-receiver.gs). Leave as is to use the FormSubmit fallback.
+    var CV_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYPmZysoN1XrfaSa9XUnazOgLXlVD0KF36WoJNulU04_0WW1sYanOzcDHk5b--AlBhjw/exec';
+
+    // Shows the CV file box when the Apps Script URL is set, otherwise asks for a CV link (always reaches your email)
+    function cvMode(form){
+      var configured = CV_SCRIPT_URL.indexOf('PASTE_') !== 0;
+      var fw = form.querySelector('.cv-file-wrap'), lw = form.querySelector('.cv-link-wrap');
+      var fi = fw.querySelector('input'), li = lw.querySelector('input');
+      fw.style.display = configured ? '' : 'none'; fi.disabled = !configured; fi.required = configured;
+      lw.style.display = configured ? 'none' : ''; li.disabled = configured; li.required = !configured;
+    }
+    function fileToB64(file){
+      return new Promise(function(res, rej){
+        var r = new FileReader();
+        r.onload = function(){ res(String(r.result).split(',')[1]); };
+        r.onerror = rej; r.readAsDataURL(file);
+      });
+    }
+    var W3F_KEY = '8ea43a97-57b9-4eea-a7dd-9256bdec0f98';
+    function sendBoth(form){
+      var fd = new FormData();
+      fd.append('access_key', W3F_KEY);
+      fd.append('subject', (form.elements['_subject'] && form.elements['_subject'].value) || 'New message — Peeyush Portfolio');
+      fd.append('from_name', 'Peeyush Portfolio');
+      Array.prototype.forEach.call(form.elements, function(el){
+        if(!el.name || el.name.charAt(0)==='_' || el.type==='file' || el.disabled) return;
+        if((el.type==='checkbox'||el.type==='radio') && !el.checked) return;
+        if(el.value && el.value.trim()) fd.append(el.name, el.value);
+      });
+      var f = form.querySelector('input[type=file]');
+      if(f && f.files && f.files[0]) fd.append('File attached', f.files[0].name + ' (CV is sent in a separate email)');
+      var file = f && f.files && f.files[0];
+      var upload = Promise.resolve();
+      if(file && CV_SCRIPT_URL.indexOf('PASTE_')!==0){
+        // reliable route: Google Apps Script saves the CV to your Drive and emails it to you
+        upload = fileToB64(file).then(function(b64){
+          var g = function(n){ var el=form.elements[n]; return el ? el.value : ''; };
+          return fetch(CV_SCRIPT_URL, {method:'POST', mode:'no-cors', body:JSON.stringify({
+            name:g('Full Name'), email:g('email'), phone:g('Phone / WhatsApp'),
+            details:waSummary(form,'NEW HIRING APPLICATION'), fileName:file.name, mimeType:file.type, data:b64 })});
+        }).catch(function(){ return false; });
+      } else if(file){
+        // fallback: FormSubmit in a hidden frame
+        try{
+          var fr = document.getElementById('fs_frame');
+          if(!fr){ fr = document.createElement('iframe'); fr.name='fs_frame'; fr.id='fs_frame'; fr.style.display='none'; fr.setAttribute('aria-hidden','true'); document.body.appendChild(fr); }
+          form.target = 'fs_frame'; form.submit(); form.target = '';
+        }catch(e){}
+      }
+      var ctrl = new AbortController(); var timer = setTimeout(function(){ ctrl.abort(); }, 20000);
+      var w3f = fetch('https://api.web3forms.com/submit', {method:'POST', body:fd, signal:ctrl.signal})
+        .then(function(r){ return r.json(); })
+        .then(function(j){ clearTimeout(timer); return !!j.success; })
+        .catch(function(){ clearTimeout(timer); return false; });
+      return Promise.all([w3f, upload]).then(function(r){ return !!r[0] && r[1] !== false; });
+    }
+    // Used by the sign-up / sign-in section to tell you about new accounts
+    window.PORTFOLIO_NOTIFY = function(title, fields){
+      var lines=[title]; Object.keys(fields).forEach(function(k){ if(fields[k]) lines.push(k+': '+fields[k]); });
+      var text=lines.join('\n');
+      var fd=new FormData(); fd.append('access_key',W3F_KEY); fd.append('subject',title+' — Peeyush Portfolio'); fd.append('from_name','Peeyush Portfolio');
+      Object.keys(fields).forEach(function(k){ if(fields[k]) fd.append(k,fields[k]); });
+      fetch('https://api.web3forms.com/submit',{method:'POST',body:fd}).catch(function(){});
+      if(WA_APIKEY!=='YOUR_CALLMEBOT_APIKEY'){
+        fetch('https://api.callmebot.com/whatsapp.php?phone='+encodeURIComponent(WA_PHONE)+'&text='+encodeURIComponent(text)+'&apikey='+encodeURIComponent(WA_APIKEY),{mode:'no-cors'}).catch(function(){});
+      }
+    };
+    function addWaButton(box){
+      var t=''; try{ t=sessionStorage.getItem('wa_summary')||''; sessionStorage.removeItem('wa_summary'); }catch(e){}
+      if(!t) return;
+      var a=document.createElement('a');
+      a.href='https://wa.me/919928579369?text='+encodeURIComponent(t);
+      a.target='_blank'; a.rel='noopener';
+      a.textContent='Also send these details on WhatsApp ↗';
+      a.style.cssText='display:inline-block;margin-top:10px;font-weight:700;text-decoration:underline';
+      box.appendChild(document.createElement('br')); box.appendChild(a);
+    }
+    function cvInit(form){
+      var fi=form.querySelector('input[type=file]');
+      return function(){ var f=fi.files[0];
+        if(fi.required&&!f){ alert('Please attach your CV (PDF, DOC or DOCX, up to 5 MB).'); return false; }
+        if(f&&f.size>5*1024*1024){ alert('The attached file is larger than 5 MB. Please attach a smaller file.'); return false; }
+        return true; };
+    }
+    function setup(cfg){
+      var modal=document.getElementById(cfg.modal),form=document.getElementById(cfg.form),
+          ok=document.getElementById(cfg.ok),err=document.getElementById(cfg.err),
+          btn=document.getElementById(cfg.btn),last=null;
+      var cvCheck=form.querySelector('input[type=file]')?cvInit(form):function(){return true;};
+      if(form.querySelector('.cv-file-wrap')) cvMode(form);
+      function openM(e){ if(e) e.preventDefault();
+        document.querySelectorAll('.otw-modal.open').forEach(function(m){m.classList.remove('open');});
+        last=document.activeElement; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+        setTimeout(function(){document.getElementById(cfg.first).focus();},50); }
+      function closeM(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; if(last&&last.focus) last.focus(); }
+      document.querySelectorAll('a[href="'+cfg.href+'"]').forEach(function(a){ a.removeAttribute('target'); a.addEventListener('click',openM); });
+      document.getElementById(cfg.fab).addEventListener('click',openM);
+      document.getElementById(cfg.close).addEventListener('click',closeM);
+      modal.addEventListener('click',function(e){ if(e.target===modal) closeM(); });
+      document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&modal.classList.contains('open')) closeM(); });
+      form.addEventListener('submit',async function(e){
+        if(cfg.native){ if(!form.reportValidity()||!cvCheck()){ e.preventDefault(); } else { e.preventDefault(); btn.disabled=true; btn.textContent='Sending…'; ok.style.display='none'; err.style.display='none';
+          Promise.all([sendWA(form,cfg.title),sendBoth(form)]).then(function(res){
+            btn.disabled=false; btn.innerHTML=btn.getAttribute('data-label')+' <span>↗</span>';
+            if(res[1]){ ok.style.display='block'; form.reset(); addWaButton(ok); ok.scrollIntoView({behavior:'smooth',block:'center'}); }
+            else { err.style.display='block'; addWaButton(err); err.scrollIntoView({behavior:'smooth',block:'center'}); }
+          }); } return; }
+        e.preventDefault(); if(!form.reportValidity()) return;
+        ok.style.display='none'; err.style.display='none'; btn.disabled=true; btn.textContent='Sending…';
+        try{
+          var r=await fetch('https://api.web3forms.com/submit',{method:'POST',body:new FormData(form)});
+          var j=await r.json();
+          if(r.ok&&j.success){ ok.style.display='block'; form.reset(); ok.scrollIntoView({behavior:'smooth',block:'center'}); }
+          else throw new Error(j.message||'failed');
+        }catch(x){ err.style.display='block'; err.scrollIntoView({behavior:'smooth',block:'center'}); }
+        finally{ btn.disabled=false; btn.innerHTML=btn.getAttribute('data-label')+' <span>↗</span>'; }
+      });
+    }
+    setup({modal:'otw-modal',form:'otw-form',ok:'otw-ok',err:'otw-err',btn:'otw-submit',close:'otw-close',fab:'otw-open',first:'m-name',href:'contact.html',native:true,title:'NEW JOB OFFER (OPEN TO WORK)'});
+    setup({modal:'hire-modal',form:'hire-form',ok:'hire-ok',err:'hire-err',btn:'hire-submit',close:'hire-close',fab:'hire-open',first:'h-name',href:'hiring.html',native:true,title:'NEW HIRING APPLICATION'});
+    if(new URLSearchParams(location.search).get('offered')==='1'){ document.getElementById('otw-open').click(); document.getElementById('otw-ok').style.display='block'; addWaButton(document.getElementById('otw-ok')); history.replaceState(null,'',location.pathname); }
+    if(new URLSearchParams(location.search).get('hired')==='1'){ document.getElementById('hire-open').click(); document.getElementById('hire-ok').style.display='block'; addWaButton(document.getElementById('hire-ok')); history.replaceState(null,'',location.pathname); }
+    window.addEventListener('pageshow',function(){ var ob=document.getElementById('otw-submit'); ob.disabled=false; ob.innerHTML=ob.getAttribute('data-label')+' <span>↗</span>'; });
+    window.addEventListener('pageshow',function(){ var hb=document.getElementById('hire-submit'); hb.disabled=false; hb.innerHTML=hb.getAttribute('data-label')+' <span>↗</span>'; });
+  })();
+  </script>
+
+  <div class="otw-modal" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title" aria-hidden="true">
+    <div class="otw-box" style="max-width:440px">
+      <button class="otw-close" id="auth-close" type="button" aria-label="Close">✕</button>
+      <span class="otw-badge"><i></i> ACCOUNT</span>
+      <h2 id="auth-title">Sign in or create an account</h2>
+
+      <div id="auth-forms">
+        <div class="auth-tabs" role="tablist">
+          <button type="button" class="auth-tab active" id="tab-in" role="tab" aria-selected="true">Sign in</button>
+          <button type="button" class="auth-tab" id="tab-up" role="tab" aria-selected="false">Sign up</button>
+        </div>
+        <div class="otw-msg otw-err" id="auth-err" role="alert"></div>
+        <div class="otw-msg otw-ok" id="auth-ok" role="status"></div>
+
+        <form id="form-in" novalidate>
+          <label for="in-email">EMAIL</label><input id="in-email" type="email" autocomplete="email" required />
+          <label for="in-pass">PASSWORD</label><input id="in-pass" type="password" autocomplete="current-password" required />
+          <button class="btn btn-primary" id="in-btn" type="submit">Sign in <span>↗</span></button>
+          <a href="#" class="auth-link" id="forgot">Forgot password?</a>
+        </form>
+
+        <form id="form-up" novalidate style="display:none">
+          <label for="up-name">FULL NAME</label><input id="up-name" type="text" autocomplete="name" required />
+          <label for="up-email">EMAIL</label><input id="up-email" type="email" autocomplete="email" required />
+          <label for="up-pass">PASSWORD (MIN 6 CHARACTERS)</label><input id="up-pass" type="password" autocomplete="new-password" minlength="6" required />
+          <button class="btn btn-primary" id="up-btn" type="submit">Create account <span>↗</span></button>
+        </form>
+
+        <div class="auth-or"><span>or</span></div>
+        <button class="auth-google" id="auth-google" type="button">Continue with Google</button>
+        <p class="auth-note">Your password is handled securely by Google Firebase and is never stored on this website.</p>
+      </div>
+
+      <div id="auth-account" style="display:none">
+        <p class="auth-hello" id="auth-hello"></p>
+        <p class="auth-note" style="margin-top:0">You are signed in. Your name and email will be filled in automatically in the job forms.</p>
+        <button class="btn btn-primary" id="signout-btn" type="button">Sign out <span>↗</span></button>
+      </div>
+    </div>
+  </div>
+  <script src="firebase-config.js"></script>
+  <script>
+  (function(){
+    // ===== Firebase settings: paste yours from Firebase console > Project settings > Your apps =====
+    var FIREBASE_CONFIG = window.FIREBASE_CONFIG || { apiKey:'YOUR_API_KEY', authDomain:'', projectId:'', appId:'' };
+    var configured = FIREBASE_CONFIG.apiKey.indexOf('YOUR_') !== 0; window.PORTFOLIO_AUTH_CONFIGURED = configured;
+    var V = '10.14.1', fb = null;
+    var $ = function(id){ return document.getElementById(id); };
+    var modal=$('auth-modal'), errBox=$('auth-err'), okBox=$('auth-ok'), lastFocus=null;
+
+    function msg(type,t){ errBox.style.display='none'; okBox.style.display='none'; if(!t) return; var b=type==='err'?errBox:okBox; b.textContent=t; b.style.display='block'; }
+    function friendly(e){
+      var c=(e&&e.code)||'';
+      var m={ 'auth/email-already-in-use':'This email already has an account. Please sign in.',
+        'auth/invalid-email':'Please enter a valid email address.',
+        'auth/weak-password':'Password must be at least 6 characters.',
+        'auth/invalid-credential':'Email or password is incorrect.',
+        'auth/wrong-password':'Email or password is incorrect.',
+        'auth/user-not-found':'No account found with this email.',
+        'auth/too-many-requests':'Too many attempts. Please wait a few minutes and try again.',
+        'auth/popup-closed-by-user':'Google sign-in was closed before finishing. Please try again and complete the Google window.',
+        'auth/unauthorized-domain':'This website is not authorised in Firebase yet (Authentication > Settings > Authorized domains).',
+        'auth/operation-not-allowed':'This sign-in method is not turned on in Firebase yet.',
+        'auth/network-request-failed':'Network problem. Please check your internet and try again.',
+        'not-configured':'Sign in is not set up yet: the Firebase settings (apiKey, projectId, appId) are still empty in index.html.',
+        'auth/invalid-api-key':'The Firebase apiKey in index.html is wrong. Copy it again from Firebase console > Project settings.',
+        'auth/api-key-not-valid.-please-pass-a-valid-api-key.':'The Firebase apiKey in index.html is wrong. Copy it again from Firebase console > Project settings.',
+        'auth/configuration-not-found':'Firebase Authentication is not turned on. In Firebase console open Authentication > Get started.',
+        'auth/admin-restricted-operation':'Sign up is disabled in Firebase. Turn on Email/Password in Authentication > Sign-in method.',
+        'auth/popup-blocked':'The browser blocked the Google popup. Please allow popups and try again.' };
+      if(!m[c] && !c && e && e.message && /import|fetch|module|Failed/i.test(e.message)) return 'Could not load Firebase (network blocked?). Check your internet and try again.';
+      return m[c] || ('Something went wrong' + (c ? ' ('+c+')' : '') + '. Please try again.');
+    }
+    function open(e){ if(e) e.preventDefault();
+      document.querySelectorAll('.otw-modal.open').forEach(function(m){ m.classList.remove('open'); });
+      lastFocus=document.activeElement; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+      msg(); if(!configured){ $('auth-forms').classList.add('quick'); tab('up'); } else load();
+    }
+    function close(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
+    function tab(which){
+      var up = which==='up';
+      $('form-in').style.display = up?'none':''; $('form-up').style.display = up?'':'none';
+      $('tab-in').classList.toggle('active',!up); $('tab-up').classList.toggle('active',up);
+      $('tab-in').setAttribute('aria-selected',String(!up)); $('tab-up').setAttribute('aria-selected',String(up));
+      $('auth-title').textContent = up ? 'Create your account' : 'Sign in to your account'; msg();
+    }
+    function load(){
+      if(!configured) return Promise.reject({code:'not-configured'});
+      if(fb) return Promise.resolve(fb);
+      return Promise.all([
+        import('https://www.gstatic.com/firebasejs/'+V+'/firebase-app.js'),
+        import('https://www.gstatic.com/firebasejs/'+V+'/firebase-auth.js'),
+        import('https://www.gstatic.com/firebasejs/'+V+'/firebase-firestore.js')
+      ]).then(function(m){
+        var app=m[0].initializeApp(FIREBASE_CONFIG), au=m[1], auth=au.getAuth(app), fs=m[2], db=fs.getFirestore(app);
+        fb={au:au,auth:auth,fs:fs,db:db}; au.onAuthStateChanged(auth,render); return fb;
+      });
+    }
+    function prefill(user){
+      var n=user.displayName||'', em=user.email||'';
+      [['m-name',n],['m-email',em],['h-name',n],['h-email',em]].forEach(function(p){ var el=$(p[0]); if(el && !el.value) el.value=p[1]; });
+    }
+    function render(user){
+      var label = user ? 'Hi, '+((user.displayName||user.email||'').split(' ')[0]) : 'Sign in';
+      document.querySelectorAll('.auth-nav').forEach(function(a){ a.textContent=label; });
+      $('auth-forms').style.display = user?'none':''; $('auth-account').style.display = user?'':'none';
+      if(user){ $('auth-title').textContent='Your account'; $('auth-hello').textContent='Signed in as '+(user.displayName?user.displayName+' · ':'')+user.email; prefill(user); }
+      else { tab('in'); }
+    }
+    function busy(btn,on,label){ btn.disabled=on; btn.innerHTML = on ? 'Please wait…' : label+' <span>↗</span>'; }
+    // Saves the user's details straight to Firestore (visible only to the owner on admin.html). No email / WhatsApp.
+    function notifyNew(user,how,title){
+      if(!fb || !fb.db || !user || !user.uid) return Promise.resolve();
+      var fs=fb.fs, isNew=(title||'')==='NEW SIGN-UP', ref=fs.doc(fb.db,'users',user.uid);
+      var data={ name:user.displayName||'', email:user.email||'', provider:how, lastLogin:fs.serverTimestamp() };
+      if(isNew) data.createdAt=fs.serverTimestamp();
+      return fs.setDoc(ref,data,{merge:true})
+        .then(function(){ return fs.addDoc(fs.collection(fb.db,'users',user.uid,'logins'),{ event:title||'SIGN-IN', provider:how, at:fs.serverTimestamp(), device:(navigator.userAgent||'').slice(0,160) }); })
+        .catch(function(e){ if(window.console) console.warn('Could not save user record',e); });
+    }
+    // After a successful sign in / sign up, open the hiring application form
+    function openHire(){ setTimeout(function(){ window.__hpAllow=true; var b=$('hire-open'); if(b) b.click(); window.__hpAllow=false; },250); }
+
+    document.querySelectorAll('[data-auth-open]').forEach(function(a){ a.addEventListener('click',open); });
+    $('auth-close').addEventListener('click',close);
+    modal.addEventListener('click',function(e){ if(e.target===modal) close(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&modal.classList.contains('open')) close(); });
+    $('tab-in').addEventListener('click',function(){ tab('in'); });
+    $('tab-up').addEventListener('click',function(){ tab('up'); });
+
+    $('form-in').addEventListener('submit',function(e){
+      e.preventDefault(); msg();
+      var em=$('in-email').value.trim(), pw=$('in-pass').value;
+      if(!em||!pw){ msg('err','Please enter your email and password.'); return; }
+      busy($('in-btn'),true,'Sign in');
+      load().then(function(f){ return f.au.signInWithEmailAndPassword(f.auth,em,pw); })
+        .then(function(cred){ return notifyNew(cred.user,'Email & password','SIGN-IN'); })
+        .then(function(){ $('form-in').reset(); close(); openHire(); })
+        .catch(function(x){ msg('err',friendly(x)); })
+        .then(function(){ busy($('in-btn'),false,'Sign in'); });
     });
-  });
-  $('signout').addEventListener('click',function(){API.out()});
 
-  if(cfg){
-    $('gwrap').style.display='block';
-    fb().then(function(f){f.m.onAuthStateChanged(f.a,function(u){setUser(u?{name:u.displayName||u.email.split('@')[0],email:u.email}:null)})}).catch(function(){setUser(null)});
-  }else{
-    $('amode').textContent='Your account is saved on this device.';
-    var s=localStorage.getItem('pj_sess'),u=s&&db.get()[s];
-    setUser(u?{name:u.name,email:s}:null);
-  }
-  drawMode();
+    $('form-up').addEventListener('submit',function(e){
+      e.preventDefault(); msg();
+      var nm=$('up-name').value.trim(), em=$('up-email').value.trim(), pw=$('up-pass').value;
+      if(!configured){   // quick register (Firebase not set up): no password, details are emailed to the owner
+        if(!nm||!/^\S+@\S+\.\S+$/.test(em)){ msg('err','Please enter your name and a valid email address.'); return; }
+        notifyNew({displayName:nm,email:em},'Quick register (no password)','NEW SIGN-UP');
+        prefill({displayName:nm,email:em}); $('form-up').reset(); close(); openHire(); return;
+      }
+      if(!nm||!em||pw.length<6){ msg('err','Please enter your name, email and a password of at least 6 characters.'); return; }
+      busy($('up-btn'),true,'Create account');
+      load().then(function(f){
+        return f.au.createUserWithEmailAndPassword(f.auth,em,pw).then(function(cred){
+          return f.au.updateProfile(cred.user,{displayName:nm}).then(function(){ return cred.user; });
+        });
+      }).then(function(user){ return notifyNew(user,'Email & password','NEW SIGN-UP');
+      }).then(function(){
+        return fb.au.signOut(fb.auth).then(function(){
+          $('form-up').reset(); tab('in'); $('in-email').value=em; $('in-pass').value='';
+          setTimeout(function(){ $('auth-title').textContent='Step 2: Sign in to apply'; msg('ok','Account created! Now sign in with the same email and password to open the job application form.'); $('in-pass').focus(); },400);
+        });
+      })
+        .catch(function(x){ msg('err',friendly(x)); })
+        .then(function(){ busy($('up-btn'),false,'Create account'); });
+    });
 
-  /* ---------- install + service worker ---------- */
-  var dp,btn=$('install');
-  addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;btn.style.display='flex'});
-  btn.addEventListener('click',function(){if(!dp)return;dp.prompt();dp.userChoice.then(function(){dp=null;btn.style.display='none'})});
-  addEventListener('appinstalled',function(){btn.style.display='none'});
-  if('serviceWorker' in navigator)addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
-})();
-</script>
+    var googleBusy=false;
+    $('auth-google').addEventListener('click',function(){
+      if(googleBusy) return;            // one Google popup at a time (a 2nd click cancels the 1st)
+      googleBusy=true; msg();
+      var gb=$('auth-google'); gb.disabled=true; gb.style.opacity='.6';
+      load().then(function(f){
+        var provider=new f.au.GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'});
+        return f.au.signInWithPopup(f.auth,provider).then(function(res){
+          var info=f.au.getAdditionalUserInfo(res); return notifyNew(res.user,'Google',(info && info.isNewUser)?'NEW SIGN-UP':'SIGN-IN');
+        });
+      }).then(function(){ close(); openHire(); }).catch(function(x){
+        var c=(x&&x.code)||'';
+        if(c==='auth/cancelled-popup-request') return;   // another popup replaced this one: nothing to show
+        msg('err', c==='not-configured' ? 'Sign in is not set up yet.' : friendly(x));
+      }).then(function(){ googleBusy=false; gb.disabled=false; gb.style.opacity=''; });
+    });
+
+    $('forgot').addEventListener('click',function(e){
+      e.preventDefault(); msg();
+      var em=$('in-email').value.trim();
+      if(!em){ msg('err','Enter your email above first, then press "Forgot password?".'); return; }
+      load().then(function(f){ return f.au.sendPasswordResetEmail(f.auth,em); })
+        .then(function(){ msg('ok','Password reset email sent. Please check your inbox and spam folder.'); })
+        .catch(function(x){ msg('err',friendly(x)); });
+    });
+
+    $('signout-btn').addEventListener('click',function(){
+      load().then(function(f){ return f.au.signOut(f.auth); }).then(close).catch(function(){});
+    });
+
+    if(configured) load().catch(function(){});
+  })();
+  </script>
+
+  <!-- ===== HIRING POPUP ===== -->
+  <aside class="hp-popup" id="hp-popup" role="complementary" aria-label="Hiring and job offers" aria-hidden="true">
+    <section class="hp-col" aria-labelledby="hp-title">
+      <h2 id="hp-title">Looking for a job?</h2>
+      <p id="hp-sub">Register first, then apply with your email and password.</p>
+      <div class="hp-actions">
+        <button class="hp-btn hp-btn-primary" id="hp-up" type="button">Register</button>
+        <button class="hp-btn hp-btn-ghost" id="hp-in" type="button">Apply</button>
+        <button class="hp-btn hp-btn-primary" id="hp-apply" type="button" style="display:none">Apply now</button>
+      </div>
+    </section>
+    <section class="hp-col" aria-labelledby="hp-offer-title">
+      <h2 id="hp-offer-title">Have a job for me?</h2>
+      <p>I am open to work. Send me your job offer.</p>
+      <div class="hp-actions">
+        <button class="hp-btn hp-btn-ghost" id="hp-offer" type="button">Send job offer</button>
+      </div>
+    </section>
+  </aside>
+  <script>
+  (function(){
+    var pop=document.getElementById('hp-popup');
+    function show(){ pop.classList.add('show'); pop.setAttribute('aria-hidden','false'); }
+    function expand(){}
+    setTimeout(show,800);   // always visible
+    document.getElementById('hp-offer').addEventListener('click',function(){ document.getElementById('otw-open').click(); });
+    var re=document.getElementById('hp-reopen');
+    if(re) re.addEventListener('click',function(e){ e.preventDefault(); show(); expand(); });
+    // Step 1: Sign up / Sign in popup.  Step 2: hiring form opens automatically after login.
+    function go(which){
+      var signedIn = document.getElementById('auth-forms').style.display==='none';
+      if(signedIn){ document.getElementById('hire-open').click(); return; }   // already logged in: straight to the form
+      var a=document.querySelector('[data-auth-open]'); if(a) a.click();
+      var t=document.getElementById(which==='up'?'tab-up':'tab-in'); if(t) t.click();
+      document.getElementById('auth-title').textContent = which==='up' ? 'Step 1: Create your account' : 'Step 2: Sign in to apply';
+    }
+    function sync(){
+      var si = document.getElementById('auth-forms').style.display==='none';
+      document.getElementById('hp-up').style.display = si?'none':'';
+      document.getElementById('hp-in').style.display = si?'none':'';
+      document.getElementById('hp-apply').style.display = si?'':'none';
+      document.getElementById('hp-title').textContent = si ? 'You are signed in' : 'Looking for a job?';
+      document.getElementById('hp-sub').textContent = si ? 'Continue to the job application form.' : 'Register first, then apply with your email and password.';
+    }
+    new MutationObserver(sync).observe(document.getElementById('auth-forms'),{attributes:true,attributeFilter:['style']});
+    document.getElementById('hp-apply').addEventListener('click',function(){ document.getElementById('hire-open').click(); });
+    sync();
+    if(/[?&]apply=1/.test(location.search)){ history.replaceState(null,'',location.pathname); setTimeout(function(){ go('up'); },900); }
+    document.getElementById('hp-up').addEventListener('click',function(){ go('up'); });
+    document.getElementById('hp-in').addEventListener('click',function(){ go('in'); });
+    // Gate: every "apply" button/link needs an account + sign in first
+    document.addEventListener('click',function(e){
+      var t=e.target.closest && e.target.closest('a[href="hiring.html"],#hire-open');
+      if(!t || window.__hpAllow) return;
+      if(document.getElementById('auth-forms').style.display==='none') return;   // already signed in
+      e.preventDefault(); e.stopImmediatePropagation(); go('up');
+    },true);
+  })();
+  </script>
+  <!-- ===== END HIRING POPUP ===== -->
 </body>
 </html>
