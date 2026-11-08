@@ -726,7 +726,7 @@
         'auth/wrong-password':'Email or password is incorrect.',
         'auth/user-not-found':'No account found with this email.',
         'auth/too-many-requests':'Too many attempts. Please wait a few minutes and try again.',
-        'auth/popup-closed-by-user':'Google sign-in was closed before finishing.',
+        'auth/popup-closed-by-user':'Google sign-in was closed before finishing. Please try again and complete the Google window.',
         'auth/unauthorized-domain':'This website is not authorised in Firebase yet (Authentication > Settings > Authorized domains).',
         'auth/operation-not-allowed':'This sign-in method is not turned on in Firebase yet.',
         'auth/network-request-failed':'Network problem. Please check your internet and try again.',
@@ -823,13 +823,21 @@
         .then(function(){ busy($('up-btn'),false,'Create account'); });
     });
 
+    var googleBusy=false;
     $('auth-google').addEventListener('click',function(){
-      msg();
+      if(googleBusy) return;            // one Google popup at a time (a 2nd click cancels the 1st)
+      googleBusy=true; msg();
+      var gb=$('auth-google'); gb.disabled=true; gb.style.opacity='.6';
       load().then(function(f){
-        return f.au.signInWithPopup(f.auth,new f.au.GoogleAuthProvider()).then(function(res){
+        var provider=new f.au.GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'});
+        return f.au.signInWithPopup(f.auth,provider).then(function(res){
           var info=f.au.getAdditionalUserInfo(res); notifyNew(res.user,'Google',(info && info.isNewUser)?'NEW SIGN-UP':'SIGN-IN');
         });
-      }).then(function(){ close(); openHire(); }).catch(function(x){ msg('err', x&&x.code==='not-configured' ? 'Sign in is not set up yet.' : friendly(x)); });
+      }).then(function(){ close(); openHire(); }).catch(function(x){
+        var c=(x&&x.code)||'';
+        if(c==='auth/cancelled-popup-request') return;   // another popup replaced this one: nothing to show
+        msg('err', c==='not-configured' ? 'Sign in is not set up yet.' : friendly(x));
+      }).then(function(){ googleBusy=false; gb.disabled=false; gb.style.opacity=''; });
     });
 
     $('forgot').addEventListener('click',function(e){
