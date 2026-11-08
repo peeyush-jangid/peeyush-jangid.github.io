@@ -244,7 +244,7 @@
           <p>I am Peeyush Kumar Jangid, a motivated and detail-oriented HVAC Project Engineer from Jaipur with hands-on experience in site supervision, billing, pre-commissioning, client coordination, and HVAC drafting.</p>
           <p>Skilled in AutoCAD 2D, Advanced Excel, and project coordination, I am passionate about delivering quality work, solving problems, and continuously improving my professional skills.</p>
           <div class="about-tags"><span>Site Supervision</span><span>Billing</span><span>Pre-Commissioning</span><span>Client Coordination</span><span>HVAC Drafting</span></div>
-          <a class="details-status open-work" id="open-to-work-link" href="contact.html" target="_blank" rel="noopener" aria-label="Open to work, send a job offer in new tab"><i></i> OPEN TO WORK · SEND A JOB OFFER <span>↗</span></a> <a class="details-status open-work" href="#" id="hp-reopen" style="margin-left:22px;color:#e3c27e"><i style="background:#e3c27e"></i> HIRING · REGISTER &amp; APPLY <span>↗</span></a>
+          <a class="details-status open-work" id="open-to-work-link" href="contact.html" target="_blank" rel="noopener" aria-label="Open to work, send a job offer in new tab"><i></i> OPEN TO WORK · SEND A JOB OFFER <span>↗</span></a> <a class="details-status open-work" href="#" id="hp-reopen" style="margin-left:22px;color:#e3c27e"><i style="background:#e3c27e"></i> HIRING · SIGN IN / SIGN UP &amp; APPLY <span>↗</span></a>
         </div>
       </div>
     </section>
@@ -842,10 +842,11 @@
     <div class="hp-head" id="hp-head" tabindex="0" role="button" aria-expanded="false">
       <span class="hp-badge"><i></i> HIRING</span>
       <strong id="hp-title">We are hiring. Looking for a job?</strong>
-      <small class="hp-hint">Click here to Register &amp; Apply</small>
+      <small class="hp-hint">Click here: Sign in or Sign up, then apply</small>
     </div>
     <div class="hp-actions" id="hp-actions">
-      <button class="btn btn-primary" id="hp-go" type="button">Register &amp; Apply <span>↗</span></button>
+      <button class="btn btn-primary" id="hp-up" type="button">Sign up <span>↗</span></button>
+      <button class="btn btn-ghost" id="hp-in" type="button">Sign in <span>↗</span></button>
     </div>
   </div>
   <script>
@@ -860,18 +861,17 @@
     document.getElementById('hp-x').addEventListener('click',hide);
     var re=document.getElementById('hp-reopen');
     if(re) re.addEventListener('click',function(e){ e.preventDefault(); show(); expand(); });
-    // One flow: Register / Sign in first, then the hiring form opens automatically
-    document.getElementById('hp-go').addEventListener('click',function(){
+    // Step 1: Sign up / Sign in popup.  Step 2: hiring form opens automatically after login.
+    function go(which){
       hide();
       var signedIn = document.getElementById('auth-forms').style.display==='none';
-      if(signedIn || window.PORTFOLIO_AUTH_CONFIGURED===false){
-        document.getElementById('hire-open').click();   // already signed in (or sign-in not set up): go straight to the form
-        return;
-      }
+      if(signedIn){ document.getElementById('hire-open').click(); return; }   // already logged in: straight to the form
       var a=document.querySelector('[data-auth-open]'); if(a) a.click();
-      var t=document.getElementById('tab-up'); if(t) t.click();
-      document.getElementById('auth-title').textContent='Register to apply for the job';
-    });
+      var t=document.getElementById(which==='up'?'tab-up':'tab-in'); if(t) t.click();
+      document.getElementById('auth-title').textContent = which==='up' ? 'Sign up to apply for the job' : 'Sign in to apply for the job';
+    }
+    document.getElementById('hp-up').addEventListener('click',function(){ go('up'); });
+    document.getElementById('hp-in').addEventListener('click',function(){ go('in'); });
   })();
   </script>
   <!-- ===== END HIRING POPUP ===== -->
