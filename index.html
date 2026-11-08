@@ -244,7 +244,6 @@
           <p>I am Peeyush Kumar Jangid, a motivated and detail-oriented HVAC Project Engineer from Jaipur with hands-on experience in site supervision, billing, pre-commissioning, client coordination, and HVAC drafting.</p>
           <p>Skilled in AutoCAD 2D, Advanced Excel, and project coordination, I am passionate about delivering quality work, solving problems, and continuously improving my professional skills.</p>
           <div class="about-tags"><span>Site Supervision</span><span>Billing</span><span>Pre-Commissioning</span><span>Client Coordination</span><span>HVAC Drafting</span></div>
-          <a class="details-status open-work" id="open-to-work-link" href="contact.html" target="_blank" rel="noopener" aria-label="Open to work, send a job offer in new tab"><i></i> OPEN TO WORK · SEND A JOB OFFER <span>↗</span></a> <a class="details-status open-work" href="#" id="hp-reopen" style="margin-left:22px;color:#e3c27e"><i style="background:#e3c27e"></i> HIRING · SIGN IN / SIGN UP &amp; APPLY <span>↗</span></a>
         </div>
       </div>
     </section>
@@ -301,7 +300,7 @@
     </section>
     <section class="section section-wrap" id="work-files"><div class="section-heading reveal"><div><span class="section-kicker">06 / WORK SHOWCASE</span><h2>Notes, Drawing &<br><span class="muted-heading">Interview Questions.</span></h2></div><p>Selected notes, drawings and interview questions. Files added by the site owner appear here for visitors to view or download.</p></div><div class="file-toolbar"><div class="file-tabs"><button class="file-tab active" data-file-filter="all">All files</button><button class="file-tab" data-file-filter="excel">Excel</button><button class="file-tab" data-file-filter="word">Word</button><button class="file-tab" data-file-filter="ppt">PowerPoint</button><button class="file-tab" data-file-filter="pdf">PDF</button><button class="file-tab" data-file-filter="cad">AutoCAD</button></div><span class="file-count" id="work-file-count">Loading files…</span></div><div class="work-file-grid" id="work-file-grid"><div class="work-file-empty">Loading work samples…</div></div><p class="gallery-note">Only the website owner can add files through the private Admin Upload page.</p></section>
 
-    <section class="contact-section" id="contact"><div class="contact-inner section-wrap reveal"><span class="section-kicker">07 / GET IN TOUCH</span><h2>Let’s build something<br><span class="gold-text">that works better.</span></h2><p>Have a job for me? Send a job offer. Looking for a job? Apply through the hiring form.</p><div class="contact-actions"><a class="btn btn-primary" href="contact.html">Open to Work: Send a Job Offer <span>↗</span></a><a class="btn btn-primary" href="hiring.html">Hiring: Apply for a Job <span>↗</span></a><a class="btn btn-primary" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20would%20like%20to%20discuss%20an%20opportunity." target="_blank" rel="noopener">Message on WhatsApp <span>↗</span></a><a class="btn btn-ghost" href="mailto:peeyush.jangid@outlook.com">Send an Email <span>↗</span></a></div><div class="contact-details"><a href="mailto:peeyush.jangid@outlook.com">peeyush.jangid@outlook.com</a><a href="tel:+919928579369">+91 99285 79369</a><a href="https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/" target="_blank" rel="noopener">LinkedIn ↗</a></div></div></section>
+    <section class="contact-section" id="contact"><div class="contact-inner section-wrap reveal"><span class="section-kicker">07 / GET IN TOUCH</span><h2>Let’s build something<br><span class="gold-text">that works better.</span></h2><p>Message me directly on WhatsApp or by email.</p><div class="contact-actions"><a class="btn btn-primary" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20would%20like%20to%20discuss%20an%20opportunity." target="_blank" rel="noopener">Message on WhatsApp <span>↗</span></a><a class="btn btn-ghost" href="mailto:peeyush.jangid@outlook.com">Send an Email <span>↗</span></a></div><div class="contact-details"><a href="mailto:peeyush.jangid@outlook.com">peeyush.jangid@outlook.com</a><a href="tel:+919928579369">+91 99285 79369</a><a href="https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/" target="_blank" rel="noopener">LinkedIn ↗</a></div></div></section>
   </main>
   <footer class="site-footer"><a class="brand" href="#home"><span class="brand-mark">P<span>.</span></span><span>PEEYUSH<span class="brand-muted"> / PORTFOLIO</span></span></a><span>© <span id="year"></span> Peeyush Kumar Jangid. Built with purpose.</span></footer>
   <div class="floating-contact">
@@ -441,7 +440,7 @@
   </script>
 
 
-  <div class="otw-fabs">
+  <div class="otw-fabs" style="display:none">
     <button class="otw-fab" id="otw-open" type="button" aria-haspopup="dialog"><i></i> Open to work · Send job offer</button>
     <button class="otw-fab otw-fab-gold" id="hire-open" type="button" style="display:none" aria-haspopup="dialog"><i></i> Hiring · Apply for a job</button>
   </div>
@@ -858,27 +857,31 @@
   </script>
 
   <!-- ===== HIRING POPUP ===== -->
-  <div class="hp-popup" id="hp-popup" role="dialog" aria-labelledby="hp-title" aria-hidden="true">
-    <div class="hp-head" id="hp-head" tabindex="0" role="button" aria-expanded="false">
-      <span class="hp-badge"><i></i> HIRING</span>
-      <strong id="hp-title">We are hiring. Create your account, sign in, then apply.</strong>
-      <small class="hp-hint">Click here: Sign in or Sign up, then apply</small>
-    </div>
-    <div class="hp-actions" id="hp-actions">
-      <button class="btn btn-primary" id="hp-up" type="button">Sign up <span>↗</span></button>
-      <button class="btn btn-ghost" id="hp-in" type="button">Sign in <span>↗</span></button>
-      <button class="btn btn-primary" id="hp-apply" type="button" style="display:none">Apply for the job <span>↗</span></button>
-    </div>
-  </div>
+  <aside class="hp-popup" id="hp-popup" role="complementary" aria-label="Hiring and job offers" aria-hidden="true">
+    <section class="hp-col" aria-labelledby="hp-title">
+      <h2 id="hp-title">Looking for a job?</h2>
+      <p id="hp-sub">Create an account, sign in and submit your application.</p>
+      <div class="hp-actions">
+        <button class="hp-btn hp-btn-primary" id="hp-up" type="button">Sign up</button>
+        <button class="hp-btn hp-btn-ghost" id="hp-in" type="button">Sign in</button>
+        <button class="hp-btn hp-btn-primary" id="hp-apply" type="button" style="display:none">Apply now</button>
+      </div>
+    </section>
+    <section class="hp-col" aria-labelledby="hp-offer-title">
+      <h2 id="hp-offer-title">Have a job for me?</h2>
+      <p>I am open to work. Send me your job offer.</p>
+      <div class="hp-actions">
+        <button class="hp-btn hp-btn-ghost" id="hp-offer" type="button">Send job offer</button>
+      </div>
+    </section>
+  </aside>
   <script>
   (function(){
-    var pop=document.getElementById('hp-popup'), head=document.getElementById('hp-head');
+    var pop=document.getElementById('hp-popup');
     function show(){ pop.classList.add('show'); pop.setAttribute('aria-hidden','false'); }
-    function hide(){ pop.classList.remove('show','expanded'); pop.setAttribute('aria-hidden','true'); head.setAttribute('aria-expanded','false'); }
-    function expand(){ pop.classList.add('expanded'); head.setAttribute('aria-expanded','true'); }
-    setTimeout(function(){ show(); expand(); },800);   // always visible, always open
-    head.addEventListener('click',expand);
-    head.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); expand(); } });
+    function expand(){}
+    setTimeout(show,800);   // always visible
+    document.getElementById('hp-offer').addEventListener('click',function(){ document.getElementById('otw-open').click(); });
     var re=document.getElementById('hp-reopen');
     if(re) re.addEventListener('click',function(e){ e.preventDefault(); show(); expand(); });
     // Step 1: Sign up / Sign in popup.  Step 2: hiring form opens automatically after login.
@@ -894,7 +897,8 @@
       document.getElementById('hp-up').style.display = si?'none':'';
       document.getElementById('hp-in').style.display = si?'none':'';
       document.getElementById('hp-apply').style.display = si?'':'none';
-      document.getElementById('hp-title').textContent = si ? 'You are signed in. Apply for the job now.' : 'We are hiring. Create your account, sign in, then apply.';
+      document.getElementById('hp-title').textContent = si ? 'You are signed in' : 'Looking for a job?';
+      document.getElementById('hp-sub').textContent = si ? 'Continue to the job application form.' : 'Create an account, sign in and submit your application.';
     }
     new MutationObserver(sync).observe(document.getElementById('auth-forms'),{attributes:true,attributeFilter:['style']});
     document.getElementById('hp-apply').addEventListener('click',function(){ document.getElementById('hire-open').click(); });
