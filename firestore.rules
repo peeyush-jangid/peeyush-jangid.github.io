@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Replace with YOUR UID: sign in on admin.html once and copy the UID it shows.
+    function isOwner() {
+      return request.auth != null && request.auth.uid == 'PASTE_YOUR_OWNER_UID_HERE';
+    }
+
+    match /users/{uid} {
+      // A visitor can only write their own record; only the owner can read all of them.
+      allow read: if isOwner() || (request.auth != null && request.auth.uid == uid);
+      allow create, update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['name', 'email', 'provider', 'lastLogin', 'createdAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() < 120
+        && request.resource.data.email is string && request.resource.data.email.size() < 200;
+      allow delete: if isOwner();
+
+      match /logins/{id} {
+        allow read, delete: if isOwner();
+        allow create: if request.auth != null && request.auth.uid == uid
+          && request.resource.data.keys().hasOnly(['event', 'provider', 'at', 'device']);
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

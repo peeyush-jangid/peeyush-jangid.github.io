@@ -756,10 +756,11 @@
       if(fb) return Promise.resolve(fb);
       return Promise.all([
         import('https://www.gstatic.com/firebasejs/'+V+'/firebase-app.js'),
-        import('https://www.gstatic.com/firebasejs/'+V+'/firebase-auth.js')
+        import('https://www.gstatic.com/firebasejs/'+V+'/firebase-auth.js'),
+        import('https://www.gstatic.com/firebasejs/'+V+'/firebase-firestore.js')
       ]).then(function(m){
-        var app=m[0].initializeApp(FIREBASE_CONFIG), au=m[1], auth=au.getAuth(app);
-        fb={au:au,auth:auth}; au.onAuthStateChanged(auth,render); return fb;
+        var app=m[0].initializeApp(FIREBASE_CONFIG), au=m[1], auth=au.getAuth(app), fs=m[2], db=fs.getFirestore(app);
+        fb={au:au,auth:auth,fs:fs,db:db}; au.onAuthStateChanged(auth,render); return fb;
       });
     }
     function prefill(user){
@@ -774,8 +775,15 @@
       else { tab('in'); }
     }
     function busy(btn,on,label){ btn.disabled=on; btn.innerHTML = on ? 'Please wait…' : label+' <span>↗</span>'; }
+    // Saves the user's details straight to Firestore (visible only to the owner on admin.html). No email / WhatsApp.
     function notifyNew(user,how,title){
-      if(window.PORTFOLIO_NOTIFY) window.PORTFOLIO_NOTIFY(title||'NEW SIGN-UP',{ 'Name':user.displayName||'', 'Email':user.email||'', 'Method':how, 'Time':new Date().toLocaleString('en-IN') });
+      if(!fb || !fb.db || !user || !user.uid) return Promise.resolve();
+      var fs=fb.fs, isNew=(title||'')==='NEW SIGN-UP', ref=fs.doc(fb.db,'users',user.uid);
+      var data={ name:user.displayName||'', email:user.email||'', provider:how, lastLogin:fs.serverTimestamp() };
+      if(isNew) data.createdAt=fs.serverTimestamp();
+      return fs.setDoc(ref,data,{merge:true})
+        .then(function(){ return fs.addDoc(fs.collection(fb.db,'users',user.uid,'logins'),{ event:title||'SIGN-IN', provider:how, at:fs.serverTimestamp(), device:(navigator.userAgent||'').slice(0,160) }); })
+        .catch(function(e){ if(window.console) console.warn('Could not save user record',e); });
     }
     // After a successful sign in / sign up, open the hiring application form
     function openHire(){ setTimeout(function(){ window.__hpAllow=true; var b=$('hire-open'); if(b) b.click(); window.__hpAllow=false; },250); }
@@ -793,7 +801,8 @@
       if(!em||!pw){ msg('err','Please enter your email and password.'); return; }
       busy($('in-btn'),true,'Sign in');
       load().then(function(f){ return f.au.signInWithEmailAndPassword(f.auth,em,pw); })
-        .then(function(cred){ notifyNew(cred.user,'Email & password','SIGN-IN'); $('form-in').reset(); close(); openHire(); })
+        .then(function(cred){ return notifyNew(cred.user,'Email & password','SIGN-IN'); })
+        .then(function(){ $('form-in').reset(); close(); openHire(); })
         .catch(function(x){ msg('err',friendly(x)); })
         .then(function(){ busy($('in-btn'),false,'Sign in'); });
     });
@@ -812,7 +821,8 @@
         return f.au.createUserWithEmailAndPassword(f.auth,em,pw).then(function(cred){
           return f.au.updateProfile(cred.user,{displayName:nm}).then(function(){ return cred.user; });
         });
-      }).then(function(user){ notifyNew({displayName:nm,email:em},'Email & password','NEW SIGN-UP');
+      }).then(function(user){ return notifyNew(user,'Email & password','NEW SIGN-UP');
+      }).then(function(){
         return fb.au.signOut(fb.auth).then(function(){
           $('form-up').reset(); tab('in'); $('in-email').value=em; $('in-pass').value='';
           setTimeout(function(){ $('auth-title').textContent='Step 2: Sign in to apply'; msg('ok','Account created! Now sign in with the same email and password to open the job application form.'); $('in-pass').focus(); },400);
@@ -830,7 +840,7 @@
       load().then(function(f){
         var provider=new f.au.GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'});
         return f.au.signInWithPopup(f.auth,provider).then(function(res){
-          var info=f.au.getAdditionalUserInfo(res); notifyNew(res.user,'Google',(info && info.isNewUser)?'NEW SIGN-UP':'SIGN-IN');
+          var info=f.au.getAdditionalUserInfo(res); return notifyNew(res.user,'Google',(info && info.isNewUser)?'NEW SIGN-UP':'SIGN-IN');
         });
       }).then(function(){ close(); openHire(); }).catch(function(x){
         var c=(x&&x.code)||'';
