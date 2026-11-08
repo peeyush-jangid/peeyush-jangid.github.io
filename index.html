@@ -746,7 +746,7 @@
     function open(e){ if(e) e.preventDefault();
       document.querySelectorAll('.otw-modal.open').forEach(function(m){ m.classList.remove('open'); });
       lastFocus=document.activeElement; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
-      msg(); if(!configured) msg('err','Sign in is not set up yet. The site owner needs to add the Firebase settings.'); else load();
+      msg(); if(!configured){ $('auth-forms').classList.add('quick'); tab('up'); } else load();
     }
     function close(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
     function tab(which){
@@ -806,6 +806,11 @@
     $('form-up').addEventListener('submit',function(e){
       e.preventDefault(); msg();
       var nm=$('up-name').value.trim(), em=$('up-email').value.trim(), pw=$('up-pass').value;
+      if(!configured){   // quick register (Firebase not set up): no password, details are emailed to the owner
+        if(!nm||!/^\S+@\S+\.\S+$/.test(em)){ msg('err','Please enter your name and a valid email address.'); return; }
+        notifyNew({displayName:nm,email:em},'Quick register (no password)','NEW SIGN-UP');
+        prefill({displayName:nm,email:em}); $('form-up').reset(); close(); openHire(); return;
+      }
       if(!nm||!em||pw.length<6){ msg('err','Please enter your name, email and a password of at least 6 characters.'); return; }
       busy($('up-btn'),true,'Create account');
       load().then(function(f){
