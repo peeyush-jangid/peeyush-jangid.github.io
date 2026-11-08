@@ -42,7 +42,8 @@ body.locked #auth{display:flex}
 header{position:fixed;inset:0 0 auto;height:var(--top);padding:env(safe-area-inset-top,0px) 16px 0;display:flex;align-items:center;gap:10px;background:rgba(7,20,38,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);z-index:5}
 header img{width:32px;height:32px;border-radius:9px}
 header b{font-size:1rem}
-header a{margin-left:auto;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red2));display:grid;place-items:center;font-weight:700;font-size:.9rem}
+#avatar{margin-left:auto;width:36px;height:36px;padding:0;border:0;border-radius:50%;overflow:hidden;color:#fff;background:linear-gradient(135deg,var(--red),var(--red2));font:700 .95rem system-ui,sans-serif;cursor:pointer;display:grid;place-items:center}
+#avatar img,.mav img{width:100%;height:100%;object-fit:cover}
 main{padding:calc(var(--top) + 18px) 18px calc(var(--bot) + 24px);max-width:640px;margin:auto}
 .view{display:none}.view.on{display:block;animation:in .22s ease-out}
 @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -94,6 +95,14 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--red);border-colo
 .note{font-size:.82rem;color:var(--mute);margin-top:12px}
 a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
 #install{display:none}
+#amenu{display:none;position:fixed;top:calc(var(--top) + 6px);right:12px;width:min(330px,calc(100vw - 24px));background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;z-index:9;box-shadow:0 20px 60px rgba(0,0,0,.55)}
+#amenu.on{display:block}
+body.locked #amenu,body.boot #amenu{display:none!important}
+.mh{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.mav{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red2));display:grid;place-items:center;font-weight:800;font-size:1.3rem;overflow:hidden;flex:none}
+.mh b{display:block;word-break:break-word}.mh small{color:var(--mute);word-break:break-all}
+.mrow{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:.85rem}
+.mrow span{color:var(--mute)}.mrow b{text-align:right;font-weight:600}
 </style>
 <script src="firebase-config.js"></script>
 </head>
@@ -117,7 +126,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset
   </div>
 </div>
 
-<header><img src="icons/icon-192.png" alt="" width="32" height="32"><b>Peeyush Jangid</b><a href="#contact" id="avatar" aria-label="Account">P</a></header>
+<header><img src="icons/icon-192.png" alt="" width="32" height="32"><b>Peeyush Jangid</b><button id="avatar" type="button" aria-label="Account" aria-expanded="false">P</button></header>
+<div id="amenu" role="dialog" aria-label="Your account"><div class="mh"><div class="mav" id="mav">P</div><div><b id="mName"></b><small id="mMail"></small></div></div><div id="mRows"></div><button class="btn" id="signout2" type="button" style="margin-top:12px">Sign out</button></div>
 
 <main>
 <section class="view" id="v-home">
@@ -262,10 +272,19 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset
     $('notes').innerHTML=list.length?list.map(function(n){return card(n,ext(n).slice(0,3).toUpperCase())}).join(''):'<div class="empty">No notes or drawings yet. New files will appear here.</div>';
   }
   $('ftypes').addEventListener('click',function(e){if(e.target.dataset.t){cur=e.target.dataset.t;drawNotes()}});
+  var REPO='peeyush-jangid/peeyush-jangid.github.io',SITE='https://peeyush-jangid.github.io/';
+  function list(dir){
+    return fetch('https://api.github.com/repos/'+REPO+'/contents/'+dir).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(a){
+      return a.filter(function(x){return x.type==='file'&&x.name.toLowerCase()!=='readme.txt'}).map(function(x){return{title:x.name.replace(/\.[^.]+$/,'').replace(/[_]+/g,' '),url:SITE+dir+'/'+encodeURIComponent(x.name)}});
+    }).catch(function(){return null});
+  }
+  function cached(k,v){try{if(v){localStorage.setItem(k,JSON.stringify(v));return v}return JSON.parse(localStorage.getItem(k)||'[]')}catch(e){return v||[]}}
   fetch('files.json').then(function(r){return r.json()}).catch(function(){return{}}).then(function(d){
-    notes=d.notes||[]; drawNotes();
-    var c=d.certificates||[];
-    $('certs').innerHTML=c.length?c.map(function(x){return card(x,'CERT')}).join(''):'<div class="empty">No certificates added yet.</div>';
+    Promise.all([list('documents'),list('certificates')]).then(function(r){
+      notes=(d.notes||[]).concat(cached('pj_docs',r[0])||[]); drawNotes();
+      var c=(d.certificates||[]).concat(cached('pj_certs',r[1])||[]);
+      $('certs').innerHTML=c.length?c.map(function(x){return card(x,'CERT')}).join(''):'<div class="empty">No certificates added yet.</div>';
+    });
   });
 
   /* ---------- job forms ---------- */
@@ -297,11 +316,23 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset
 
   /* ---------- accounts ---------- */
   var cfg=window.FIREBASE_CONFIG&&window.FIREBASE_CONFIG.apiKey?window.FIREBASE_CONFIG:null,mode='up',fbp;
+  var me=null;
+  function fmt(d){return d?new Date(d).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):'-'}
+  function lu(e,x){return{name:x.name,email:e,photo:'',provider:'This device',created:x.created,last:x.last}}
+  function fu(u){var p=(u.providerData&&u.providerData[0]&&u.providerData[0].providerId)||'password';
+    return{name:u.displayName||u.email.split('@')[0],email:u.email,photo:u.photoURL||'',provider:p==='google.com'?'Google':'Email and password',created:u.metadata&&u.metadata.creationTime,last:u.metadata&&u.metadata.lastSignInTime,verified:u.emailVerified}}
+  function note(t,ok){$('aerr').textContent=t;$('aerr').style.color=ok?'#8ff0b3':''}
   function setUser(u){
-    document.body.className=u?'':'locked';
-    $('accName').textContent=u?u.name:'Guest'; $('accMail').textContent=u?u.email:'';
-    $('avatar').textContent=u?(u.name||u.email)[0].toUpperCase():'P';
+    me=u; document.body.className=u?'':'locked';
+    var av=u?(u.photo?'<img src="'+esc(u.photo)+'" alt="" referrerpolicy="no-referrer">':esc((u.name||u.email)[0].toUpperCase())):'P';
+    $('avatar').innerHTML=av; $('mav').innerHTML=av;
+    $('accName').textContent=$('mName').textContent=u?u.name:'Guest';
+    $('accMail').textContent=$('mMail').textContent=u?u.email:'';
+    var r=u?[['Sign-in method',u.provider],['Member since',fmt(u.created)],['Last sign-in',fmt(u.last)]]:[];
+    if(u&&u.verified!==undefined)r.push(['Email status',u.verified?'Verified':'Not verified']);
+    $('mRows').innerHTML=r.map(function(x){return '<div class="mrow"><span>'+x[0]+'</span><b>'+esc(x[1])+'</b></div>'}).join('');
     if(u)Object.keys(ID).forEach(function(k){var n=$(k+ID[k].n),e=$(k+ID[k].e);if(n&&!n.value)n.value=u.name;if(e&&!e.value)e.value=u.email});
+    $('amenu').classList.remove('on');
     if(u)show();
   }
   function msg(e){
@@ -323,18 +354,21 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset
     fbp=Promise.all([import(b+'firebase-app.js'),import(b+'firebase-auth.js')]).then(function(r){var app=r[0].initializeApp(cfg);return{m:r[1],a:r[1].getAuth(app)}});
     return fbp;
   }
+  var hold=false;
+  function afterSignup(e){mode='in';drawMode();$('ae').value=e;$('ap').value='';note('Account created. Sign in to continue.',1)}
   var API={
     up:function(n,e,p){
-      if(cfg)return fb().then(function(f){return f.m.createUserWithEmailAndPassword(f.a,e,p).then(function(c){return f.m.updateProfile(c.user,{displayName:n}).then(function(){setUser({name:n,email:e})})})});
+      if(cfg){hold=true;return fb().then(function(f){return f.m.createUserWithEmailAndPassword(f.a,e,p).then(function(c){return f.m.updateProfile(c.user,{displayName:n})}).then(function(){return f.m.signOut(f.a)})}).then(function(){hold=false;afterSignup(e)},function(x){hold=false;throw x})}
       var u=db.get(); if(u[e])return Promise.reject({code:'exists'}); if(p.length<6)return Promise.reject({code:'short'});
-      return hash(p).then(function(h){u[e]={name:n,h:h};db.set(u);localStorage.setItem('pj_sess',e);setUser({name:n,email:e})});
+      return hash(p).then(function(h){u[e]={name:n,h:h,created:Date.now()};db.set(u);afterSignup(e)});
     },
     in:function(e,p){
       if(cfg)return fb().then(function(f){return f.m.signInWithEmailAndPassword(f.a,e,p)});
-      var u=db.get()[e]; if(!u)return Promise.reject({code:'incorrect'});
-      return hash(p).then(function(h){if(h!==u.h)return Promise.reject({code:'incorrect'});localStorage.setItem('pj_sess',e);setUser({name:u.name,email:e})});
+      var all=db.get(),u=all[e]; if(!u)return Promise.reject({code:'incorrect'});
+      return hash(p).then(function(h){if(h!==u.h)return Promise.reject({code:'incorrect'});u.last=Date.now();db.set(all);localStorage.setItem('pj_sess',e);setUser(lu(e,u))});
     },
     out:function(){
+      mode='in';drawMode();
       if(cfg)return fb().then(function(f){return f.m.signOut(f.a)});
       localStorage.removeItem('pj_sess'); setUser(null); return Promise.resolve();
     }
@@ -345,7 +379,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset
     $('asub').textContent=up?'Create account':'Sign in';
     $('ap').autocomplete=up?'new-password':'current-password';
     $('aforgot').style.display=!up&&cfg?'block':'none';
-    $('aerr').textContent='';
+    $('aerr').textContent='';$('aerr').style.color='';
     [].forEach.call($('aseg').children,function(b){b.classList.toggle('on',b.dataset.t===mode)});
   }
   $('aseg').addEventListener('click',function(e){if(e.target.dataset.t){mode=e.target.dataset.t;drawMode()}});
@@ -355,12 +389,12 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset
     if(mode==='up'&&!n)return $('aerr').textContent='Enter your full name.';
     if(!/^\S+@\S+\.\S+$/.test(e))return $('aerr').textContent='Enter a valid email address.';
     if(p.length<6)return $('aerr').textContent='Use at least 6 characters for the password.';
-    $('aerr').textContent=''; $('asub').disabled=true;
+    $('aerr').textContent='';$('aerr').style.color=''; $('asub').disabled=true;
     (mode==='up'?API.up(n,e,p):API.in(e,p)).catch(function(x){$('aerr').textContent=msg(x)}).then(function(){$('asub').disabled=false});
   });
   $('aforgot').addEventListener('click',function(){
     var e=$('ae').value.trim(); if(!e)return $('aerr').textContent='Enter your email first.';
-    fb().then(function(f){return f.m.sendPasswordResetEmail(f.a,e)}).then(function(){$('aerr').textContent='Reset link sent to '+e+'.'}).catch(function(x){$('aerr').textContent=msg(x)});
+    fb().then(function(f){return f.m.sendPasswordResetEmail(f.a,e)}).then(function(){note('Reset link sent to '+e+'.',1)}).catch(function(x){$('aerr').textContent=msg(x)});
   });
   $('agoogle').addEventListener('click',function(){
     fb().then(function(f){return f.m.signInWithPopup(f.a,new f.m.GoogleAuthProvider())}).catch(function(x){
@@ -369,14 +403,20 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset
     });
   });
   $('signout').addEventListener('click',function(){API.out()});
+  $('signout2').addEventListener('click',function(){API.out()});
+  $('avatar').addEventListener('click',function(ev){ev.stopPropagation();var o=$('amenu').classList.toggle('on');$('avatar').setAttribute('aria-expanded',o)});
+  $('amenu').addEventListener('click',function(ev){ev.stopPropagation()});
+  document.addEventListener('click',function(){$('amenu').classList.remove('on')});
+  addEventListener('keydown',function(ev){if(ev.key==='Escape')$('amenu').classList.remove('on')});
+  addEventListener('hashchange',function(){$('amenu').classList.remove('on')});
 
   if(cfg){
     $('gwrap').style.display='block';
-    fb().then(function(f){f.m.onAuthStateChanged(f.a,function(u){setUser(u?{name:u.displayName||u.email.split('@')[0],email:u.email}:null)})}).catch(function(){setUser(null)});
+    fb().then(function(f){f.m.onAuthStateChanged(f.a,function(u){if(hold)return;setUser(u?fu(u):null)})}).catch(function(){setUser(null)});
   }else{
     $('amode').textContent='Your account is saved on this device.';
     var s=localStorage.getItem('pj_sess'),u=s&&db.get()[s];
-    setUser(u?{name:u.name,email:s}:null);
+    setUser(u?lu(s,u):null);
   }
   drawMode();
 
