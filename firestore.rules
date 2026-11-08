@@ -4,7 +4,7 @@ service cloud.firestore {
 
     // Replace with YOUR UID: sign in on admin.html once and copy the UID it shows.
     function isOwner() {
-      return request.auth != null && request.auth.uid == 'PASTE_YOUR_OWNER_UID_HERE';
+      return request.auth != null && request.auth.uid == 'YOhDSpAfa9NlDC0FoICohAPa7dz1';
     }
 
     match /users/{uid} {
