@@ -6,6 +6,8 @@
   <meta name="theme-color" content="#08090d" />
   <title>Hiring: apply for a job | Peeyush Kumar Jangid</title>
   <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml" />
+  <style>html.gate body{visibility:hidden}</style>
+  <script>if(!/[?&]sent=1/.test(location.search)) document.documentElement.classList.add('gate');</script>
   <link rel="stylesheet" href="style.css" />
   <style>
     .form-page{min-height:100vh;display:grid;place-items:center;padding:54px 5%}
@@ -188,6 +190,28 @@
       submitButton.disabled = false;
       submitButton.innerHTML = 'Submit Job Application <span>↗</span>';
     });
+  </script>
+  <script src="firebase-config.js"></script>
+  <script type="module">
+    // Sirf signed-in user hi hiring form dekh sakta hai; baaki log index.html par account banane/sign in ke liye bheje jaate hain.
+    var go = function(){ location.replace('index.html?apply=1'); };
+    var c = window.FIREBASE_CONFIG;
+    if(!/[?&]sent=1/.test(location.search)){
+      if(!c || String(c.apiKey).indexOf('YOUR_')===0){ go(); }
+      else {
+        var V='10.14.1';
+        Promise.all([import('https://www.gstatic.com/firebasejs/'+V+'/firebase-app.js'), import('https://www.gstatic.com/firebasejs/'+V+'/firebase-auth.js')])
+          .then(function(m){
+            var auth=m[1].getAuth(m[0].initializeApp(c));
+            m[1].onAuthStateChanged(auth,function(u){
+              if(!u){ go(); return; }
+              var n=document.getElementById('name'), e=document.getElementById('email');
+              if(n && !n.value) n.value=u.displayName||''; if(e && !e.value) e.value=u.email||'';
+              document.documentElement.classList.remove('gate');
+            });
+          }).catch(go);
+      }
+    }
   </script>
 </body>
 </html>

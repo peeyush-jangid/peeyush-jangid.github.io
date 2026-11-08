@@ -706,15 +706,11 @@
       </div>
     </div>
   </div>
+  <script src="firebase-config.js"></script>
   <script>
   (function(){
     // ===== Firebase settings: paste yours from Firebase console > Project settings > Your apps =====
-    var FIREBASE_CONFIG = {
-      apiKey: 'YOUR_API_KEY',
-      authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
-      projectId: 'YOUR_PROJECT_ID',
-      appId: 'YOUR_APP_ID'
-    };
+    var FIREBASE_CONFIG = window.FIREBASE_CONFIG || { apiKey:'YOUR_API_KEY', authDomain:'', projectId:'', appId:'' };
     var configured = FIREBASE_CONFIG.apiKey.indexOf('YOUR_') !== 0; window.PORTFOLIO_AUTH_CONFIGURED = configured;
     var V = '10.14.1', fb = null;
     var $ = function(id){ return document.getElementById(id); };
@@ -895,6 +891,7 @@
     new MutationObserver(sync).observe(document.getElementById('auth-forms'),{attributes:true,attributeFilter:['style']});
     document.getElementById('hp-apply').addEventListener('click',function(){ document.getElementById('hire-open').click(); });
     sync();
+    if(/[?&]apply=1/.test(location.search)){ history.replaceState(null,'',location.pathname); setTimeout(function(){ go('up'); },900); }
     document.getElementById('hp-up').addEventListener('click',function(){ go('up'); });
     document.getElementById('hp-in').addEventListener('click',function(){ go('in'); });
     // Gate: every "apply" button/link needs an account + sign in first
