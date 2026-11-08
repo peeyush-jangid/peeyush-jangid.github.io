@@ -479,7 +479,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     ev.preventDefault();
     var ph=normPhone($('pph').value); if(!ph){$('perr').textContent='Enter a valid 10-digit mobile number.';return}
     $('perr').textContent='';$('psub').disabled=true;
-    saveProfile({phone:ph}).catch(function(){$('perr').textContent='Could not save. Please try again.'}).then(function(){$('psub').disabled=false});
+    saveProfile({phone:ph}).catch(function(x){if(window.console)console.error('saveProfile failed',x);$('perr').textContent='Could not save ('+((x&&x.code)||(x&&x.message)||'unknown error')+'). Please try again.'}).then(function(){$('psub').disabled=false});
   });
   $('pout').addEventListener('click',function(){API.out()});
   /* photo: crop to a square, shrink to 256px, store in the profile */
