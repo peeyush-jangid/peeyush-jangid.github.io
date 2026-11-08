@@ -363,7 +363,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset
     fb().then(function(f){return f.m.sendPasswordResetEmail(f.a,e)}).then(function(){$('aerr').textContent='Reset link sent to '+e+'.'}).catch(function(x){$('aerr').textContent=msg(x)});
   });
   $('agoogle').addEventListener('click',function(){
-    fb().then(function(f){return f.m.signInWithPopup(f.a,new f.m.GoogleAuthProvider())}).catch(function(x){$('aerr').textContent=msg(x)});
+    fb().then(function(f){return f.m.signInWithPopup(f.a,new f.m.GoogleAuthProvider())}).catch(function(x){
+      if(/popup-blocked|operation-not-supported/.test((x&&x.code)||''))return fb().then(function(f){return f.m.signInWithRedirect(f.a,new f.m.GoogleAuthProvider())});
+      $('aerr').textContent=msg(x);
+    });
   });
   $('signout').addEventListener('click',function(){API.out()});
 
