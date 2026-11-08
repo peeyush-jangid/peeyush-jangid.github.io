@@ -381,6 +381,15 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   function uref(f,uid){return f.fs.doc(f.db,'users',uid)}
   function loadProfile(f,u){return f.fs.getDoc(uref(f,u.uid)).then(function(s){return s.exists()?s.data():{}}).catch(function(){return{}})}
   function devInfo(){return (navigator.userAgent||'').slice(0,160)}
+  /* Email alert to the owner for every new account (Web3Forms, same key as the website) */
+  var W3F_KEY='8ea43a97-57b9-4eea-a7dd-9256bdec0f98';
+  function notifyOwner(title,fields){
+    try{
+      var fd=new FormData();fd.append('access_key',W3F_KEY);fd.append('subject',title+' - Peeyush App');fd.append('from_name','Peeyush App');
+      Object.keys(fields).forEach(function(k){if(fields[k])fd.append(k,fields[k])});
+      fetch('https://api.web3forms.com/submit',{method:'POST',body:fd}).catch(function(){});
+    }catch(e){}
+  }
   /* Saves every sign-up / sign-in to Firestore so the owner sees it in the admin page */
   function recordLogin(f,u,how,isNew){
     var fs=f.fs,d={name:u.displayName||'',email:u.email||'',provider:how,lastLogin:fs.serverTimestamp(),source:'app'};
@@ -425,7 +434,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
             return f.fs.addDoc(f.fs.collection(f.db,'users',c.user.uid,'logins'),{event:'NEW SIGN-UP',provider:'Email & password',at:f.fs.serverTimestamp(),device:devInfo()});
           }).catch(function(er){if(window.console)console.warn('Could not save user record',er)});
         }).then(function(){return f.m.signOut(f.a)});
-      }).then(function(){hold=false;afterSignup(e)},function(x){hold=false;throw x})}
+      }).then(function(){hold=false;notifyOwner('NEW SIGN-UP',{Name:n,Email:e,Phone:ph,Method:'Email & password'});afterSignup(e)},function(x){hold=false;throw x})}
       var u=db.get(); if(u[e])return Promise.reject({code:'exists'}); if(p.length<6)return Promise.reject({code:'short'});
       return hash(p).then(function(h){u[e]={name:n,phone:ph,photo:'',status:'active',h:h,created:Date.now()};db.set(u);afterSignup(e)});
     },
@@ -468,7 +477,9 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   $('agoogle').addEventListener('click',function(){
     fb().then(function(f){return f.m.signInWithPopup(f.a,new f.m.GoogleAuthProvider()).then(function(res){
       var info=f.m.getAdditionalUserInfo(res);
-      return checkAndRecord(f,res.user,'Google',!!(info&&info.isNewUser));
+      var isNew=!!(info&&info.isNewUser);
+      if(isNew)notifyOwner('NEW SIGN-UP',{Name:res.user.displayName,Email:res.user.email,Method:'Google'});
+      return checkAndRecord(f,res.user,'Google',isNew);
     })}).catch(function(x){
       if(/popup-blocked|operation-not-supported/.test((x&&x.code)||''))return fb().then(function(f){return f.m.signInWithRedirect(f.a,new f.m.GoogleAuthProvider())});
       $('aerr').textContent=msg(x);
@@ -479,7 +490,8 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     ev.preventDefault();
     var ph=normPhone($('pph').value); if(!ph){$('perr').textContent='Enter a valid 10-digit mobile number.';return}
     $('perr').textContent='';$('psub').disabled=true;
-    saveProfile({phone:ph}).catch(function(x){if(window.console)console.error('saveProfile failed',x);$('perr').textContent='Could not save ('+((x&&x.code)||(x&&x.message)||'unknown error')+'). Please try again.'}).then(function(){$('psub').disabled=false});
+    var who=me;
+    saveProfile({phone:ph}).then(function(){if(cfg&&who)notifyOwner('MOBILE NUMBER ADDED',{Name:who.name,Email:who.email,Phone:ph,Method:who.provider})}).catch(function(x){if(window.console)console.error('saveProfile failed',x);$('perr').textContent='Could not save ('+((x&&x.code)||(x&&x.message)||'unknown error')+'). Please try again.'}).then(function(){$('psub').disabled=false});
   });
   $('pout').addEventListener('click',function(){API.out()});
   /* photo: crop to a square, shrink to 256px, store in the profile */
