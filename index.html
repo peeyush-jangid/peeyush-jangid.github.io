@@ -860,10 +860,10 @@
   <aside class="hp-popup" id="hp-popup" role="complementary" aria-label="Hiring and job offers" aria-hidden="true">
     <section class="hp-col" aria-labelledby="hp-title">
       <h2 id="hp-title">Looking for a job?</h2>
-      <p id="hp-sub">Create an account, sign in and submit your application.</p>
+      <p id="hp-sub">Register first, then apply with your email and password.</p>
       <div class="hp-actions">
-        <button class="hp-btn hp-btn-primary" id="hp-up" type="button">Sign up</button>
-        <button class="hp-btn hp-btn-ghost" id="hp-in" type="button">Sign in</button>
+        <button class="hp-btn hp-btn-primary" id="hp-up" type="button">Register</button>
+        <button class="hp-btn hp-btn-ghost" id="hp-in" type="button">Apply</button>
         <button class="hp-btn hp-btn-primary" id="hp-apply" type="button" style="display:none">Apply now</button>
       </div>
     </section>
@@ -898,7 +898,7 @@
       document.getElementById('hp-in').style.display = si?'none':'';
       document.getElementById('hp-apply').style.display = si?'':'none';
       document.getElementById('hp-title').textContent = si ? 'You are signed in' : 'Looking for a job?';
-      document.getElementById('hp-sub').textContent = si ? 'Continue to the job application form.' : 'Create an account, sign in and submit your application.';
+      document.getElementById('hp-sub').textContent = si ? 'Continue to the job application form.' : 'Register first, then apply with your email and password.';
     }
     new MutationObserver(sync).observe(document.getElementById('auth-forms'),{attributes:true,attributeFilter:['style']});
     document.getElementById('hp-apply').addEventListener('click',function(){ document.getElementById('hire-open').click(); });
