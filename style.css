@@ -205,3 +205,21 @@ a.open-work{display:inline-flex;margin-top:24px;font-size:11px;letter-spacing:.2
 
 .otw-cv{display:inline-block;margin:0 0 6px;font-size:10px;letter-spacing:1.2px;font-weight:700;color:var(--gold2);border-bottom:1px solid var(--line);padding-bottom:3px}
 .otw-box input[type=file],.form-card input[type=file]{padding:10px;cursor:pointer}
+
+/* ===== Hiring popup ===== */
+.hp-popup{position:fixed;right:23px;bottom:90px;z-index:55;width:min(330px,calc(100vw - 32px));background:linear-gradient(145deg,#151720,#0e1016);border:1px solid rgba(214,179,106,.45);box-shadow:0 18px 55px rgba(0,0,0,.6);padding:18px 20px;opacity:0;transform:translateY(24px);pointer-events:none;transition:opacity .35s ease,transform .35s ease}
+.hp-popup.show{opacity:1;transform:none;pointer-events:auto}
+.hp-head{display:grid;gap:8px;cursor:pointer;padding-right:30px}
+.hp-head:focus-visible,.hp-x:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.hp-badge{display:flex;align-items:center;gap:8px;font-size:9px;letter-spacing:2px;font-weight:700;color:#e3c27e}
+.hp-badge i{width:7px;height:7px;border-radius:50%;background:#e3c27e;box-shadow:0 0 0 4px rgba(227,194,126,.15),0 0 12px rgba(227,194,126,.6)}
+.hp-head strong{font:700 16px/1.35 var(--display);color:var(--ink)}
+.hp-hint{font-size:11px;color:var(--gold2);border-bottom:1px solid var(--line);justify-self:start;padding-bottom:3px}
+.hp-x{position:absolute;right:10px;top:10px;width:30px;height:30px;background:none;border:1px solid var(--line);color:var(--gold2);cursor:pointer;font-size:12px}
+.hp-actions{display:none;gap:10px;margin-top:16px}
+.hp-popup.expanded .hp-actions{display:flex}
+.hp-popup.expanded .hp-hint{display:none}
+.hp-actions .btn{flex:1;border:0;cursor:pointer;padding:14px 12px}
+.hp-actions .btn-ghost{border:1px solid rgba(255,255,255,.22);background:none}
+@media(max-width:560px){.hp-popup{right:16px;bottom:84px}}
+@media(prefers-reduced-motion:reduce){.hp-popup{transition:none}}

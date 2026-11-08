@@ -244,7 +244,7 @@
           <p>I am Peeyush Kumar Jangid, a motivated and detail-oriented HVAC Project Engineer from Jaipur with hands-on experience in site supervision, billing, pre-commissioning, client coordination, and HVAC drafting.</p>
           <p>Skilled in AutoCAD 2D, Advanced Excel, and project coordination, I am passionate about delivering quality work, solving problems, and continuously improving my professional skills.</p>
           <div class="about-tags"><span>Site Supervision</span><span>Billing</span><span>Pre-Commissioning</span><span>Client Coordination</span><span>HVAC Drafting</span></div>
-          <a class="details-status open-work" id="open-to-work-link" href="contact.html" target="_blank" rel="noopener" aria-label="Open to work, send a job offer in new tab"><i></i> OPEN TO WORK · SEND A JOB OFFER <span>↗</span></a> <a class="details-status open-work" href="hiring.html" style="margin-left:22px;color:#e3c27e"><i style="background:#e3c27e"></i> HIRING · APPLY FOR A JOB <span>↗</span></a>
+          <a class="details-status open-work" id="open-to-work-link" href="contact.html" target="_blank" rel="noopener" aria-label="Open to work, send a job offer in new tab"><i></i> OPEN TO WORK · SEND A JOB OFFER <span>↗</span></a> <a class="details-status open-work" href="#" id="hp-reopen" style="margin-left:22px;color:#e3c27e"><i style="background:#e3c27e"></i> HIRING · REGISTER &amp; APPLY <span>↗</span></a>
         </div>
       </div>
     </section>
@@ -443,7 +443,7 @@
 
   <div class="otw-fabs">
     <button class="otw-fab" id="otw-open" type="button" aria-haspopup="dialog"><i></i> Open to work · Send job offer</button>
-    <button class="otw-fab otw-fab-gold" id="hire-open" type="button" aria-haspopup="dialog"><i></i> Hiring · Apply for a job</button>
+    <button class="otw-fab otw-fab-gold" id="hire-open" type="button" style="display:none" aria-haspopup="dialog"><i></i> Hiring · Apply for a job</button>
   </div>
   <div class="otw-modal" id="otw-modal" role="dialog" aria-modal="true" aria-labelledby="otw-modal-t" aria-hidden="true">
     <div class="otw-box">
@@ -833,5 +833,40 @@
     if(configured) load().catch(function(){});
   })();
   </script>
+
+  <!-- ===== HIRING POPUP ===== -->
+  <div class="hp-popup" id="hp-popup" role="dialog" aria-labelledby="hp-title" aria-hidden="true">
+    <button class="hp-x" id="hp-x" type="button" aria-label="Close">✕</button>
+    <div class="hp-head" id="hp-head" tabindex="0" role="button" aria-expanded="false">
+      <span class="hp-badge"><i></i> HIRING</span>
+      <strong id="hp-title">We are hiring. Looking for a job?</strong>
+      <small class="hp-hint">Click here to Register &amp; Apply</small>
+    </div>
+    <div class="hp-actions" id="hp-actions">
+      <button class="btn btn-primary" id="hp-register" type="button">Register <span>↗</span></button>
+      <button class="btn btn-ghost" id="hp-apply" type="button">Apply <span>↗</span></button>
+    </div>
+  </div>
+  <script>
+  (function(){
+    var pop=document.getElementById('hp-popup'), head=document.getElementById('hp-head');
+    function show(){ pop.classList.add('show'); pop.setAttribute('aria-hidden','false'); }
+    function hide(){ pop.classList.remove('show','expanded'); pop.setAttribute('aria-hidden','true'); head.setAttribute('aria-expanded','false'); }
+    function expand(){ pop.classList.add('expanded'); head.setAttribute('aria-expanded','true'); }
+    setTimeout(show,1500);
+    head.addEventListener('click',expand);
+    head.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); expand(); } });
+    document.getElementById('hp-x').addEventListener('click',hide);
+    var re=document.getElementById('hp-reopen');
+    if(re) re.addEventListener('click',function(e){ e.preventDefault(); show(); expand(); });
+    document.getElementById('hp-apply').addEventListener('click',function(){ hide(); document.getElementById('hire-open').click(); });
+    document.getElementById('hp-register').addEventListener('click',function(){
+      hide();
+      var a=document.querySelector('[data-auth-open]'); if(a) a.click();
+      var t=document.getElementById('tab-up'); if(t) t.click();
+    });
+  })();
+  </script>
+  <!-- ===== END HIRING POPUP ===== -->
 </body>
 </html>
