@@ -1,8 +1,8 @@
-// ===== Firebase settings (ek hi jagah, index.html aur hiring.html dono yahi use karte hain) =====
-// Firebase console > Project settings > Your apps > Web app se values copy karke yahan paste karein.
+// Optional: paste your Firebase web config here to use real accounts (same project as your website).
+// Leave it empty and accounts are saved on each visitor's device only.
 window.FIREBASE_CONFIG = {
-  apiKey: 'AIzaSyAeXQML9tZet3ZKIkKijA502Jr_3afaNh0',
-  authDomain: 'peeyush-55352.firebaseapp.com',
-  projectId: 'peeyush-55352',
-  appId: '1:261110868340:web:d493aaae525f573d38e421'
+  // apiKey: "",
+  // authDomain: "",
+  // projectId: "",
+  // appId: ""
 };
