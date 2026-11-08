@@ -1,22 +1,37 @@
 {
-  "id": "/app/",
-  "name": "Peeyush Kumar Jangid – HVAC Project Engineer",
-  "short_name": "Peeyush",
-  "description": "HVAC Project Engineer in Jaipur: site supervision, AutoCAD 2D and project coordination.",
-  "start_url": "./index.html#home",
+  "name": "Owner Admin | Peeyush",
+  "short_name": "Owner Admin",
+  "description": "Private owner admin for Peeyush Portfolio",
+  "start_url": "admin.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#071426",
+  "background_color": "#07070a",
   "theme_color": "#071426",
-  "lang": "en-IN",
   "icons": [
-    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
-    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
-    {"src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
-    {"src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}
-  ],
-  "shortcuts": [
-    {"name": "Send job offer", "url": "./index.html#contact", "icons": [{"src": "icons/icon-192.png", "sizes": "192x192"}]}
+    {
+      "src": "admin-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "admin-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "admin-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
   ]
 }
