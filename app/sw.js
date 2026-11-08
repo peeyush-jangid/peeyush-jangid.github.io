@@ -1,4 +1,4 @@
-const V='peeyush-app-v1';
+const V='peeyush-app-v2';
 const SHELL=['./','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/icon.svg',
   '../profile-photo.jpg','../geetanjali-hospital.jpg','../jecrc-university.jpg'];
 self.addEventListener('install',e=>{

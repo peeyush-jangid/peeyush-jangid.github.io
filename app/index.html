@@ -15,87 +15,127 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Peeyush">
 <style>
-:root{--bg:#071426;--panel:#0d2038;--line:#1b3558;--ink:#eef3fa;--mute:#93a6c0;--red:#ff4558;--red2:#e5132b;--wa:#25d366;
---top:calc(56px + env(safe-area-inset-top,0px));--bot:calc(64px + env(safe-area-inset-bottom,0px))}
+:root{--bg:#071426;--panel:#0c1e36;--panel2:#10284a;--line:#1a3355;--ink:#eef3fa;--mute:#8fa3bf;--red:#ff4558;--red2:#e5132b;--wa:#25d366;
+--top:calc(58px + env(safe-area-inset-top,0px));--bot:calc(66px + env(safe-area-inset-bottom,0px))}
 *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+html,body{min-height:100%;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 a{color:inherit;text-decoration:none}
-header{position:fixed;inset:0 0 auto;height:var(--top);padding:env(safe-area-inset-top,0px) 16px 0;display:flex;align-items:center;gap:10px;background:rgba(7,20,38,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:5}
+h1{font-size:1.7rem;line-height:1.15;font-weight:800;letter-spacing:-.4px}
+h2{font-size:1.1rem;margin:28px 0 12px;font-weight:700;letter-spacing:-.1px}
+h3{font-size:1rem;font-weight:650}
+p{color:var(--mute)}
+svg.i{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+/* gating */
+body.boot header,body.boot main,body.boot nav,body.boot #auth{display:none}
+body.locked header,body.locked main,body.locked nav{display:none}
+#auth{display:none;min-height:100vh;padding:calc(28px + env(safe-area-inset-top,0px)) 20px 32px;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(600px 400px at 85% -5%,rgba(255,69,88,.22),transparent 60%),radial-gradient(500px 400px at 0% 100%,rgba(30,90,170,.28),transparent 60%),var(--bg)}
+body.locked #auth{display:flex}
+.acard{width:100%;max-width:420px}
+.brand{text-align:center;margin-bottom:22px}
+.brand img{width:76px;height:76px;border-radius:22px;box-shadow:0 10px 40px rgba(255,69,88,.3)}
+.brand h1{margin-top:14px}.brand p{margin-top:4px}
+#auth form{background:rgba(12,30,54,.85);border:1px solid var(--line);border-radius:20px;padding:6px 18px 20px}
+.err{color:#ff9aa5;font-size:.88rem;min-height:1.3em;margin-top:10px}
+.lnk{background:none;border:0;color:var(--mute);font:inherit;font-size:.88rem;margin-top:12px;text-decoration:underline;cursor:pointer;width:100%}
+.or{display:flex;align-items:center;gap:10px;color:var(--mute);font-size:.82rem;margin:14px 0}.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+/* shell */
+header{position:fixed;inset:0 0 auto;height:var(--top);padding:env(safe-area-inset-top,0px) 16px 0;display:flex;align-items:center;gap:10px;background:rgba(7,20,38,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);z-index:5}
 header img{width:32px;height:32px;border-radius:9px}
-header b{font-size:1rem;letter-spacing:.2px}
-header span{color:var(--mute);font-size:.8rem;margin-left:auto}
+header b{font-size:1rem}
+header a{margin-left:auto;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red2));display:grid;place-items:center;font-weight:700;font-size:.9rem}
 main{padding:calc(var(--top) + 18px) 18px calc(var(--bot) + 24px);max-width:640px;margin:auto}
 .view{display:none}.view.on{display:block;animation:in .22s ease-out}
 @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.view.on{animation:none}}
-h1{font-size:2rem;line-height:1.1;font-weight:800;letter-spacing:-.5px}
-h2{font-size:1.25rem;margin:26px 0 10px;font-weight:700}
-h3{font-size:1rem;font-weight:650}
-p{color:var(--mute)}
-.hero{display:flex;gap:16px;align-items:center;margin-bottom:14px}
-.hero img{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--red);flex:none;background:var(--panel)}
-.badge{display:inline-flex;align-items:center;gap:7px;font-size:.82rem;color:#bff5d3;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.35);padding:4px 11px;border-radius:99px;margin-top:8px}
+.hero{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:22px;padding:22px 18px;background:radial-gradient(380px 220px at 100% 0,rgba(255,69,88,.22),transparent 65%),linear-gradient(160deg,var(--panel2),var(--panel))}
+.hero .top{display:flex;gap:16px;align-items:center}
+.hero img{width:92px;height:92px;border-radius:50%;object-fit:cover;border:3px solid var(--red);flex:none;background:var(--panel)}
+.badge{display:inline-flex;align-items:center;gap:7px;font-size:.8rem;color:#bff5d3;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.35);padding:4px 11px;border-radius:99px;margin-top:10px}
 .badge i{width:7px;height:7px;border-radius:50%;background:var(--wa)}
-.btns{display:grid;gap:10px;margin:18px 0}
+.hero>p{margin-top:16px}
+.btns{display:grid;gap:10px;margin:16px 0}
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;border-radius:14px;font-weight:650;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:1rem;font-family:inherit;width:100%;cursor:pointer}
 .btn.pri{background:linear-gradient(135deg,var(--red),var(--red2));border:0}
 .btn.wa{background:var(--wa);color:#052b14;border:0}
 .btn:active{transform:scale(.98)}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
-.stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 8px;text-align:center}
-.stat b{display:block;font-size:1.05rem}.stat small{color:var(--mute);font-size:.75rem}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 8px;text-align:center}
+.stat b{display:block;font-size:1.02rem}.stat small{color:var(--mute);font-size:.74rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
 .card small{color:var(--mute);display:block}
 .card ul{margin:10px 0 0 18px;color:var(--mute)}.card li{margin:3px 0}
-.tl{border-left:2px solid var(--red);padding-left:14px;margin-left:4px}
-.proj{padding:0;overflow:hidden}.proj img{width:100%;height:150px;object-fit:cover;display:block;background:#10294a}
+.tl{position:relative;padding-left:18px}.tl::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:3px;background:linear-gradient(var(--red),var(--red2))}
+.proj{padding:0;overflow:hidden}.proj img{width:100%;height:150px;object-fit:cover;display:block;background:var(--panel2)}
 .proj div{padding:14px 16px 16px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.chips span{font-size:.85rem;padding:6px 12px;border-radius:99px;background:var(--panel);border:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span,.chips button{font:inherit;font-size:.85rem;padding:7px 13px;border-radius:99px;background:var(--panel);border:1px solid var(--line);color:var(--ink)}
+.chips button{cursor:pointer;color:var(--mute)}.chips button.on{background:linear-gradient(135deg,var(--red),var(--red2));border-color:transparent;color:#fff}
 .bar{margin:14px 0}.bar div{display:flex;justify-content:space-between;font-size:.92rem;margin-bottom:6px}
 .bar i{display:block;height:8px;border-radius:9px;background:var(--line);overflow:hidden}
 .bar i::after{content:"";display:block;height:100%;width:var(--v);background:linear-gradient(90deg,var(--red),var(--red2));border-radius:9px}
 .row{display:flex;align-items:center;gap:14px;padding:14px 16px}
-.row em{font-style:normal;font-size:1.3rem;width:34px;text-align:center}
+.row .ic{width:42px;height:42px;border-radius:12px;background:var(--panel2);display:grid;place-items:center;color:var(--red);font-weight:800;flex:none}
 .row small{display:block;color:var(--mute);font-size:.82rem}
-nav{position:fixed;inset:auto 0 0;height:var(--bot);padding-bottom:env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(4,1fr);background:rgba(7,20,38,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);z-index:5}
-nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--mute);font-size:.72rem}
+.row .go{margin-left:auto;color:var(--mute)}
+.empty{text-align:center;padding:30px 16px;color:var(--mute);border:1px dashed var(--line);border-radius:18px}
+.file{display:flex;gap:12px;align-items:center}.file .ic{width:42px;height:42px;border-radius:12px;background:var(--panel2);display:grid;place-items:center;color:var(--red);font-size:.72rem;font-weight:800;flex:none}
+nav{position:fixed;inset:auto 0 0;height:var(--bot);padding-bottom:env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(5,1fr);background:rgba(7,20,38,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);z-index:5}
+nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--mute);font-size:.7rem}
 nav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 nav a.on{color:var(--red)}
-a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
-#install{display:none}
-nav{grid-template-columns:repeat(5,1fr)}
 .seg{display:flex;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px;margin:14px 0}
-.seg button{flex:1;min-height:40px;border:0;border-radius:10px;background:none;color:var(--mute);font:600 .88rem inherit;font-family:inherit;cursor:pointer}
+.seg button{flex:1;min-height:40px;border:0;border-radius:10px;background:none;color:var(--mute);font-weight:600;font-size:.88rem;font-family:inherit;cursor:pointer}
 .seg button.on{background:linear-gradient(135deg,var(--red),var(--red2));color:#fff}
 .pane{display:none}.pane.on{display:block}
-iframe{width:100%;height:calc(100vh - var(--top) - var(--bot) - 190px);min-height:380px;border:1px solid var(--line);border-radius:14px;background:#fff}
 label{display:block;font-size:.85rem;color:var(--mute);margin:12px 0 5px}
-input,select,textarea{width:100%;min-height:46px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit}
+input,select,textarea{width:100%;min-height:46px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
 textarea{min-height:110px;resize:vertical}
 input:focus,select:focus,textarea:focus{outline:2px solid var(--red);border-color:transparent}
 .note{font-size:.82rem;color:var(--mute);margin-top:12px}
-
+a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+#install{display:none}
 </style>
+<script src="firebase-config.js"></script>
 </head>
-<body>
-<header><img src="icons/icon-192.png" alt="" width="32" height="32"><b>Peeyush Jangid</b><span>HVAC · Jaipur</span></header>
+<body class="boot">
+
+<!-- Sign up / Sign in -->
+<div id="auth">
+  <div class="acard">
+    <div class="brand"><img src="icons/icon-192.png" alt="" width="76" height="76"><h1>Peeyush Kumar Jangid</h1><p>HVAC Project Engineer · Jaipur</p></div>
+    <div class="seg" id="aseg"><button class="on" data-t="up" type="button">Create account</button><button data-t="in" type="button">Sign in</button></div>
+    <form id="af" novalidate>
+      <div id="nameRow"><label for="an">Full name</label><input id="an" autocomplete="name"></div>
+      <label for="ae">Email</label><input id="ae" type="email" autocomplete="email" inputmode="email">
+      <label for="ap">Password (min 6 characters)</label><input id="ap" type="password" autocomplete="new-password">
+      <p class="err" id="aerr" role="alert"></p>
+      <button class="btn pri" id="asub" type="submit">Create account</button>
+      <div id="gwrap" style="display:none"><div class="or">or</div><button class="btn" id="agoogle" type="button">Continue with Google</button></div>
+      <button class="lnk" id="aforgot" type="button" style="display:none">Forgot password?</button>
+    </form>
+    <p class="note" style="text-align:center" id="amode"></p>
+  </div>
+</div>
+
+<header><img src="icons/icon-192.png" alt="" width="32" height="32"><b>Peeyush Jangid</b><a href="#contact" id="avatar" aria-label="Account">P</a></header>
 
 <main>
 <section class="view" id="v-home">
   <div class="hero">
-    <img src="../profile-photo.jpg" alt="Peeyush Kumar Jangid" onerror="this.src='icons/icon-192.png'">
-    <div><h1>Peeyush Kumar Jangid</h1><p>HVAC Project Engineer · Site Supervision</p></div>
+    <div class="top">
+      <img src="../profile-photo.jpg" alt="Peeyush Kumar Jangid" onerror="this.src='icons/icon-192.png'">
+      <div><h1>Peeyush Kumar Jangid</h1><p>HVAC Project Engineer</p></div>
+    </div>
+    <span class="badge"><i></i>Open to work</span>
+    <p>Hands-on HVAC project experience across site supervision, installation coordination, technical drawings and project documentation.</p>
   </div>
-  <span class="badge"><i></i>Open to work</span>
-  <p style="margin-top:14px">Hands-on HVAC project experience across site supervision, installation coordination, technical drawings and project documentation.</p>
   <div class="btns">
     <a class="btn pri" href="../Peeyush_Kumar_Jangid_Resume.pdf">Download CV</a>
     <a class="btn wa" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20found%20your%20app.">Chat on WhatsApp</a>
     <button class="btn" id="install" type="button">Install this app</button>
   </div>
   <div class="stats">
-    <div class="stat"><b>10 mo</b><small>Experience</small></div>
+    <div class="stat"><b>10 months</b><small>Experience</small></div>
     <div class="stat"><b>AutoCAD</b><small>2D drawing</small></div>
     <div class="stat"><b>VRV · AHU</b><small>Chilled water</small></div>
   </div>
@@ -143,10 +183,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--red);border-colo
 
 <section class="view" id="v-files">
   <h1>Files</h1>
-  <p>Notes, drawings, interview questions and certificates added by Peeyush.</p>
   <div class="seg" data-seg="files"><button class="on" data-t="notes" type="button">Notes &amp; drawings</button><button data-t="certs" type="button">Certificates</button></div>
-  <iframe id="fr" title="Files from the website" loading="lazy"></iframe>
-  <div class="btns"><a class="btn" id="frOpen" href="../#work-files">Open in browser</a></div>
+  <div class="pane on" id="p-notes">
+    <div class="chips" id="ftypes" style="margin-bottom:14px"></div>
+    <div id="notes"></div>
+  </div>
+  <div class="pane" id="p-certs"><div id="certs"></div></div>
 </section>
 
 <section class="view" id="v-contact">
@@ -154,12 +196,14 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--red);border-colo
   <div class="seg" data-seg="contact"><button class="on" data-t="reach" type="button">Reach me</button><button data-t="offer" type="button">Job offer</button><button data-t="apply" type="button">Apply</button></div>
 
   <div class="pane on" id="p-reach">
-    <a class="card row" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20would%20like%20to%20discuss%20an%20opportunity."><em>💬</em><div><b>WhatsApp</b><small>+91 99285 79369</small></div></a>
-    <a class="card row" href="tel:+919928579369"><em>📞</em><div><b>Call</b><small>+91 99285 79369</small></div></a>
-    <a class="card row" href="mailto:peeyush.jangid@outlook.com?subject=Job%20opportunity"><em>✉️</em><div><b>Email</b><small>peeyush.jangid@outlook.com</small></div></a>
-    <a class="card row" href="https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/"><em>🔗</em><div><b>LinkedIn</b><small>Peeyush Kumar Jangid</small></div></a>
-    <a class="card row" href="../"><em>🔐</em><div><b>Sign in / Create account</b><small>On the full website (Google or email)</small></div></a>
+    <a class="card row" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20would%20like%20to%20discuss%20an%20opportunity."><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M21 12a8 8 0 01-11.6 7.1L3 21l1.9-6.4A8 8 0 1121 12z"/></svg></span><div><b>WhatsApp</b><small>+91 99285 79369</small></div></a>
+    <a class="card row" href="tel:+919928579369"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></span><div><b>Call</b><small>+91 99285 79369</small></div></a>
+    <a class="card row" href="mailto:peeyush.jangid@outlook.com?subject=Job%20opportunity"><span class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><div><b>Email</b><small>peeyush.jangid@outlook.com</small></div></a>
+    <a class="card row" href="https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/"><span class="ic">in</span><div><b>LinkedIn</b><small>Peeyush Kumar Jangid</small></div></a>
     <div class="btns"><a class="btn pri" href="../Peeyush_Kumar_Jangid_Resume.pdf">Download CV</a></div>
+    <h2>Your account</h2>
+    <div class="card row"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0"/></svg></span><div><b id="accName">Guest</b><small id="accMail"></small></div></div>
+    <button class="btn" id="signout" type="button">Sign out</button>
   </div>
 
   <div class="pane" id="p-offer">
@@ -181,64 +225,166 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--red);border-colo
   <a href="#career"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V4h6v3"/></svg>Career</a>
   <a href="#skills"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Skills</a>
   <a href="#files"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>Files</a>
-  <a href="#contact"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 01-11.6 7.1L3 21l1.9-6.4A8 8 0 1121 12z"/></svg>Contact</a>
+  <a href="#contact"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0"/></svg>Contact</a>
 </nav>
 
 <script>
 (function(){
+  var $=function(i){return document.getElementById(i)};
+  /* ---------- routing ---------- */
   var tabs=['home','career','skills','files','contact'];
   function show(){
     var h=(location.hash||'#home').slice(1); if(tabs.indexOf(h)<0)h='home';
-    tabs.forEach(function(t){document.getElementById('v-'+t).classList.toggle('on',t===h)});
+    tabs.forEach(function(t){$('v-'+t).classList.toggle('on',t===h)});
     [].forEach.call(document.querySelectorAll('nav a'),function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+h)});
-    window.scrollTo(0,0);
+    scrollTo(0,0);
   }
   addEventListener('hashchange',show); show();
 
+  /* ---------- segmented tabs ---------- */
+  [].forEach.call(document.querySelectorAll('[data-seg]'),function(box){
+    box.addEventListener('click',function(e){
+      var t=e.target.dataset&&e.target.dataset.t; if(!t)return;
+      [].forEach.call(box.children,function(b){b.classList.toggle('on',b.dataset.t===t)});
+      [].forEach.call(box.parentNode.querySelectorAll(':scope > .pane'),function(p){p.classList.toggle('on',p.id==='p-'+t)});
+    });
+  });
 
-  /* segmented tabs */
-  var frSrc={notes:'../#work-files',certs:'../#certificates'};
-  function seg(g,t){
-    var box=document.querySelector('[data-seg="'+g+'"]');
-    [].forEach.call(box.children,function(b){b.classList.toggle('on',b.dataset.t===t)});
-    if(g==='contact'){['reach','offer','apply'].forEach(function(n){document.getElementById('p-'+n).classList.toggle('on',n===t)})}
-    else{var f=document.getElementById('fr');f.src=frSrc[t];document.getElementById('frOpen').href=frSrc[t]}
+  /* ---------- files (edit files.json to add items) ---------- */
+  var FT={xls:'Excel',xlsx:'Excel',doc:'Word',docx:'Word',ppt:'PowerPoint',pptx:'PowerPoint',pdf:'PDF',dwg:'AutoCAD',dxf:'AutoCAD'},cur='All',notes=[];
+  function ext(it){if(it.type)return it.type;var m=(it.url||'').split('?')[0].split('.').pop().toLowerCase();return FT[m]||'File'}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function card(it,badge){return '<a class="card file" href="'+esc(it.url)+'" target="_blank" rel="noopener"><span class="ic">'+esc(badge)+'</span><div><b>'+esc(it.title)+'</b>'+(it.note?'<small>'+esc(it.note)+'</small>':'')+'</div></a>'}
+  function drawNotes(){
+    var types=['All'],list=notes.filter(function(n){return cur==='All'||ext(n)===cur});
+    notes.forEach(function(n){var t=ext(n);if(types.indexOf(t)<0)types.push(t)});
+    $('ftypes').innerHTML=types.length>1?types.map(function(t){return '<button type="button" class="'+(t===cur?'on':'')+'" data-t="'+esc(t)+'">'+esc(t)+'</button>'}).join(''):'';
+    $('notes').innerHTML=list.length?list.map(function(n){return card(n,ext(n).slice(0,3).toUpperCase())}).join(''):'<div class="empty">No notes or drawings yet. New files will appear here.</div>';
   }
-  [].forEach.call(document.querySelectorAll('.seg'),function(b){b.addEventListener('click',function(e){var t=e.target.dataset.t;if(t)seg(b.dataset.seg,t)})});
-  addEventListener('hashchange',function(){if(location.hash==='#files'&&!document.getElementById('fr').getAttribute('src'))seg('files','notes')});
-  if(location.hash==='#files')seg('files','notes');
+  $('ftypes').addEventListener('click',function(e){if(e.target.dataset.t){cur=e.target.dataset.t;drawNotes()}});
+  fetch('files.json').then(function(r){return r.json()}).catch(function(){return{}}).then(function(d){
+    notes=d.notes||[]; drawNotes();
+    var c=d.certificates||[];
+    $('certs').innerHTML=c.length?c.map(function(x){return card(x,'CERT')}).join(''):'<div class="empty">No certificates added yet.</div>';
+  });
 
-  /* forms: field = [id,label,type,required,options] */
-  var yes=true,TY=['Full-time','Part-time','Contract','Internship'];
+  /* ---------- job forms ---------- */
+  var yes=1,TY=['Full-time','Part-time','Contract','Internship'];
   var F={
    offer:[['Your name','text',yes],['Your designation','text'],['Company name','text',yes],['Company website / LinkedIn','text'],['Email address','email',yes],['Phone / WhatsApp','tel',yes],['Job role you are offering','text',yes],['Job location','text'],['Employment type','select',0,TY],['Salary / CTC offered','text'],['Interview mode','select',0,['Online (video call)','Phone call','In person']],['Joining timeline','text'],['Best way to contact you','select',0,['WhatsApp','Phone call','Email']],['Job details or message','textarea',yes]],
    apply:[['Your full name','text',yes],['Your email address','email',yes],['Phone / WhatsApp','tel',yes],['Your current city','text',yes],['Job role you are seeking','text',yes],['Work experience','select',0,['Fresher','Less than 1 year','1-2 years','2-5 years','5+ years']],['Employment type','select',0,TY.concat(['Any suitable role'])],['Availability / notice period','text'],['Your CV link (Google Drive / Dropbox)','url',yes],['Skills, qualifications and message','textarea',yes]]
   };
+  var ID={offer:{n:0,e:4},apply:{n:0,e:1}};
   Object.keys(F).forEach(function(k){
-    var f=document.getElementById('f-'+k),h='';
+    var f=$('f-'+k),h='';
     F[k].forEach(function(x,i){
       var id=k+i,r=x[2]?' required':'',l='<label for="'+id+'">'+x[0]+(x[2]?' *':'')+'</label>';
       if(x[1]==='select')h+=l+'<select id="'+id+'"><option value="">Select</option>'+x[3].map(function(o){return '<option>'+o+'</option>'}).join('')+'</select>';
       else if(x[1]==='textarea')h+=l+'<textarea id="'+id+'"'+r+'></textarea>';
       else h+=l+'<input id="'+id+'" type="'+x[1]+'"'+r+'>';
     });
-    h+='<div class="btns"><button class="btn wa" type="button" data-m="wa">Send on WhatsApp</button><button class="btn" type="button" data-m="mail">Send by email</button></div><p class="note">Your message opens in WhatsApp or your email app, ready to send. To attach a CV file, use the CV link field or send it in the chat.</p>';
+    h+='<div class="btns"><button class="btn wa" type="button" data-m="wa">Send on WhatsApp</button><button class="btn" type="button" data-m="mail">Send by email</button></div><p class="note">Your message opens in WhatsApp or your email app, ready to send. To share a CV file, use the CV link field or send it in the chat.</p>';
     f.innerHTML=h;
     f.addEventListener('click',function(e){
       var m=e.target.dataset&&e.target.dataset.m; if(!m)return;
       if(!f.reportValidity())return;
       var t=f.dataset.title,lines=[t+' via Peeyush app',''];
-      F[k].forEach(function(x,i){var v=document.getElementById(k+i).value.trim();if(v)lines.push(x[0]+': '+v)});
+      F[k].forEach(function(x,i){var v=$(k+i).value.trim();if(v)lines.push(x[0]+': '+v)});
       var body=lines.join('\n');
       location.href=m==='wa'?'https://wa.me/919928579369?text='+encodeURIComponent(body):'mailto:peeyush.jangid@outlook.com?subject='+encodeURIComponent(t)+'&body='+encodeURIComponent(body);
     });
   });
 
-  var dp,btn=document.getElementById('install');
+  /* ---------- accounts ---------- */
+  var cfg=window.FIREBASE_CONFIG&&window.FIREBASE_CONFIG.apiKey?window.FIREBASE_CONFIG:null,mode='up',fbp;
+  function setUser(u){
+    document.body.className=u?'':'locked';
+    $('accName').textContent=u?u.name:'Guest'; $('accMail').textContent=u?u.email:'';
+    $('avatar').textContent=u?(u.name||u.email)[0].toUpperCase():'P';
+    if(u)Object.keys(ID).forEach(function(k){var n=$(k+ID[k].n),e=$(k+ID[k].e);if(n&&!n.value)n.value=u.name;if(e&&!e.value)e.value=u.email});
+    if(u)show();
+  }
+  function msg(e){
+    var c=(e&&e.code)||(e&&e.message)||'';
+    if(/email-already|exists/.test(c))return 'This email already has an account. Choose Sign in.';
+    if(/invalid-credential|wrong-password|user-not-found|incorrect/.test(c))return 'Email or password is incorrect.';
+    if(/weak-password|short/.test(c))return 'Use at least 6 characters for the password.';
+    if(/invalid-email|badmail/.test(c))return 'Enter a valid email address.';
+    if(/popup-closed|cancelled/.test(c))return 'Sign-in was cancelled.';
+    if(/network/.test(c))return 'No internet connection. Try again.';
+    if(/too-many/.test(c))return 'Too many attempts. Wait a minute and try again.';
+    return 'Something went wrong. Please try again.';
+  }
+  function hash(s){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)).then(function(b){return [].map.call(new Uint8Array(b),function(x){return x.toString(16).padStart(2,'0')}).join('')})}
+  var db={get:function(){try{return JSON.parse(localStorage.getItem('pj_users')||'{}')}catch(e){return{}}},set:function(u){localStorage.setItem('pj_users',JSON.stringify(u))}};
+  function fb(){
+    if(fbp)return fbp;
+    var b='https://www.gstatic.com/firebasejs/10.12.2/';
+    fbp=Promise.all([import(b+'firebase-app.js'),import(b+'firebase-auth.js')]).then(function(r){var app=r[0].initializeApp(cfg);return{m:r[1],a:r[1].getAuth(app)}});
+    return fbp;
+  }
+  var API={
+    up:function(n,e,p){
+      if(cfg)return fb().then(function(f){return f.m.createUserWithEmailAndPassword(f.a,e,p).then(function(c){return f.m.updateProfile(c.user,{displayName:n}).then(function(){setUser({name:n,email:e})})})});
+      var u=db.get(); if(u[e])return Promise.reject({code:'exists'}); if(p.length<6)return Promise.reject({code:'short'});
+      return hash(p).then(function(h){u[e]={name:n,h:h};db.set(u);localStorage.setItem('pj_sess',e);setUser({name:n,email:e})});
+    },
+    in:function(e,p){
+      if(cfg)return fb().then(function(f){return f.m.signInWithEmailAndPassword(f.a,e,p)});
+      var u=db.get()[e]; if(!u)return Promise.reject({code:'incorrect'});
+      return hash(p).then(function(h){if(h!==u.h)return Promise.reject({code:'incorrect'});localStorage.setItem('pj_sess',e);setUser({name:u.name,email:e})});
+    },
+    out:function(){
+      if(cfg)return fb().then(function(f){return f.m.signOut(f.a)});
+      localStorage.removeItem('pj_sess'); setUser(null); return Promise.resolve();
+    }
+  };
+  function drawMode(){
+    var up=mode==='up';
+    $('nameRow').style.display=up?'block':'none';
+    $('asub').textContent=up?'Create account':'Sign in';
+    $('ap').autocomplete=up?'new-password':'current-password';
+    $('aforgot').style.display=!up&&cfg?'block':'none';
+    $('aerr').textContent='';
+    [].forEach.call($('aseg').children,function(b){b.classList.toggle('on',b.dataset.t===mode)});
+  }
+  $('aseg').addEventListener('click',function(e){if(e.target.dataset.t){mode=e.target.dataset.t;drawMode()}});
+  $('af').addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var n=$('an').value.trim(),e=$('ae').value.trim().toLowerCase(),p=$('ap').value;
+    if(mode==='up'&&!n)return $('aerr').textContent='Enter your full name.';
+    if(!/^\S+@\S+\.\S+$/.test(e))return $('aerr').textContent='Enter a valid email address.';
+    if(p.length<6)return $('aerr').textContent='Use at least 6 characters for the password.';
+    $('aerr').textContent=''; $('asub').disabled=true;
+    (mode==='up'?API.up(n,e,p):API.in(e,p)).catch(function(x){$('aerr').textContent=msg(x)}).then(function(){$('asub').disabled=false});
+  });
+  $('aforgot').addEventListener('click',function(){
+    var e=$('ae').value.trim(); if(!e)return $('aerr').textContent='Enter your email first.';
+    fb().then(function(f){return f.m.sendPasswordResetEmail(f.a,e)}).then(function(){$('aerr').textContent='Reset link sent to '+e+'.'}).catch(function(x){$('aerr').textContent=msg(x)});
+  });
+  $('agoogle').addEventListener('click',function(){
+    fb().then(function(f){return f.m.signInWithPopup(f.a,new f.m.GoogleAuthProvider())}).catch(function(x){
+      if(/popup-blocked|operation-not-supported/.test((x&&x.code)||''))return fb().then(function(f){return f.m.signInWithRedirect(f.a,new f.m.GoogleAuthProvider())});
+      $('aerr').textContent=msg(x);
+    });
+  });
+  $('signout').addEventListener('click',function(){API.out()});
+
+  if(cfg){
+    $('gwrap').style.display='block';
+    fb().then(function(f){f.m.onAuthStateChanged(f.a,function(u){setUser(u?{name:u.displayName||u.email.split('@')[0],email:u.email}:null)})}).catch(function(){setUser(null)});
+  }else{
+    $('amode').textContent='Your account is saved on this device.';
+    var s=localStorage.getItem('pj_sess'),u=s&&db.get()[s];
+    setUser(u?{name:u.name,email:s}:null);
+  }
+  drawMode();
+
+  /* ---------- install + service worker ---------- */
+  var dp,btn=$('install');
   addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;btn.style.display='flex'});
   btn.addEventListener('click',function(){if(!dp)return;dp.prompt();dp.userChoice.then(function(){dp=null;btn.style.display='none'})});
   addEventListener('appinstalled',function(){btn.style.display='none'});
-
   if('serviceWorker' in navigator)addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
 })();
 </script>
