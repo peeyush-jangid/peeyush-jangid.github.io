@@ -108,6 +108,12 @@ body.locked #amenu,body.boot #amenu{display:none!important}
 .mh b{display:block;word-break:break-word}.mh small{color:var(--mute);word-break:break-all}
 .mrow{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:.85rem}
 .hello{margin:2px 2px 12px;font-size:1.15rem;font-weight:700}
+.modal{display:none;position:fixed;inset:0;z-index:40;background:rgba(3,10,20,.72);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;overflow:auto}
+.modal.on{display:flex}
+.mcard{position:relative;width:100%;max-width:400px;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:26px 22px 22px;box-shadow:0 24px 70px rgba(0,0,0,.6)}
+.mcard h2{margin:0 0 4px;font-size:1.25rem}.mcard .msub{margin:0 0 4px;color:var(--mute);font-size:.92rem;line-height:1.45}
+.mclose{position:absolute;top:10px;right:12px;width:36px;height:36px;background:none;border:0;color:var(--mute);font-size:1.7rem;line-height:1;cursor:pointer}
+.wlc{text-align:center}.wlc .wemo{font-size:2.6rem;line-height:1;margin-bottom:10px}.wlc .btn{margin-top:18px}
 .mrow span{color:var(--mute)}.mrow b{text-align:right;font-weight:600}
 </style>
 <script src="firebase-config.js"></script>
@@ -166,7 +172,35 @@ body.locked #amenu,body.boot #amenu{display:none!important}
 
 <header><img src="icons/icon-192.png" alt="" width="32" height="32"><b>Peeyush Jangid</b><button id="avatar" type="button" aria-label="Account" aria-expanded="false">P</button></header>
 <div id="amenu" role="dialog" aria-label="Your account"><div class="mh"><div class="mav" id="mav">P</div><div><b id="mName"></b><small id="mMail"></small></div></div><div id="mRows"></div><input type="file" id="pfile" accept="image/*" hidden><button class="btn" id="pchange" type="button" style="margin-top:12px">Add / change photo</button><button class="btn" id="pwlink" type="button" style="margin-top:10px">Update password</button>
-<form id="pwform" style="display:none;margin-top:6px" novalidate><label for="pwcur">Current password</label><input id="pwcur" type="password" autocomplete="current-password"><label for="pwnew">New password (min 6 characters)</label><input id="pwnew" type="password" autocomplete="new-password"><label for="pwnew2">Confirm new password</label><input id="pwnew2" type="password" autocomplete="new-password"><button class="btn pri" id="pwsave" type="submit" style="margin-top:12px">Save new password</button><p class="err" id="pwmsg" role="alert" style="margin:8px 0 0"></p></form><button class="btn" id="signout2" type="button" style="margin-top:10px">Sign out</button><button class="btn" id="deact" type="button" style="margin-top:10px;color:#ff9aa5">Deactivate account</button></div>
+<button class="btn" id="signout2" type="button" style="margin-top:10px">Sign out</button><button class="btn" id="deact" type="button" style="margin-top:10px;color:#ff9aa5">Deactivate account</button></div>
+
+<!-- Update password popup -->
+<div id="pwmodal" class="modal" role="dialog" aria-modal="true" aria-labelledby="pwtitle">
+  <div class="mcard">
+    <button class="mclose" id="pwclose" type="button" aria-label="Close">&times;</button>
+    <h2 id="pwtitle">Update password</h2>
+    <p class="msub">Enter your current password, then choose a new one.</p>
+    <form id="pwform" novalidate>
+      <label for="pwcur">Current password</label><input id="pwcur" type="password" autocomplete="current-password">
+      <label for="pwnew">New password (min 6 characters)</label><input id="pwnew" type="password" autocomplete="new-password">
+      <label for="pwnew2">Confirm new password</label><input id="pwnew2" type="password" autocomplete="new-password">
+      <button class="btn pri" id="pwsave" type="submit" style="margin-top:14px">Save new password</button>
+      <p class="err" id="pwmsg" role="alert" style="margin:8px 0 0"></p>
+      <button class="lnk" id="pwforgot" type="button">Forgot password?</button>
+    </form>
+  </div>
+</div>
+
+<!-- Welcome popup (shown once after a new account is created) -->
+<div id="wlcmodal" class="modal" role="dialog" aria-modal="true" aria-labelledby="wlcName">
+  <div class="mcard wlc">
+    <div class="wemo" aria-hidden="true">🎉</div>
+    <h2 id="wlcName">Welcome!</h2>
+    <p class="msub" id="wlcTxt"></p>
+    <button class="btn pri" id="wlcok" type="button">Continue</button>
+  </div>
+</div>
+
 
 <main>
 <section class="view" id="v-home">
@@ -389,6 +423,15 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     return{name:u.displayName||u.email.split('@')[0],email:u.email,photo:u.photoURL||'',provider:p==='google.com'?'Google':'Email and password',created:u.metadata&&u.metadata.creationTime,last:u.metadata&&u.metadata.lastSignInTime,verified:u.emailVerified,phoneVerified:!!u.phoneNumber}}
   function gateNeeded(u){return cfg?!u.verified:!u.phone}
   function note(t,ok){$('aerr').textContent=t;$('aerr').style.color=ok?'#8ff0b3':''}
+  function cap1(n){var w=String(n||'').trim().split(/\s+/)[0]||'';return w?w.charAt(0).toUpperCase()+w.slice(1):''}
+  function openPw(){$('amenu').classList.remove('on');$('pwform').reset();pwMsg('');$('pwforgot').style.display=cfg?'':'none';$('pwmodal').classList.add('on');setTimeout(function(){$('pwcur').focus()},60)}
+  function closePw(){$('pwmodal').classList.remove('on');$('pwform').reset();pwMsg('')}
+  function showWelcome(name){
+    var fn=cap1(name);
+    $('wlcName').textContent=fn?'Welcome, '+fn+'!':'Welcome!';
+    $('wlcTxt').textContent=document.body.classList.contains('needphone')?'Your account has been created. One last step: verify your email to open the app.':'Your account has been created. Enjoy exploring!';
+    $('wlcmodal').classList.add('on');
+  }
   function setUser(u){
     me=u; var bc=document.body.classList; bc.remove('boot'); bc.toggle('locked',!u); bc.toggle('needphone',!!(u&&gateNeeded(u)));
     var av=u?(u.photo?'<img src="'+esc(u.photo)+'" alt="" referrerpolicy="no-referrer">':esc((u.name||u.email)[0].toUpperCase())):'P';
@@ -397,10 +440,10 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     $('accMail').textContent=$('mMail').textContent=u?u.email:'';
     var r=[];
     if(u){if(u.phone)r.push(['Mobile',u.phone]);r.push(['Signed in with',u.provider])}
-    var hl=$('hello');if(hl){var fn=u?String(u.name||'').trim().split(/\s+/)[0]:'';hl.textContent=fn?'Welcome, '+fn+'!':'';hl.style.display=fn?'block':'none'}
+    var hl=$('hello');if(hl){var fn=u?String(u.name||'').trim().split(/\s+/)[0]:'';hl.textContent=fn?'Welcome, '+cap1(fn)+'!':'';hl.style.display=fn?'block':'none'}
     $('mRows').innerHTML=r.map(function(x){return '<div class="mrow"><span>'+x[0]+'</span><b>'+esc(x[1])+'</b></div>'}).join('');
     if(u)Object.keys(ID).forEach(function(k){var n=$(k+ID[k].n),e=$(k+ID[k].e);if(n&&!n.value)n.value=u.name;if(e&&!e.value)e.value=u.email});
-    var pwl=$('pwlink');if(pwl){pwl.style.display=(u&&u.provider!=='Google')?'':'none';$('pwform').style.display='none';$('pwform').reset();$('pwmsg').textContent=''}
+    var pwl=$('pwlink');if(pwl){pwl.style.display=(u&&u.provider!=='Google')?'':'none';closePw()}
     $('amenu').classList.remove('on');
     if(u&&gateNeeded(u))drawGate();
     if(u)show();
@@ -496,11 +539,11 @@ body.locked #amenu,body.boot #amenu{display:none!important}
             return f.fs.addDoc(f.fs.collection(f.db,'users',c.user.uid,'logins'),{event:'NEW SIGN-UP',provider:'Email & password',at:f.fs.serverTimestamp(),device:devInfo()});
           }).catch(function(er){if(window.console)console.warn('Could not save user record',er)})
           .then(function(){return f.m.sendEmailVerification(c.user).catch(function(er){if(window.console)console.warn('verification email failed',er);window.__verr=(er&&er.code)||'unknown'})})
-          .then(function(){hold=false;notifyOwner('NEW SIGN-UP',{Name:n,Email:e,Phone:ph,Method:'Email & password'});return enter(f,c.user)});
+          .then(function(){hold=false;notifyOwner('NEW SIGN-UP',{Name:n,Email:e,Phone:ph,Method:'Email & password'});return enter(f,c.user).then(function(){showWelcome(n)})});
         });
       }).catch(function(x){hold=false;throw x})}
       var u=db.get(); if(u[e])return Promise.reject({code:'exists'}); if(p.length<6)return Promise.reject({code:'short'});
-      return hash(p).then(function(h){u[e]={name:n,phone:ph,photo:'',status:'active',h:h,created:Date.now()};db.set(u);afterSignup(e)});
+      return hash(p).then(function(h){u[e]={name:n,phone:ph,photo:'',status:'active',h:h,created:Date.now()};db.set(u);afterSignup(e);showWelcome(n)});
     },
     in:function(e,p){
       if(cfg)return fb().then(function(f){return f.m.signInWithEmailAndPassword(f.a,e,p).then(function(c){return checkAndRecord(f,c.user,'Email & password',false)})});
@@ -543,7 +586,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
       var info=f.m.getAdditionalUserInfo(res);
       var isNew=!!(info&&info.isNewUser);
       if(isNew)notifyOwner('NEW SIGN-UP',{Name:res.user.displayName,Email:res.user.email,Method:'Google'});
-      return checkAndRecord(f,res.user,'Google',isNew);
+      return checkAndRecord(f,res.user,'Google',isNew).then(function(){if(isNew)showWelcome(res.user.displayName)});
     })}).catch(function(x){
       if(/popup-blocked|operation-not-supported/.test((x&&x.code)||''))return fb().then(function(f){return f.m.signInWithRedirect(f.a,new f.m.GoogleAuthProvider())});
       $('aerr').textContent=msg(x);
@@ -634,7 +677,19 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   /* change password (email & password accounts only; Google accounts sign in with Google) */
   function pwMsg(t,ok){var m=$('pwmsg');m.textContent=t||'';m.style.color=ok?'#8ff0b3':'#ff9aa5'}
   /* Update password button opens the form: current password + new password (no email is sent) */
-  $('pwlink').addEventListener('click',function(){var f=$('pwform'),show=f.style.display==='none';f.style.display=show?'block':'none';pwMsg('');if(show)$('pwcur').focus()});
+  $('pwlink').addEventListener('click',openPw);
+  $('pwclose').addEventListener('click',closePw);
+  $('pwmodal').addEventListener('mousedown',function(ev){if(ev.target===$('pwmodal'))closePw()});
+  $('wlcok').addEventListener('click',function(){$('wlcmodal').classList.remove('on')});
+  addEventListener('keydown',function(ev){if(ev.key==='Escape'){closePw();$('wlcmodal').classList.remove('on')}});
+  /* Forgot password: email a reset link to the signed-in account */
+  $('pwforgot').addEventListener('click',function(){
+    if(!me||!me.email)return;
+    var b=$('pwforgot');b.disabled=true;pwMsg('');
+    fb().then(function(f){return f.m.sendPasswordResetEmail(f.a,me.email)}).then(function(){pwMsg('Reset link sent to '+me.email+'. Check Inbox and Spam.',1)})
+      .catch(function(x){var c=(x&&x.code)||'';pwMsg(/too-many/.test(c)?'Too many attempts. Try again later.':/network/.test(c)?'No internet connection.':'Could not send the reset email. Please try again.')})
+      .then(function(){b.disabled=false});
+  });
   $('pwform').addEventListener('submit',function(ev){
     ev.preventDefault();
     var cur=$('pwcur').value,nw=$('pwnew').value,nw2=$('pwnew2').value,btn=$('pwsave');
@@ -643,7 +698,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     if(nw!==nw2)return pwMsg('New passwords do not match.');
     if(nw===cur)return pwMsg('New password must be different from the current one.');
     btn.disabled=true;pwMsg('');
-    function done(){$('pwform').reset();btn.disabled=false;pwMsg('Password updated.',1)}
+    function done(){$('pwform').reset();btn.disabled=false;pwMsg('Password updated.',1);setTimeout(closePw,1500)}
     function fail(x){btn.disabled=false;var c=(x&&x.code)||'';
       pwMsg(/wrong-password|invalid-credential|incorrect/.test(c)?'Current password is incorrect.':/weak-password/.test(c)?'New password is too weak.':/too-many/.test(c)?'Too many attempts. Try again later.':/network/.test(c)?'No internet connection.':'Could not update the password. Please try again.')}
     if(cfg){
