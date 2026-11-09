@@ -41,6 +41,7 @@ body.needphone #pgate{display:flex}
 .err{color:#ff9aa5;font-size:.88rem;min-height:1.3em;margin-top:10px}
 .lnk{background:none;border:0;color:var(--mute);font:inherit;font-size:.88rem;margin-top:12px;text-decoration:underline;cursor:pointer;width:100%}
 .or{display:flex;align-items:center;gap:10px;color:var(--mute);font-size:.82rem;margin:14px 0}.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.vstep{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}.vstep p{margin:6px 0;font-size:.9rem;color:var(--mute)}.vstep b span{color:#8ff0b3;font-weight:600;margin-left:6px;font-size:.85rem}.vstep .btn{margin-top:10px}
 /* shell */
 header{position:fixed;inset:0 0 auto;height:var(--top);padding:env(safe-area-inset-top,0px) 16px 0;display:flex;align-items:center;gap:10px;background:rgba(7,20,38,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);z-index:5}
 header img{width:32px;height:32px;border-radius:9px}
@@ -130,17 +131,34 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   </div>
 </div>
 
-<!-- Phone gate: shown when a signed-in user has no mobile number yet (e.g. Google sign-in) -->
+<!-- Verification gate: email link + mobile OTP must both be verified before the app opens -->
 <div id="pgate">
   <div class="acard">
-    <form id="pform" novalidate>
-      <h2>One more step</h2>
-      <p>Please add your mobile number to continue.</p>
-      <label for="pph">Mobile number (India)</label><input id="pph" type="tel" autocomplete="tel-national" inputmode="numeric" placeholder="10-digit mobile number">
+    <div id="pform">
+      <h2>Verify your account</h2>
+      <p>Verify your email and mobile number to continue.</p>
+      <div class="vstep" id="vEmail">
+        <b>1. Email<span id="vEmailTag"></span></b>
+        <p id="vEmailTxt"></p>
+        <div id="vEmailBtns"><button class="btn pri" id="veCheck" type="button">I have verified my email</button><button class="lnk" id="veResend" type="button">Resend email</button></div>
+      </div>
+      <div class="vstep" id="vPhone">
+        <b>2. Mobile number<span id="vPhoneTag"></span></b>
+        <p id="vPhoneTxt"></p>
+        <div id="vp1">
+          <label for="pph">Mobile number (India)</label><input id="pph" type="tel" autocomplete="tel-national" inputmode="numeric" placeholder="10-digit mobile number">
+          <button class="btn pri" id="psend" type="button">Send OTP</button>
+        </div>
+        <div id="vp2" style="display:none">
+          <label for="potp">Enter the 6-digit OTP</label><input id="potp" type="text" autocomplete="one-time-code" inputmode="numeric" maxlength="6" placeholder="------">
+          <button class="btn pri" id="pverify" type="button">Verify OTP</button>
+          <button class="lnk" id="pchangeNum" type="button">Change number / resend OTP</button>
+        </div>
+      </div>
       <p class="err" id="perr" role="alert"></p>
-      <button class="btn pri" id="psub" type="submit">Save and continue</button>
+      <div id="recap"></div>
       <button class="lnk" id="pout" type="button">Sign out</button>
-    </form>
+    </div>
   </div>
 </div>
 
@@ -343,10 +361,11 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     return /^[6-9]\d{9}$/.test(d)?'+91'+d:'';
   }
   function fu(u){var p=(u.providerData&&u.providerData[0]&&u.providerData[0].providerId)||'password';
-    return{name:u.displayName||u.email.split('@')[0],email:u.email,photo:u.photoURL||'',provider:p==='google.com'?'Google':'Email and password',created:u.metadata&&u.metadata.creationTime,last:u.metadata&&u.metadata.lastSignInTime,verified:u.emailVerified}}
+    return{name:u.displayName||u.email.split('@')[0],email:u.email,photo:u.photoURL||'',provider:p==='google.com'?'Google':'Email and password',created:u.metadata&&u.metadata.creationTime,last:u.metadata&&u.metadata.lastSignInTime,verified:u.emailVerified,phoneVerified:!!u.phoneNumber}}
+  function gateNeeded(u){return cfg?!(u.verified&&u.phoneVerified):!u.phone}
   function note(t,ok){$('aerr').textContent=t;$('aerr').style.color=ok?'#8ff0b3':''}
   function setUser(u){
-    me=u; var bc=document.body.classList; bc.remove('boot'); bc.toggle('locked',!u); bc.toggle('needphone',!!(u&&!u.phone));
+    me=u; var bc=document.body.classList; bc.remove('boot'); bc.toggle('locked',!u); bc.toggle('needphone',!!(u&&gateNeeded(u)));
     var av=u?(u.photo?'<img src="'+esc(u.photo)+'" alt="" referrerpolicy="no-referrer">':esc((u.name||u.email)[0].toUpperCase())):'P';
     $('avatar').innerHTML=av; $('mav').innerHTML=av;
     $('accName').textContent=$('mName').textContent=u?u.name:'Guest';
@@ -356,10 +375,17 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     $('mRows').innerHTML=r.map(function(x){return '<div class="mrow"><span>'+x[0]+'</span><b>'+esc(x[1])+'</b></div>'}).join('');
     if(u)Object.keys(ID).forEach(function(k){var n=$(k+ID[k].n),e=$(k+ID[k].e);if(n&&!n.value)n.value=u.name;if(e&&!e.value)e.value=u.email});
     $('amenu').classList.remove('on');
+    if(u&&gateNeeded(u))drawGate();
     if(u)show();
   }
   function msg(e){
     var c=(e&&e.code)||(e&&e.message)||'';
+    if(/invalid-verification-code/.test(c))return 'Wrong OTP. Check the code and try again.';
+    if(/code-expired|session-expired/.test(c))return 'OTP expired. Send a new OTP.';
+    if(/invalid-phone-number/.test(c))return 'Enter a valid mobile number.';
+    if(/credential-already-in-use|account-exists-with-different|provider-already-linked/.test(c))return 'This mobile number is already linked to another account.';
+    if(/captcha/.test(c))return 'Security check failed. Refresh the page and try again.';
+    if(/quota-exceeded|billing-not-enabled|operation-not-allowed/.test(c))return 'SMS OTP is not available right now. Please contact Peeyush.';
     if(/deactivated/.test(c))return 'This account is deactivated. Contact Peeyush to reactivate it.';
     if(/email-already|exists/.test(c))return 'This email already has an account. Choose Sign in.';
     if(/invalid-credential|wrong-password|user-not-found|incorrect/.test(c))return 'Email or password is incorrect.';
@@ -423,18 +449,29 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     return p.then(function(){if(!quiet)setUser(Object.assign({},me,patch))});
   }
   var hold=false;
+  function enter(f,u){
+    return loadProfile(f,u).then(function(p){
+      if(p.status==='deactivated'){
+        return f.m.signOut(f.a).then(function(){setUser(null);mode='in';drawMode();note('This account is deactivated. Contact Peeyush to reactivate it.')});
+      }
+      var x=fu(u);x.uid=u.uid;x.phone=u.phoneNumber||p.phone||'';x.photo=p.photo||x.photo;x.status=p.status||'active';
+      setUser(x);
+    });
+  }
   function afterSignup(e){mode='in';drawMode();$('ae').value=e;$('ap').value='';note('Account created. Sign in to continue.',1)}
   var API={
     up:function(n,e,p,ph){
       if(cfg){hold=true;return fb().then(function(f){
         return f.m.createUserWithEmailAndPassword(f.a,e,p).then(function(c){
           return f.m.updateProfile(c.user,{displayName:n}).then(function(){
-            return f.fs.setDoc(uref(f,c.user.uid),{name:n,email:e,phone:ph,photo:'',status:'active',provider:'Email & password',createdAt:f.fs.serverTimestamp(),lastLogin:f.fs.serverTimestamp(),source:'app'});
+            return f.fs.setDoc(uref(f,c.user.uid),{name:n,email:e,phone:ph,phoneVerified:false,photo:'',status:'active',provider:'Email & password',createdAt:f.fs.serverTimestamp(),lastLogin:f.fs.serverTimestamp(),source:'app'});
           }).then(function(){
             return f.fs.addDoc(f.fs.collection(f.db,'users',c.user.uid,'logins'),{event:'NEW SIGN-UP',provider:'Email & password',at:f.fs.serverTimestamp(),device:devInfo()});
-          }).catch(function(er){if(window.console)console.warn('Could not save user record',er)});
-        }).then(function(){return f.m.signOut(f.a)});
-      }).then(function(){hold=false;notifyOwner('NEW SIGN-UP',{Name:n,Email:e,Phone:ph,Method:'Email & password'});afterSignup(e)},function(x){hold=false;throw x})}
+          }).catch(function(er){if(window.console)console.warn('Could not save user record',er)})
+          .then(function(){return f.m.sendEmailVerification(c.user).catch(function(er){if(window.console)console.warn('verification email failed',er)})})
+          .then(function(){hold=false;notifyOwner('NEW SIGN-UP',{Name:n,Email:e,Phone:ph,Method:'Email & password'});return enter(f,c.user)});
+        });
+      }).catch(function(x){hold=false;throw x})}
       var u=db.get(); if(u[e])return Promise.reject({code:'exists'}); if(p.length<6)return Promise.reject({code:'short'});
       return hash(p).then(function(h){u[e]={name:n,phone:ph,photo:'',status:'active',h:h,created:Date.now()};db.set(u);afterSignup(e)});
     },
@@ -485,13 +522,62 @@ body.locked #amenu,body.boot #amenu{display:none!important}
       $('aerr').textContent=msg(x);
     });
   });
-  /* phone gate */
-  $('pform').addEventListener('submit',function(ev){
-    ev.preventDefault();
-    var ph=normPhone($('pph').value); if(!ph){$('perr').textContent='Enter a valid 10-digit mobile number.';return}
-    $('perr').textContent='';$('psub').disabled=true;
+  /* verification gate: email link + mobile OTP (Firebase Phone Auth) */
+  var rcv=null,conf=null,phoneNo='',cool=0;
+  function gerr(t,ok){$('perr').textContent=t||'';$('perr').style.color=ok?'#8ff0b3':''}
+  function drawGate(){
+    if(!me)return;
+    var ev=!!me.verified,pv=!!me.phoneVerified;
+    $('vEmailTag').textContent=ev?' ✓ verified':'';
+    $('vEmailTxt').textContent=ev?me.email:'We sent a verification link to '+me.email+'. Open it, then come back and tap the button below. Check Spam too.';
+    $('vEmailBtns').style.display=ev?'none':'block';
+    $('vPhoneTag').textContent=pv?' ✓ verified':'';
+    $('vPhoneTxt').textContent=pv?me.phone:'';
+    $('vp1').style.display=(pv||conf)?'none':'block';
+    $('vp2').style.display=(!pv&&conf)?'block':'none';
+    if(!pv&&!conf&&!$('pph').value&&me.phone)$('pph').value=me.phone.replace(/^\+91/,'');
+  }
+  function resetRecaptcha(){
+    try{if(rcv)rcv.clear()}catch(e){}
+    rcv=null;var o=$('recap'),n=document.createElement('div');n.id='recap';o.parentNode.replaceChild(n,o);
+  }
+  function recheck(){
+    return fb().then(function(f){var u=f.a.currentUser;if(!u)return;return u.reload().then(function(){return u.getIdToken(true)}).then(function(){return enter(f,u)})});
+  }
+  function tick(){var b=$('veResend');if(cool>0){b.textContent='Resend in '+cool+'s';cool--;setTimeout(tick,1000)}else b.textContent='Resend email'}
+  $('veCheck').addEventListener('click',function(){
+    gerr('');recheck().then(function(){if(me&&!me.verified)gerr('Email is not verified yet. Open the link in your inbox first.')}).catch(function(x){gerr(msg(x))});
+  });
+  $('veResend').addEventListener('click',function(){
+    if(cool>0)return;
+    fb().then(function(f){return f.m.sendEmailVerification(f.a.currentUser)}).then(function(){gerr('Verification email sent to '+me.email+'.',1);cool=60;tick()}).catch(function(x){gerr(msg(x))});
+  });
+  document.addEventListener('visibilitychange',function(){
+    if(!document.hidden&&cfg&&me&&!me.verified&&document.body.classList.contains('needphone'))recheck().catch(function(){});
+  });
+  $('psend').addEventListener('click',function(){
+    var ph=normPhone($('pph').value); if(!ph)return gerr('Enter a valid 10-digit mobile number.');
+    gerr('');$('psend').disabled=true;
+    fb().then(function(f){
+      if(!rcv)rcv=new f.m.RecaptchaVerifier(f.a,'recap',{size:'invisible'});
+      return f.m.linkWithPhoneNumber(f.a.currentUser,ph,rcv).then(function(c){conf=c;phoneNo=ph;$('potp').value='';drawGate();gerr('OTP sent to '+ph+'.',1)});
+    }).catch(function(x){resetRecaptcha();gerr(msg(x))}).then(function(){$('psend').disabled=false});
+  });
+  $('pchangeNum').addEventListener('click',function(){conf=null;resetRecaptcha();gerr('');drawGate()});
+  $('pverify').addEventListener('click',function(){
+    var code=$('potp').value.replace(/\D/g,''); if(!conf)return; if(code.length!==6)return gerr('Enter the 6-digit OTP.');
+    gerr('');$('pverify').disabled=true;
     var who=me;
-    saveProfile({phone:ph}).then(function(){if(cfg&&who)notifyOwner('MOBILE NUMBER ADDED',{Name:who.name,Email:who.email,Phone:ph,Method:who.provider})}).catch(function(x){if(window.console)console.error('saveProfile failed',x);$('perr').textContent='Could not save ('+((x&&x.code)||(x&&x.message)||'unknown error')+'). Please try again.'}).then(function(){$('psub').disabled=false});
+    conf.confirm(code).then(function(){
+      conf=null;
+      return saveProfile({phone:phoneNo,phoneVerified:true},true).catch(function(){});
+    }).then(function(){
+      notifyOwner('MOBILE VERIFIED',{Name:who.name,Email:who.email,Phone:phoneNo,Method:who.provider});
+      return recheck();
+    }).catch(function(x){
+      if(/credential-already-in-use|account-exists-with-different|code-expired|session-expired/.test((x&&x.code)||''))conf=null;
+      drawGate();gerr(msg(x));
+    }).then(function(){$('pverify').disabled=false});
   });
   $('pout').addEventListener('click',function(){API.out()});
   /* photo: crop to a square, shrink to 256px, store in the profile */
@@ -529,13 +615,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     fb().then(function(f){f.m.onAuthStateChanged(f.a,function(u){
       if(hold)return;
       if(!u){setUser(null);return}
-      loadProfile(f,u).then(function(p){
-        if(p.status==='deactivated'){
-          return f.m.signOut(f.a).then(function(){setUser(null);mode='in';drawMode();note('This account is deactivated. Contact Peeyush to reactivate it.')});
-        }
-        var x=fu(u);x.uid=u.uid;x.phone=p.phone||'';x.photo=p.photo||x.photo;x.status=p.status||'active';
-        setUser(x);
-      });
+      enter(f,u);
     })}).catch(function(){setUser(null)});
   }else{
     $('amode').textContent='Your account is saved on this device.';
