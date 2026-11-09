@@ -107,6 +107,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
 .mav{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red2));display:grid;place-items:center;font-weight:800;font-size:1.3rem;overflow:hidden;flex:none}
 .mh b{display:block;word-break:break-word}.mh small{color:var(--mute);word-break:break-all}
 .mrow{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:.85rem}
+.hello{margin:2px 2px 12px;font-size:1.15rem;font-weight:700}
 .mrow span{color:var(--mute)}.mrow b{text-align:right;font-weight:600}
 </style>
 <script src="firebase-config.js"></script>
@@ -168,6 +169,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
 
 <main>
 <section class="view" id="v-home">
+  <p class="hello" id="hello" style="display:none"></p>
   <div class="hero">
     <div class="top">
       <img src="../profile-photo.jpg" alt="Peeyush Kumar Jangid" onerror="this.src='icons/icon-192.png'">
@@ -392,8 +394,9 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     $('avatar').innerHTML=av; $('mav').innerHTML=av;
     $('accName').textContent=$('mName').textContent=u?u.name:'Guest';
     $('accMail').textContent=$('mMail').textContent=u?u.email:'';
-    var r=u?[['Mobile',u.phone||'-'],['Sign-in method',u.provider],['Member since',fmt(u.created)],['Last sign-in',fmt(u.last)]]:[];
-    if(u&&u.verified!==undefined)r.push(['Email status',u.verified?'Verified':'Not verified']);
+    var r=[];
+    if(u){if(u.phone)r.push(['Mobile',u.phone]);r.push(['Signed in with',u.provider])}
+    var hl=$('hello');if(hl){var fn=u?String(u.name||'').trim().split(/\s+/)[0]:'';hl.textContent=fn?'Welcome, '+fn+'!':'';hl.style.display=fn?'block':'none'}
     $('mRows').innerHTML=r.map(function(x){return '<div class="mrow"><span>'+x[0]+'</span><b>'+esc(x[1])+'</b></div>'}).join('');
     if(u)Object.keys(ID).forEach(function(k){var n=$(k+ID[k].n),e=$(k+ID[k].e);if(n&&!n.value)n.value=u.name;if(e&&!e.value)e.value=u.email});
     $('amenu').classList.remove('on');
