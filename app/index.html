@@ -468,7 +468,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
           }).then(function(){
             return f.fs.addDoc(f.fs.collection(f.db,'users',c.user.uid,'logins'),{event:'NEW SIGN-UP',provider:'Email & password',at:f.fs.serverTimestamp(),device:devInfo()});
           }).catch(function(er){if(window.console)console.warn('Could not save user record',er)})
-          .then(function(){return f.m.sendEmailVerification(c.user).catch(function(er){if(window.console)console.warn('verification email failed',er)})})
+          .then(function(){return f.m.sendEmailVerification(c.user).catch(function(er){if(window.console)console.warn('verification email failed',er);window.__verr=(er&&er.code)||'unknown'})})
           .then(function(){hold=false;notifyOwner('NEW SIGN-UP',{Name:n,Email:e,Phone:ph,Method:'Email & password'});return enter(f,c.user)});
         });
       }).catch(function(x){hold=false;throw x})}
@@ -524,6 +524,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   });
   /* verification gate: email link + mobile OTP (Firebase Phone Auth) */
   var rcv=null,conf=null,phoneNo='',cool=0;
+  function gmsg(x){var c=(x&&x.code)||(x&&x.message)||'';return msg(x)+(c?' ['+c+']':'')}
   function gerr(t,ok){$('perr').textContent=t||'';$('perr').style.color=ok?'#8ff0b3':''}
   function drawGate(){
     if(!me)return;
@@ -531,6 +532,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     $('vEmailTag').textContent=ev?' ✓ verified':'';
     $('vEmailTxt').textContent=ev?me.email:'We sent a verification link to '+me.email+'. Open it, then come back and tap the button below. Check Spam too.';
     $('vEmailBtns').style.display=ev?'none':'block';
+    if(!ev&&window.__verr){gerr('Verification email could not be sent ['+window.__verr+']');window.__verr=''}
     $('vPhoneTag').textContent=pv?' ✓ verified':'';
     $('vPhoneTxt').textContent=pv?me.phone:'';
     $('vp1').style.display=(pv||conf)?'none':'block';
@@ -546,11 +548,11 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   }
   function tick(){var b=$('veResend');if(cool>0){b.textContent='Resend in '+cool+'s';cool--;setTimeout(tick,1000)}else b.textContent='Resend email'}
   $('veCheck').addEventListener('click',function(){
-    gerr('');recheck().then(function(){if(me&&!me.verified)gerr('Email is not verified yet. Open the link in your inbox first.')}).catch(function(x){gerr(msg(x))});
+    gerr('');recheck().then(function(){if(me&&!me.verified)gerr('Email is not verified yet. Open the link in your inbox first.')}).catch(function(x){gerr(gmsg(x))});
   });
   $('veResend').addEventListener('click',function(){
     if(cool>0)return;
-    fb().then(function(f){return f.m.sendEmailVerification(f.a.currentUser)}).then(function(){gerr('Verification email sent to '+me.email+'.',1);cool=60;tick()}).catch(function(x){gerr(msg(x))});
+    fb().then(function(f){return f.m.sendEmailVerification(f.a.currentUser)}).then(function(){gerr('Verification email sent to '+me.email+'.',1);cool=60;tick()}).catch(function(x){gerr(gmsg(x))});
   });
   document.addEventListener('visibilitychange',function(){
     if(!document.hidden&&cfg&&me&&!me.verified&&document.body.classList.contains('needphone'))recheck().catch(function(){});
@@ -561,7 +563,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     fb().then(function(f){
       if(!rcv)rcv=new f.m.RecaptchaVerifier(f.a,'recap',{size:'invisible'});
       return f.m.linkWithPhoneNumber(f.a.currentUser,ph,rcv).then(function(c){conf=c;phoneNo=ph;$('potp').value='';drawGate();gerr('OTP sent to '+ph+'.',1)});
-    }).catch(function(x){resetRecaptcha();gerr(msg(x))}).then(function(){$('psend').disabled=false});
+    }).catch(function(x){resetRecaptcha();gerr(gmsg(x))}).then(function(){$('psend').disabled=false});
   });
   $('pchangeNum').addEventListener('click',function(){conf=null;resetRecaptcha();gerr('');drawGate()});
   $('pverify').addEventListener('click',function(){
@@ -576,7 +578,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
       return recheck();
     }).catch(function(x){
       if(/credential-already-in-use|account-exists-with-different|code-expired|session-expired/.test((x&&x.code)||''))conf=null;
-      drawGate();gerr(msg(x));
+      drawGate();gerr(gmsg(x));
     }).then(function(){$('pverify').disabled=false});
   });
   $('pout').addEventListener('click',function(){API.out()});
