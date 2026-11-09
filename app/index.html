@@ -96,6 +96,7 @@ label{display:block;font-size:.85rem;color:var(--mute);margin:12px 0 5px}
 input,select,textarea{width:100%;min-height:46px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
 textarea{min-height:110px;resize:vertical}
 input:focus,select:focus,textarea:focus{outline:2px solid var(--red);border-color:transparent}
+.ccrow{display:flex;gap:8px}.ccrow select{width:42%;max-width:150px;flex:none}.ccrow input{flex:1;min-width:0}
 .note{font-size:.82rem;color:var(--mute);margin-top:12px}
 a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
 #install{display:none}
@@ -119,7 +120,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     <div class="seg" id="aseg"><button class="on" data-t="up" type="button">Create account</button><button data-t="in" type="button">Sign in</button></div>
     <form id="af" novalidate>
       <div id="nameRow"><label for="an">Full name</label><input id="an" autocomplete="name"></div>
-      <div id="phoneRow"><label for="aph">Mobile number (India) *</label><input id="aph" type="tel" autocomplete="tel-national" inputmode="numeric" placeholder="10-digit mobile number"></div>
+      <div id="phoneRow"><label for="aph">Mobile number *</label><div class="ccrow"><select id="acc" aria-label="Country code"></select><input id="aph" type="tel" autocomplete="tel-national" inputmode="numeric" placeholder="Mobile number"></div></div>
       <label for="ae">Email</label><input id="ae" type="email" autocomplete="email" inputmode="email">
       <label for="ap">Password (min 6 characters)</label><input id="ap" type="password" autocomplete="new-password">
       <p class="err" id="aerr" role="alert"></p>
@@ -146,7 +147,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
         <b>2. Mobile number<span id="vPhoneTag"></span></b>
         <p id="vPhoneTxt"></p>
         <div id="vp1">
-          <label for="pph">Mobile number (India)</label><input id="pph" type="tel" autocomplete="tel-national" inputmode="numeric" placeholder="10-digit mobile number">
+          <label for="pph">Mobile number</label><div class="ccrow"><select id="pcc" aria-label="Country code"></select><input id="pph" type="tel" autocomplete="tel-national" inputmode="numeric" placeholder="Mobile number"></div>
           <button class="btn pri" id="psend" type="button">Send OTP</button>
         </div>
         <div id="vp2" style="display:none">
@@ -355,10 +356,31 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   var me=null;
   function fmt(d){return d?new Date(d).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):'-'}
   function lu(e,x){return{name:x.name,email:e,photo:x.photo||'',phone:x.phone||'',status:x.status||'active',provider:'This device',created:x.created,last:x.last}}
-  function normPhone(s){
-    var d=String(s||'').replace(/[^\d+]/g,'');
-    if(/^\+?91\d{10}$/.test(d))d=d.slice(-10); else if(/^0\d{10}$/.test(d))d=d.slice(1);
-    return /^[6-9]\d{9}$/.test(d)?'+91'+d:'';
+  var CC=[['+91','India'],['+1','USA / Canada'],['+44','United Kingdom'],['+971','UAE'],['+966','Saudi Arabia'],['+974','Qatar'],['+968','Oman'],['+965','Kuwait'],['+973','Bahrain'],['+61','Australia'],['+64','New Zealand'],['+65','Singapore'],['+60','Malaysia'],['+977','Nepal'],['+975','Bhutan'],['+94','Sri Lanka'],['+880','Bangladesh'],['+92','Pakistan'],['+93','Afghanistan'],['+49','Germany'],['+33','France'],['+39','Italy'],['+34','Spain'],['+31','Netherlands'],['+41','Switzerland'],['+46','Sweden'],['+353','Ireland'],['+7','Russia / Kazakhstan'],['+81','Japan'],['+82','South Korea'],['+86','China'],['+852','Hong Kong'],['+66','Thailand'],['+62','Indonesia'],['+63','Philippines'],['+84','Vietnam'],['+20','Egypt'],['+27','South Africa'],['+234','Nigeria'],['+254','Kenya'],['+55','Brazil'],['+52','Mexico'],['+90','Turkey'],['+98','Iran'],['+964','Iraq'],['+962','Jordan'],['+961','Lebanon']];
+  ['acc','pcc'].forEach(function(id){var el=$(id);if(el)el.innerHTML=CC.map(function(c){return '<option value="'+c[0]+'">'+c[1]+' ('+c[0]+')</option>'}).join('')});
+  /* Returns an international number like +919876543210, or '' when invalid. cc = selected country code. */
+  function normPhone(s,cc){
+    var raw=String(s||'').trim(),d=raw.replace(/[^\d+]/g,'');
+    if(!d)return '';
+    cc=cc||'+91';
+    if(d.charAt(0)==='+'||raw.slice(0,2)==='00'){ /* user typed full international number */
+      d='+'+d.replace(/^\+|^00/,'').replace(/\D/g,'');
+      if(/^\+91\d{10}$/.test(d))return /^\+91[6-9]/.test(d)?d:'';
+      return /^\+[1-9]\d{7,14}$/.test(d)?d:'';
+    }
+    d=d.replace(/\D/g,'');
+    if(cc==='+91'){
+      if(/^91\d{10}$/.test(d))d=d.slice(2); else if(/^0\d{10}$/.test(d))d=d.slice(1);
+      return /^[6-9]\d{9}$/.test(d)?'+91'+d:'';
+    }
+    d=d.replace(/^0+/,'');
+    var full=cc+d;
+    return /^\+[1-9]\d{7,14}$/.test(full)?full:'';
+  }
+  /* Splits +CCnumber back into {cc, num} for the form fields */
+  function splitPhone(p){
+    var best='';CC.forEach(function(c){if(p.indexOf(c[0])===0&&c[0].length>best.length)best=c[0]});
+    return best?{cc:best,num:p.slice(best.length)}:{cc:'+91',num:p.replace(/^\+/,'')};
   }
   function fu(u){var p=(u.providerData&&u.providerData[0]&&u.providerData[0].providerId)||'password';
     return{name:u.displayName||u.email.split('@')[0],email:u.email,photo:u.photoURL||'',provider:p==='google.com'?'Google':'Email and password',created:u.metadata&&u.metadata.creationTime,last:u.metadata&&u.metadata.lastSignInTime,verified:u.emailVerified,phoneVerified:!!u.phoneNumber}}
@@ -499,9 +521,9 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   $('aseg').addEventListener('click',function(e){if(e.target.dataset.t){mode=e.target.dataset.t;drawMode()}});
   $('af').addEventListener('submit',function(ev){
     ev.preventDefault();
-    var n=$('an').value.trim(),e=$('ae').value.trim().toLowerCase(),p=$('ap').value,ph=normPhone($('aph').value);
+    var n=$('an').value.trim(),e=$('ae').value.trim().toLowerCase(),p=$('ap').value,ph=normPhone($('aph').value,$('acc').value);
     if(mode==='up'&&!n)return $('aerr').textContent='Enter your full name.';
-    if(mode==='up'&&!ph)return $('aerr').textContent='Enter a valid 10-digit mobile number.';
+    if(mode==='up'&&!ph)return $('aerr').textContent='Enter a valid mobile number with the correct country code.';
     if(!/^\S+@\S+\.\S+$/.test(e))return $('aerr').textContent='Enter a valid email address.';
     if(p.length<6)return $('aerr').textContent='Use at least 6 characters for the password.';
     $('aerr').textContent='';$('aerr').style.color=''; $('asub').disabled=true;
@@ -537,7 +559,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     $('vPhoneTxt').textContent=pv?me.phone:'';
     $('vp1').style.display=(pv||conf)?'none':'block';
     $('vp2').style.display=(!pv&&conf)?'block':'none';
-    if(!pv&&!conf&&!$('pph').value&&me.phone)$('pph').value=me.phone.replace(/^\+91/,'');
+    if(!pv&&!conf&&!$('pph').value&&me.phone){var sp=splitPhone(me.phone);$('pcc').value=sp.cc;$('pph').value=sp.num}
   }
   function resetRecaptcha(){
     try{if(rcv)rcv.clear()}catch(e){}
@@ -558,7 +580,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     if(!document.hidden&&cfg&&me&&!me.verified&&document.body.classList.contains('needphone'))recheck().catch(function(){});
   });
   $('psend').addEventListener('click',function(){
-    var ph=normPhone($('pph').value); if(!ph)return gerr('Enter a valid 10-digit mobile number.');
+    var ph=normPhone($('pph').value,$('pcc').value); if(!ph)return gerr('Enter a valid mobile number with the correct country code.');
     gerr('');$('psend').disabled=true;
     fb().then(function(f){
       if(!rcv)rcv=new f.m.RecaptchaVerifier(f.a,'recap',{size:'invisible'});
