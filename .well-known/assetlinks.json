@@ -1,0 +1,8 @@
+   [{
+     "relation": ["delegate_permission/common.handle_all_urls"],
+     "target": {
+       "namespace": "android_app",
+       "package_name": "io.github.peeyush_jangid.twa",
+       "sha256_cert_fingerprints": ["6B:86:A1:71:B1:B1:57:AA:C0:3D:8A:FC:10:25:BC:D1:89:AC:E8:EB:4F:80:A6:B5:69:19:DD:9D:E0:35:07:D2"]
+     }
+   }]
