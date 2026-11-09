@@ -132,18 +132,18 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   </div>
 </div>
 
-<!-- Verification gate: email link + mobile OTP must both be verified before the app opens -->
+<!-- Verification gate: only the email link must be verified before the app opens (mobile OTP removed) -->
 <div id="pgate">
   <div class="acard">
     <div id="pform">
       <h2>Verify your account</h2>
-      <p>Verify your email and mobile number to continue.</p>
+      <p>Verify your email to continue.</p>
       <div class="vstep" id="vEmail">
         <b>1. Email<span id="vEmailTag"></span></b>
         <p id="vEmailTxt"></p>
         <div id="vEmailBtns"><button class="btn pri" id="veCheck" type="button">I have verified my email</button><button class="lnk" id="veResend" type="button">Resend email</button></div>
       </div>
-      <div class="vstep" id="vPhone">
+      <div class="vstep" id="vPhone" style="display:none">
         <b>2. Mobile number<span id="vPhoneTag"></span></b>
         <p id="vPhoneTxt"></p>
         <div id="vp1">
@@ -384,7 +384,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   }
   function fu(u){var p=(u.providerData&&u.providerData[0]&&u.providerData[0].providerId)||'password';
     return{name:u.displayName||u.email.split('@')[0],email:u.email,photo:u.photoURL||'',provider:p==='google.com'?'Google':'Email and password',created:u.metadata&&u.metadata.creationTime,last:u.metadata&&u.metadata.lastSignInTime,verified:u.emailVerified,phoneVerified:!!u.phoneNumber}}
-  function gateNeeded(u){return cfg?!(u.verified&&u.phoneVerified):!u.phone}
+  function gateNeeded(u){return cfg?!u.verified:!u.phone}
   function note(t,ok){$('aerr').textContent=t;$('aerr').style.color=ok?'#8ff0b3':''}
   function setUser(u){
     me=u; var bc=document.body.classList; bc.remove('boot'); bc.toggle('locked',!u); bc.toggle('needphone',!!(u&&gateNeeded(u)));
@@ -486,7 +486,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
       if(cfg){hold=true;return fb().then(function(f){
         return f.m.createUserWithEmailAndPassword(f.a,e,p).then(function(c){
           return f.m.updateProfile(c.user,{displayName:n}).then(function(){
-            return f.fs.setDoc(uref(f,c.user.uid),{name:n,email:e,phone:ph,phoneVerified:false,photo:'',status:'active',provider:'Email & password',createdAt:f.fs.serverTimestamp(),lastLogin:f.fs.serverTimestamp(),source:'app'});
+            return f.fs.setDoc(uref(f,c.user.uid),{name:n,email:e,phone:ph,photo:'',status:'active',provider:'Email & password',createdAt:f.fs.serverTimestamp(),lastLogin:f.fs.serverTimestamp(),source:'app'});
           }).then(function(){
             return f.fs.addDoc(f.fs.collection(f.db,'users',c.user.uid,'logins'),{event:'NEW SIGN-UP',provider:'Email & password',at:f.fs.serverTimestamp(),device:devInfo()});
           }).catch(function(er){if(window.console)console.warn('Could not save user record',er)})
