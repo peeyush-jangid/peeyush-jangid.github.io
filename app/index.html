@@ -165,7 +165,8 @@ body.locked #amenu,body.boot #amenu{display:none!important}
 </div>
 
 <header><img src="icons/icon-192.png" alt="" width="32" height="32"><b>Peeyush Jangid</b><button id="avatar" type="button" aria-label="Account" aria-expanded="false">P</button></header>
-<div id="amenu" role="dialog" aria-label="Your account"><div class="mh"><div class="mav" id="mav">P</div><div><b id="mName"></b><small id="mMail"></small></div></div><div id="mRows"></div><input type="file" id="pfile" accept="image/*" hidden><button class="btn" id="pchange" type="button" style="margin-top:12px">Add / change photo</button><button class="btn" id="signout2" type="button" style="margin-top:10px">Sign out</button><button class="btn" id="deact" type="button" style="margin-top:10px;color:#ff9aa5">Deactivate account</button></div>
+<div id="amenu" role="dialog" aria-label="Your account"><div class="mh"><div class="mav" id="mav">P</div><div><b id="mName"></b><small id="mMail"></small></div></div><div id="mRows"></div><input type="file" id="pfile" accept="image/*" hidden><button class="btn" id="pchange" type="button" style="margin-top:12px">Add / change photo</button><button class="btn" id="pwlink" type="button" style="margin-top:10px">Update password</button>
+<form id="pwform" style="display:none;margin-top:6px" novalidate><label for="pwcur">Current password</label><input id="pwcur" type="password" autocomplete="current-password"><label for="pwnew">New password (min 6 characters)</label><input id="pwnew" type="password" autocomplete="new-password"><label for="pwnew2">Confirm new password</label><input id="pwnew2" type="password" autocomplete="new-password"><button class="btn pri" id="pwsave" type="submit" style="margin-top:12px">Save new password</button><p class="err" id="pwmsg" role="alert" style="margin:8px 0 0"></p></form><button class="btn" id="signout2" type="button" style="margin-top:10px">Sign out</button><button class="btn" id="deact" type="button" style="margin-top:10px;color:#ff9aa5">Deactivate account</button></div>
 
 <main>
 <section class="view" id="v-home">
@@ -399,6 +400,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     var hl=$('hello');if(hl){var fn=u?String(u.name||'').trim().split(/\s+/)[0]:'';hl.textContent=fn?'Welcome, '+fn+'!':'';hl.style.display=fn?'block':'none'}
     $('mRows').innerHTML=r.map(function(x){return '<div class="mrow"><span>'+x[0]+'</span><b>'+esc(x[1])+'</b></div>'}).join('');
     if(u)Object.keys(ID).forEach(function(k){var n=$(k+ID[k].n),e=$(k+ID[k].e);if(n&&!n.value)n.value=u.name;if(e&&!e.value)e.value=u.email});
+    var pwl=$('pwlink');if(pwl){pwl.style.display=(u&&u.provider!=='Google')?'':'none';$('pwform').style.display='none';$('pwform').reset();$('pwmsg').textContent=''}
     $('amenu').classList.remove('on');
     if(u&&gateNeeded(u))drawGate();
     if(u)show();
@@ -628,6 +630,31 @@ body.locked #amenu,body.boot #amenu{display:none!important}
     if(!me)return;
     if(!confirm('Deactivate your account? You will be signed out and cannot sign in again until Peeyush reactivates it.'))return;
     saveProfile({status:'deactivated'},true).then(function(){return API.out()}).then(function(){note('Your account has been deactivated.',1)}).catch(function(){alert('Could not deactivate right now. Please try again.')});
+  });
+  /* change password (email & password accounts only; Google accounts sign in with Google) */
+  function pwMsg(t,ok){var m=$('pwmsg');m.textContent=t||'';m.style.color=ok?'#8ff0b3':'#ff9aa5'}
+  /* Update password button opens the form: current password + new password (no email is sent) */
+  $('pwlink').addEventListener('click',function(){var f=$('pwform'),show=f.style.display==='none';f.style.display=show?'block':'none';pwMsg('');if(show)$('pwcur').focus()});
+  $('pwform').addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var cur=$('pwcur').value,nw=$('pwnew').value,nw2=$('pwnew2').value,btn=$('pwsave');
+    if(!cur)return pwMsg('Enter your current password.');
+    if(nw.length<6)return pwMsg('New password must be at least 6 characters.');
+    if(nw!==nw2)return pwMsg('New passwords do not match.');
+    if(nw===cur)return pwMsg('New password must be different from the current one.');
+    btn.disabled=true;pwMsg('');
+    function done(){$('pwform').reset();btn.disabled=false;pwMsg('Password updated.',1)}
+    function fail(x){btn.disabled=false;var c=(x&&x.code)||'';
+      pwMsg(/wrong-password|invalid-credential|incorrect/.test(c)?'Current password is incorrect.':/weak-password/.test(c)?'New password is too weak.':/too-many/.test(c)?'Too many attempts. Try again later.':/network/.test(c)?'No internet connection.':'Could not update the password. Please try again.')}
+    if(cfg){
+      fb().then(function(f){var u=f.a.currentUser;if(!u||!u.email)return Promise.reject({code:'no-user'});
+        return f.m.reauthenticateWithCredential(u,f.m.EmailAuthProvider.credential(u.email,cur)).then(function(){return f.m.updatePassword(u,nw)})
+      }).then(done).catch(fail);
+      return;
+    }
+    var all=db.get(),rec=me&&all[me.email];
+    if(!rec)return fail({code:'incorrect'});
+    hash(cur).then(function(h){if(h!==rec.h)return Promise.reject({code:'incorrect'});return hash(nw)}).then(function(h2){rec.h=h2;db.set(all)}).then(done).catch(fail);
   });
   $('signout').addEventListener('click',function(){API.out()});
   $('signout2').addEventListener('click',function(){API.out()});
