@@ -1,0 +1,21 @@
+Peeyush App - GitHub upload instructions
+
+1. Open your repository and go to the app/ folder.
+2. Extract this ZIP on your computer.
+3. Upload the six app files from this folder into the existing app/ folder:
+   index.html
+   firebase-config.js
+   users.js
+   sw.js
+   manifest.webmanifest
+   files.json
+4. Keep the existing app/icons/ folder and the parent website assets (profile-photo.jpg,
+   geetanjali-hospital.jpg, jecrc-university.jpg, and Peeyush_Kumar_Jangid_Resume.pdf)
+   in their current locations. They were not included in the uploaded files.
+5. Commit the changes to GitHub.
+6. After deployment, open https://peeyush-jangid.github.io/app/ in a private/incognito tab
+   or clear the site's cached data, then test account creation and OTP.
+
+Important: This ZIP fixes file names and folder packaging. It does not enable Firebase SMS
+billing, Phone provider, authorized domains, or Firestore security rules. Those must be
+configured in Firebase Console. Do not publish Firebase service-account private keys.
