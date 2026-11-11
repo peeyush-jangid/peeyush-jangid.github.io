@@ -121,8 +121,8 @@
     "@keyframes pjcPulse{0%{transform:scale(.92);opacity:.9}100%{transform:scale(1.25);opacity:0}}",
     ".pjc-btn>svg{width:100%;height:100%;display:block;border-radius:50%}",
     ".pjc-dot{position:absolute;top:2px;right:2px;width:14px;height:14px;border-radius:50%;background:#22c55e;border:2px solid #071426}",
-    ".pjc-inf{position:absolute;left:-6px;bottom:-4px;display:flex;align-items:center;gap:3px;background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;border-radius:999px;font:700 10px system-ui,sans-serif;padding:3px 7px 3px 5px;border:2px solid #071426;letter-spacing:.2px}",
-    ".pjc-inf svg{width:15px;height:8px}",
+    ".pjc-inf{position:absolute;left:-6px;bottom:-4px;display:flex;align-items:center;gap:3px;background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;border-radius:999px;font:700 10px system-ui,sans-serif;padding:4px 7px;border:2px solid #071426}",
+    ".pjc-inf svg{width:16px;height:8px}",
     ".pjc-panel{position:fixed;right:18px;bottom:calc(98px + env(safe-area-inset-bottom,0px));z-index:2147483000;width:380px;max-width:calc(100vw - 24px);height:600px;max-height:calc(100vh - 124px);background:#f8faff;color:#0f1f3d;border-radius:22px;box-shadow:0 24px 70px rgba(2,12,40,.55);display:none;flex-direction:column;overflow:hidden;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:14.5px}",
     ".pjc-panel.open{display:flex;animation:pjcIn .25s ease}",
     "@keyframes pjcIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}",
@@ -182,11 +182,11 @@
   }
 
   var btn = el("button", "pjc-btn");
-  btn.setAttribute("aria-label", "Chat with Peeyush's assistant – unlimited questions, 24x7");
+  btn.setAttribute("aria-label", "Chat with Peeyush's assistant");
   btn.innerHTML = robot("b");
   btn.appendChild(el("span", "pjc-dot"));
   var infBadge = el("span", "pjc-inf");
-  infBadge.innerHTML = IC.inf + "<span>Unlimited</span>";
+  infBadge.innerHTML = IC.inf;
   btn.appendChild(infBadge);
 
   var panel = el("div", "pjc-panel");
