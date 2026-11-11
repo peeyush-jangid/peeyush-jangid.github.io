@@ -833,6 +833,26 @@ a.card.file{position:relative;padding-right:80px}
 @media(max-width:390px){.rating-stars{gap:5px}.rating-star{width:43px;height:45px;font-size:1.75rem}}
 </style>
 
+
+<style id="file-actions-styles">
+/* Files & certificates: Preview / Download / Save actions */
+.card.file{display:block;padding:16px 18px}
+.card.file .file-main{display:flex;gap:14px;align-items:center;color:inherit;min-width:0}
+.card.file .file-main>div{min-width:0}
+.file-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.file-actions .fa,.file-actions .save-file{position:static;transform:none;flex:1 1 0;min-width:92px;min-height:40px;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 12px;border:1px solid var(--line);border-radius:11px;background:var(--panel2);color:var(--brand2);font:inherit;font-size:.8rem;font-weight:800;white-space:nowrap;text-decoration:none;cursor:pointer;transition:border-color .18s,background .18s}
+.file-actions .fa:hover{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,var(--panel));color:var(--brand2)}
+.file-actions .fa.pv{background:var(--grad);border-color:transparent;color:#1b271e}
+.preview-card{width:min(100%,920px);height:min(88dvh,780px);display:flex;flex-direction:column;overflow:hidden}
+.preview-card h2{font-size:1.1rem;overflow-wrap:anywhere}
+.preview-body{flex:1;min-height:0;margin-top:6px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel2);display:flex;align-items:center;justify-content:center}
+.preview-body iframe{width:100%;height:100%;border:0;background:#fff}
+.preview-body img{max-width:100%;max-height:100%;object-fit:contain}
+.preview-body .nopv{padding:24px;text-align:center;color:var(--mute);font-size:.9rem;line-height:1.6}
+.preview-actions{display:flex;gap:8px;margin-top:12px}
+.preview-actions .btn{margin:0;min-height:44px;font-size:.85rem}
+@media(max-width:420px){.file-actions .fa,.file-actions .save-file{min-width:0;padding:0 6px;font-size:.74rem}}
+</style>
 </head>
 <body class="boot">
 
@@ -970,6 +990,15 @@ a.card.file{position:relative;padding-right:80px}
   </div>
 </div>
 
+
+<div class="account-modal" id="filePreviewModal" aria-hidden="true">
+  <div class="account-modal-card preview-card" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
+    <button class="account-modal-close" type="button" data-close-account-modal aria-label="Close">×</button>
+    <h2 id="previewTitle">Preview</h2>
+    <div class="preview-body" id="previewBody"></div>
+    <div class="preview-actions"><a class="btn pri" id="previewDownload" href="#" download>Download</a><a class="btn" id="previewOpen" href="#" target="_blank" rel="noopener">Open in new tab</a></div>
+  </div>
+</div>
 
 <div class="account-modal" id="accountRatingModal" aria-hidden="true">
   <div class="account-modal-card rating-card" role="dialog" aria-modal="true" aria-labelledby="accountRatingTitle">
@@ -1150,7 +1179,16 @@ a.card.file{position:relative;padding-right:80px}
   var FT={xls:'Excel',xlsx:'Excel',doc:'Word',docx:'Word',ppt:'PowerPoint',pptx:'PowerPoint',pdf:'PDF',dwg:'AutoCAD',dxf:'AutoCAD'},cur='All',notes=[];
   function ext(it){if(it.type)return it.type;var m=(it.url||'').split('?')[0].split('.').pop().toLowerCase();return FT[m]||'File'}
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-  function card(it,badge){return '<a class="card file" href="'+esc(it.url)+'" target="_blank" rel="noopener" data-file-title="'+esc(it.title)+'"><span class="ic">'+esc(badge)+'</span><div><b>'+esc(it.title)+'</b>'+(it.note?'<small>'+esc(it.note)+'</small>':'')+'</div><span class="save-file" role="button" tabindex="0" aria-label="Save '+esc(it.title)+'" data-save-url="'+esc(it.url)+'" data-save-title="'+esc(it.title)+'">♡ Save</span></a>'}
+  function card(it,badge){
+    var t=esc(it.title),u=esc(it.url),sv=false;
+    try{sv=readAccountList(SAVED_KEY).some(function(x){return x.url===it.url})}catch(e){}
+    return '<div class="card file" data-file-title="'+t+'" data-file-url="'+u+'">'
+      +'<a class="file-main" href="'+u+'" target="_blank" rel="noopener"><span class="ic">'+esc(badge)+'</span><div><b>'+t+'</b>'+(it.note?'<small>'+esc(it.note)+'</small>':'')+'</div></a>'
+      +'<div class="file-actions">'
+      +'<button type="button" class="fa pv" data-preview-url="'+u+'" data-preview-title="'+t+'" aria-label="Preview '+t+'">Preview</button>'
+      +'<a class="fa" href="'+u+'" download data-download-url="'+u+'" aria-label="Download '+t+'">↓ Download</a>'
+      +'<button type="button" class="save-file" data-save-url="'+u+'" data-save-title="'+t+'" aria-label="Save '+t+'">'+(sv?'♥ Saved':'♡ Save')+'</button>'
+      +'</div></div>'}
   function drawNotes(){
     var types=['All'],list=notes.filter(function(n){return cur==='All'||ext(n)===cur});
     notes.forEach(function(n){var t=ext(n);if(types.indexOf(t)<0)types.push(t)});
@@ -1571,6 +1609,27 @@ a.card.file{position:relative;padding-right:80px}
     [].forEach.call(document.querySelectorAll('.account-modal.on'),function(el){
       el.classList.remove('on');el.setAttribute('aria-hidden','true');
     });
+    var pb=$('previewBody');if(pb)pb.innerHTML='';
+  }
+  function logHistory(url,title){
+    var h=readAccountList(DOWNLOADS_KEY).filter(function(x){return x.url!==url});
+    h.unshift({url:url,title:title||'File',date:new Date().toLocaleString('en-IN')});
+    writeAccountList(DOWNLOADS_KEY,h);
+  }
+  function openPreview(url,title){
+    var abs=url;try{abs=new URL(url,location.href).href}catch(e){}
+    var ext=(abs.split('?')[0].split('.').pop()||'').toLowerCase(),body=$('previewBody'),mobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent),src='';
+    $('previewTitle').textContent=title||'Preview';
+    $('previewDownload').href=url;$('previewOpen').href=url;
+    if(['png','jpg','jpeg','gif','webp','svg'].indexOf(ext)>-1){
+      body.innerHTML='<img alt="'+esc(title||'')+'" src="'+esc(url)+'">';
+    }else{
+      if(ext==='pdf')src=mobile?'https://docs.google.com/viewer?embedded=true&url='+encodeURIComponent(abs):abs;
+      else if(['doc','docx','xls','xlsx','ppt','pptx'].indexOf(ext)>-1)src='https://view.officeapps.live.com/op/embed.aspx?src='+encodeURIComponent(abs);
+      body.innerHTML=src?'<iframe title="'+esc(title||'Preview')+'" src="'+esc(src)+'" loading="eager"></iframe>':'<div class="nopv">Preview is not available for this file type.<br>Use Download to open it on your device.</div>';
+    }
+    logHistory(url,title);
+    openAccountModal('filePreviewModal');
   }
   function accountProfile(){
     var u=me||{};
@@ -1606,6 +1665,8 @@ a.card.file{position:relative;padding-right:80px}
       }
       ev.preventDefault();ev.stopPropagation();return;
     }
+    var prev=ev.target.closest('[data-preview-url]');
+    if(prev){ev.preventDefault();ev.stopPropagation();openPreview(prev.getAttribute('data-preview-url'),prev.getAttribute('data-preview-title'));return}
     var save=ev.target.closest('[data-save-url]');
     if(save){
       ev.preventDefault();ev.stopPropagation();
@@ -1625,12 +1686,10 @@ a.card.file{position:relative;padding-right:80px}
     }
     if(ev.target.closest('[data-close-account-modal]')){closeAccountModals();return}
     if(ev.target.classList&&ev.target.classList.contains('account-modal')){closeAccountModals();return}
-    var file=ev.target.closest('a.card.file');
+    var file=ev.target.closest('.file-main, [data-download-url]');
     if(file){
-      var history=readAccountList(DOWNLOADS_KEY),url=file.getAttribute('href'),title=file.getAttribute('data-file-title')||file.textContent.trim();
-      history=history.filter(function(x){return x.url!==url});
-      history.unshift({url:url,title:title,date:new Date().toLocaleString('en-IN')});
-      writeAccountList(DOWNLOADS_KEY,history);
+      var holder=file.closest('.card.file');
+      if(holder)logHistory(holder.getAttribute('data-file-url'),holder.getAttribute('data-file-title'));
     }
   },true);
   document.addEventListener('keydown',function(ev){
