@@ -1,5 +1,5 @@
 /*!
- * Peeyush Jangid – AI Chat Assistant (24x7, Unlimited Questions)
+ * Peeyush Jangid – AI Chat Assistant (24x7)
  * Ek hi file website (/) aur app (/app/) dono mein use hoti hai.
  * Setup: API_URL mein apna Cloudflare Worker URL daalo (worker.js dekho).
  * API_URL khaali ho to widget FAQ mode mein chalta hai (bina AI ke bhi 24x7 jawab deta hai).
@@ -18,7 +18,8 @@
     NAME: "Peeyush's Assistant",
     MAX_HISTORY: 12,   // sirf AI ko context bhejne ke liye; sawalon ki koi limit nahi
     MAX_INPUT: 500,    // ek message ki max length
-    COOLDOWN_MS: 600   // sirf double-tap se bachne ke liye
+    COOLDOWN_MS: 600,  // sirf double-tap se bachne ke liye
+    AUTO_DELETE_MS: 10 * 60 * 1000  // itni der koi message na ho to chat khud delete (10 minute)
   };
 
   var GREETING =
@@ -37,7 +38,9 @@
     users: icon('<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>'),
     plane: icon('<path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/>'),
     min: icon('<path d="M5 12h14"/>'),
+    trash: icon('<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/>'),
     close: icon('<path d="M18 6 6 18M6 6l12 12"/>'),
+    trash: icon('<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/>'),
     bolt: '<svg viewBox="0 0 24 24" fill="#f59e0b"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>',
     inf: '<svg viewBox="0 0 32 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M16 8c-2.5-3.5-4.5-5-7-5a5 5 0 0 0 0 10c2.5 0 4.5-1.500 7-5s4.500-5 7-5a5 5 0 0 1 0 10c-2.500 0-4.500-1.500-7-5z"/></svg>',
     verified: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#38bdf8"/><path d="m7 12.500 3.200 3.200L17 9" fill="none" stroke="#fff" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round"/></svg>'
@@ -136,6 +139,9 @@
     ".pjc-ht span{display:block;font-size:12.5px;opacity:.92;margin-top:2px}",
     ".pjc-hb{background:rgba(255,255,255,.14);border:0;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}",
     ".pjc-hb:hover{background:rgba(255,255,255,.28)}",
+    ".pjc-hbs{display:flex;gap:6px;flex:none}",
+    ".pjc-hbs .pjc-hb{width:30px;height:30px}",
+    ".pjc-nm{font-style:normal;overflow:hidden;text-overflow:ellipsis;min-width:0}",
     ".pjc-hb svg{width:17px;height:17px}",
     ".pjc-body{flex:1;overflow-y:auto;padding:16px 14px 8px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth;background:#f8faff}",
     ".pjc-row{display:flex;gap:8px;align-items:flex-end}",
@@ -154,7 +160,7 @@
     ".pjc-chip:hover{background:#eaf2ff;border-color:#2563eb}",
     ".pjc-typing{display:inline-flex;gap:4px;padding:3px 0}.pjc-typing i{width:7px;height:7px;border-radius:50%;background:#2563eb;animation:pjcB 1s infinite}.pjc-typing i:nth-child(2){animation-delay:.15s}.pjc-typing i:nth-child(3){animation-delay:.3s}",
     "@keyframes pjcB{0%,80%,100%{opacity:.25}40%{opacity:1}}",
-    ".pjc-form{display:flex;align-items:center;gap:8px;margin:6px 12px 4px;padding:5px 5px 5px 14px;background:#fff;border:1.5px solid #d3e0f6;border-radius:999px}",
+    ".pjc-form{display:flex;align-items:center;gap:8px;margin:6px 12px 14px;padding:5px 5px 5px 14px;background:#fff;border:1.5px solid #d3e0f6;border-radius:999px}",
     ".pjc-form:focus-within{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.12)}",
     ".pjc-in{flex:1;background:transparent;border:0;color:#0f1f3d;padding:8px 0;font-size:16px;outline:none;min-width:0}",
     ".pjc-in::placeholder{color:#7b8aa6}",
@@ -185,9 +191,6 @@
   btn.setAttribute("aria-label", "Chat with Peeyush's assistant");
   btn.innerHTML = robot("b");
   btn.appendChild(el("span", "pjc-dot"));
-  var infBadge = el("span", "pjc-inf");
-  infBadge.innerHTML = IC.inf;
-  btn.appendChild(infBadge);
 
   var panel = el("div", "pjc-panel");
   panel.setAttribute("role", "dialog");
@@ -199,7 +202,7 @@
   head.appendChild(av);
   var ht = el("div", "pjc-ht");
   var title = el("b");
-  title.appendChild(document.createTextNode(CONFIG.NAME));
+  title.appendChild(el("em", "pjc-nm", CONFIG.NAME));
   var vb = el("span");
   vb.style.cssText = "display:inline-flex;margin:0;opacity:1";
   vb.innerHTML = IC.verified;
@@ -213,7 +216,11 @@
   var closeBtn = el("button", "pjc-hb");
   closeBtn.setAttribute("aria-label", "Close chat");
   closeBtn.innerHTML = IC.close;
-  head.appendChild(minBtn); head.appendChild(closeBtn);
+  var delBtn = el("button", "pjc-hb");
+  delBtn.setAttribute("aria-label", "Chat delete karein");
+  delBtn.title = "Chat delete karein";
+  delBtn.innerHTML = IC.trash;
+  head.appendChild(delBtn); head.appendChild(minBtn); head.appendChild(closeBtn);
 
   var body = el("div", "pjc-body");
   body.setAttribute("aria-live", "polite");
@@ -229,20 +236,48 @@
   send.innerHTML = IC.plane;
   form.appendChild(input); form.appendChild(send);
 
-  var note = el("div", "pjc-note");
-  note.innerHTML = "<b>" + IC.inf + "No Question Limit</b><span>•</span><u>Chat Anytime, Anywhere " + IC.bolt + "</u>";
-
   panel.appendChild(head); panel.appendChild(body);
-  panel.appendChild(form); panel.appendChild(note);
+  panel.appendChild(form);
   document.body.appendChild(btn); document.body.appendChild(panel);
 
   // ---- State ----
   var history = [];
   var busy = false, lastSent = 0, started = false;
-  try { history = JSON.parse(sessionStorage.getItem("pjc_h") || "[]"); } catch (e) { history = []; }
+  var epoch = 0, idleTimer = null;
+  try {
+    history = JSON.parse(sessionStorage.getItem("pjc_h") || "[]");
+    var lastActive = parseInt(sessionStorage.getItem("pjc_t") || "0", 10);
+    // Purani chat (10 minute se zyada) automatic delete
+    if (history.length && (!lastActive || Date.now() - lastActive > CONFIG.AUTO_DELETE_MS)) {
+      history = [];
+      sessionStorage.removeItem("pjc_h"); sessionStorage.removeItem("pjc_t");
+    }
+  } catch (e) { history = []; }
+
+  function armIdle() {
+    clearTimeout(idleTimer);
+    if (history.length) idleTimer = setTimeout(clearChat, CONFIG.AUTO_DELETE_MS);
+  }
+  armIdle();
 
   function save() {
-    try { sessionStorage.setItem("pjc_h", JSON.stringify(history.slice(-CONFIG.MAX_HISTORY))); } catch (e) {}
+    try {
+      sessionStorage.setItem("pjc_h", JSON.stringify(history.slice(-CONFIG.MAX_HISTORY)));
+      sessionStorage.setItem("pjc_t", String(Date.now()));
+    } catch (e) {}
+    armIdle();
+  }
+
+  // Chat poori tarah delete (button se ya automatic)
+  function clearChat() {
+    epoch++;
+    clearTimeout(idleTimer);
+    history = [];
+    busy = false; send.disabled = false;
+    try { sessionStorage.removeItem("pjc_h"); sessionStorage.removeItem("pjc_t"); } catch (e) {}
+    body.innerHTML = "";
+    started = false;
+    if (panel.classList.contains("open")) start();
   }
   function scroll() { body.scrollTop = body.scrollHeight; }
 
@@ -317,7 +352,9 @@
   }
   btn.onclick = function () { toggle(); };
   closeBtn.onclick = function () { toggle(false); };
+  delBtn.onclick = function () { clearChat(); };
   minBtn.onclick = function () { toggle(false); };
+  delBtn.onclick = function () { clearChat(); };
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") toggle(false); });
 
   // ---- Ask ----
@@ -327,10 +364,13 @@
     var now = Date.now();
     if (now - lastSent < CONFIG.COOLDOWN_MS) return;
     lastSent = now;
+    var mySid = sid;
+    touch();
 
     addMsg("user", text);
     history.push({ role: "user", content: text });
     busy = true; send.disabled = true;
+    var myEpoch = epoch;
 
     var typingRow = el("div", "pjc-row");
     var mini = el("div", "pjc-mini");
@@ -343,6 +383,7 @@
     body.appendChild(typingRow); scroll();
 
     function done(reply, isHtml) {
+      if (myEpoch !== epoch) return; // chat beech mein delete ho gayi
       typingRow.remove();
       var plain = isHtml ? reply.replace(/<[^>]+>/g, "") : reply;
       addMsg("bot", isHtml ? reply : linkify(reply), true);
@@ -360,6 +401,7 @@
     if (!CONFIG.API_URL) return offline();
 
     var ctrl = new AbortController();
+    curCtrl = ctrl;
     var to = setTimeout(function () { ctrl.abort(); }, 20000);
     fetch(CONFIG.API_URL, {
       method: "POST",
@@ -373,7 +415,7 @@
         if (!d || !d.reply) throw new Error("empty");
         done(String(d.reply), false);
       })
-      .catch(function () { clearTimeout(to); offline(); });
+      .catch(function () { clearTimeout(to); if (mySid !== sid) return; offline(); });
   }
 
   form.addEventListener("submit", function (e) {
