@@ -815,6 +815,24 @@ a.card.file{position:relative;padding-right:80px}
 }
 </style>
 
+
+<style id="account-star-rating-styles">
+.rating-card{text-align:center}
+.rating-top-icon{width:54px;height:54px;margin:2px auto 12px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(140deg,#dfc17f,#b58a45);color:#fff;font-size:1.7rem;box-shadow:0 9px 22px rgba(181,138,69,.2)}
+.rating-card h2{margin:0 35px 6px!important}
+.rating-card .account-modal-sub{margin:0 0 14px}
+.rating-stars{display:flex;justify-content:center;gap:7px;margin:13px 0 7px}
+.rating-star{width:49px;height:49px;padding:0;border:1px solid var(--line);border-radius:14px;background:var(--panel2);color:#c7c9c4;font-size:2rem;line-height:1;cursor:pointer;transition:transform .16s,background .16s,color .16s,border-color .16s}
+.rating-star:hover{transform:translateY(-3px) scale(1.04);border-color:#d3ad68}
+.rating-star.active{color:#d4a94f;background:color-mix(in srgb,#d4a94f 15%,var(--panel));border-color:#d4a94f}
+.rating-value{font-weight:850;color:var(--ink);font-size:.98rem;margin:8px 0 3px}
+.rating-feedback-label{font-size:.8rem;color:var(--mute);margin-bottom:12px}
+#ratingFeedback{text-align:left;min-height:88px;resize:vertical;margin-top:2px}
+.rating-note{font-size:.7rem;color:var(--mute);line-height:1.5;margin:10px 0 0}
+#sendAppRating:disabled{opacity:.45;cursor:not-allowed;transform:none}
+@media(max-width:390px){.rating-stars{gap:5px}.rating-star{width:43px;height:45px;font-size:1.75rem}}
+</style>
+
 </head>
 <body class="boot">
 
@@ -886,7 +904,7 @@ a.card.file{position:relative;padding-right:80px}
   </div>
   <div class="account-menu-group">
     <div class="account-menu-label">RATE &amp; SHARE</div>
-    <a class="account-menu-item" href="mailto:peeyush.jangid@outlook.com?subject=App%20Review%20%26%20Feedback&amp;body=My%20rating%20for%20Peeyush%20Jangid%20App%3A%20%2F5%0AFeedback%3A%20"><span class="ami-icon">★</span><span><b>Rate This App</b><small>Send your rating and feedback</small></span><i>↗</i></a>
+    <button class="account-menu-item" type="button" data-account-action="rate"><span class="ami-icon">★</span><span><b>Rate This App</b><small>Choose your rating from 1 to 5 stars</small></span><i>›</i></button>
     <button class="account-menu-item" type="button" data-account-action="share"><span class="ami-icon">↗</span><span><b>Share Our App</b><small>Share the app with friends</small></span><i>↗</i></button>
   </div>
   <input type="file" id="pfile" accept="image/*" hidden>
@@ -949,6 +967,28 @@ a.card.file{position:relative;padding-right:80px}
     <h2 id="accountSavedTitle">Saved Items</h2><p class="account-modal-sub">Keep useful files here for quick access.</p>
     <div id="accountSavedList" class="account-history-list"></div>
     <button class="btn pri" type="button" data-close-account-modal>Done</button>
+  </div>
+</div>
+
+
+<div class="account-modal" id="accountRatingModal" aria-hidden="true">
+  <div class="account-modal-card rating-card" role="dialog" aria-modal="true" aria-labelledby="accountRatingTitle">
+    <button class="account-modal-close" type="button" data-close-account-modal aria-label="Close">×</button>
+    <div class="rating-top-icon">★</div>
+    <h2 id="accountRatingTitle">Rate Our App</h2>
+    <p class="account-modal-sub">How was your experience with Peeyush Jangid App?</p>
+    <div class="rating-stars" role="radiogroup" aria-label="Rate from 1 to 5 stars">
+      <button type="button" class="rating-star" data-rating="1" role="radio" aria-checked="false" aria-label="1 star">★</button>
+      <button type="button" class="rating-star" data-rating="2" role="radio" aria-checked="false" aria-label="2 stars">★</button>
+      <button type="button" class="rating-star" data-rating="3" role="radio" aria-checked="false" aria-label="3 stars">★</button>
+      <button type="button" class="rating-star" data-rating="4" role="radio" aria-checked="false" aria-label="4 stars">★</button>
+      <button type="button" class="rating-star" data-rating="5" role="radio" aria-checked="false" aria-label="5 stars">★</button>
+    </div>
+    <div class="rating-value" id="ratingValue" aria-live="polite">Select your rating</div>
+    <div class="rating-feedback-label" id="ratingFeedbackLabel">Your feedback helps us improve.</div>
+    <textarea id="ratingFeedback" rows="3" placeholder="Tell us what you liked or what we should improve..."></textarea>
+    <div class="rating-note" id="ratingNote">1–2 stars: Negative feedback · 3 stars: Average · 4–5 stars: Positive feedback</div>
+    <button class="btn pri" id="sendAppRating" type="button" disabled>Submit Rating</button>
   </div>
 </div>
 
@@ -1556,6 +1596,7 @@ a.card.file{position:relative;padding-right:80px}
       if(kind==='profile')accountProfile();
       if(kind==='downloads'){renderAccountList('accountDownloadsList',DOWNLOADS_KEY,'Open or download a file from the Files section to see it here.');openAccountModal('accountDownloadsModal')}
       if(kind==='saved'){renderAccountList('accountSavedList',SAVED_KEY,'Tap the Save control on any file card to add it here.');openAccountModal('accountSavedModal')}
+      if(kind==='rate'){resetAppRating();openAccountModal('accountRatingModal')}
       if(kind==='share'){
         closeAccountMenu();
         var shareData={title:'Peeyush Jangid App',text:'Explore Peeyush Jangid’s professional portfolio, skills and documents.',url:APP_SHARE_URL};
@@ -1595,6 +1636,58 @@ a.card.file{position:relative;padding-right:80px}
   document.addEventListener('keydown',function(ev){
     if((ev.key==='Enter'||ev.key===' ')&&ev.target.matches('[data-save-url]')){ev.preventDefault();ev.target.click()}
     if(ev.key==='Escape')closeAccountModals();
+  });
+
+
+  /* Five-star feedback: 1-2 negative, 3 average, 4-5 positive */
+  var selectedAppRating=0;
+  var ratingLabels={
+    1:{title:'Very Bad',hint:'We’re sorry your experience was negative. Tell us what went wrong.',sentiment:'Negative'},
+    2:{title:'Needs Improvement',hint:'Thanks for being honest. What should we improve?',sentiment:'Negative'},
+    3:{title:'Average',hint:'Thanks! Tell us what could make the app better.',sentiment:'Neutral'},
+    4:{title:'Good',hint:'Glad you had a good experience. What did you like?',sentiment:'Positive'},
+    5:{title:'Excellent',hint:'Wonderful! We’re happy you loved the app.',sentiment:'Positive'}
+  };
+  function resetAppRating(){
+    selectedAppRating=0;
+    document.querySelectorAll('.rating-star').forEach(function(star){
+      star.classList.remove('active');star.setAttribute('aria-checked','false');
+    });
+    $('ratingValue').textContent='Select your rating';
+    $('ratingFeedbackLabel').textContent='Your feedback helps us improve.';
+    $('ratingFeedback').value='';
+    $('sendAppRating').disabled=true;
+  }
+  document.addEventListener('click',function(ev){
+    var star=ev.target.closest('[data-rating]');
+    if(star){
+      selectedAppRating=Number(star.getAttribute('data-rating'));
+      document.querySelectorAll('.rating-star').forEach(function(node){
+        var n=Number(node.getAttribute('data-rating'));
+        node.classList.toggle('active',n<=selectedAppRating);
+        node.setAttribute('aria-checked',n===selectedAppRating?'true':'false');
+      });
+      $('ratingValue').textContent=selectedAppRating+' / 5 — '+ratingLabels[selectedAppRating].title;
+      $('ratingFeedbackLabel').textContent=ratingLabels[selectedAppRating].hint;
+      $('sendAppRating').disabled=false;
+    }
+    if(ev.target.closest('#sendAppRating')){
+      if(!selectedAppRating)return;
+      var label=ratingLabels[selectedAppRating];
+      var feedback=$('ratingFeedback').value.trim();
+      var subject=encodeURIComponent('App Rating: '+selectedAppRating+'/5 stars — '+label.sentiment);
+      var body=encodeURIComponent(
+        'Peeyush Jangid App Feedback\n'+
+        'Rating: '+selectedAppRating+'/5 stars\n'+
+        'Category: '+label.sentiment+'\n'+
+        'Review: '+label.title+'\n'+
+        'Name: '+((me&&me.name)||'Not provided')+'\n'+
+        'Email: '+((me&&me.email)||'Not provided')+'\n'+
+        'Feedback: '+(feedback||'No additional comment')
+      );
+      window.location.href='mailto:peeyush.jangid@outlook.com?subject='+subject+'&body='+body;
+      closeAccountModals();
+    }
   });
 
 })();
