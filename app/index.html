@@ -767,6 +767,54 @@ a:hover{color:var(--brand2)}
 }
 </style>
 
+
+<style id="account-menu-feature-styles">
+#amenu{max-height:calc(100dvh - var(--top) - 18px);overflow:auto}
+.account-menu-group{border-top:1px solid var(--line);margin-top:13px;padding-top:12px}
+.account-menu-label{font-size:.67rem;letter-spacing:.14em;font-weight:850;color:var(--mute);margin:0 2px 7px}
+.account-menu-item{width:100%;min-height:57px;display:flex;align-items:center;gap:11px;padding:9px 7px;border:0;border-radius:13px;background:transparent;color:var(--ink);text-align:left;text-decoration:none;cursor:pointer;font:inherit}
+.account-menu-item:hover{background:var(--panel2)}
+.account-menu-item>span:nth-child(2){display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}
+.account-menu-item b{font-size:.86rem;font-weight:800}
+.account-menu-item small{font-size:.72rem;color:var(--mute);overflow-wrap:anywhere}
+.account-menu-item>i{font-style:normal;color:var(--mute);font-size:1.2rem}
+.ami-icon{width:36px;height:36px;flex:none;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--brand) 13%,var(--panel));color:var(--brand2);font-size:1.13rem;font-weight:850}
+.account-modal{display:none;position:fixed;inset:0;z-index:60;background:var(--scrim);backdrop-filter:blur(7px);padding:18px;align-items:center;justify-content:center;overflow:auto}
+.account-modal.on{display:flex}
+.account-modal-card{position:relative;width:min(100%,430px);max-height:calc(100dvh - 36px);overflow:auto;padding:25px 21px 20px;border:1px solid var(--line);border-radius:24px;background:var(--panel);box-shadow:var(--shadow-lg)}
+.account-modal-card h2{margin:2px 38px 5px 0;font-size:1.35rem}
+.account-modal-sub,.account-profile-head p{font-size:.84rem;color:var(--mute);line-height:1.55;margin:0 0 16px}
+.account-modal-close{position:absolute;right:14px;top:12px;width:34px;height:34px;border:0;border-radius:50%;background:var(--panel2);color:var(--ink);font-size:1.45rem;cursor:pointer}
+.account-profile-head{display:flex;align-items:center;gap:14px;margin-bottom:19px}
+.account-profile-head h2{margin:0 0 4px}
+.account-profile-head p{margin:0}
+.account-profile-avatar{width:62px;height:62px;display:grid;place-items:center;overflow:hidden;flex:none;border-radius:19px;background:var(--grad);color:#fff;font-size:1.5rem;font-weight:850}
+.account-profile-avatar img{width:100%;height:100%;object-fit:cover}
+.account-detail{display:flex;flex-direction:column;gap:5px;padding:13px 0;border-top:1px solid var(--line)}
+.account-detail span{font-size:.73rem;color:var(--mute)}
+.account-detail b{font-size:.91rem;overflow-wrap:anywhere}
+.account-modal-card>.btn{width:100%;margin-top:16px}
+.account-history-list{display:flex;flex-direction:column;gap:9px;max-height:48vh;overflow:auto}
+.account-history-item{display:flex;align-items:center;gap:10px;padding:11px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.account-history-item>div{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}
+.account-history-item b{font-size:.85rem;overflow-wrap:anywhere}
+.account-history-item small{font-size:.7rem;color:var(--mute)}
+.account-history-item a,.remove-saved{font-size:.78rem;font-weight:800;color:var(--brand2);text-decoration:none;border:0;background:transparent;padding:6px;cursor:pointer}
+.history-icon{width:34px;height:34px;display:grid;place-items:center;flex:none;border-radius:11px;background:var(--panel2);color:var(--brand);font-size:1.1rem}
+.account-empty{padding:25px 12px;text-align:center;border:1px dashed var(--line);border-radius:16px;display:flex;align-items:center;flex-direction:column;gap:7px}
+.account-empty>span{font-size:1.8rem;color:var(--brand)}
+.account-empty b{font-size:.9rem}
+.account-empty small{max-width:260px;color:var(--mute);font-size:.78rem;line-height:1.5}
+a.card.file{position:relative;padding-right:80px}
+.save-file{position:absolute;right:12px;top:50%;transform:translateY(-50%);padding:7px 9px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--brand2);font-size:.7rem;font-weight:850;white-space:nowrap;cursor:pointer;z-index:2}
+.save-file:hover{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,var(--panel))}
+@media(max-width:420px){
+  #amenu{right:8px;width:calc(100vw - 16px);padding:14px}
+  .account-menu-item{min-height:54px}
+  .account-modal-card{padding:23px 17px 18px}
+}
+</style>
+
 </head>
 <body class="boot">
 
@@ -821,8 +869,32 @@ a:hover{color:var(--brand2)}
 </div>
 
 <header><img src="icons/icon-192.png" alt="" width="32" height="32"><b>Peeyush Jangid</b><button id="avatar" type="button" aria-label="Account" aria-expanded="false">P</button></header>
-<div id="amenu" role="dialog" aria-label="Your account"><div class="mh"><div class="mav" id="mav">P</div><div><b id="mName"></b><small id="mMail"></small></div></div><div id="mRows"></div><input type="file" id="pfile" accept="image/*" hidden><button class="btn" id="pchange" type="button" style="margin-top:12px">Add / change photo</button><button class="btn" id="pwlink" type="button" style="margin-top:10px">Update password</button>
-<button class="btn" id="signout2" type="button" style="margin-top:10px">Sign out</button><button class="btn" id="deact" type="button" style="margin-top:10px;color:#ff9aa5">Deactivate account</button></div>
+<div id="amenu" role="dialog" aria-label="Your account">
+  <div class="mh"><div class="mav" id="mav">P</div><div><b id="mName"></b><small id="mMail"></small></div></div>
+  <div id="mRows"></div>
+  <div class="account-menu-group">
+    <div class="account-menu-label">MY ACCOUNT</div>
+    <button class="account-menu-item" type="button" data-account-action="profile"><span class="ami-icon">♙</span><span><b>My Profile</b><small>View your account details</small></span><i>›</i></button>
+    <button class="account-menu-item" type="button" data-account-action="downloads"><span class="ami-icon">↓</span><span><b>My Downloads</b><small>Recently opened or downloaded files</small></span><i>›</i></button>
+    <button class="account-menu-item" type="button" data-account-action="saved"><span class="ami-icon">♡</span><span><b>Saved Items</b><small>Your bookmarked files</small></span><i>›</i></button>
+  </div>
+  <div class="account-menu-group">
+    <div class="account-menu-label">HELP &amp; SUPPORT</div>
+    <a class="account-menu-item" href="tel:+919928579369"><span class="ami-icon">☎</span><span><b>Call Us</b><small>+91 99285 79369</small></span><i>↗</i></a>
+    <a class="account-menu-item" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20need%20help%20with%20your%20app." target="_blank" rel="noopener"><span class="ami-icon">◉</span><span><b>Chat on WhatsApp</b><small>Get help directly on WhatsApp</small></span><i>↗</i></a>
+    <a class="account-menu-item" href="mailto:peeyush.jangid@outlook.com?subject=App%20Help%20%26%20Support"><span class="ami-icon">✉</span><span><b>Send Us Email</b><small>peeyush.jangid@outlook.com</small></span><i>↗</i></a>
+  </div>
+  <div class="account-menu-group">
+    <div class="account-menu-label">RATE &amp; SHARE</div>
+    <a class="account-menu-item" href="mailto:peeyush.jangid@outlook.com?subject=App%20Review%20%26%20Feedback&amp;body=My%20rating%20for%20Peeyush%20Jangid%20App%3A%20%2F5%0AFeedback%3A%20"><span class="ami-icon">★</span><span><b>Rate This App</b><small>Send your rating and feedback</small></span><i>↗</i></a>
+    <button class="account-menu-item" type="button" data-account-action="share"><span class="ami-icon">↗</span><span><b>Share Our App</b><small>Share the app with friends</small></span><i>↗</i></button>
+  </div>
+  <input type="file" id="pfile" accept="image/*" hidden>
+  <button class="btn" id="pchange" type="button" style="margin-top:12px">Add / change photo</button>
+  <button class="btn" id="pwlink" type="button" style="margin-top:10px">Update password</button>
+  <button class="btn" id="signout2" type="button" style="margin-top:10px">Sign out</button>
+  <button class="btn" id="deact" type="button" style="margin-top:10px;color:#ff9aa5">Deactivate account</button>
+</div>
 
 <!-- Update password popup -->
 <div id="pwmodal" class="modal" role="dialog" aria-modal="true" aria-labelledby="pwtitle">
@@ -851,6 +923,34 @@ a:hover{color:var(--brand2)}
   </div>
 </div>
 
+
+
+<div class="account-modal" id="accountProfileModal" aria-hidden="true">
+  <div class="account-modal-card" role="dialog" aria-modal="true" aria-labelledby="accountProfileTitle">
+    <button class="account-modal-close" type="button" data-close-account-modal aria-label="Close">×</button>
+    <div class="account-profile-head"><div class="account-profile-avatar" id="accountProfileAvatar">P</div><div><h2 id="accountProfileTitle">My Profile</h2><p>Your account information</p></div></div>
+    <div class="account-detail"><span>Full name</span><b id="profileFullName">—</b></div>
+    <div class="account-detail"><span>Email address</span><b id="profileEmail">—</b></div>
+    <div class="account-detail"><span>Mobile number</span><b id="profilePhone">—</b></div>
+    <button class="btn pri" type="button" data-close-account-modal>Done</button>
+  </div>
+</div>
+<div class="account-modal" id="accountDownloadsModal" aria-hidden="true">
+  <div class="account-modal-card" role="dialog" aria-modal="true" aria-labelledby="accountDownloadsTitle">
+    <button class="account-modal-close" type="button" data-close-account-modal aria-label="Close">×</button>
+    <h2 id="accountDownloadsTitle">My Downloads</h2><p class="account-modal-sub">Files you have opened or downloaded from this app appear here.</p>
+    <div id="accountDownloadsList" class="account-history-list"></div>
+    <button class="btn pri" type="button" data-close-account-modal>Done</button>
+  </div>
+</div>
+<div class="account-modal" id="accountSavedModal" aria-hidden="true">
+  <div class="account-modal-card" role="dialog" aria-modal="true" aria-labelledby="accountSavedTitle">
+    <button class="account-modal-close" type="button" data-close-account-modal aria-label="Close">×</button>
+    <h2 id="accountSavedTitle">Saved Items</h2><p class="account-modal-sub">Keep useful files here for quick access.</p>
+    <div id="accountSavedList" class="account-history-list"></div>
+    <button class="btn pri" type="button" data-close-account-modal>Done</button>
+  </div>
+</div>
 
 <main>
 <section class="view" id="v-home">
@@ -1010,7 +1110,7 @@ a:hover{color:var(--brand2)}
   var FT={xls:'Excel',xlsx:'Excel',doc:'Word',docx:'Word',ppt:'PowerPoint',pptx:'PowerPoint',pdf:'PDF',dwg:'AutoCAD',dxf:'AutoCAD'},cur='All',notes=[];
   function ext(it){if(it.type)return it.type;var m=(it.url||'').split('?')[0].split('.').pop().toLowerCase();return FT[m]||'File'}
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-  function card(it,badge){return '<a class="card file" href="'+esc(it.url)+'" target="_blank" rel="noopener"><span class="ic">'+esc(badge)+'</span><div><b>'+esc(it.title)+'</b>'+(it.note?'<small>'+esc(it.note)+'</small>':'')+'</div></a>'}
+  function card(it,badge){return '<a class="card file" href="'+esc(it.url)+'" target="_blank" rel="noopener" data-file-title="'+esc(it.title)+'"><span class="ic">'+esc(badge)+'</span><div><b>'+esc(it.title)+'</b>'+(it.note?'<small>'+esc(it.note)+'</small>':'')+'</div><span class="save-file" role="button" tabindex="0" aria-label="Save '+esc(it.title)+'" data-save-url="'+esc(it.url)+'" data-save-title="'+esc(it.title)+'">♡ Save</span></a>'}
   function drawNotes(){
     var types=['All'],list=notes.filter(function(n){return cur==='All'||ext(n)===cur});
     notes.forEach(function(n){var t=ext(n);if(types.indexOf(t)<0)types.push(t)});
@@ -1411,6 +1511,92 @@ a:hover{color:var(--brand2)}
   btn.addEventListener('click',function(){if(!dp)return;dp.prompt();dp.userChoice.then(function(){dp=null;btn.style.display='none'})});
   addEventListener('appinstalled',function(){btn.style.display='none'});
   if('serviceWorker' in navigator)addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
+
+  /* ---------- account menu: profile, downloads, saved items, support & sharing ---------- */
+  var APP_SHARE_URL='https://peeyush-jangid.github.io/app/';
+  var DOWNLOADS_KEY='pj_app_download_history_v1';
+  var SAVED_KEY='pj_app_saved_items_v1';
+  function readAccountList(key){try{return JSON.parse(localStorage.getItem(key)||'[]')}catch(e){return[]}}
+  function writeAccountList(key,list){try{localStorage.setItem(key,JSON.stringify(list.slice(0,60)))}catch(e){}}
+  function closeAccountMenu(){
+    var menu=$('amenu'); if(menu)menu.classList.remove('on');
+    var avatar=$('avatar'); if(avatar)avatar.setAttribute('aria-expanded','false');
+  }
+  function openAccountModal(id){
+    closeAccountMenu();
+    var el=$(id); if(!el)return;
+    el.classList.add('on');el.setAttribute('aria-hidden','false');
+  }
+  function closeAccountModals(){
+    [].forEach.call(document.querySelectorAll('.account-modal.on'),function(el){
+      el.classList.remove('on');el.setAttribute('aria-hidden','true');
+    });
+  }
+  function accountProfile(){
+    var u=me||{};
+    $('profileFullName').textContent=u.name||'—';
+    $('profileEmail').textContent=u.email||'—';
+    $('profilePhone').textContent=u.phone||'Not added';
+    var av=$('accountProfileAvatar');
+    if(u.photo){av.innerHTML='<img src="'+esc(u.photo)+'" alt="Profile photo">'}
+    else{av.textContent=(u.name||u.email||'P').charAt(0).toUpperCase()}
+    openAccountModal('accountProfileModal');
+  }
+  function renderAccountList(targetId,key,emptyText){
+    var list=readAccountList(key),el=$(targetId);
+    if(!list.length){el.innerHTML='<div class="account-empty"><span>✧</span><b>Nothing here yet</b><small>'+emptyText+'</small></div>';return}
+    el.innerHTML=list.map(function(item,index){
+      return '<div class="account-history-item"><span class="history-icon">'+(key===SAVED_KEY?'♡':'↓')+'</span><div><b>'+esc(item.title||'File')+'</b><small>'+(item.date?esc(item.date):'')+'</small></div>'+(key===SAVED_KEY?'<button type="button" class="remove-saved" data-remove-saved="'+index+'" aria-label="Remove saved item">×</button>':'<a href="'+esc(item.url||'#')+'" target="_blank" rel="noopener">Open</a>')+'</div>';
+    }).join('');
+  }
+  document.addEventListener('click',function(ev){
+    var action=ev.target.closest('[data-account-action]');
+    if(action){
+      var kind=action.getAttribute('data-account-action');
+      if(kind==='profile')accountProfile();
+      if(kind==='downloads'){renderAccountList('accountDownloadsList',DOWNLOADS_KEY,'Open or download a file from the Files section to see it here.');openAccountModal('accountDownloadsModal')}
+      if(kind==='saved'){renderAccountList('accountSavedList',SAVED_KEY,'Tap the Save control on any file card to add it here.');openAccountModal('accountSavedModal')}
+      if(kind==='share'){
+        closeAccountMenu();
+        var shareData={title:'Peeyush Jangid App',text:'Explore Peeyush Jangid’s professional portfolio, skills and documents.',url:APP_SHARE_URL};
+        if(navigator.share){navigator.share(shareData).catch(function(){});}
+        else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(APP_SHARE_URL).then(function(){alert('App link copied. Share it with your friends!')}).catch(function(){prompt('Copy this app link:',APP_SHARE_URL)})}
+        else{prompt('Copy this app link:',APP_SHARE_URL)}
+      }
+      ev.preventDefault();ev.stopPropagation();return;
+    }
+    var save=ev.target.closest('[data-save-url]');
+    if(save){
+      ev.preventDefault();ev.stopPropagation();
+      var url=save.getAttribute('data-save-url'),title=save.getAttribute('data-save-title')||'File';
+      var saved=readAccountList(SAVED_KEY),found=saved.some(function(x){return x.url===url});
+      if(found){saved=saved.filter(function(x){return x.url!==url});save.textContent='♡ Save';}
+      else{saved.unshift({url:url,title:title,date:new Date().toLocaleDateString('en-IN')});save.textContent='♥ Saved';}
+      writeAccountList(SAVED_KEY,saved);
+      return;
+    }
+    var remove=ev.target.closest('[data-remove-saved]');
+    if(remove){
+      var idx=Number(remove.getAttribute('data-remove-saved')),arr=readAccountList(SAVED_KEY);
+      arr.splice(idx,1);writeAccountList(SAVED_KEY,arr);
+      renderAccountList('accountSavedList',SAVED_KEY,'Tap the Save control on any file card to add it here.');
+      ev.preventDefault();ev.stopPropagation();return;
+    }
+    if(ev.target.closest('[data-close-account-modal]')){closeAccountModals();return}
+    if(ev.target.classList&&ev.target.classList.contains('account-modal')){closeAccountModals();return}
+    var file=ev.target.closest('a.card.file');
+    if(file){
+      var history=readAccountList(DOWNLOADS_KEY),url=file.getAttribute('href'),title=file.getAttribute('data-file-title')||file.textContent.trim();
+      history=history.filter(function(x){return x.url!==url});
+      history.unshift({url:url,title:title,date:new Date().toLocaleString('en-IN')});
+      writeAccountList(DOWNLOADS_KEY,history);
+    }
+  },true);
+  document.addEventListener('keydown',function(ev){
+    if((ev.key==='Enter'||ev.key===' ')&&ev.target.matches('[data-save-url]')){ev.preventDefault();ev.target.click()}
+    if(ev.key==='Escape')closeAccountModals();
+  });
+
 })();
 </script>
 <script src="/chatbot.js" defer></script>
