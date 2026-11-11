@@ -128,6 +128,45 @@ a.card:hover,.proj:hover,.tl:hover{transform:translateY(-3px);box-shadow:var(--s
 .bar b{color:var(--brand);font-weight:700}
 .bar i{display:block;height:9px;border-radius:9px;background:var(--panel2);overflow:hidden;border:1px solid var(--line)}
 .bar i::after{content:"";display:block;height:100%;width:var(--v);background:var(--grad);border-radius:9px}
+
+/* Skills page refresh */
+.skills-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:4px 0 22px;padding:24px 26px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(115deg,color-mix(in srgb,var(--brand) 10%,var(--panel)),var(--panel) 68%);box-shadow:var(--shadow)}
+.skills-kicker{display:block;margin-bottom:8px;color:var(--brand);font-size:.7rem;font-weight:800;letter-spacing:.15em}
+.skills-heading h1{font-size:2rem}
+.skills-heading p{margin-top:7px;font-size:.92rem}
+.skills-mark{width:58px;height:58px;display:grid;place-items:center;flex:none;border-radius:18px;background:var(--grad);color:#fff;font-size:1.8rem;box-shadow:0 10px 24px rgba(37,99,235,.24)}
+.skills-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.skills-overview>div{display:flex;align-items:center;gap:10px;min-width:0;padding:13px 15px;border:1px solid var(--line);border-radius:16px;background:var(--panel);box-shadow:var(--shadow)}
+.skills-overview b{font:800 1.25rem var(--fh);color:var(--brand)}
+.skills-overview span{font-size:.76rem;line-height:1.25;color:var(--mute)}
+.skills-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.skill-panel{min-width:0;padding:21px;border:1px solid var(--line);border-radius:22px;background:var(--panel);box-shadow:var(--shadow)}
+.skill-panel-head{display:flex;align-items:center;gap:12px;padding-bottom:16px;margin-bottom:5px;border-bottom:1px solid var(--line)}
+.skill-icon{width:43px;height:43px;display:grid;place-items:center;flex:none;border-radius:14px;background:color-mix(in srgb,var(--brand) 12%,var(--panel));color:var(--brand);font-size:1.45rem;font-weight:700}
+.skill-icon.people{background:color-mix(in srgb,#0d9488 13%,var(--panel));color:#0d9488}
+.skill-icon.tools{background:color-mix(in srgb,#8b5cf6 13%,var(--panel));color:#8b5cf6}
+.skill-icon.language{background:color-mix(in srgb,#d97706 13%,var(--panel));color:#d97706}
+.skill-panel-head h2{margin:0;font-size:1.02rem}
+.skill-panel-head p{margin-top:3px;font-size:.78rem}
+.skill-list{padding-top:5px}
+.skill-item{margin:15px 0 17px}
+.skill-item>div{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:9px;font-size:.86rem;line-height:1.4;font-weight:550}
+.skill-item>div span{min-width:0}
+.skill-item b{flex:none;color:var(--brand);font-size:.82rem;font-weight:750;font-variant-numeric:tabular-nums}
+.skill-item i{display:block;height:7px;overflow:hidden;border-radius:20px;background:var(--panel2)}
+.skill-item i:after{content:"";display:block;width:var(--v);height:100%;border-radius:20px;background:var(--grad);box-shadow:0 2px 7px rgba(37,99,235,.18);animation:skillFill .8s ease-out both}
+@keyframes skillFill{from{width:0}to{width:var(--v)}}
+.tools-panel,.language-panel{margin-top:14px}
+.skill-tags{display:flex;flex-wrap:wrap;gap:9px;padding-top:15px}
+.skill-tags span{padding:8px 13px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font-size:.8rem;font-weight:550;transition:transform .18s,border-color .18s,color .18s}
+.skill-tags span:hover{transform:translateY(-2px);border-color:var(--brand);color:var(--brand)}
+.language-tags{display:flex;flex-wrap:wrap;gap:10px;padding-top:15px}
+.language-tags span{display:flex;align-items:center;gap:9px;padding:9px 15px;border:1px solid var(--line);border-radius:13px;background:var(--bg);font-size:.86rem;font-weight:600}
+.language-tags i{width:28px;height:28px;display:grid;place-items:center;border-radius:9px;background:color-mix(in srgb,var(--brand) 12%,var(--panel));color:var(--brand);font-size:.72rem;font-style:normal;font-weight:800}
+@media(min-width:760px){#v-skills.on{display:block}.skills-heading{padding:27px 30px}.skills-heading h1{font-size:2.15rem}.skills-grid{grid-template-columns:1fr 1fr;align-items:stretch}.skill-panel{padding:23px}.tools-panel,.language-panel{margin-top:14px}.skills-overview{max-width:620px}}
+@media(max-width:420px){.skills-heading{padding:19px 17px}.skills-mark{width:48px;height:48px;border-radius:15px}.skills-overview{gap:7px}.skills-overview>div{padding:11px 9px;gap:7px;flex-direction:column;align-items:flex-start}.skills-overview b{font-size:1.15rem}.skills-overview span{font-size:.7rem}.skill-panel{padding:17px}.skill-item>div{font-size:.82rem}}
+@media(prefers-reduced-motion:reduce){.skill-item i:after{animation:none}}
+
 .row{display:flex;align-items:center;gap:14px;padding:15px 18px}
 .row .ic{width:46px;height:46px;border-radius:14px;background:var(--panel2);display:grid;place-items:center;color:var(--brand);font-weight:800;flex:none}
 .row b{font-weight:650}
@@ -332,23 +371,45 @@ body.locked #amenu,body.boot #amenu{display:none!important}
 </section>
 
 <section class="view" id="v-skills">
-  <h1>Skills</h1>
-  <h2>Field work</h2>
-  <div class="bar" style="--v:86%"><div><span>HVAC installation &amp; site supervision</span><b>86%</b></div><i></i></div>
-  <div class="bar" style="--v:82%"><div><span>Site supervision &amp; coordination</span><b>82%</b></div><i></i></div>
-  <div class="bar" style="--v:78%"><div><span>VRV / VRF drawing · AutoCAD 2D</span><b>78%</b></div><i></i></div>
-  <div class="bar" style="--v:76%"><div><span>Pre-commissioning documentation</span><b>76%</b></div><i></i></div>
-  <h2>People &amp; finance</h2>
-  <div class="bar" style="--v:88%"><div><span>Communication</span><b>88%</b></div><i></i></div>
-  <div class="bar" style="--v:87%"><div><span>Problem solving</span><b>87%</b></div><i></i></div>
-  <div class="bar" style="--v:85%"><div><span>Time management</span><b>85%</b></div><i></i></div>
-  <div class="bar" style="--v:84%"><div><span>Team management</span><b>84%</b></div><i></i></div>
-  <div class="bar" style="--v:82%"><div><span>Accounting</span><b>82%</b></div><i></i></div>
-  <div class="bar" style="--v:80%"><div><span>Banking</span><b>80%</b></div><i></i></div>
-  <h2>Tools &amp; systems</h2>
-  <div class="chips"><span>AutoCAD 2D</span><span>MS Excel</span><span>MS Word</span><span>PowerPoint</span><span>Tally Prime</span><span>VRV / VRF</span><span>Chilled water</span><span>Ducting</span><span>AHU</span><span>FCU</span><span>Site reports</span><span>ChatGPT</span><span>Claude</span><span>GitHub</span></div>
-  <h2>Languages</h2>
-  <div class="chips"><span>Hindi</span><span>English</span></div>
+  <div class="skills-heading">
+    <div><span class="skills-kicker">EXPERTISE &amp; CAPABILITIES</span><h1>Skills</h1><p>A snapshot of my technical strengths, working style and tools.</p></div>
+    <div class="skills-mark" aria-hidden="true">✦</div>
+  </div>
+  <div class="skills-overview"><div><b>10</b><span>Core skills</span></div><div><b>3</b><span>Skill categories</span></div><div><b>14</b><span>Tools &amp; systems</span></div></div>
+
+  <div class="skills-grid">
+    <article class="skill-panel">
+      <div class="skill-panel-head"><span class="skill-icon">⌁</span><div><h2>Technical &amp; field work</h2><p>Project execution and HVAC operations</p></div></div>
+      <div class="skill-list">
+        <div class="skill-item" style="--v:86%"><div><span>HVAC installation &amp; site supervision</span><b>86%</b></div><i></i></div>
+        <div class="skill-item" style="--v:82%"><div><span>Site supervision &amp; coordination</span><b>82%</b></div><i></i></div>
+        <div class="skill-item" style="--v:78%"><div><span>VRV / VRF drawing · AutoCAD 2D</span><b>78%</b></div><i></i></div>
+        <div class="skill-item" style="--v:76%"><div><span>Pre-commissioning documentation</span><b>76%</b></div><i></i></div>
+      </div>
+    </article>
+
+    <article class="skill-panel">
+      <div class="skill-panel-head"><span class="skill-icon people">◎</span><div><h2>Professional skills</h2><p>Communication, planning and teamwork</p></div></div>
+      <div class="skill-list">
+        <div class="skill-item" style="--v:88%"><div><span>Communication</span><b>88%</b></div><i></i></div>
+        <div class="skill-item" style="--v:87%"><div><span>Problem solving</span><b>87%</b></div><i></i></div>
+        <div class="skill-item" style="--v:85%"><div><span>Time management</span><b>85%</b></div><i></i></div>
+        <div class="skill-item" style="--v:84%"><div><span>Team management</span><b>84%</b></div><i></i></div>
+        <div class="skill-item" style="--v:82%"><div><span>Accounting</span><b>82%</b></div><i></i></div>
+        <div class="skill-item" style="--v:80%"><div><span>Banking</span><b>80%</b></div><i></i></div>
+      </div>
+    </article>
+  </div>
+
+  <article class="skill-panel tools-panel">
+    <div class="skill-panel-head"><span class="skill-icon tools">▦</span><div><h2>Tools &amp; systems</h2><p>Software, equipment and work processes</p></div></div>
+    <div class="skill-tags"><span>AutoCAD 2D</span><span>MS Excel</span><span>MS Word</span><span>PowerPoint</span><span>Tally Prime</span><span>VRV / VRF</span><span>Chilled water</span><span>Ducting</span><span>AHU</span><span>FCU</span><span>Site reports</span><span>ChatGPT</span><span>Claude</span><span>GitHub</span></div>
+  </article>
+
+  <article class="skill-panel language-panel">
+    <div class="skill-panel-head"><span class="skill-icon language">文</span><div><h2>Languages</h2><p>Languages I communicate in</p></div></div>
+    <div class="language-tags"><span><i>ह</i> Hindi</span><span><i>EN</i> English</span></div>
+  </article>
 </section>
 
 <section class="view" id="v-files">
