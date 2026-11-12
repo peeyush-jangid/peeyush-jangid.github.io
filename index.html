@@ -241,13 +241,7 @@
       <a href="#about">About Us</a>
       <a href="#projects">Gallery</a>
       <a href="#work-files">Resources</a>
-      <div class="nav-drop" id="career-drop">
-        <a href="#experience" class="nav-drop-toggle" id="career-toggle" aria-haspopup="true" aria-expanded="false">Career <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
-        <div class="nav-menu" role="menu">
-          <button type="button" role="menuitem" data-career="otw"><i></i><span>Open to Work<small>Send me a job offer</small></span></button>
-          <button type="button" role="menuitem" data-career="hire"><i class="gold"></i><span>Hiring<small>Apply for a job</small></span></button>
-        </div>
-      </div>
+      <a href="career.html">Career</a>
       <a href="contact.html" class="nav-contact">Contact Us</a>
       <a href="#" class="auth-nav" data-auth-open>Sign in</a>
     </nav>
@@ -380,7 +374,7 @@
       </div>
       <div>
         <h4>Quick Links</h4>
-        <ul class="rs-links"><li><a href="#home">Home</a></li><li><a href="#about">About Us</a></li><li><a href="#services">Our Services</a></li><li><a href="#projects">Gallery</a></li><li><a href="#experience">Career</a></li><li><a href="contact.html">Contact Us</a></li></ul>
+        <ul class="rs-links"><li><a href="#home">Home</a></li><li><a href="#about">About Us</a></li><li><a href="#services">Our Services</a></li><li><a href="#projects">Gallery</a></li><li><a href="career.html">Career</a></li><li><a href="contact.html">Contact Us</a></li></ul>
       </div>
       <div>
         <h4>Services</h4>
@@ -1365,5 +1359,13 @@
     updateCounts(); decorateAll();
   })();
   </script>
+<script>
+  (function(){
+    var p=new URLSearchParams(location.search).get('open');
+    if(!p) return;
+    history.replaceState(null,'',location.pathname);
+    setTimeout(function(){ var el=document.getElementById(p==='otw'?'otw-open':'hire-open'); if(el) el.click(); },1200);
+  })();
+</script>
 </body>
 </html>
