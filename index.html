@@ -977,66 +977,27 @@
   })();
   </script>
 
-  <!-- ===== HIRING POPUP ===== -->
-  <aside class="hp-popup" id="hp-popup" role="complementary" aria-label="Hiring and job offers" aria-hidden="true">
-    <section class="hp-col" aria-labelledby="hp-title">
-      <h2 id="hp-title">Looking for a job?</h2>
-      <p id="hp-sub">Register first, then apply with your email and password.</p>
-      <div class="hp-actions">
-        <button class="hp-btn hp-btn-primary" id="hp-up" type="button">Register</button>
-        <button class="hp-btn hp-btn-ghost" id="hp-in" type="button">Apply</button>
-        <button class="hp-btn hp-btn-primary" id="hp-apply" type="button" style="display:none">Apply now</button>
-      </div>
-    </section>
-    <section class="hp-col" aria-labelledby="hp-offer-title">
-      <h2 id="hp-offer-title">Have a job for me?</h2>
-      <p>I am open to work. Send me your job offer.</p>
-      <div class="hp-actions">
-        <button class="hp-btn hp-btn-ghost" id="hp-offer" type="button">Send job offer</button>
-      </div>
-    </section>
-  </aside>
+  <!-- ===== APPLY GATE (sign-in required before the hiring form) ===== -->
   <script>
   (function(){
-    var pop=document.getElementById('hp-popup');
-    function show(){ pop.classList.add('show'); pop.setAttribute('aria-hidden','false'); }
-    function expand(){}
-    setTimeout(show,800);   // always visible
-    document.getElementById('hp-offer').addEventListener('click',function(){ document.getElementById('otw-open').click(); });
-    var re=document.getElementById('hp-reopen');
-    if(re) re.addEventListener('click',function(e){ e.preventDefault(); show(); expand(); });
-    // Step 1: Sign up / Sign in popup.  Step 2: hiring form opens automatically after login.
     function go(which){
       var signedIn = document.getElementById('auth-forms').style.display==='none';
-      if(signedIn){ document.getElementById('hire-open').click(); return; }   // already logged in: straight to the form
+      if(signedIn){ document.getElementById('hire-open').click(); return; }
       var a=document.querySelector('[data-auth-open]'); if(a) a.click();
       var t=document.getElementById(which==='up'?'tab-up':'tab-in'); if(t) t.click();
       document.getElementById('auth-title').textContent = which==='up' ? 'Step 1: Create your account' : 'Step 2: Sign in to apply';
     }
-    function sync(){
-      var si = document.getElementById('auth-forms').style.display==='none';
-      document.getElementById('hp-up').style.display = si?'none':'';
-      document.getElementById('hp-in').style.display = si?'none':'';
-      document.getElementById('hp-apply').style.display = si?'':'none';
-      document.getElementById('hp-title').textContent = si ? 'You are signed in' : 'Looking for a job?';
-      document.getElementById('hp-sub').textContent = si ? 'Continue to the job application form.' : 'Register first, then apply with your email and password.';
-    }
-    new MutationObserver(sync).observe(document.getElementById('auth-forms'),{attributes:true,attributeFilter:['style']});
-    document.getElementById('hp-apply').addEventListener('click',function(){ document.getElementById('hire-open').click(); });
-    sync();
     if(/[?&]apply=1/.test(location.search)){ history.replaceState(null,'',location.pathname); setTimeout(function(){ go('up'); },900); }
-    document.getElementById('hp-up').addEventListener('click',function(){ go('up'); });
-    document.getElementById('hp-in').addEventListener('click',function(){ go('in'); });
     // Gate: every "apply" button/link needs an account + sign in first
     document.addEventListener('click',function(e){
       var t=e.target.closest && e.target.closest('a[href="hiring.html"],#hire-open');
       if(!t || window.__hpAllow) return;
-      if(document.getElementById('auth-forms').style.display==='none') return;   // already signed in
+      if(document.getElementById('auth-forms').style.display==='none') return;
       e.preventDefault(); e.stopImmediatePropagation(); go('up');
     },true);
   })();
   </script>
-  <!-- ===== END HIRING POPUP ===== -->
+  <!-- ===== END APPLY GATE ===== -->
 <script src="/chatbot.js?v=4" defer></script>
 
   <!-- ===== Help & Support: modal, toast, styles and script ===== -->
