@@ -3,177 +3,186 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#08090d" />
-  <title>Send a job offer | Peeyush Kumar Jangid</title>
+  <meta name="theme-color" content="#0878bf" />
+  <title>Contact Us | Peeyush Kumar Jangid – HVAC Project Engineer</title>
+  <meta name="description" content="Contact Peeyush Kumar Jangid, HVAC Project Engineer in Jaipur. Send a message, call or WhatsApp." />
+  <link rel="canonical" href="https://peeyush-jangid.github.io/contact.html" />
+  <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <style>
-    .form-page{min-height:100vh;display:grid;place-items:center;padding:54px 5%}
-    .form-card{width:min(680px,100%);background:linear-gradient(145deg,#151720,#0e1016);border:1px solid rgba(214,179,106,.3);padding:clamp(24px,5vw,42px)}
-    .form-card h1{font:800 clamp(28px,5vw,38px) var(--display);letter-spacing:-1.3px;margin:14px 0 8px}
-    .form-card>p{color:var(--muted);font-size:12px;line-height:1.8;margin:0 0 24px}
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
-    .field-full{grid-column:1/-1}
-    .form-card label{display:block;font-size:10px;letter-spacing:1.3px;color:var(--gold);font-weight:700;margin:15px 0 7px}
-    .form-card input,.form-card textarea,.form-card select{width:100%;padding:13px 14px;background:#171922;border:1px solid rgba(255,255,255,.14);color:var(--ink);font:13px var(--body);outline:none;border-radius:0}
-    .form-card select option{background:#171922}
-    .form-card input:focus,.form-card textarea:focus,.form-card select:focus{border-color:var(--gold)}
-    .form-card textarea{min-height:115px;resize:vertical}
-    .form-card .btn{width:100%;margin-top:24px;border:0;cursor:pointer}
-    .form-back{display:inline-block;margin-top:20px;font-size:10px;letter-spacing:1.2px;color:#c6b58e}
-    .sent,.error{display:none;padding:14px;margin:0 0 20px;font-size:12px;line-height:1.6}
-    .sent{border:1px solid rgba(143,240,180,.4);background:rgba(143,240,180,.08);color:#8ff0b4}
-    .error{border:1px solid rgba(255,120,120,.4);background:rgba(255,120,120,.08);color:#ffb2b2}
-    .form-card button:disabled{opacity:.65;cursor:wait}
-    .required-note{font-size:10px;color:#85858d;margin-top:12px}
-    @media(max-width:560px){.form-grid{grid-template-columns:1fr}.field-full{grid-column:auto}}
+    body { background: #fff; }
+    .cp-top { text-align: center; padding: 64px 5% 36px; background: linear-gradient(115deg, #fff 0%, #f1f6fc 100%); }
+    .cp-top .section-kicker { display: inline-block; }
+    .cp-top h1 { margin: 14px 0 10px; font: 800 clamp(34px, 4.6vw, 56px)/1.1 'Manrope', sans-serif; letter-spacing: -2px; color: #111b32; }
+    .cp-top p { margin: 0 auto; max-width: 560px; color: #596c82; font-size: 15px; line-height: 1.8; }
+    .cp-wrap { width: min(1180px, 90%); margin: 40px auto 90px; display: grid; grid-template-columns: 1.05fr .95fr; border: 1px solid #e2eaf1; border-radius: 20px; overflow: hidden; box-shadow: 0 18px 50px rgba(24, 54, 82, .08); }
+    .cp-form { padding: 44px; background: #f8fafc; border-right: 1px solid #e2eaf1; }
+    .cp-form h2, .cp-info h2 { margin: 0 0 10px; font: 800 clamp(26px, 3vw, 36px)/1.15 'Manrope', sans-serif; letter-spacing: -1px; color: #111b32; }
+    .cp-form > p, .cp-info > p { margin: 0 0 26px; color: #596c82; font-size: 15px; line-height: 1.8; }
+    .cp-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+    .cp-form label { display: block; margin: 18px 0 9px; font: 800 12px 'Manrope', sans-serif; letter-spacing: 1.2px; text-transform: uppercase; color: #1b2c47; }
+    .cp-form input, .cp-form select, .cp-form textarea { width: 100%; padding: 16px 18px; border: 1px solid #dbe5ee; border-radius: 14px; background: #fff; color: #14263d; font: 500 15px 'DM Sans', sans-serif; outline: none; transition: border-color .2s, box-shadow .2s; }
+    .cp-form textarea { min-height: 140px; resize: vertical; }
+    .cp-form input:focus, .cp-form select:focus, .cp-form textarea:focus { border-color: #0878bf; box-shadow: 0 0 0 4px rgba(8, 120, 191, .12); }
+    .cp-form .btn { width: 100%; margin-top: 24px; border: 0; cursor: pointer; }
+    .cp-form .btn:disabled { opacity: .65; cursor: wait; }
+    .cp-msg { display: none; margin: 0 0 16px; padding: 14px 16px; border-radius: 12px; font-size: 14px; line-height: 1.6; }
+    .cp-ok { background: #edf7f2; border: 1px solid #cce6d8; color: #1d6244; }
+    .cp-err { background: #fdf0f0; border: 1px solid #f1c8c8; color: #a53b3b; }
+    .cp-info { padding: 44px; background: #fff; }
+    .cp-item { display: flex; gap: 18px; align-items: flex-start; margin-top: 26px; }
+    .cp-ico { flex: none; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 14px; background: #f1f6fb; color: #0878bf; }
+    .cp-ico svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .cp-item small { display: block; margin-bottom: 4px; font: 800 12px 'Manrope', sans-serif; letter-spacing: 1.4px; text-transform: uppercase; color: #6c8095; }
+    .cp-item a, .cp-item b { display: block; font: 700 18px/1.5 'Manrope', sans-serif; color: #0878bf; }
+    .cp-item b { color: #111b32; }
+    .cp-item a:hover { text-decoration: underline; }
+    .cp-note { margin-top: 34px; padding: 20px 22px; border-radius: 14px; background: #edf7f2; border: 1px solid #cce6d8; color: #1d6244; font-size: 14px; line-height: 1.7; }
+    .cp-fab { position: fixed; right: 24px; bottom: 28px; z-index: 50; display: flex; flex-direction: column; gap: 14px; }
+    .cp-fab a { width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; background: #0878bf; color: #fff; box-shadow: 0 10px 26px rgba(8, 120, 191, .3); transition: transform .2s; }
+    .cp-fab a.wa { background: #20c866; box-shadow: 0 10px 26px rgba(32, 200, 102, .3); }
+    .cp-fab a:hover { transform: translateY(-3px) scale(1.05); }
+    .cp-fab svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-links a.active:not(.nav-contact) { color: #0878bf; }
+    @media (max-width: 900px) { .cp-wrap { grid-template-columns: 1fr; } .cp-form { border-right: 0; border-bottom: 1px solid #e2eaf1; } }
+    @media (max-width: 560px) { .cp-form, .cp-info { padding: 26px 20px; } .cp-row { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <main class="form-page">
-    <div class="form-card">
-      <span class="section-kicker" style="color:#8fcb9c">● OPEN TO WORK · HIRING ENQUIRY / JOB OFFER</span>
-      <h1>Have a job? <span class="gradient-text">Send me the details.</span></h1>
-      <p>Recruiters and employers can share a job opening, interview request or hiring message. Your details are sent directly to Peeyush Kumar Jangid, who is open to work as an HVAC Project Engineer.</p>
-      <p><a class="form-back" style="margin:0 0 18px" href="Peeyush_Kumar_Jangid_Resume.pdf" target="_blank" rel="noopener">VIEW / DOWNLOAD MY CV ↓</a></p>
-      <div class="sent" id="sent" role="status">Thank you! Your job offer has been sent. Peeyush has received your details and will contact you soon.</div>
-      <div class="error" id="error" role="alert">Your message could not be sent. Please try again or contact Peeyush by email or WhatsApp.</div>
-      <form id="contact-form" action="https://formsubmit.co/peeyush.jangid@outlook.com" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="_subject" value="New Job Offer for Peeyush — Portfolio" />
-        <input type="hidden" name="_template" value="table" />
-        <input type="hidden" name="_captcha" value="false" />
-        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
-        <div class="form-grid">
-          <div><label for="name">YOUR NAME *</label><input id="name" name="Recruiter Name" type="text" autocomplete="name" required /></div>
-          <div><label for="desig">YOUR DESIGNATION</label><input id="desig" name="Designation" type="text" placeholder="HR / Hiring Manager / Director" /></div>
-          <div><label for="company">COMPANY NAME *</label><input id="company" name="Company" type="text" autocomplete="organization" required /></div>
-          <div><label for="web">COMPANY WEBSITE / LINKEDIN</label><input id="web" name="Company Website" type="url" placeholder="https://…" /></div>
-          <div><label for="email">EMAIL ADDRESS *</label><input id="email" name="email" type="email" autocomplete="email" required /></div>
-          <div><label for="phone">PHONE / WHATSAPP *</label><input id="phone" name="Phone / WhatsApp" type="tel" autocomplete="tel" required /></div>
-          <div><label for="role">JOB ROLE YOU ARE OFFERING *</label><input id="role" name="Job Role Offered" type="text" placeholder="e.g. HVAC Project Engineer" required /></div>
-          <div><label for="loc">JOB LOCATION</label><input id="loc" name="Job Location" type="text" placeholder="City / site" /></div>
-          <div><label for="type">EMPLOYMENT TYPE</label><select id="type" name="Employment Type"><option value="">Select type</option><option>Full-time</option><option>Contract</option><option>Part-time</option><option>Internship</option></select></div>
-          <div><label for="salary">SALARY / CTC OFFERED</label><input id="salary" name="Salary Offered" type="text" placeholder="e.g. 3–4 LPA" /></div>
-          <div><label for="mode">INTERVIEW MODE</label><select id="mode" name="Interview Mode"><option value="">Select</option><option>Online (video call)</option><option>Phone call</option><option>In person</option></select></div>
-          <div><label for="join">JOINING TIMELINE</label><input id="join" name="Joining Timeline" type="text" placeholder="e.g. Within 15 days" /></div>
-          <div class="field-full"><label for="contact">BEST WAY TO CONTACT YOU</label><select id="contact" name="Preferred Contact"><option value="">Select</option><option>WhatsApp</option><option>Phone call</option><option>Email</option></select></div>
-          <div class="field-full"><label for="msg">JOB DETAILS OR MESSAGE *</label><textarea id="msg" name="Message" placeholder="Responsibilities, requirements and anything else I should know…" required></textarea></div>
-          <div class="field-full"><label style="display:flex;gap:10px;align-items:center;letter-spacing:.5px;color:#e6e1d7;font-weight:600;cursor:pointer"><input type="checkbox" name="Interview Requested" value="Yes" style="width:auto" /> I would like to schedule an interview with Peeyush</label></div>
-        </div>
-        <p class="required-note">* Required fields</p>
-        <button class="btn btn-primary" id="submit-button" type="submit">Send Job Offer <span>↗</span></button>
-      </form>
-      <a class="form-back" href="index.html">← BACK TO PORTFOLIO</a>
+  <header class="site-header">
+    <div class="brand-wrap">
+      <a class="brand-mark brand-photo" href="index.html" aria-label="Peeyush home" style="width:44px;height:44px;overflow:hidden;border-radius:50%;padding:0;border:2px solid #0878bf;background:#fff;flex:none;display:block"><img src="profile-photo.jpg" alt="Peeyush" width="44" height="44" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block" /></a>
+      <a class="brand" href="index.html" aria-label="Peeyush home"><span>PEEYUSH<span class="brand-muted"> / PORTFOLIO</span></span></a>
     </div>
-  </main>
-  <script>
-    const contactForm = document.getElementById('contact-form');
-    const submitButton = document.getElementById('submit-button');
-    const successBox = document.getElementById('sent');
-    const errorBox = document.getElementById('error');
-    // ---- WhatsApp notification (CallMeBot) ----
-    // Paste your CallMeBot API key below (see setup steps). Leave as is to disable.
-    var WA_PHONE = '+919928579369';
-    var WA_APIKEY = 'YOUR_CALLMEBOT_APIKEY';
-    function waSummary(form, title){
-      var lines = [title];
-      Array.prototype.forEach.call(form.elements, function(el){
-        if(!el.name || el.name.charAt(0)==='_' || el.disabled) return;
-        if(el.type==='file'){ if(el.files && el.files[0]) lines.push('File attached: '+el.files[0].name+' (see email)'); return; }
-        if((el.type==='checkbox'||el.type==='radio') && !el.checked) return;
-        var v=(el.value||'').trim(); if(v) lines.push(el.name+': '+v);
-      });
-      var t=lines.join('\n'); return t.length>1400 ? t.slice(0,1400)+'…' : t;
-    }
-    function sendWA(form, title){
-      var text = waSummary(form, title);
-      try{ sessionStorage.setItem('wa_summary', text); }catch(e){}
-      if(WA_APIKEY==='YOUR_CALLMEBOT_APIKEY') return Promise.resolve();
-      var url='https://api.callmebot.com/whatsapp.php?phone='+encodeURIComponent(WA_PHONE)+'&text='+encodeURIComponent(text)+'&apikey='+encodeURIComponent(WA_APIKEY);
-      var req=fetch(url,{mode:'no-cors',keepalive:true}).catch(function(){});
-      return Promise.race([req,new Promise(function(r){setTimeout(r,2500);})]);
-    }
-    
-    // ---- Reliable sending: Web3Forms (details, instant) + FormSubmit in a hidden frame (carries the file) ----
-    // Paste your Google Apps Script web app URL here (see cv-receiver.gs). Leave as is to use the FormSubmit fallback.
-    var CV_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZaTHory5Ot9VWPibUVjU_Qc-nHb_M1zkafnVa9eBD9NzVkXchxB95hw5U6TlOBDmwTw/exec';
-    function fileToB64(file){
-      return new Promise(function(res, rej){
-        var r = new FileReader();
-        r.onload = function(){ res(String(r.result).split(',')[1]); };
-        r.onerror = rej; r.readAsDataURL(file);
-      });
-    }
-    var W3F_KEY = '8ea43a97-57b9-4eea-a7dd-9256bdec0f98';
-    function sendBoth(form){
-      var fd = new FormData();
-      fd.append('access_key', W3F_KEY);
-      fd.append('subject', (form.elements['_subject'] && form.elements['_subject'].value) || 'New message — Peeyush Portfolio');
-      fd.append('from_name', 'Peeyush Portfolio');
-      Array.prototype.forEach.call(form.elements, function(el){
-        if(!el.name || el.name.charAt(0)==='_' || el.type==='file' || el.disabled) return;
-        if((el.type==='checkbox'||el.type==='radio') && !el.checked) return;
-        if(el.value && el.value.trim()) fd.append(el.name, el.value);
-      });
-      var f = form.querySelector('input[type=file]');
-      if(f && f.files && f.files[0]) fd.append('File attached', f.files[0].name + ' (CV is sent in a separate email)');
-      var file = f && f.files && f.files[0];
-      var upload = Promise.resolve();
-      if(file && CV_SCRIPT_URL.indexOf('PASTE_')!==0){
-        // reliable route: Google Apps Script saves the CV to your Drive and emails it to you
-        upload = fileToB64(file).then(function(b64){
-          var g = function(n){ var el=form.elements[n]; return el ? el.value : ''; };
-          return fetch(CV_SCRIPT_URL, {method:'POST', mode:'no-cors', body:JSON.stringify({
-            name:g('Full Name'), email:g('email'), phone:g('Phone / WhatsApp'),
-            details:waSummary(form,'NEW HIRING APPLICATION'), fileName:file.name, mimeType:file.type, data:b64 })});
-        }).catch(function(){});
-      } else if(file){
-        // fallback: FormSubmit in a hidden frame
-        try{
-          var fr = document.getElementById('fs_frame');
-          if(!fr){ fr = document.createElement('iframe'); fr.name='fs_frame'; fr.id='fs_frame'; fr.style.display='none'; fr.setAttribute('aria-hidden','true'); document.body.appendChild(fr); }
-          form.target = 'fs_frame'; form.submit(); form.target = '';
-        }catch(e){}
-      }
-      var ctrl = new AbortController(); var timer = setTimeout(function(){ ctrl.abort(); }, 20000);
-      var w3f = fetch('https://api.web3forms.com/submit', {method:'POST', body:fd, signal:ctrl.signal})
-        .then(function(r){ return r.json(); })
-        .then(function(j){ clearTimeout(timer); return !!j.success; })
-        .catch(function(){ clearTimeout(timer); return false; });
-      return Promise.all([w3f, upload]).then(function(r){ return r[0]; });
-    }
-    function addWaButton(box){
-      var t=''; try{ t=sessionStorage.getItem('wa_summary')||''; sessionStorage.removeItem('wa_summary'); }catch(e){}
-      if(!t) return;
-      var a=document.createElement('a');
-      a.href='https://wa.me/919928579369?text='+encodeURIComponent(t);
-      a.target='_blank'; a.rel='noopener';
-      a.textContent='Also send these details on WhatsApp ↗';
-      a.style.cssText='display:inline-block;margin-top:10px;font-weight:700;text-decoration:underline';
-      box.appendChild(document.createElement('br')); box.appendChild(a);
-    }
+    <button class="menu-toggle" id="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
+    <nav class="nav-links" id="nav-links" aria-label="Main navigation">
+      <a href="index.html#home">Home</a>
+      <a href="index.html#services">Our Services</a>
+      <a href="index.html#about">About Us</a>
+      <a href="index.html#projects">Gallery</a>
+      <a href="index.html#work-files">Resources</a>
+      <a href="index.html#experience">Career</a>
+      <a href="contact.html" class="nav-contact active">Contact Us</a>
+    </nav>
+  </header>
 
-    if (new URLSearchParams(location.search).get('sent') === '1') {
-      successBox.style.display = 'block';
-      addWaButton(successBox);
-      history.replaceState(null, '', location.pathname);
-    }
-    contactForm.addEventListener('submit', event => {
-      if (!contactForm.reportValidity()) { event.preventDefault(); return; }
-      event.preventDefault();
-      submitButton.disabled = true;
-      submitButton.textContent = 'Sending…';
-      successBox.style.display = 'none'; errorBox.style.display = 'none';
-      Promise.all([sendWA(contactForm, 'NEW JOB OFFER (OPEN TO WORK)'), sendBoth(contactForm)]).then(res => {
-        submitButton.disabled = false;
-        submitButton.innerHTML = 'Send Job Offer <span>↗</span>';
-        if (res[1]) { successBox.style.display = 'block'; contactForm.reset(); addWaButton(successBox); successBox.scrollIntoView({behavior:'smooth', block:'center'}); }
-        else { errorBox.style.display = 'block'; addWaButton(errorBox); errorBox.scrollIntoView({behavior:'smooth', block:'center'}); }
+  <main>
+    <section class="cp-top">
+      <span class="section-kicker">GET IN TOUCH</span>
+      <h1>Contact Us</h1>
+      <p>HVAC project engineering, site supervision, VRV / VRF, AutoCAD drawings and billing support. Send a message and I will get back to you.</p>
+    </section>
+
+    <section class="cp-wrap" aria-label="Contact form and details">
+      <div class="cp-form">
+        <h2>Send Us a Message</h2>
+        <p>Fill out the form and I will get back to you soon.</p>
+        <div class="cp-msg cp-ok" id="cp-ok" role="status">Thank you! Your message has been sent. Peeyush will contact you soon.</div>
+        <div class="cp-msg cp-err" id="cp-err" role="alert">Your message could not be sent. Please try again or use WhatsApp or email.</div>
+        <form id="cp-form" novalidate>
+          <div class="cp-row">
+            <div><label for="c-name">Full Name</label><input id="c-name" name="Full Name" type="text" placeholder="Your full name" autocomplete="name" required /></div>
+            <div><label for="c-email">Email Address</label><input id="c-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required /></div>
+          </div>
+          <label for="c-phone">Phone Number</label>
+          <input id="c-phone" name="Phone" type="tel" placeholder="+91 XXXXX XXXXX" autocomplete="tel" />
+          <label for="c-service">Service Required</label>
+          <select id="c-service" name="Service Required">
+            <option value="">Select a service...</option>
+            <option>VRV / VRF Systems</option>
+            <option>Ducting &amp; AHU / FCU</option>
+            <option>Chilled Water Systems</option>
+            <option>AutoCAD 2D Drawings</option>
+            <option>Billing &amp; Excel Reports</option>
+            <option>Site &amp; Pre-commissioning</option>
+            <option>Job offer / Hiring</option>
+            <option>Other</option>
+          </select>
+          <label for="c-msg">Message</label>
+          <textarea id="c-msg" name="Message" placeholder="Tell us about your requirement..." required></textarea>
+          <button class="btn btn-primary" id="cp-submit" type="submit">Send Message <span>↗</span></button>
+        </form>
+      </div>
+
+      <div class="cp-info">
+        <h2>I Will Reply Soon</h2>
+        <p>Ready to help with your HVAC project requirement. Call, WhatsApp, email or send the form.</p>
+        <div class="cp-item"><i class="cp-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></i><div><small>Phone</small><a href="tel:+919928579369">+91 99285 79369</a></div></div>
+        <div class="cp-item"><i class="cp-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></i><div><small>Email</small><a href="mailto:peeyush.jangid@outlook.com">peeyush.jangid@outlook.com</a></div></div>
+        <div class="cp-item"><i class="cp-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></i><div><small>Location</small><b>Jaipur, Rajasthan, India</b></div></div>
+        <div class="cp-item"><i class="cp-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></i><div><small>LinkedIn</small><a href="https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/" target="_blank" rel="noopener">Peeyush Kumar Jangid ↗</a></div></div>
+        <div class="cp-note"><b>Open to suitable opportunities</b><br>HVAC project engineering · Site supervision · Project coordination</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer rs-footer">
+    <div class="rs-footer-grid">
+      <div>
+        <a class="rs-brand" href="index.html"><img src="profile-photo.jpg" alt="Peeyush" width="52" height="52" /><span>Peeyush Kumar Jangid</span></a>
+        <p class="rs-about">HVAC Project Engineer in Jaipur. Site supervision, VRV / VRF, ducting, AutoCAD 2D, billing and project coordination.</p>
+        <div class="rs-social">
+          <a href="https://wa.me/919928579369" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></a>
+          <a href="tel:+919928579369" aria-label="Call"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
+          <a href="mailto:peeyush.jangid@outlook.com" aria-label="Email"><svg viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+          <a href="https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul class="rs-links"><li><a href="index.html#home">Home</a></li><li><a href="index.html#about">About Us</a></li><li><a href="index.html#services">Our Services</a></li><li><a href="index.html#projects">Gallery</a></li><li><a href="index.html#experience">Career</a></li><li><a href="contact.html">Contact Us</a></li></ul>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul class="rs-links"><li><a href="index.html#services">VRV / VRF Systems</a></li><li><a href="index.html#services">Ducting &amp; AHU / FCU</a></li><li><a href="index.html#services">Chilled Water Systems</a></li><li><a href="index.html#services">AutoCAD 2D Drawings</a></li><li><a href="index.html#services">Billing &amp; Excel Reports</a></li><li><a href="index.html#services">Site &amp; Pre-commissioning</a></li></ul>
+      </div>
+      <div>
+        <h4>Contact Info</h4>
+        <ul class="rs-contact">
+          <li><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Jaipur, Rajasthan, India</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><a href="tel:+919928579369">+91 99285 79369</a></li>
+          <li><svg viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:peeyush.jangid@outlook.com">peeyush.jangid@outlook.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="rs-footer-bottom"><span>© <span id="year"></span> Peeyush Kumar Jangid. All rights reserved. | Jaipur, India</span><span>Built with purpose.</span></div>
+  </footer>
+
+  <div class="cp-fab">
+    <a href="tel:+919928579369" aria-label="Call"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
+    <a class="wa" href="https://wa.me/919928579369?text=Hello%20Peeyush" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></a>
+  </div>
+
+  <script>
+    (function () {
+      var y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+      var t = document.getElementById('menu-toggle'), n = document.getElementById('nav-links');
+      t.addEventListener('click', function () { var o = n.classList.toggle('open'); t.setAttribute('aria-expanded', String(o)); });
+
+      var form = document.getElementById('cp-form'), ok = document.getElementById('cp-ok'), err = document.getElementById('cp-err'), btn = document.getElementById('cp-submit');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        ok.style.display = 'none'; err.style.display = 'none';
+        var name = form.elements['Full Name'].value.trim(), email = form.elements['email'].value.trim(), msg = form.elements['Message'].value.trim();
+        if (!name || !/^\S+@\S+\.\S+$/.test(email) || !msg) { err.textContent = 'Please enter your name, a valid email and your message.'; err.style.display = 'block'; return; }
+        btn.disabled = true; btn.textContent = 'Sending…';
+        var fd = new FormData(form);
+        fd.append('access_key', '8ea43a97-57b9-4eea-a7dd-9256bdec0f98');
+        fd.append('subject', 'New website enquiry — Peeyush Portfolio');
+        fd.append('from_name', 'Peeyush Portfolio');
+        fetch('https://api.web3forms.com/submit', { method: 'POST', body: fd })
+          .then(function (r) { return r.json(); })
+          .then(function (j) {
+            if (j.success) { ok.style.display = 'block'; form.reset(); ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+            else throw new Error('failed');
+          })
+          .catch(function () { err.textContent = 'Your message could not be sent. Please try again or use WhatsApp or email.'; err.style.display = 'block'; })
+          .then(function () { btn.disabled = false; btn.innerHTML = 'Send Message <span>↗</span>'; });
       });
-    });
-    window.addEventListener('pageshow', () => {
-      submitButton.disabled = false;
-      submitButton.innerHTML = 'Send Job Offer <span>↗</span>';
-    });
+    })();
   </script>
 </body>
 </html>

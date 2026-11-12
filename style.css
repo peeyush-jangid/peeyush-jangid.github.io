@@ -521,3 +521,55 @@ body:before{display:none}
 @media(prefers-reduced-motion:reduce){
  .hero-panel,.floating-contact .floating-whatsapp{animation:none!important}
 }
+
+/* ===== Fixes: header, sidebar, hero photo, hiring bar, RS-style footer ===== */
+.site-header .nav-links>a{text-transform:none;letter-spacing:0;white-space:nowrap}
+.nav-links a.active:not(.nav-contact),.nav-links a:not(.nav-contact):hover{color:#0878bf!important}
+.nav-links a:not(.nav-contact)::after{background:#0878bf!important}
+.nav-links .auth-nav{padding:10px 16px;border:1px solid #c6d9e8;border-radius:12px;color:#0878bf}
+.nav-links .auth-nav::after{display:none!important}
+@media(max-width:1200px){.site-header .nav-links>a{font-size:13.5px}.nav-links .nav-contact{padding:11px 18px}.nav-links .auth-nav{padding:9px 12px}}
+
+.sidebar-overlay{z-index:310}
+.sidebar{z-index:320;overflow-y:auto}
+.sidebar-links{gap:2px}
+.sidebar .sidebar-links a.sl-item{display:flex;align-items:center;gap:12px;padding:9px 12px;border:0;border-radius:12px;text-transform:none;letter-spacing:0;font:600 .9rem 'Manrope',sans-serif;color:#31516e;transition:background-color .2s,color .2s}
+.sidebar .sidebar-links a.sl-item:hover,.sidebar .sidebar-links a.sl-item.active{background:#eef5fb;color:#0878bf;padding-left:12px}
+.sidebar .hs-ico{background:#eaf4fb;border-color:#c8dceb;color:#0b67b2}
+.sidebar .hs-title{color:#0878bf!important}
+.sidebar .hs-lbl small{color:#6c8095!important}
+.sidebar .sidebar-links a.sl-item .hs-lbl{color:inherit!important}
+.sidebar .hs{border-top-color:#dce7f0}
+.sidebar .hs-item:hover,.sidebar .hs-item:focus-visible{background:#eef5fb!important;color:#0878bf!important}
+
+.hero-panel{animation:none!important;transform:none!important;translate:none!important}
+.profile-photo.hvac-hero-image{object-position:center 18%;filter:none}
+
+.hp-col h2{color:#183956}
+.hp-btn-primary{background:linear-gradient(105deg,#0878bf,#00a5df);color:#fff}
+.hp-btn-ghost{color:#0878bf;border-color:#9fc4e1}
+.hp-btn-ghost:hover{border-color:#0878bf;color:#0878bf}
+
+.floating-contact a{background:#0878bf!important;color:#fff!important}
+.floating-contact .floating-whatsapp{background:#20c866!important}
+
+.site-footer.rs-footer{display:block;padding:72px 0 0;background:#0b142b!important;color:#aab6c9!important;border:0;font-size:15px}
+.rs-footer-grid{width:min(1240px,90%);margin:0 auto;display:grid;grid-template-columns:1.4fr .8fr 1fr 1.3fr;gap:48px}
+.rs-brand{display:flex;align-items:center;gap:14px;font:800 21px 'Manrope',sans-serif;letter-spacing:-.5px;color:#fff}
+.rs-brand img{width:52px;height:52px;border-radius:50%;object-fit:cover;object-position:center 20%;border:2px solid #00a5df;background:#fff}
+.rs-about{margin:22px 0 26px;font-size:15px;line-height:1.85;color:#9aa8bd;max-width:420px}
+.rs-social{display:flex;gap:12px}
+.rs-social a{width:56px;height:56px;display:grid;place-items:center;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#fff;transition:background-color .2s,border-color .2s,transform .2s}
+.rs-social a:hover{background:#0878bf;border-color:#0878bf;transform:translateY(-3px)}
+.rs-social svg,.rs-contact svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rs-social svg{width:22px;height:22px}
+.rs-footer h4{margin:6px 0 24px;font:800 14px 'Manrope',sans-serif;letter-spacing:2.4px;text-transform:uppercase;color:#8fa1b9}
+.rs-links,.rs-contact{margin:0;padding:0;list-style:none;display:grid;gap:16px}
+.rs-links a{font-size:16px;color:#c3cddd;transition:color .2s,padding-left .2s}
+.rs-links a:hover{color:#00a5df;padding-left:4px}
+.rs-contact li{display:flex;gap:14px;align-items:flex-start;font-size:15px;line-height:1.6;color:#c3cddd}
+.rs-contact svg{flex:none;width:20px;height:20px;margin-top:3px;color:#00a5df}
+.rs-contact a:hover{color:#00a5df}
+.rs-footer-bottom{width:min(1240px,90%);margin:56px auto 0;padding:26px 0 96px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:14px;color:#8493aa}
+@media(max-width:1000px){.rs-footer-grid{grid-template-columns:1fr 1fr;gap:40px}}
+@media(max-width:560px){.rs-footer-grid{grid-template-columns:1fr}.rs-footer-bottom{flex-direction:column;text-align:left}}
