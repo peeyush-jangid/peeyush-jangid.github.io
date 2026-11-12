@@ -233,7 +233,7 @@
   </aside>
 
   <header class="site-header">
-    <div class="brand-wrap"><button class="brand-mark brand-photo side-toggle" type="button" aria-label="Open side menu" aria-controls="sidebar" aria-expanded="false" style="width:44px;height:44px;overflow:hidden;border-radius:50%;padding:0;border:2px solid #d6b36a;background:#fff;flex:none;cursor:pointer"><img src="profile-photo.jpg" alt="Peeyush" width="44" height="44" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block" /></button><a class="brand" href="#home" aria-label="Peeyush home"><span>PEEYUSH<span class="brand-muted"> / PORTFOLIO</span></span></a></div>
+    <div class="brand-wrap"><button class="brand-mark brand-photo side-toggle" type="button" aria-label="Open side menu" aria-controls="sidebar" aria-expanded="false" style="width:44px;height:44px;overflow:hidden;border-radius:50%;padding:0;border:2px solid #d6b36a;background:#fff;flex:none;cursor:pointer"><img src="profile-photo.jpg" alt="Peeyush" width="44" height="44" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block" /></button><a class="brand" href="#home" aria-label="Peeyush home"><span>Peeyush Jangid</span></a></div>
     <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
     <nav class="nav-links" aria-label="Main navigation">
       <a href="#home" class="active">Home</a>
@@ -241,7 +241,13 @@
       <a href="#about">About Us</a>
       <a href="#projects">Gallery</a>
       <a href="#work-files">Resources</a>
-      <a href="#experience">Career</a>
+      <div class="nav-drop" id="career-drop">
+        <a href="#experience" class="nav-drop-toggle" id="career-toggle" aria-haspopup="true" aria-expanded="false">Career <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+        <div class="nav-menu" role="menu">
+          <button type="button" role="menuitem" data-career="otw"><i></i><span>Open to Work<small>Send me a job offer</small></span></button>
+          <button type="button" role="menuitem" data-career="hire"><i class="gold"></i><span>Hiring<small>Apply for a job</small></span></button>
+        </div>
+      </div>
       <a href="contact.html" class="nav-contact">Contact Us</a>
       <a href="#" class="auth-nav" data-auth-open>Sign in</a>
     </nav>
@@ -528,6 +534,24 @@
   </script>
 
 
+  <script>
+  (function () {
+    var drop = document.getElementById('career-drop'), tg = document.getElementById('career-toggle');
+    if (!drop || !tg) return;
+    function setOpen(o) { drop.classList.toggle('open', o); tg.setAttribute('aria-expanded', String(o)); }
+    tg.addEventListener('click', function (e) { e.preventDefault(); setOpen(!drop.classList.contains('open')); });
+    document.addEventListener('click', function (e) { if (!drop.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+    drop.querySelectorAll('[data-career]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        setOpen(false);
+        var nav = document.querySelector('.nav-links'); if (nav) nav.classList.remove('open');
+        var id = b.getAttribute('data-career') === 'otw' ? 'otw-open' : 'hire-open';
+        var t = document.getElementById(id); if (t) t.click();
+      });
+    });
+  })();
+  </script>
   <div class="otw-fabs" style="display:none">
     <button class="otw-fab" id="otw-open" type="button" aria-haspopup="dialog"><i></i> Open to work · Send job offer</button>
     <button class="otw-fab otw-fab-gold" id="hire-open" type="button" style="display:none" aria-haspopup="dialog"><i></i> Hiring · Apply for a job</button>
