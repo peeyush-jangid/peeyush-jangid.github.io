@@ -16,6 +16,7 @@
     EMAIL: "peeyush.jangid@outlook.com",
     CV: "https://peeyush-jangid.github.io/Peeyush_Kumar_Jangid_Resume.pdf",
     NAME: "Peeyush's Assistant",
+    DEBUG: true,       // true: AI fail hone par chat mein wajah dikhegi. Theek hone ke baad false kar dein
     MAX_HISTORY: 12,   // sirf AI ko context bhejne ke liye; sawalon ki koi limit nahi
     MAX_INPUT: 500,    // ek message ki max length
     COOLDOWN_MS: 600,  // sirf double-tap se bachne ke liye
@@ -394,9 +395,13 @@
       busy = false; send.disabled = false; input.focus();
     }
 
-    function offline() {
+    function offline(why) {
       var r = faqAnswer(text);
-      setTimeout(function () { r.html ? done(r.html, true) : done(r.text, false); }, 500);
+      var note = (CONFIG.DEBUG && why) ? "\n\n[debug: AI server error - " + why + "]" : "";
+      setTimeout(function () {
+        if (r.html) done(r.html + note.replace(/&/g, "&amp;").replace(/</g, "&lt;"), true);
+        else done(r.text + note, false);
+      }, 500);
     }
 
     if (!CONFIG.API_URL) return offline();
@@ -409,13 +414,16 @@
       body: JSON.stringify({ messages: history.slice(-CONFIG.MAX_HISTORY) }),
       signal: ctrl.signal
     })
-      .then(function (r) { if (!r.ok) throw new Error("bad status"); return r.json(); })
+      .then(function (r) {
+        if (!r.ok) return r.text().then(function (t) { throw new Error("status " + r.status + " " + String(t).slice(0, 150)); });
+        return r.json();
+      })
       .then(function (d) {
         clearTimeout(to);
         if (!d || !d.reply) throw new Error("empty");
         done(String(d.reply), false);
       })
-      .catch(function (err) { clearTimeout(to); console.warn("[chatbot] API failed, FAQ mode:", err); if (myEpoch !== epoch) return; offline(); });
+      .catch(function (err) { clearTimeout(to); console.warn("[chatbot] API failed, FAQ mode:", err); if (myEpoch !== epoch) return; offline(String((err && err.message) || err)); });
   }
 
   function submitTyped(e) {
