@@ -210,6 +210,16 @@
     <nav class="sidebar-links">
       <a href="#about">About</a><a href="#process">Process</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#work-files">Notes</a><a href="#certificates">Certificates</a><a href="#contact">Contact Us</a><a href="#" class="auth-nav" data-auth-open>Sign in</a>
     </nav>
+    <div class="hs" id="hs-support" aria-label="Help and support">
+      <div class="hs-title">HELP &amp; SUPPORT</div>
+      <a class="hs-item" href="tel:+919928579369"><i class="hs-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></i><span class="hs-lbl">Call Us<small>+91 99285 79369</small></span></a>
+      <a class="hs-item" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20visited%20your%20website%20and%20need%20some%20help." target="_blank" rel="noopener"><i class="hs-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></i><span class="hs-lbl">Chat on WhatsApp<small>Quick reply on chat</small></span></a>
+      <a class="hs-item" href="mailto:peeyush.jangid@outlook.com?subject=Website%20Support"><i class="hs-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></i><span class="hs-lbl">Send Us Email<small>peeyush.jangid@outlook.com</small></span></a>
+      <button class="hs-item" type="button" data-hs-open="rate"><i class="hs-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></i><span class="hs-lbl">Rate this Website<small id="hs-rate-sub">Tap to give stars</small></span></button>
+      <button class="hs-item" type="button" data-hs-open="share"><i class="hs-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></i><span class="hs-lbl">Share Website<small>Send to friends &amp; colleagues</small></span></button>
+      <button class="hs-item" type="button" data-hs-open="downloads"><i class="hs-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></i><span class="hs-lbl">My Downloads<small>Files you downloaded</small></span><b class="hs-badge" data-hs-count="downloads" hidden>0</b></button>
+      <button class="hs-item" type="button" data-hs-open="saved"><i class="hs-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></i><span class="hs-lbl">Saved Items<small>Your bookmarks</small></span><b class="hs-badge" data-hs-count="saved" hidden>0</b></button>
+    </div>
   </aside>
 
   <header class="site-header">
@@ -943,5 +953,329 @@
   </script>
   <!-- ===== END HIRING POPUP ===== -->
 <script src="/chatbot.js" defer></script>
+
+  <!-- ===== Help & Support: modal, toast, styles and script ===== -->
+  <div class="hs-modal" id="hs-modal" role="dialog" aria-modal="true" aria-labelledby="hs-m-title" aria-hidden="true">
+    <div class="hs-card">
+      <button class="hs-x" type="button" aria-label="Close">✕</button>
+      <h3 id="hs-m-title"></h3>
+      <div id="hs-m-body"></div>
+    </div>
+  </div>
+  <div class="hs-toast" id="hs-toast" role="status" aria-live="polite"></div>
+  <style>
+    .sidebar { overflow-y: auto; overscroll-behavior: contain; }
+    .hs { margin: 18px 0 8px; padding-top: 14px; border-top: 1px solid rgba(214, 179, 106, .22); display: grid; gap: 2px; }
+    .hs-title { padding: 0 12px 8px; font: 700 .68rem 'Manrope', sans-serif; letter-spacing: .24em; color: #d6b36a; }
+    .sidebar .hs-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 9px 12px; border: 0; border-radius: 12px; background: none; color: #f4efe6; font: 600 .9rem 'Manrope', sans-serif; text-align: left; text-decoration: none; cursor: pointer; transition: background-color .2s ease, color .2s ease; }
+    .sidebar .hs-item:hover, .sidebar .hs-item:focus-visible { background: rgba(214, 179, 106, .12); color: #e0c07f; outline: none; }
+    .hs-ico { flex: none; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: rgba(214, 179, 106, .12); border: 1px solid rgba(214, 179, 106, .25); color: #e0c07f; font-style: normal; }
+    .hs-ico svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .hs-lbl { flex: 1; min-width: 0; display: grid; gap: 1px; line-height: 1.25; }
+    .hs-lbl small { font: 500 .7rem 'Manrope', sans-serif; color: rgba(244, 239, 230, .5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .hs-badge { flex: none; min-width: 22px; padding: 2px 7px; border-radius: 99px; background: linear-gradient(135deg, #b8975a, #e0c07f); color: #0b1220; font: 800 .7rem 'Manrope', sans-serif; text-align: center; }
+    .hs-badge[hidden] { display: none; }
+
+    .hs-modal { position: fixed; inset: 0; z-index: 400; display: none; place-items: center; padding: 18px; background: rgba(3, 9, 18, .72); backdrop-filter: blur(6px); }
+    .hs-modal.open { display: grid; }
+    .hs-card { position: relative; width: min(460px, 100%); max-height: 86vh; overflow-y: auto; padding: 26px 22px 22px; border-radius: 20px; background: #0b1626; border: 1px solid rgba(214, 179, 106, .3); box-shadow: 0 30px 70px rgba(0, 0, 0, .55); color: #f4efe6; font-family: 'Manrope', sans-serif; animation: hsPop .28s ease both; }
+    @keyframes hsPop { from { opacity: 0; translate: 0 14px; scale: .97; } to { opacity: 1; translate: 0 0; scale: 1; } }
+    .hs-card h3 { margin: 0 34px 14px 0; font: 800 1.2rem 'Manrope', sans-serif; color: #f4efe6; }
+    .hs-x { position: absolute; top: 14px; right: 14px; width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(214, 179, 106, .3); background: none; color: #e0c07f; font-size: 15px; cursor: pointer; }
+    .hs-x:hover { background: rgba(214, 179, 106, .14); }
+    .hs-p { margin: 0 0 14px; font-size: .86rem; line-height: 1.6; color: rgba(244, 239, 230, .7); }
+    .hs-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 20px; border: 0; border-radius: 99px; background: linear-gradient(135deg, #b8975a, #e0c07f); color: #0b1220; font: 800 .82rem 'Manrope', sans-serif; letter-spacing: .04em; cursor: pointer; text-decoration: none; }
+    .hs-btn:disabled { opacity: .45; cursor: not-allowed; }
+    .hs-btn.ghost { background: none; border: 1px solid rgba(214, 179, 106, .4); color: #e0c07f; }
+
+    .hs-stars { display: flex; justify-content: center; gap: 6px; margin: 6px 0 4px; }
+    .hs-star { width: 48px; height: 48px; padding: 0; border: 0; background: none; cursor: pointer; color: rgba(244, 239, 230, .22); transition: color .15s ease, transform .15s ease; }
+    .hs-star svg { width: 100%; height: 100%; fill: currentColor; }
+    .hs-star.on { color: #e0c07f; }
+    .hs-star:hover { transform: scale(1.12); }
+    .hs-rate-label { min-height: 1.4em; margin-bottom: 14px; text-align: center; font: 700 .88rem 'Manrope', sans-serif; color: #e0c07f; }
+    .hs-ta { width: 100%; min-height: 84px; margin-bottom: 14px; padding: 12px 14px; resize: vertical; border-radius: 12px; border: 1px solid rgba(214, 179, 106, .28); background: rgba(255, 255, 255, .04); color: #f4efe6; font: 500 .88rem 'Manrope', sans-serif; box-sizing: border-box; }
+    .hs-ta:focus { outline: 2px solid rgba(214, 179, 106, .55); outline-offset: 1px; }
+    .hs-center { text-align: center; }
+
+    .hs-share { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .hs-share a, .hs-share button { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 12px; border: 1px solid rgba(214, 179, 106, .28); background: rgba(255, 255, 255, .04); color: #f4efe6; font: 700 .84rem 'Manrope', sans-serif; text-decoration: none; cursor: pointer; }
+    .hs-share a:hover, .hs-share button:hover { background: rgba(214, 179, 106, .14); color: #e0c07f; }
+    .hs-link-box { display: flex; gap: 8px; margin-top: 12px; }
+    .hs-link-box input { flex: 1; min-width: 0; padding: 11px 12px; border-radius: 12px; border: 1px solid rgba(214, 179, 106, .28); background: rgba(255, 255, 255, .04); color: #f4efe6; font: 500 .8rem 'Manrope', sans-serif; }
+
+    .hs-list { display: grid; gap: 10px; margin: 0 0 14px; padding: 0; list-style: none; }
+    .hs-row { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 14px; border: 1px solid rgba(214, 179, 106, .2); background: rgba(255, 255, 255, .04); }
+    .hs-row .hs-ico { width: 38px; height: 38px; }
+    .hs-row-main { flex: 1; min-width: 0; display: grid; gap: 2px; text-align: left; background: none; border: 0; padding: 0; color: inherit; cursor: pointer; font-family: inherit; }
+    .hs-row-main strong { font: 700 .9rem 'Manrope', sans-serif; color: #f4efe6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .hs-row-main span { font: 500 .72rem 'Manrope', sans-serif; color: rgba(244, 239, 230, .5); }
+    .hs-row-main:hover strong { color: #e0c07f; }
+    .hs-del { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .15); background: none; color: rgba(244, 239, 230, .6); cursor: pointer; }
+    .hs-del:hover { color: #ff9d9d; border-color: rgba(255, 157, 157, .5); }
+    .hs-empty { padding: 28px 16px; margin-bottom: 14px; text-align: center; border: 1px dashed rgba(214, 179, 106, .35); border-radius: 16px; color: rgba(244, 239, 230, .6); font-size: .86rem; line-height: 1.6; }
+
+    .hs-save { position: absolute; top: 10px; right: 10px; z-index: 5; width: 36px; height: 36px; display: grid; place-items: center; padding: 0; border-radius: 50%; border: 1px solid rgba(214, 179, 106, .5); background: rgba(7, 20, 38, .82); color: #e0c07f; cursor: pointer; backdrop-filter: blur(4px); transition: transform .2s ease, background-color .2s ease; }
+    .hs-save:hover { transform: scale(1.1); }
+    .hs-save svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .hs-save[aria-pressed="true"] { background: linear-gradient(135deg, #b8975a, #e0c07f); color: #0b1220; }
+    .hs-save[aria-pressed="true"] svg { fill: currentColor; }
+    .hs-has-save { position: relative; }
+
+    .hs-toast { position: fixed; left: 50%; bottom: 28px; z-index: 450; max-width: calc(100% - 32px); padding: 11px 20px; border-radius: 99px; background: #e0c07f; color: #0b1220; font: 700 .84rem 'Manrope', sans-serif; box-shadow: 0 12px 30px rgba(0, 0, 0, .45); translate: -50% 20px; opacity: 0; pointer-events: none; transition: opacity .25s ease, translate .25s ease; }
+    .hs-toast.show { opacity: 1; translate: -50% 0; }
+    @media (prefers-reduced-motion: reduce) { .hs-card { animation: none; } }
+  </style>
+  <script>
+  (function () {
+    'use strict';
+    var SITE = 'https://peeyush-jangid.github.io/';
+    var OWNER_EMAIL = 'peeyush.jangid@outlook.com';
+    var K = { rating: 'pk-rating', downloads: 'pk-downloads', saved: 'pk-saved' };
+    var LABELS = ['', 'Poor', 'Fair', 'Good', 'Very good', 'Excellent!'];
+    var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+    var BOOKMARK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
+    var FILE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
+
+    var modal = document.getElementById('hs-modal');
+    var body = document.getElementById('hs-m-body');
+    var titleEl = document.getElementById('hs-m-title');
+    var toastEl = document.getElementById('hs-toast');
+    var lastFocus = null, toastTimer = null;
+
+    /* ---------- helpers ---------- */
+    function load(key, fallback) { try { var v = JSON.parse(localStorage.getItem(key)); return v == null ? fallback : v; } catch (e) { return fallback; } }
+    function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
+    function el(tag, attrs, kids) {
+      var n = document.createElement(tag);
+      if (attrs) for (var k in attrs) {
+        if (k === 'text') n.textContent = attrs[k];
+        else if (k === 'html') n.innerHTML = attrs[k];
+        else n.setAttribute(k, attrs[k]);
+      }
+      (kids || []).forEach(function (c) { n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+      return n;
+    }
+    function toast(msg) {
+      toastEl.textContent = msg; toastEl.classList.add('show');
+      clearTimeout(toastTimer); toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 2400);
+    }
+    function fmtDate(t) { try { return new Date(t).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) { return ''; } }
+    function closeSidebar() { var c = document.querySelector('.sidebar-close'); var s = document.getElementById('sidebar'); if (c && s && s.getAttribute('aria-hidden') === 'false') c.click(); }
+    function goTo(url) {
+      if (!url) return;
+      if (url.charAt(0) === '#') { close(); var t = document.querySelector(url); if (t) t.scrollIntoView({ behavior: 'smooth' }); }
+      else window.open(url, '_blank', 'noopener');
+    }
+
+    /* ---------- counts ---------- */
+    function updateCounts() {
+      ['downloads', 'saved'].forEach(function (k) {
+        var n = load(K[k], []).length;
+        document.querySelectorAll('[data-hs-count="' + k + '"]').forEach(function (b) { b.textContent = n; b.hidden = !n; });
+      });
+      var r = load(K.rating, null), sub = document.getElementById('hs-rate-sub');
+      if (sub) sub.textContent = r ? 'You rated ' + r.stars + ' / 5 ★' : 'Tap to give stars';
+    }
+
+    /* ---------- modal open / close ---------- */
+    function open(kind) {
+      closeSidebar();
+      lastFocus = document.activeElement;
+      body.textContent = '';
+      var handled = ({ rate: viewRate, share: viewShare, downloads: function () { viewList('downloads'); }, saved: function () { viewList('saved'); } })[kind]();
+      if (handled === true) return;
+      modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false');
+      var x = modal.querySelector('.hs-x'); if (x) x.focus();
+    }
+    function close() {
+      modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true');
+      if (lastFocus && lastFocus.focus) { try { lastFocus.focus(); } catch (e) {} }
+    }
+    modal.addEventListener('click', function (e) { if (e.target === modal || e.target.closest('.hs-x')) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) close(); });
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-hs-open]'); if (b) open(b.getAttribute('data-hs-open'));
+    });
+
+    /* ---------- Rate this website ---------- */
+    function viewRate() {
+      var prev = load(K.rating, null), current = prev ? prev.stars : 0;
+      titleEl.textContent = 'Rate this Website';
+      body.appendChild(el('p', { class: 'hs-p hs-center', text: 'How was your experience? Choose stars from 1 to 5.' }));
+      var row = el('div', { class: 'hs-stars', role: 'radiogroup', 'aria-label': 'Rating' });
+      var label = el('div', { class: 'hs-rate-label', 'aria-live': 'polite' });
+      var stars = [];
+      function paint(n) { stars.forEach(function (s, i) { s.classList.toggle('on', i < n); }); label.textContent = LABELS[n] || ''; }
+      for (var i = 1; i <= 5; i++) (function (n) {
+        var s = el('button', { type: 'button', class: 'hs-star', role: 'radio', 'aria-label': n + ' star' + (n > 1 ? 's' : ''), html: STAR });
+        s.addEventListener('mouseenter', function () { paint(n); });
+        s.addEventListener('focus', function () { paint(n); });
+        s.addEventListener('click', function () { current = n; paint(n); send.disabled = false; });
+        stars.push(s); row.appendChild(s);
+      })(i);
+      row.addEventListener('mouseleave', function () { paint(current); });
+      var ta = el('textarea', { class: 'hs-ta', placeholder: 'Any feedback or suggestion? (optional)', maxlength: '500', 'aria-label': 'Feedback' });
+      if (prev && prev.comment) ta.value = prev.comment;
+      var send = el('button', { type: 'button', class: 'hs-btn', text: prev ? 'Update Rating' : 'Submit Rating' });
+      send.disabled = !current;
+      send.addEventListener('click', function () {
+        if (!current) return;
+        var data = { stars: current, comment: ta.value.trim(), t: Date.now() };
+        save(K.rating, data); updateCounts();
+        try {
+          fetch('https://formsubmit.co/ajax/' + OWNER_EMAIL, {
+            method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ _subject: 'Website rating: ' + current + '/5', Rating: current + ' / 5', Feedback: data.comment || '(none)', Page: SITE })
+          }).catch(function () {});
+        } catch (e) {}
+        body.textContent = ''; titleEl.textContent = 'Thank you!';
+        body.appendChild(el('div', { class: 'hs-stars' }, [1, 2, 3, 4, 5].map(function (n) { return el('span', { class: 'hs-star' + (n <= current ? ' on' : ''), style: 'width:34px;height:34px;display:block;cursor:default', html: STAR }); })));
+        body.appendChild(el('p', { class: 'hs-p hs-center', text: 'You gave ' + current + ' out of 5. Your feedback helps improve this website.' }));
+        body.appendChild(el('div', { class: 'hs-center' }, [el('button', { type: 'button', class: 'hs-btn', text: 'Done' })]));
+        body.querySelector('.hs-btn').addEventListener('click', close);
+      });
+      body.appendChild(row); body.appendChild(label); body.appendChild(ta);
+      body.appendChild(el('div', { class: 'hs-center' }, [send]));
+      paint(current);
+    }
+
+    /* ---------- Share website ---------- */
+    function viewShare() {
+      var text = 'Check out Peeyush Kumar Jangid’s portfolio - HVAC Project Engineer in Jaipur.';
+      if (navigator.share) {
+        navigator.share({ title: document.title, text: text, url: SITE }).catch(function (err) { if (!err || err.name !== 'AbortError') showSheet(); });
+        return true;
+      }
+      showSheet();
+      function showSheet() {
+        modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false'); body.textContent = '';
+        titleEl.textContent = 'Share Website';
+        var u = encodeURIComponent(SITE), t = encodeURIComponent(text);
+        var opts = [
+          ['WhatsApp', 'https://wa.me/?text=' + t + '%20' + u],
+          ['Telegram', 'https://t.me/share/url?url=' + u + '&text=' + t],
+          ['LinkedIn', 'https://www.linkedin.com/sharing/share-offsite/?url=' + u],
+          ['Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' + u],
+          ['X (Twitter)', 'https://twitter.com/intent/tweet?url=' + u + '&text=' + t],
+          ['Email', 'mailto:?subject=' + encodeURIComponent('Peeyush Kumar Jangid - Portfolio') + '&body=' + t + '%20' + u]
+        ];
+        var grid = el('div', { class: 'hs-share' });
+        opts.forEach(function (o) { grid.appendChild(el('a', { href: o[1], target: '_blank', rel: 'noopener', text: o[0] })); });
+        body.appendChild(grid);
+        var input = el('input', { type: 'text', readonly: 'readonly', value: SITE, 'aria-label': 'Website link' });
+        var copy = el('button', { type: 'button', class: 'hs-btn', text: 'Copy' });
+        copy.addEventListener('click', function () {
+          function ok() { toast('Link copied'); }
+          if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(SITE).then(ok, function () { input.select(); document.execCommand('copy'); ok(); });
+          else { input.select(); try { document.execCommand('copy'); } catch (e) {} ok(); }
+        });
+        body.appendChild(el('div', { class: 'hs-link-box' }, [input, copy]));
+      }
+    }
+
+    /* ---------- Downloads & Saved lists ---------- */
+    function viewList(kind) {
+      var isDl = kind === 'downloads';
+      var items = load(K[kind], []);
+      titleEl.textContent = isDl ? 'My Downloads' : 'Saved Items';
+      if (!items.length) {
+        body.appendChild(el('div', { class: 'hs-empty', text: isDl
+          ? 'No downloads yet. Files you download from this website (CV, notes, drawings) will appear here.'
+          : 'Nothing saved yet. Tap the bookmark icon on any project, certificate or file to save it here.' }));
+        return;
+      }
+      var list = el('ul', { class: 'hs-list' });
+      items.forEach(function (it, idx) {
+        var main = el('button', { type: 'button', class: 'hs-row-main' }, [
+          el('strong', { text: it.title || 'Untitled' }),
+          el('span', { text: (it.type ? it.type + ' · ' : '') + fmtDate(it.t) })
+        ]);
+        main.addEventListener('click', function () { goTo(it.url); });
+        var del = el('button', { type: 'button', class: 'hs-del', 'aria-label': 'Remove ' + (it.title || 'item'), text: '✕' });
+        del.addEventListener('click', function () {
+          var all = load(K[kind], []); all.splice(idx, 1); save(K[kind], all);
+          updateCounts(); refreshSaveButtons(); body.textContent = ''; viewList(kind);
+        });
+        list.appendChild(el('li', { class: 'hs-row' }, [el('i', { class: 'hs-ico', html: isDl ? FILE : BOOKMARK }), main, del]));
+      });
+      body.appendChild(list);
+      var clear = el('button', { type: 'button', class: 'hs-btn ghost', text: 'Clear all' });
+      clear.addEventListener('click', function () { save(K[kind], []); updateCounts(); refreshSaveButtons(); body.textContent = ''; viewList(kind); });
+      body.appendChild(el('div', { class: 'hs-center' }, [clear]));
+    }
+
+    /* ---------- Track downloads ---------- */
+    var FILE_RE = /\.(pdf|docx?|xlsx?|xlsm|csv|pptx?|dwg|dxf|zip|rar|txt)(\?|#|$)/i;
+    function cardOf(node) {
+      var g = node.closest('#work-file-grid, #cert-grid'); if (!g) return null;
+      var c = node; while (c && c.parentElement !== g) c = c.parentElement; return c;
+    }
+    function titleOf(card) {
+      if (!card) return '';
+      var h = card.querySelector('h3, h4, strong, [class*="title"], [class*="name"]');
+      return (h && h.textContent.trim()) || card.getAttribute('aria-label') || '';
+    }
+    function fileName(href) { try { return decodeURIComponent(href.split('#')[0].split('?')[0].split('/').pop()); } catch (e) { return href; } }
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (!a || a.closest('#hs-modal') || a.closest('.sidebar')) return;
+      var href = a.getAttribute('href') || '';
+      if (!href || href.charAt(0) === '#' || /^(mailto|tel|javascript):/i.test(href)) return;
+      var card = cardOf(a);
+      var isDownload = a.hasAttribute('download') || FILE_RE.test(href) || (card && /download/i.test(a.textContent));
+      if (!isDownload) return;
+      var abs = a.href, title = (card && titleOf(card)) || a.getAttribute('download') || fileName(href);
+      var ext = (fileName(href).match(/\.([a-z0-9]+)$/i) || [])[1];
+      var list = load(K.downloads, []).filter(function (x) { return x.url !== abs; });
+      list.unshift({ title: title, url: abs, type: ext ? ext.toUpperCase() : 'File', t: Date.now() });
+      save(K.downloads, list.slice(0, 50)); updateCounts();
+      toast('Added to My Downloads');
+    }, true);
+
+    /* ---------- Save (bookmark) buttons ---------- */
+    function itemId(type, title) { return type + ':' + title; }
+    function isSaved(id) { return load(K.saved, []).some(function (x) { return x.id === id; }); }
+    function refreshSaveButtons() {
+      document.querySelectorAll('.hs-save').forEach(function (b) {
+        var on = isSaved(b.getAttribute('data-id'));
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.setAttribute('aria-label', (on ? 'Remove from saved: ' : 'Save: ') + b.getAttribute('data-title'));
+        b.title = on ? 'Remove from saved' : 'Save for later';
+      });
+    }
+    function decorate(card, type, fallbackUrl) {
+      if (!card || card.nodeType !== 1 || card.querySelector(':scope > .hs-save') || /empty/.test(card.className)) return;
+      var title = titleOf(card); if (!title) return;
+      var id = itemId(type, title);
+      var firstLink = card.tagName === 'A' ? card : card.querySelector('a[href]:not([href="#"])');
+      var url = (firstLink && firstLink.getAttribute('href') && firstLink.href) || fallbackUrl;
+      var btn = el('button', { type: 'button', class: 'hs-save', 'data-id': id, 'data-title': title, html: BOOKMARK });
+      btn.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        var all = load(K.saved, []), i = -1;
+        all.forEach(function (x, n) { if (x.id === id) i = n; });
+        if (i >= 0) { all.splice(i, 1); toast('Removed from Saved Items'); }
+        else { all.unshift({ id: id, title: title, url: url, type: type, t: Date.now() }); toast('Saved'); }
+        save(K.saved, all); updateCounts(); refreshSaveButtons();
+      });
+      card.classList.add('hs-has-save'); card.appendChild(btn);
+    }
+    function decorateAll() {
+      document.querySelectorAll('.project-card').forEach(function (c) { decorate(c, 'Project', '#projects'); });
+      var w = document.getElementById('work-file-grid');
+      if (w) Array.prototype.forEach.call(w.children, function (c) { decorate(c, 'File', '#work-files'); });
+      var g = document.getElementById('cert-grid');
+      if (g) Array.prototype.forEach.call(g.children, function (c) { decorate(c, 'Certificate', '#certificates'); });
+      refreshSaveButtons();
+    }
+    ['work-file-grid', 'cert-grid'].forEach(function (id) {
+      var g = document.getElementById(id);
+      if (g && window.MutationObserver) new MutationObserver(function () { decorateAll(); }).observe(g, { childList: true });
+    });
+
+    updateCounts(); decorateAll();
+  })();
+  </script>
 </body>
 </html>
