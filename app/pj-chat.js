@@ -15,6 +15,7 @@
     PHONE_TEXT: "+91 99285 79369",
     EMAIL: "peeyush.jangid@outlook.com",
     CV: "https://peeyush-jangid.github.io/Peeyush_Kumar_Jangid_Resume.pdf",
+    SITE: "https://peeyush-jangid.github.io/",  // form links hamesha is address se banenge (website aur app dono mein)
     NAME: "Peeyush's Assistant",
     DEBUG: true,       // true: AI fail hone par chat mein wajah dikhegi. Theek hone ke baad false kar dein
     MAX_HISTORY: 12,   // sirf AI ko context bhejne ke liye; sawalon ki koi limit nahi
@@ -119,6 +120,26 @@
       if (s > score) { score = s; best = f; }
     });
     return best ? { html: best.a } : { text: FALLBACK };
+  }
+
+  // ---- Seedhe links: form / job offer / CV ----
+  // Inke jawab AI se nahi, seedha yahin se jaate hain, taaki link hamesha sahi mile.
+  var HIRE_URL = CONFIG.SITE + "?open=hire";
+  var OFFER_URL = CONFIG.SITE + "?open=otw";
+  var HIRE_HTML =
+    'Hiring / job application form yahan hai:\n👉 <a href="' + HIRE_URL + '" target="_blank" rel="noopener">' + HIRE_URL + '</a>\n\nForm bharne se pehle Register ya Sign in karna hota hai.';
+  var OFFER_HTML =
+    'Job offer bhejne ka form yahan hai:\n👉 <a href="' + OFFER_URL + '" target="_blank" rel="noopener">' + OFFER_URL + '</a>\n\nYa seedha WhatsApp par bhejein: <a href="https://wa.me/' + CONFIG.WHATSAPP + '" target="_blank" rel="noopener">https://wa.me/' + CONFIG.WHATSAPP + '</a>';
+  var CV_HTML =
+    'Aap CV yahan se download kar sakte hain:\n👉 <a href="' + CONFIG.CV + '" target="_blank" rel="noopener">' + CONFIG.CV + '</a>';
+
+  function localAnswer(q) {
+    var t = " " + q.toLowerCase() + " ";
+    var action = /(form|link|url|apply|application|submit|bhej|send|bharn|bhar |fill|register)/.test(t);
+    if (/offer/.test(t) && (action || /job offer/.test(t))) return OFFER_HTML;
+    if (/(hiring|hire|apply|application|naukri|\bjob\b)/.test(t) && /(form|link|url|apply|application|submit|bharn|bhar |fill|register)/.test(t)) return HIRE_HTML;
+    if (/\b(cv|resume|biodata)\b/.test(t)) return CV_HTML;
+    return null;
   }
 
   // ---- Styles ----
@@ -403,6 +424,9 @@
         else done(r.text + note, false);
       }, 500);
     }
+
+    var local = localAnswer(text);
+    if (local) { setTimeout(function () { done(local, true); }, 400); return; }
 
     if (!CONFIG.API_URL) return offline();
 
