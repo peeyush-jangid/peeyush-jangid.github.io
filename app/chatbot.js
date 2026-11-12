@@ -364,9 +364,6 @@
     var now = Date.now();
     if (now - lastSent < CONFIG.COOLDOWN_MS) return;
     lastSent = now;
-    var mySid = sid;
-    touch();
-
     addMsg("user", text);
     history.push({ role: "user", content: text });
     busy = true; send.disabled = true;
@@ -401,7 +398,6 @@
     if (!CONFIG.API_URL) return offline();
 
     var ctrl = new AbortController();
-    curCtrl = ctrl;
     var to = setTimeout(function () { ctrl.abort(); }, 20000);
     fetch(CONFIG.API_URL, {
       method: "POST",
@@ -415,7 +411,7 @@
         if (!d || !d.reply) throw new Error("empty");
         done(String(d.reply), false);
       })
-      .catch(function () { clearTimeout(to); if (mySid !== sid) return; offline(); });
+      .catch(function () { clearTimeout(to); if (myEpoch !== epoch) return; offline(); });
   }
 
   form.addEventListener("submit", function (e) {
