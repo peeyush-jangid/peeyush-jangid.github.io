@@ -110,7 +110,11 @@
     var best = null, score = 0;
     FAQ.forEach(function (f) {
       var s = 0;
-      f.k.forEach(function (w) { if (t.indexOf(w) !== -1) s++; });
+      f.k.forEach(function (w) {
+        // chhote words (hi, cv, hey) poore word ki tarah match hon, "nahi"/"chahiye" mein nahi
+        var hit = w.length <= 3 ? new RegExp("(^|[^a-z0-9])" + w + "([^a-z0-9]|$)").test(t) : t.indexOf(w) !== -1;
+        if (hit) s++;
+      });
       if (s > score) { score = s; best = f; }
     });
     return best ? { html: best.a } : { text: FALLBACK };
