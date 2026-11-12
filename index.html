@@ -553,6 +553,7 @@
   <div class="otw-modal" id="otw-modal" role="dialog" aria-modal="true" aria-labelledby="otw-modal-t" aria-hidden="true">
     <div class="otw-box">
       <button class="otw-close" id="otw-close" type="button" aria-label="Close form">✕</button>
+      <button class="otw-minimize" type="button" data-modal-minimize aria-label="Minimize form" title="Minimize">—</button>
       <span class="otw-badge"><i></i> OPEN TO WORK</span>
       <h2 id="otw-modal-t">I am open to work. Send me your job offer.</h2>
       <p>HVAC Project Engineer · Site Supervision · Jaipur. Share the role details and Peeyush will contact you soon.</p><a class="otw-cv" href="Peeyush_Kumar_Jangid_Resume.pdf" target="_blank" rel="noopener">View / download my CV ↓</a>
@@ -588,6 +589,7 @@
   <div class="otw-modal" id="hire-modal" role="dialog" aria-modal="true" aria-labelledby="hire-modal-t" aria-hidden="true">
     <div class="otw-box">
       <button class="otw-close" id="hire-close" type="button" aria-label="Close form">✕</button>
+      <button class="otw-minimize" type="button" data-modal-minimize aria-label="Minimize form" title="Minimize">—</button>
       <span class="otw-badge" style="color:#e3c27e"><i style="background:#e3c27e;box-shadow:0 0 0 4px rgba(227,194,126,.15),0 0 12px rgba(227,194,126,.6)"></i> HIRING</span>
       <h2 id="hire-modal-t">Looking for a job? Apply here.</h2>
       <p>Share your profile and the kind of work you are seeking. Your application goes directly to Peeyush Kumar Jangid.</p>
@@ -774,6 +776,7 @@
   <div class="otw-modal" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title" aria-hidden="true">
     <div class="otw-box" style="max-width:440px">
       <button class="otw-close" id="auth-close" type="button" aria-label="Close">✕</button>
+      <button class="otw-minimize" type="button" data-modal-minimize aria-label="Minimize form" title="Minimize">—</button>
       <span class="otw-badge"><i></i> ACCOUNT</span>
       <h2 id="auth-title">Sign in or create an account</h2>
 
@@ -1366,6 +1369,38 @@
     history.replaceState(null,'',location.pathname);
     setTimeout(function(){ var el=document.getElementById(p==='otw'?'otw-open':'hire-open'); if(el) el.click(); },1200);
   })();
+</script>
+<script>
+(function () {
+  var restore = null;
+  function removeRestore() { if (restore) { restore.remove(); restore = null; } }
+  document.querySelectorAll('.otw-modal').forEach(function (modal) {
+    var box = modal.querySelector('.otw-box');
+    var min = box && box.querySelector('[data-modal-minimize]');
+    if (!min) return;
+    min.addEventListener('click', function () {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      removeRestore();
+      restore = document.createElement('button');
+      restore.type = 'button';
+      restore.className = 'modal-restore';
+      restore.textContent = '▢  Restore form';
+      restore.setAttribute('aria-label', 'Restore minimized form');
+      restore.addEventListener('click', function () {
+        removeRestore();
+        document.querySelectorAll('.otw-modal.open').forEach(function (m) { m.classList.remove('open'); m.setAttribute('aria-hidden', 'true'); });
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      });
+      document.body.appendChild(restore);
+    });
+  });
+  document.querySelectorAll('.otw-modal .otw-close').forEach(function (btn) { btn.addEventListener('click', removeRestore); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') removeRestore(); });
+})();
 </script>
 </body>
 </html>

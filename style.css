@@ -637,3 +637,28 @@ body:before{display:none}
 .page-hero .crumb a{color:#38b6ff}
 .page-hero .crumb i{margin:0 8px;font-style:normal;color:#9fb6e4}
 .inner-header .nav-links a.active:not(.nav-contact){color:#0878bf!important}
+
+
+/* Form window controls: close and minimize */
+.otw-box .otw-close,
+.otw-box .otw-minimize {
+  position: absolute; top: 14px; width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border: 1px solid rgba(214,179,106,.38); border-radius: 10px;
+  background: rgba(255,255,255,.045); color: #f0d69a; cursor: pointer;
+  font: 700 19px/1 'DM Sans', sans-serif;
+  transition: background .2s ease, transform .2s ease, border-color .2s ease; z-index: 3;
+}
+.otw-box .otw-close { right: 14px; }
+.otw-box .otw-minimize { right: 58px; font-size: 22px; }
+.otw-box .otw-close:hover, .otw-box .otw-minimize:hover {
+  background: rgba(214,179,106,.16); border-color: #e0c07f; transform: translateY(-2px);
+}
+.modal-restore {
+  position: fixed; right: 22px; bottom: 22px; z-index: 1001;
+  border: 1px solid rgba(214,179,106,.55); border-radius: 999px; padding: 13px 19px;
+  background: linear-gradient(110deg,#b88d43,#e3c27e); color: #17130b;
+  box-shadow: 0 12px 35px rgba(0,0,0,.45); font: 800 12px 'Manrope',sans-serif; cursor: pointer;
+}
+.modal-restore:hover { transform: translateY(-2px); }
+@media(max-width:600px) { .modal-restore { right: 14px; bottom: 14px; } }
