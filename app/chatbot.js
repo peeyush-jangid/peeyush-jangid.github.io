@@ -398,7 +398,7 @@
     if (!CONFIG.API_URL) return offline();
 
     var ctrl = new AbortController();
-    var to = setTimeout(function () { ctrl.abort(); }, 20000);
+    var to = setTimeout(function () { ctrl.abort(); }, 12000);
     fetch(CONFIG.API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -411,13 +411,18 @@
         if (!d || !d.reply) throw new Error("empty");
         done(String(d.reply), false);
       })
-      .catch(function () { clearTimeout(to); if (myEpoch !== epoch) return; offline(); });
+      .catch(function (err) { clearTimeout(to); console.warn("[chatbot] API failed, FAQ mode:", err); if (myEpoch !== epoch) return; offline(); });
   }
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
+  function submitTyped(e) {
+    if (e) e.preventDefault();
     var v = input.value;
+    if (!v.trim()) return;
     input.value = "";
-    ask(v);
+    try { ask(v); } catch (err) { console.error("[chatbot] ask error:", err); busy = false; send.disabled = false; }
+  }
+  form.addEventListener("submit", submitTyped);
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.isComposing) submitTyped(e);
   });
 })();
