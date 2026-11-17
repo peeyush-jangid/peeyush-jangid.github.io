@@ -878,7 +878,19 @@
       var n=fixName(user.displayName||''), em=user.email||'';
       [['m-name',n],['m-email',em],['h-name',n],['h-email',em]].forEach(function(p){ var el=$(p[0]); if(el && !el.value) el.value=p[1]; });
     }
+    // Owner "Force sign out" (admin.html writes forceLogout/{uid}); signs this user out if the marker is newer than their sign-in
+    var stopForce=null;
+    function watchForce(user){
+      if(stopForce){ stopForce(); stopForce=null; }
+      if(!user||!fb||!fb.db) return;
+      var fs=fb.fs, since=Date.parse(user.metadata&&user.metadata.lastSignInTime)||0;
+      stopForce=fs.onSnapshot(fs.doc(fb.db,'forceLogout',user.uid),function(s){
+        var d=s.exists()?s.data():null;
+        if(d&&d.at&&d.at.toMillis&&d.at.toMillis()>since){ fb.au.signOut(fb.auth); }
+      },function(){});
+    }
     function render(user){
+      watchForce(user);
       var label = user ? 'Hi, '+(fixName(user.displayName||user.email||'').split(' ')[0]) : 'Sign in';
       document.querySelectorAll('.auth-nav').forEach(function(a){ var t=a.querySelector('.sl-t'); (t||a).textContent=label; });
       $('auth-forms').style.display = user?'none':''; $('auth-account').style.display = user?'':'none';
