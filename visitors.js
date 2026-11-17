@@ -13,7 +13,7 @@ if (root && cfg && cfg.apiKey && cfg.apiKey.indexOf('YOUR_') !== 0) {
   const app = A.getApps().some(a => a.name === 'admin') ? A.getApp('admin') : A.initializeApp(cfg, 'admin'); // same named app as users.js -> shares its sign-in
   const auth = Au.getAuth(app), db = F.getFirestore(app);
   const out = $('v-out');
-  let stop = null, shown = 30;
+  let stop = null, shown = 30, cur = null, timer = null;
   let cache = [];
 
   const top = (m, n) => Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, n);
@@ -36,12 +36,29 @@ if (root && cfg && cfg.apiKey && cfg.apiKey.indexOf('YOUR_') !== 0) {
     const m = $('v-more'); if (m) m.onclick = () => { shown += 30; draw(); };
   }
 
+  const setCache = snap => {
+    cache = snap.docs.map(d => d.data()).map(d => ({ ...d, t: d.at && d.at.toDate ? d.at.toDate() : new Date(0) }));
+    $('v-updated').textContent = 'Updated: ' + new Date().toLocaleTimeString();
+    draw();
+  };
+  const q = s => F.query(F.collection(s.db, 'visits'), F.orderBy('at', 'desc'), F.limit(1000));
+  async function refreshNow() {
+    if (!cur) return;
+    const b = $('v-refresh'); b.disabled = true; b.textContent = 'Refreshing…';
+    try { setCache(await F.getDocs(q(cur))); } catch (e) { out.innerHTML = esc(e.message || e); }
+    b.disabled = false; b.textContent = '🔄 Refresh visitors';
+  }
+  function setTimer() {
+    clearInterval(timer); timer = null;
+    if ($('v-auto').checked && cur) timer = setInterval(refreshNow, 30000);
+  }
+  $('v-refresh').onclick = refreshNow;
+  $('v-auto').onchange = setTimer;
+
   function start(s) {
+    cur = s; setTimer();
     out.innerHTML = 'Loading…';
-    stop = F.onSnapshot(F.query(F.collection(s.db, 'visits'), F.orderBy('at', 'desc'), F.limit(1000)), snap => {
-      cache = snap.docs.map(d => d.data()).map(d => ({ ...d, t: d.at && d.at.toDate ? d.at.toDate() : new Date(0) }));
-      draw();
-    }, e => {
+    stop = F.onSnapshot(q(s), setCache, e => {
       out.innerHTML = /permission/i.test(e.message || '') ? 'Permission denied: Firestore rules me "visits" ka owner read rule add karo.' : esc(e.message || e);
     });
   }
@@ -52,6 +69,7 @@ if (root && cfg && cfg.apiKey && cfg.apiKey.indexOf('YOUR_') !== 0) {
   const apps = new Set([app]);
   const apply = () => {
     if (stop) { stop(); stop = null; }
+    if (!user) { cur = null; clearInterval(timer); }
     $('v-panel').style.display = user ? '' : 'none';
     note.style.display = user ? 'none' : '';
     login.style.display = (!user && firstDone) ? '' : 'none';
