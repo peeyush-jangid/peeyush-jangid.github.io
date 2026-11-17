@@ -1,5 +1,6 @@
 // Owner-only "Registered users" panel for admin.html.
 // Reads users saved by index.html in Firestore. Access is enforced by firestore.rules (owner UID only).
+// Added: "Force sign out" button per user (writes forceLogout/{uid}; the public site listens and signs the user out).
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var V = '10.14.1', fb = null;
@@ -51,6 +52,7 @@
           '<div><small>Registered</small>' + esc(when(u.createdAt)) + '</div>' +
           '<div><small>Last login</small>' + esc(when(u.lastLogin)) + '</div>' +
           '<div><small>User ID</small>' + esc(d.id) + '</div></div>' +
+          '<button type="button" class="u-force" data-uid="' + esc(d.id) + '" data-email="' + esc(u.email) + '">🚪 Force sign out</button>' +
           '<div class="u-logins"><small>Login history</small><div class="u-log">Open to load…</div></div></div></details>';
       });
       $('u-list').innerHTML = html;
@@ -60,6 +62,22 @@
         ? 'Permission denied. Put your UID (shown above) in firestore.rules as the owner, then publish the rules.'
         : (e.message || 'Could not load users.'), true);
     });
+  }
+
+  function forceSignOut(btn) {
+    var uid = btn.dataset.uid, email = btn.dataset.email || uid;
+    if (!fb || !fb.auth.currentUser) return;
+    if (!confirm('Force sign out ' + email + '?\n\nUser ka current session khatam ho jayega (wo dobara sign in kar sakta hai).')) return;
+    var fs = fb.fs;
+    btn.disabled = true;
+    fs.setDoc(fs.doc(fb.db, 'forceLogout', uid), { at: fs.serverTimestamp(), by: fb.auth.currentUser.uid })
+      .then(function () { say(email + ' ko sign out kar diya gaya.'); })
+      .catch(function (e) {
+        say(e.code === 'permission-denied'
+          ? 'Permission denied. firestore.rules mein forceLogout rule add karke publish karo.'
+          : (e.message || 'Could not sign out user.'), true);
+      })
+      .then(function () { btn.disabled = false; });
   }
 
   function loadLogins(det) {
@@ -90,6 +108,10 @@
     });
     $('u-out').addEventListener('click', function () { if (fb) fb.au.signOut(fb.auth); });
     $('u-refresh').addEventListener('click', refresh);
+    $('u-list').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.u-force') : null;
+      if (b) { e.preventDefault(); forceSignOut(b); }
+    });
     $('u-list').addEventListener('toggle', function (e) { if (e.target.open && e.target.classList.contains('u-folder')) loadLogins(e.target); }, true);
     load().catch(function (e) { say(e.message, true); });
   }
