@@ -818,6 +818,14 @@
         <p class="auth-note">Your password is handled securely by Google Firebase and is never stored on this website.</p>
       </div>
 
+      <div id="auth-otp" style="display:none">
+        <p class="auth-note" id="otp-txt" style="margin-top:0"></p>
+        <p class="auth-note" id="otp-msg" role="status" style="margin-top:0"></p>
+        <label for="otp-in">6-DIGIT OTP</label><input id="otp-in" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="Enter OTP" />
+        <button class="btn btn-primary" id="otp-btn" type="button" style="margin-top:12px">Verify OTP <span>↗</span></button>
+        <button class="btn btn-ghost" id="otp-resend" type="button" style="margin-top:10px;width:100%">Resend OTP</button>
+        <button class="btn btn-ghost" id="otp-out" type="button" style="margin-top:10px;width:100%">Sign out</button>
+      </div>
       <div id="auth-account" style="display:none">
         <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px"><img id="acc-av" alt="" width="64" height="64" style="display:none;border-radius:50%;object-fit:cover"><p class="auth-hello" id="auth-hello" style="margin:0"></p></div>
         <p class="auth-note" id="acc-msg" role="status" style="margin-top:0"></p>
@@ -843,6 +851,8 @@
     // ===== Firebase settings: paste yours from Firebase console > Project settings > Your apps =====
     var FIREBASE_CONFIG = window.FIREBASE_CONFIG || { apiKey:'YOUR_API_KEY', authDomain:'', projectId:'', appId:'' };
     var configured = FIREBASE_CONFIG.apiKey.indexOf('YOUR_') !== 0; window.PORTFOLIO_AUTH_CONFIGURED = configured;
+    /* Email OTP via EmailJS (emailjs.com). Paste your 3 values to turn on the 6-digit email OTP; leave empty to keep the verification link. */
+    var EJS={service:'',template:'',key:''}, EJS_ON=!!(EJS.service&&EJS.template&&EJS.key);
     var V = '10.14.1', fb = null;
     var $ = function(id){ return document.getElementById(id); };
     var modal=$('auth-modal'), errBox=$('auth-err'), okBox=$('auth-ok'), lastFocus=null;
@@ -850,7 +860,7 @@
     // Corrects the common typo "Peeysuh" -> "Peeyush" in the displayed name
     function fixName(s){ return String(s||'').replace(/peeysuh/gi,'Peeyush'); }
     function msg(type,t){ errBox.style.display='none'; okBox.style.display='none'; if(!t) return; var b=type==='err'?errBox:okBox; b.textContent=t; b.style.display='block'; }
-    function friendly(e){ if(e&&e.code==='x-unverified') return 'Please verify your email first. We just sent a new verification link to your inbox (check Spam too), then sign in again.'; if(e&&e.code==='x-deactivated') return 'This account is deactivated. Contact Peeyush to reactivate it.';
+    function friendly(e){ if(e&&e.code==='x-otp'){ setTimeout(function(){ render(fb.auth.currentUser); },0); return ''; } if(e&&e.code==='x-unverified') return 'Please verify your email first. We just sent a new verification link to your inbox (check Spam too), then sign in again.'; if(e&&e.code==='x-deactivated') return 'This account is deactivated. Contact Peeyush to reactivate it.';
       var c=(e&&e.code)||'';
       var m={ 'auth/email-already-in-use':'This email already has an account. Please sign in.',
         'auth/invalid-email':'Please enter a valid email address.',
@@ -916,7 +926,9 @@
       watchForce(user);
       var label = user ? 'Hi, '+(fixName(user.displayName||user.email||'').split(' ')[0]) : 'Sign in';
       document.querySelectorAll('.auth-nav').forEach(function(a){ var t=a.querySelector('.sl-t'); (t||a).textContent=label; });
-      $('auth-forms').style.display = user?'none':''; $('auth-account').style.display = user?'':'none';
+      var needs = !!(user && EJS_ON && !user.emailVerified);
+      $('auth-forms').style.display = user?'none':''; $('auth-account').style.display = user&&!needs?'':'none'; $('auth-otp').style.display='none';
+      if(needs){ loadProf(user).then(function(p){ if(p.emailOtpOk){ $('auth-account').style.display=''; } else { otpPane(user); } }); }
       if(user){ $('auth-title').textContent='Your account'; $('auth-hello').textContent='Signed in as '+(user.displayName?fixName(user.displayName)+' · ':'')+user.email; prefill(user); refreshAcc(user); }
       else { tab('in'); }
     }
@@ -951,6 +963,7 @@
       load().then(function(f){ return f.au.signInWithEmailAndPassword(f.auth,em,pw); })
         .then(function(cred){ var u=cred.user;
           return checkActive(u).then(function(){
+            if(!u.emailVerified && EJS_ON){ return loadProf(u).then(function(p){ if(p.emailOtpOk) return notifyNew(u,'Email & password','SIGN-IN'); throw {code:'x-otp'}; }); }
             if(!u.emailVerified){ return fb.au.sendEmailVerification(u).catch(function(){}).then(function(){ return fb.au.signOut(fb.auth); }).then(function(){ throw {code:'x-unverified'}; }); }
             return notifyNew(u,'Email & password','SIGN-IN'); }); })
         .then(function(){ $('form-in').reset(); close(); openHire(); })
@@ -976,8 +989,9 @@
         });
       }).then(function(user){ return notifyNew(user,'Email & password','NEW SIGN-UP')
         .then(function(){ return fb.fs.setDoc(fb.fs.doc(fb.db,'users',user.uid),{phone:ph},{merge:true}).catch(function(){}); })
-        .then(function(){ return fb.au.sendEmailVerification(user).catch(function(){}); });
+        .then(function(){ return EJS_ON ? null : fb.au.sendEmailVerification(user).catch(function(){}); });
       }).then(function(){
+        if(EJS_ON){ $('form-up').reset(); return; }
         return fb.au.signOut(fb.auth).then(function(){
           $('form-up').reset(); tab('in'); $('in-email').value=em; $('in-pass').value='';
           setTimeout(function(){ $('auth-title').textContent='Step 2: Sign in to apply'; msg('ok','Account created! We sent a verification email to '+em+' (check Spam too). Open the link in it, then sign in here.'); $('in-pass').focus(); },400);
@@ -1014,6 +1028,37 @@
         .catch(function(x){ msg('err',friendly(x)); });
     });
 
+    var otpFor='', otpCool=0;
+    function sha(t){ return crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(function(b){ return [].map.call(new Uint8Array(b),function(x){ return ('0'+x.toString(16)).slice(-2); }).join(''); }); }
+    function om(t,ok){ var e=$('otp-msg'); e.textContent=t||''; e.style.color=ok?'#2e9e5b':'#e0525e'; }
+    function otpTick(){ var b=$('otp-resend'); if(otpCool>0){ b.textContent='Resend in '+otpCool+'s'; otpCool--; setTimeout(otpTick,1000); } else { b.textContent='Resend OTP'; } }
+    function sendOtp(u){
+      var code=String(100000+(crypto.getRandomValues(new Uint32Array(1))[0]%900000)), uid=u.uid, em=u.email;
+      return sha(uid+':'+code).then(function(h){
+        localStorage.setItem('pj_otp',JSON.stringify({u:uid,h:h,e:Date.now()+10*60000,n:0}));
+        return fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:EJS.service,template_id:EJS.template,user_id:EJS.key,template_params:{to_email:em,otp:code,app_name:'Peeyush Kumar Jangid'}})});
+      }).then(function(r){ if(!r.ok) throw 0; om('OTP sent to '+em+'. It is valid for 10 minutes. Check Spam too.',1); otpCool=60; otpTick(); })
+        .catch(function(){ om('Could not send the OTP email. Tap Resend OTP to try again.'); });
+    }
+    function otpPane(u){
+      $('auth-title').textContent='Verify your email'; $('auth-otp').style.display='';
+      $('otp-txt').textContent='Enter the 6-digit OTP we email to '+u.email+'.';
+      if(otpFor!==u.uid){ otpFor=u.uid; om(''); sendOtp(u); }
+    }
+    $('otp-resend').addEventListener('click',function(){ var u=fb&&fb.auth.currentUser; if(u&&otpCool<=0) sendOtp(u); });
+    $('otp-out').addEventListener('click',function(){ otpFor=''; fb.au.signOut(fb.auth).then(function(){ close(); }); });
+    $('otp-btn').addEventListener('click',function(){
+      var u=fb&&fb.auth.currentUser, v=$('otp-in').value.replace(/\D/g,''), o; try{ o=JSON.parse(localStorage.getItem('pj_otp')||'null'); }catch(e){}
+      if(!u) return; if(v.length!==6){ om('Enter the 6-digit OTP.'); return; }
+      if(!o||o.u!==u.uid||Date.now()>o.e){ om('OTP expired. Tap Resend OTP for a new one.'); return; }
+      if(o.n>=5){ om('Too many wrong attempts. Tap Resend OTP for a new one.'); return; }
+      sha(u.uid+':'+v).then(function(h){
+        if(h!==o.h){ o.n++; localStorage.setItem('pj_otp',JSON.stringify(o)); om('Wrong OTP. Please try again.'); return; }
+        localStorage.removeItem('pj_otp');
+        return fb.fs.setDoc(pRef(u),{emailOtpOk:true},{merge:true}).then(function(){ return notifyNew(u,'Email & password','SIGN-IN'); })
+          .then(function(){ $('otp-in').value=''; render(u); close(); openHire(); });
+      }).catch(function(){ om('Could not verify right now. Please try again.'); });
+    });
     function normPh(s){ var d=String(s||'').replace(/[^\d+]/g,''); if(d[0]==='+'){ d='+'+d.replace(/\D/g,''); return /^\+[1-9]\d{7,14}$/.test(d)?d:''; } d=d.replace(/\D/g,''); if(/^91\d{10}$/.test(d)) d=d.slice(2); else if(/^0\d{10}$/.test(d)) d=d.slice(1); return /^[6-9]\d{9}$/.test(d)?'+91'+d:''; }
     function pRef(u){ return fb.fs.doc(fb.db,'users',u.uid); }
     function loadProf(u){ return fb.fs.getDoc(pRef(u)).then(function(x){ return x.exists()?x.data():{}; }).catch(function(){ return {}; }); }
