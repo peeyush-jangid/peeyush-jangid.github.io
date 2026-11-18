@@ -796,10 +796,10 @@
         <div class="otw-msg otw-err" id="auth-err" role="alert"></div>
         <div class="otw-msg otw-ok" id="auth-ok" role="status"></div>
 
-        <div style="margin:4px 0 14px"><label style="display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;color:#e6e1d7;font-weight:500;font-size:.9rem;line-height:1.5;cursor:pointer"><input type="checkbox" id="auth-terms" style="width:auto;margin-top:4px;flex:none" /> <span>I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms &amp; Conditions</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>. *</span></label></div>
         <form id="form-in" novalidate>
           <label for="in-email">EMAIL</label><input id="in-email" type="email" autocomplete="email" required />
           <label for="in-pass">PASSWORD</label><input id="in-pass" type="password" autocomplete="current-password" required />
+          <div style="margin:14px 0 4px"><label style="display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;color:#e6e1d7;font-weight:500;font-size:.9rem;line-height:1.5;cursor:pointer"><input type="checkbox" id="in-terms" style="width:auto;margin-top:4px;flex:none" /> <span>I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms &amp; Conditions</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>. *</span></label></div>
           <button class="btn btn-primary" id="in-btn" type="submit">Sign in <span>↗</span></button>
           <a href="#" class="auth-link" id="forgot">Forgot password?</a>
         </form>
@@ -808,6 +808,7 @@
           <label for="up-name">FULL NAME</label><input id="up-name" type="text" autocomplete="name" required />
           <label for="up-email">EMAIL</label><input id="up-email" type="email" autocomplete="email" required />
           <label for="up-pass">PASSWORD (MIN 6 CHARACTERS)</label><input id="up-pass" type="password" autocomplete="new-password" minlength="6" required />
+          <div style="margin:14px 0 4px"><label style="display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;color:#e6e1d7;font-weight:500;font-size:.9rem;line-height:1.5;cursor:pointer"><input type="checkbox" id="up-terms" style="width:auto;margin-top:4px;flex:none" /> <span>I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms &amp; Conditions</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>. *</span></label></div>
           <button class="btn btn-primary" id="up-btn" type="submit">Create account <span>↗</span></button>
         </form>
 
@@ -863,7 +864,7 @@
       lastFocus=document.activeElement; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
       msg(); if(!configured){ $('auth-forms').classList.add('quick'); tab('up'); } else load();
     }
-    function close(){ var t=$('auth-terms'); if(t) t.checked=false; modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
+    function close(){ ['in-terms','up-terms'].forEach(function(i){var t=$(i); if(t) t.checked=false;}); modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
     function tab(which){
       var up = which==='up';
       $('form-in').style.display = up?'none':''; $('form-up').style.display = up?'':'none';
@@ -924,12 +925,13 @@
     $('auth-close').addEventListener('click',close);
     modal.addEventListener('click',function(e){ if(e.target===modal) close(); });
     document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&modal.classList.contains('open')) close(); });
+    ['in-terms','up-terms'].forEach(function(i){ $(i).addEventListener('change',function(){ $('in-terms').checked=$('up-terms').checked=this.checked; }); });
     $('tab-in').addEventListener('click',function(){ tab('in'); });
     $('tab-up').addEventListener('click',function(){ tab('up'); });
 
     $('form-in').addEventListener('submit',function(e){
       e.preventDefault(); msg();
-      if(!$('auth-terms').checked){ msg('err','Please agree to the Terms & Conditions and Privacy Policy to continue.'); return; }
+      if(!$('in-terms').checked){ msg('err','Please agree to the Terms & Conditions and Privacy Policy to continue.'); return; }
       var em=$('in-email').value.trim(), pw=$('in-pass').value;
       if(!em||!pw){ msg('err','Please enter your email and password.'); return; }
       busy($('in-btn'),true,'Sign in');
@@ -942,7 +944,7 @@
 
     $('form-up').addEventListener('submit',function(e){
       e.preventDefault(); msg();
-      if(!$('auth-terms').checked){ msg('err','Please agree to the Terms & Conditions and Privacy Policy to continue.'); return; }
+      if(!$('up-terms').checked){ msg('err','Please agree to the Terms & Conditions and Privacy Policy to continue.'); return; }
       var nm=$('up-name').value.trim(), em=$('up-email').value.trim(), pw=$('up-pass').value;
       if(!configured){   // quick register (Firebase not set up): no password, details are emailed to the owner
         if(!nm||!/^\S+@\S+\.\S+$/.test(em)){ msg('err','Please enter your name and a valid email address.'); return; }
@@ -969,7 +971,7 @@
     var googleBusy=false;
     $('auth-google').addEventListener('click',function(){
       if(googleBusy) return;            // one Google popup at a time (a 2nd click cancels the 1st)
-      msg(); if(!$('auth-terms').checked){ msg('err','Please agree to the Terms & Conditions and Privacy Policy to continue.'); return; }
+      msg(); if(!($('form-up').style.display==='none'?$('in-terms'):$('up-terms')).checked){ msg('err','Please agree to the Terms & Conditions and Privacy Policy to continue.'); return; }
       googleBusy=true;
       var gb=$('auth-google'); gb.disabled=true; gb.style.opacity='.6';
       load().then(function(f){
