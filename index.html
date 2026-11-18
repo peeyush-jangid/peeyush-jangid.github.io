@@ -587,8 +587,8 @@
           <div class="otw-full"><label for="m-msg">JOB DETAILS OR MESSAGE *</label><textarea id="m-msg" name="Message" placeholder="Responsibilities, requirements and anything else I should know…" required></textarea></div>
           <div class="otw-full"><label style="display:flex;gap:10px;align-items:center;letter-spacing:.5px;color:#e6e1d7;font-weight:600;cursor:pointer"><input type="checkbox" name="Interview Requested" value="Yes" style="width:auto" /> I would like to schedule an interview with Peeyush</label></div>
         </div>
+        <div style="margin:14px 0 4px"><label style="display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;color:#e6e1d7;font-weight:500;font-size:.9rem;line-height:1.5;cursor:pointer"><input type="checkbox" name="Accepted Terms and Privacy Policy" value="Yes" required style="width:auto;margin-top:4px;flex:none" /> <span>I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms &amp; Conditions</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>. *</span></label></div>
         <button class="btn btn-primary" id="otw-submit" type="submit" data-label="Send Job Offer">Send Job Offer <span>↗</span></button>
-        <p class="auth-note">By submitting, you agree to our <a href="terms.html" target="_blank" rel="noopener">Terms</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</p>
       </form>
       <div class="otw-alt"><a href="https://wa.me/919928579369" target="_blank" rel="noopener">WhatsApp ↗</a><a href="mailto:peeyush.jangid@outlook.com">Email ↗</a><a href="tel:+919928579369">+91 99285 79369</a></div>
     </div>
@@ -620,8 +620,8 @@
           <div class="otw-full cv-link-wrap"><label for="h-cv-link">YOUR CV LINK * (GOOGLE DRIVE / DROPBOX)</label><input id="h-cv-link" name="CV Link" type="url" placeholder="https://drive.google.com/…  (sharing: Anyone with the link)" /></div>
           <div class="otw-full"><label for="h-message">SKILLS, QUALIFICATIONS & MESSAGE *</label><textarea id="h-message" name="Message" placeholder="Your key skills, education, preferred location and a short introduction…" required></textarea></div>
         </div>
+        <div style="margin:14px 0 4px"><label style="display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;color:#e6e1d7;font-weight:500;font-size:.9rem;line-height:1.5;cursor:pointer"><input type="checkbox" name="Accepted Terms and Privacy Policy" value="Yes" required style="width:auto;margin-top:4px;flex:none" /> <span>I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms &amp; Conditions</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>. *</span></label></div>
         <button class="btn btn-primary" id="hire-submit" type="submit" data-label="Submit Job Application">Submit Job Application <span>↗</span></button>
-        <p class="auth-note">By submitting, you agree to our <a href="terms.html" target="_blank" rel="noopener">Terms</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</p>
       </form>
       <div class="otw-alt"><a href="https://wa.me/919928579369" target="_blank" rel="noopener">WhatsApp ↗</a><a href="mailto:peeyush.jangid@outlook.com">Email ↗</a><a href="tel:+919928579369">+91 99285 79369</a></div>
     </div>
@@ -796,6 +796,7 @@
         <div class="otw-msg otw-err" id="auth-err" role="alert"></div>
         <div class="otw-msg otw-ok" id="auth-ok" role="status"></div>
 
+        <div style="margin:4px 0 14px"><label style="display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;color:#e6e1d7;font-weight:500;font-size:.9rem;line-height:1.5;cursor:pointer"><input type="checkbox" id="auth-terms" style="width:auto;margin-top:4px;flex:none" /> <span>I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms &amp; Conditions</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>. *</span></label></div>
         <form id="form-in" novalidate>
           <label for="in-email">EMAIL</label><input id="in-email" type="email" autocomplete="email" required />
           <label for="in-pass">PASSWORD</label><input id="in-pass" type="password" autocomplete="current-password" required />
@@ -813,7 +814,6 @@
         <div class="auth-or"><span>or</span></div>
         <button class="auth-google" id="auth-google" type="button">Continue with Google</button>
         <p class="auth-note">Your password is handled securely by Google Firebase and is never stored on this website.</p>
-        <p class="auth-note">By creating an account or continuing with Google, you agree to our <a href="terms.html" target="_blank" rel="noopener">Terms &amp; Conditions</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</p>
       </div>
 
       <div id="auth-account" style="display:none">
@@ -863,7 +863,7 @@
       lastFocus=document.activeElement; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
       msg(); if(!configured){ $('auth-forms').classList.add('quick'); tab('up'); } else load();
     }
-    function close(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
+    function close(){ var t=$('auth-terms'); if(t) t.checked=false; modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
     function tab(which){
       var up = which==='up';
       $('form-in').style.display = up?'none':''; $('form-up').style.display = up?'':'none';
@@ -929,6 +929,7 @@
 
     $('form-in').addEventListener('submit',function(e){
       e.preventDefault(); msg();
+      if(!$('auth-terms').checked){ msg('err','Please agree to the Terms & Conditions and Privacy Policy to continue.'); return; }
       var em=$('in-email').value.trim(), pw=$('in-pass').value;
       if(!em||!pw){ msg('err','Please enter your email and password.'); return; }
       busy($('in-btn'),true,'Sign in');
@@ -941,6 +942,7 @@
 
     $('form-up').addEventListener('submit',function(e){
       e.preventDefault(); msg();
+      if(!$('auth-terms').checked){ msg('err','Please agree to the Terms & Conditions and Privacy Policy to continue.'); return; }
       var nm=$('up-name').value.trim(), em=$('up-email').value.trim(), pw=$('up-pass').value;
       if(!configured){   // quick register (Firebase not set up): no password, details are emailed to the owner
         if(!nm||!/^\S+@\S+\.\S+$/.test(em)){ msg('err','Please enter your name and a valid email address.'); return; }
@@ -967,7 +969,8 @@
     var googleBusy=false;
     $('auth-google').addEventListener('click',function(){
       if(googleBusy) return;            // one Google popup at a time (a 2nd click cancels the 1st)
-      googleBusy=true; msg();
+      msg(); if(!$('auth-terms').checked){ msg('err','Please agree to the Terms & Conditions and Privacy Policy to continue.'); return; }
+      googleBusy=true;
       var gb=$('auth-google'); gb.disabled=true; gb.style.opacity='.6';
       load().then(function(f){
         var provider=new f.au.GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'});
