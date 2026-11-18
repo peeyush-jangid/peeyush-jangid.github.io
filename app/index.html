@@ -943,6 +943,7 @@ a.card.file{position:relative;padding-right:80px}
   <button class="btn" id="pwlink" type="button" style="margin-top:10px">Update password</button>
   <button class="btn" id="signout2" type="button" style="margin-top:10px">Sign out</button>
   <button class="btn" id="deact" type="button" style="margin-top:10px;color:#ff9aa5">Deactivate account</button>
+  <button class="btn" id="delacc" type="button" style="margin-top:10px;color:#ff9aa5">Delete account</button>
 </div>
 
 <!-- Update password popup -->
@@ -1365,6 +1366,14 @@ a.card.file{position:relative;padding-right:80px}
     });
   }
   /* Saves profile changes (phone, photo, status) for the signed-in user */
+  $('delacc').addEventListener('click',function(){
+    if(!me)return;
+    if(!confirm('Delete your account permanently? This cannot be undone.'))return;
+    var done=function(){setUser(null);note('Your account has been deleted.',1)};
+    if(!cfg){var all=db.get();delete all[me.email];db.set(all);localStorage.removeItem('pj_sess');return done()}
+    fb().then(function(f){var u=f.a.currentUser;return f.fs.deleteDoc(uref(f,u.uid)).catch(function(){}).then(function(){return f.m.deleteUser(u)})}).then(done)
+      .catch(function(x){alert(x&&x.code==='auth/requires-recent-login'?'For security, please sign out, sign in again, then delete your account.':'Could not delete right now. Please try again.')});
+  });
   function saveProfile(patch,quiet){
     if(!me)return Promise.reject({code:'no-user'});
     var p;
