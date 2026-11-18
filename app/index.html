@@ -1048,7 +1048,9 @@ a.card.file{position:relative;padding-right:80px}
     <a class="btn pri" href="../Peeyush_Kumar_Jangid_Resume.pdf">Download CV</a>
     <a class="btn wa" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20found%20your%20app.">Chat on WhatsApp</a>
     <button class="btn" id="install" type="button">Install this app</button>
+    <a class="btn" id="apkdl" href="https://github.com/peeyush-jangid/peeyush-jangid.github.io/releases/latest/download/app.apk" download>Download Android App (APK)</a>
   </div>
+  <p class="note" id="apknote" style="margin-top:-4px">Android APK install karne ke liye &ldquo;Unknown sources&rdquo; allow karna pad sakta hai.</p>
   <div class="stats">
     <div class="stat"><b>10 months</b><small>Experience</small></div>
     <div class="stat"><b>AutoCAD</b><small>2D drawing</small></div>
@@ -1637,6 +1639,8 @@ a.card.file{position:relative;padding-right:80px}
   addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;btn.style.display='flex'});
   btn.addEventListener('click',function(){if(!dp)return;dp.prompt();dp.userChoice.then(function(){dp=null;btn.style.display='none'})});
   addEventListener('appinstalled',function(){btn.style.display='none'});
+  /* hide the APK download when the app is already running installed */
+  try{if(matchMedia('(display-mode: standalone)').matches||navigator.standalone){['apkdl','apknote'].forEach(function(i){var x=$(i);if(x)x.style.display='none'})}}catch(e){}
   if('serviceWorker' in navigator)addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
 
   /* ---------- account menu: profile, downloads, saved items, support & sharing ---------- */
