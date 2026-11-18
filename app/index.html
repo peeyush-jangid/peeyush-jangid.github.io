@@ -1500,9 +1500,9 @@ a.card.file{position:relative;padding-right:80px}
     if(!me)return Promise.resolve();
     var code=String(100000+(crypto.getRandomValues(new Uint32Array(1))[0]%900000)),uid=me.uid,em=me.email;
     return sha(uid+':'+code).then(function(h){
-      localStorage.setItem('pj_otp',JSON.stringify({u:uid,h:h,e:Date.now()+10*60000,n:0}));
-      return fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:EJS.service,template_id:EJS.template,user_id:EJS.key,template_params:{to_email:em,otp:code,app_name:'Peeyush Jangid App'}})});
-    }).then(function(r){if(!r.ok)throw 0;gerr('OTP sent to '+em+'. It is valid for 10 minutes.',1);cool=60;tick()}).catch(function(){gerr('Could not send the OTP email. Tap Resend email to try again.')});
+      localStorage.setItem('pj_otp',JSON.stringify({u:uid,h:h,e:Date.now()+15*60000,n:0}));
+      return fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:EJS.service,template_id:EJS.template,user_id:EJS.key,template_params:{to_email:em,email:em,otp:code,passcode:code,time:new Date(Date.now()+15*60000).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}),app_name:'Peeyush Jangid App'}})});
+    }).then(function(r){if(!r.ok)throw 0;gerr('OTP sent to '+em+'. It is valid for 15 minutes.',1);cool=60;tick()}).catch(function(){gerr('Could not send the OTP email. Tap Resend email to try again.')});
   }
   $('veOtpBtn').addEventListener('click',function(){
     var v=$('veOtp').value.replace(/\D/g,''),o;try{o=JSON.parse(localStorage.getItem('pj_otp')||'null')}catch(e){}
