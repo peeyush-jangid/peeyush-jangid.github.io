@@ -807,6 +807,7 @@
         <form id="form-up" novalidate style="display:none">
           <label for="up-name">FULL NAME</label><input id="up-name" type="text" autocomplete="name" required />
           <label for="up-email">EMAIL</label><input id="up-email" type="email" autocomplete="email" required />
+          <label for="up-phone">MOBILE NUMBER *</label><input id="up-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="e.g. 9876543210 or +971..." required />
           <label for="up-pass">PASSWORD (MIN 6 CHARACTERS)</label><input id="up-pass" type="password" autocomplete="new-password" minlength="6" required />
           <div style="margin:14px 0 4px"><label style="display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;color:#e6e1d7;font-weight:500;font-size:.9rem;line-height:1.5;cursor:pointer"><input type="checkbox" id="up-terms" style="width:auto;margin-top:4px;flex:none" /> <span>I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms &amp; Conditions</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>. *</span></label></div>
           <button class="btn btn-primary" id="up-btn" type="submit">Create account <span>↗</span></button>
@@ -818,9 +819,21 @@
       </div>
 
       <div id="auth-account" style="display:none">
-        <p class="auth-hello" id="auth-hello"></p>
-        <p class="auth-note" style="margin-top:0">You are signed in. Your name and email will be filled in automatically in the job forms.</p>
-        <button class="btn btn-primary" id="signout-btn" type="button">Sign out <span>↗</span></button>
+        <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px"><img id="acc-av" alt="" width="64" height="64" style="display:none;border-radius:50%;object-fit:cover"><p class="auth-hello" id="auth-hello" style="margin:0"></p></div>
+        <p class="auth-note" id="acc-msg" role="status" style="margin-top:0"></p>
+        <div id="prof-box" style="display:none">
+          <label for="pf-name">FULL NAME</label><input id="pf-name" type="text" autocomplete="name" />
+          <label for="pf-email">EMAIL</label><input id="pf-email" type="email" disabled />
+          <label for="pf-phone">MOBILE NUMBER</label><input id="pf-phone" type="tel" inputmode="tel" autocomplete="tel" />
+          <button class="btn btn-primary" id="pf-save" type="button" style="margin-top:12px">Save profile <span>↗</span></button>
+        </div>
+        <input type="file" id="acc-file" accept="image/*" hidden>
+        <button id="acc-prof" class="btn btn-ghost" type="button" style="margin-top:10px;width:100%">My profile</button>
+        <button id="acc-photo" class="btn btn-ghost" type="button" style="margin-top:10px;width:100%">Add / change photo</button>
+        <button id="acc-pass" class="btn btn-ghost" type="button" style="margin-top:10px;width:100%">Forgot / reset password</button>
+        <button id="acc-deact" class="btn btn-ghost" type="button" style="margin-top:10px;color:#e0525e;width:100%">Deactivate account</button>
+        <button id="acc-del" class="btn btn-ghost" type="button" style="margin-top:10px;color:#e0525e;width:100%">Delete account</button>
+        <button class="btn btn-primary" id="signout-btn" type="button" style="margin-top:14px">Sign out <span>↗</span></button>
       </div>
     </div>
   </div>
@@ -837,7 +850,7 @@
     // Corrects the common typo "Peeysuh" -> "Peeyush" in the displayed name
     function fixName(s){ return String(s||'').replace(/peeysuh/gi,'Peeyush'); }
     function msg(type,t){ errBox.style.display='none'; okBox.style.display='none'; if(!t) return; var b=type==='err'?errBox:okBox; b.textContent=t; b.style.display='block'; }
-    function friendly(e){
+    function friendly(e){ if(e&&e.code==='x-unverified') return 'Please verify your email first. We just sent a new verification link to your inbox (check Spam too), then sign in again.'; if(e&&e.code==='x-deactivated') return 'This account is deactivated. Contact Peeyush to reactivate it.';
       var c=(e&&e.code)||'';
       var m={ 'auth/email-already-in-use':'This email already has an account. Please sign in.',
         'auth/invalid-email':'Please enter a valid email address.',
@@ -904,7 +917,7 @@
       var label = user ? 'Hi, '+(fixName(user.displayName||user.email||'').split(' ')[0]) : 'Sign in';
       document.querySelectorAll('.auth-nav').forEach(function(a){ var t=a.querySelector('.sl-t'); (t||a).textContent=label; });
       $('auth-forms').style.display = user?'none':''; $('auth-account').style.display = user?'':'none';
-      if(user){ $('auth-title').textContent='Your account'; $('auth-hello').textContent='Signed in as '+(user.displayName?fixName(user.displayName)+' · ':'')+user.email; prefill(user); }
+      if(user){ $('auth-title').textContent='Your account'; $('auth-hello').textContent='Signed in as '+(user.displayName?fixName(user.displayName)+' · ':'')+user.email; prefill(user); refreshAcc(user); }
       else { tab('in'); }
     }
     function busy(btn,on,label){ btn.disabled=on; btn.innerHTML = on ? 'Please wait…' : label+' <span>↗</span>'; }
@@ -936,7 +949,10 @@
       if(!em||!pw){ msg('err','Please enter your email and password.'); return; }
       busy($('in-btn'),true,'Sign in');
       load().then(function(f){ return f.au.signInWithEmailAndPassword(f.auth,em,pw); })
-        .then(function(cred){ return notifyNew(cred.user,'Email & password','SIGN-IN'); })
+        .then(function(cred){ var u=cred.user;
+          return checkActive(u).then(function(){
+            if(!u.emailVerified){ return fb.au.sendEmailVerification(u).catch(function(){}).then(function(){ return fb.au.signOut(fb.auth); }).then(function(){ throw {code:'x-unverified'}; }); }
+            return notifyNew(u,'Email & password','SIGN-IN'); }); })
         .then(function(){ $('form-in').reset(); close(); openHire(); })
         .catch(function(x){ msg('err',friendly(x)); })
         .then(function(){ busy($('in-btn'),false,'Sign in'); });
@@ -952,16 +968,19 @@
         prefill({displayName:nm,email:em}); $('form-up').reset(); close(); openHire(); return;
       }
       if(!nm||!em||pw.length<6){ msg('err','Please enter your name, email and a password of at least 6 characters.'); return; }
+      var ph=normPh($('up-phone').value); if(!ph){ msg('err','Please enter a valid mobile number.'); return; }
       busy($('up-btn'),true,'Create account');
       load().then(function(f){
         return f.au.createUserWithEmailAndPassword(f.auth,em,pw).then(function(cred){
           return f.au.updateProfile(cred.user,{displayName:nm}).then(function(){ return cred.user; });
         });
-      }).then(function(user){ return notifyNew(user,'Email & password','NEW SIGN-UP');
+      }).then(function(user){ return notifyNew(user,'Email & password','NEW SIGN-UP')
+        .then(function(){ return fb.fs.setDoc(fb.fs.doc(fb.db,'users',user.uid),{phone:ph},{merge:true}).catch(function(){}); })
+        .then(function(){ return fb.au.sendEmailVerification(user).catch(function(){}); });
       }).then(function(){
         return fb.au.signOut(fb.auth).then(function(){
           $('form-up').reset(); tab('in'); $('in-email').value=em; $('in-pass').value='';
-          setTimeout(function(){ $('auth-title').textContent='Step 2: Sign in to apply'; msg('ok','Account created! Now sign in with the same email and password to open the job application form.'); $('in-pass').focus(); },400);
+          setTimeout(function(){ $('auth-title').textContent='Step 2: Sign in to apply'; msg('ok','Account created! We sent a verification email to '+em+' (check Spam too). Open the link in it, then sign in here.'); $('in-pass').focus(); },400);
         });
       })
         .catch(function(x){ msg('err',friendly(x)); })
@@ -977,7 +996,7 @@
       load().then(function(f){
         var provider=new f.au.GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'});
         return f.au.signInWithPopup(f.auth,provider).then(function(res){
-          var info=f.au.getAdditionalUserInfo(res); return notifyNew(res.user,'Google',(info && info.isNewUser)?'NEW SIGN-UP':'SIGN-IN');
+          var info=f.au.getAdditionalUserInfo(res); return checkActive(res.user).then(function(){ return notifyNew(res.user,'Google',(info && info.isNewUser)?'NEW SIGN-UP':'SIGN-IN'); });
         });
       }).then(function(){ close(); openHire(); }).catch(function(x){
         var c=(x&&x.code)||'';
@@ -995,6 +1014,31 @@
         .catch(function(x){ msg('err',friendly(x)); });
     });
 
+    function normPh(s){ var d=String(s||'').replace(/[^\d+]/g,''); if(d[0]==='+'){ d='+'+d.replace(/\D/g,''); return /^\+[1-9]\d{7,14}$/.test(d)?d:''; } d=d.replace(/\D/g,''); if(/^91\d{10}$/.test(d)) d=d.slice(2); else if(/^0\d{10}$/.test(d)) d=d.slice(1); return /^[6-9]\d{9}$/.test(d)?'+91'+d:''; }
+    function pRef(u){ return fb.fs.doc(fb.db,'users',u.uid); }
+    function loadProf(u){ return fb.fs.getDoc(pRef(u)).then(function(x){ return x.exists()?x.data():{}; }).catch(function(){ return {}; }); }
+    function checkActive(u){ return loadProf(u).then(function(p){ if(p.status==='deactivated') return fb.au.signOut(fb.auth).then(function(){ throw {code:'x-deactivated'}; }); }); }
+    function am(t,ok){ var e=$('acc-msg'); e.textContent=t||''; e.style.color=ok?'#2e9e5b':'#e0525e'; }
+    function refreshAcc(u){ am(''); $('prof-box').style.display='none'; loadProf(u).then(function(p){ var im=$('acc-av'); if(p.photo){ im.src=p.photo; im.style.display='block'; } else im.style.display='none'; }); }
+    $('acc-prof').addEventListener('click',function(){ var u=fb&&fb.auth.currentUser, bx=$('prof-box'); if(!u) return; if(bx.style.display==='block'){ bx.style.display='none'; return; }
+      loadProf(u).then(function(p){ $('pf-name').value=fixName(u.displayName||p.name||''); $('pf-email').value=u.email||''; $('pf-phone').value=p.phone||''; bx.style.display='block'; }); });
+    $('pf-save').addEventListener('click',function(){ var u=fb.auth.currentUser, nm=$('pf-name').value.trim(), raw=$('pf-phone').value.trim(), ph=raw?normPh(raw):'';
+      if(!nm){ am('Please enter your name.'); return; } if(raw&&!ph){ am('Please enter a valid mobile number.'); return; }
+      fb.au.updateProfile(u,{displayName:nm}).then(function(){ return fb.fs.setDoc(pRef(u),{name:nm,phone:ph},{merge:true}); })
+        .then(function(){ am('Profile saved.',1); render(u); }).catch(function(){ am('Could not save right now. Please try again.'); }); });
+    $('acc-photo').addEventListener('click',function(){ $('acc-file').click(); });
+    $('acc-file').addEventListener('change',function(){ var f=this.files[0], inp=this; if(!f) return; var r=new FileReader();
+      r.onload=function(){ var img=new Image(); img.onload=function(){ var c=document.createElement('canvas'), S=240, m=Math.min(img.width,img.height); c.width=c.height=S;
+        c.getContext('2d').drawImage(img,(img.width-m)/2,(img.height-m)/2,m,m,0,0,S,S); var d=c.toDataURL('image/jpeg',.8), u=fb.auth.currentUser;
+        fb.fs.setDoc(pRef(u),{photo:d},{merge:true}).then(function(){ var im=$('acc-av'); im.src=d; im.style.display='block'; am('Photo updated.',1); }).catch(function(){ am('Could not save the photo. Please try again.'); }); };
+        img.onerror=function(){ am('Please choose a valid image.'); }; img.src=r.result; };
+      r.readAsDataURL(f); inp.value=''; });
+    $('acc-pass').addEventListener('click',function(){ var u=fb.auth.currentUser; fb.au.sendPasswordResetEmail(fb.auth,u.email).then(function(){ am('Password reset link sent to '+u.email+'. Check your inbox and Spam.',1); }).catch(function(){ am('Could not send the reset email. Please try again.'); }); });
+    $('acc-deact').addEventListener('click',function(){ if(!confirm('Deactivate your account? You will be signed out and cannot sign in again until Peeyush reactivates it.')) return; var u=fb.auth.currentUser;
+      fb.fs.setDoc(pRef(u),{status:'deactivated',deactivatedAt:fb.fs.serverTimestamp()},{merge:true}).then(function(){ return fb.au.signOut(fb.auth); }).then(function(){ close(); }).catch(function(){ am('Could not deactivate right now. Please try again.'); }); });
+    $('acc-del').addEventListener('click',function(){ if(!confirm('Delete your account permanently? This cannot be undone.')) return; var u=fb.auth.currentUser;
+      fb.fs.deleteDoc(pRef(u)).catch(function(){}).then(function(){ return fb.au.deleteUser(u); }).then(function(){ close(); })
+        .catch(function(x){ am(x&&x.code==='auth/requires-recent-login'?'For security, please sign out, sign in again, then delete your account.':'Could not delete right now. Please try again.'); }); });
     $('signout-btn').addEventListener('click',function(){
       load().then(function(f){ return f.au.signOut(f.auth); }).then(close).catch(function(){});
     });
