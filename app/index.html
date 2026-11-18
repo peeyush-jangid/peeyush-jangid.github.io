@@ -871,13 +871,13 @@ a.card.file{position:relative;padding-right:80px}
       <div id="phoneRow"><label for="aph">Mobile number *</label><div class="ccrow"><select id="acc" aria-label="Country code"></select><input id="aph" type="tel" autocomplete="tel-national" inputmode="numeric" placeholder="Mobile number"></div></div>
       <label for="ae">Email</label><input id="ae" type="email" autocomplete="email" inputmode="email">
       <label for="ap">Password (min 6 characters)</label><input id="ap" type="password" autocomplete="new-password">
+      <label style="display:flex;gap:10px;align-items:flex-start;color:var(--ink);font-weight:500;font-size:.86rem;line-height:1.5;margin:16px 0 4px;cursor:pointer"><input type="checkbox" id="aterms" style="width:18px;height:18px;min-height:0;padding:0;margin:2px 0 0;flex:none"><span>I agree to the <a href="../terms.html" target="_blank" rel="noopener" style="color:var(--brand)">Terms &amp; Conditions</a> and <a href="../privacy.html" target="_blank" rel="noopener" style="color:var(--brand)">Privacy Policy</a>. *</span></label>
       <p class="err" id="aerr" role="alert"></p>
       <button class="btn pri" id="asub" type="submit">Create account</button>
       <div id="gwrap" style="display:none"><div class="or">or</div><button class="btn" id="agoogle" type="button">Continue with Google</button></div>
       <button class="lnk" id="aforgot" type="button" style="display:none">Forgot password?</button>
     </form>
     <p class="note" style="text-align:center" id="amode"></p>
-    <p class="note" style="text-align:center;margin-top:10px">By continuing, you agree to our <a href="../terms.html" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Terms &amp; Conditions</a> and <a href="../privacy.html" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Privacy Policy</a>.</p>
   </div>
 </div>
 
@@ -1147,14 +1147,12 @@ a.card.file{position:relative;padding-right:80px}
     <h2 style="margin-top:6px">Send me your job offer</h2>
     <p>HVAC Project Engineer · Site Supervision · Jaipur. Share the role and Peeyush will contact you.</p>
     <form id="f-offer" data-title="Job offer"></form>
-    <p class="note">By submitting, you agree to our <a href="../terms.html" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Terms</a> and <a href="../privacy.html" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Privacy Policy</a>.</p>
   </div>
 
   <div class="pane" id="p-apply">
     <h2 style="margin-top:6px">Looking for a job? Apply here</h2>
     <p>Share your profile and the work you are looking for. It goes straight to Peeyush.</p>
     <form id="f-apply" data-title="Job application"></form>
-    <p class="note">By submitting, you agree to our <a href="../terms.html" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Terms</a> and <a href="../privacy.html" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Privacy Policy</a>.</p>
   </div>
 </section>
 </main>
@@ -1240,6 +1238,7 @@ a.card.file{position:relative;padding-right:80px}
       else if(x[1]==='textarea')h+=l+'<textarea id="'+id+'"'+r+'></textarea>';
       else h+=l+'<input id="'+id+'" type="'+x[1]+'"'+r+'>';
     });
+    h+='<label style="display:flex;gap:10px;align-items:flex-start;color:var(--ink);font-weight:500;font-size:.86rem;line-height:1.5;margin:16px 0 4px;cursor:pointer"><input type="checkbox" id="'+k+'terms" required style="width:18px;height:18px;min-height:0;padding:0;margin:2px 0 0;flex:none"><span>I agree to the <a href="../terms.html" target="_blank" rel="noopener" style="color:var(--brand)">Terms &amp; Conditions</a> and <a href="../privacy.html" target="_blank" rel="noopener" style="color:var(--brand)">Privacy Policy</a>. *</span></label>';
     h+='<div class="btns"><button class="btn wa" type="button" data-m="wa">Send on WhatsApp</button><button class="btn" type="button" data-m="mail">Send by email</button></div><p class="note">Your message opens in WhatsApp or your email app, ready to send. To share a CV file, use the CV link field or send it in the chat.</p>';
     f.innerHTML=h;
     f.addEventListener('click',function(e){
@@ -1297,7 +1296,7 @@ a.card.file{position:relative;padding-right:80px}
     $('wlcmodal').classList.add('on');
   }
   function setUser(u){
-    me=u; var bc=document.body.classList; bc.remove('boot'); bc.toggle('locked',!u); bc.toggle('needphone',!!(u&&gateNeeded(u)));
+    me=u; if(!u&&$('aterms'))$('aterms').checked=false; var bc=document.body.classList; bc.remove('boot'); bc.toggle('locked',!u); bc.toggle('needphone',!!(u&&gateNeeded(u)));
     var av=u?(u.photo?'<img src="'+esc(u.photo)+'" alt="" referrerpolicy="no-referrer">':esc((u.name||u.email)[0].toUpperCase())):'P';
     $('avatar').innerHTML=av; $('mav').innerHTML=av;
     $('accName').textContent=$('mName').textContent=u?u.name:'Guest';
@@ -1433,6 +1432,7 @@ a.card.file{position:relative;padding-right:80px}
   $('aseg').addEventListener('click',function(e){if(e.target.dataset.t){mode=e.target.dataset.t;drawMode()}});
   $('af').addEventListener('submit',function(ev){
     ev.preventDefault();
+    if(!$('aterms').checked){$('aerr').style.color='';return $('aerr').textContent='Please agree to the Terms & Conditions and Privacy Policy to continue.'}
     var n=$('an').value.trim(),e=$('ae').value.trim().toLowerCase(),p=$('ap').value,ph=normPhone($('aph').value,$('acc').value);
     if(mode==='up'&&!n)return $('aerr').textContent='Enter your full name.';
     if(mode==='up'&&!ph)return $('aerr').textContent='Enter a valid mobile number with the correct country code.';
@@ -1446,6 +1446,7 @@ a.card.file{position:relative;padding-right:80px}
     fb().then(function(f){return f.m.sendPasswordResetEmail(f.a,e)}).then(function(){note('Reset link sent to '+e+'.',1)}).catch(function(x){$('aerr').textContent=msg(x)});
   });
   $('agoogle').addEventListener('click',function(){
+    if(!$('aterms').checked){$('aerr').style.color='';return $('aerr').textContent='Please agree to the Terms & Conditions and Privacy Policy to continue.'}
     fb().then(function(f){return f.m.signInWithPopup(f.a,new f.m.GoogleAuthProvider()).then(function(res){
       var info=f.m.getAdditionalUserInfo(res);
       var isNew=!!(info&&info.isNewUser);
