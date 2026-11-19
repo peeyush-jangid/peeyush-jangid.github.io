@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Free HVAC calculators – AC tonnage, duct size, BTU converter | Peeyush Jangid</title>
-<meta name="description" content="Free HVAC calculators: AC tonnage for your room, BTU/kW/TR converter, duct size and AC electricity cost. Made by Peeyush Kumar Jangid, HVAC Project Engineer in Jaipur.">
+<meta name="description" content="Free HVAC calculators: AC tonnage for your room, BTU/kW/TR converter, duct size and electrical details (current, breaker, cable). Made by Peeyush Kumar Jangid, HVAC Project Engineer in Jaipur.">
 <link rel="canonical" href="https://peeyush-jangid.github.io/tools.html">
 <meta name="theme-color" content="#0b5cab">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,7 +55,7 @@ footer{text-align:center;color:var(--muted);font-size:.85rem;padding:20px}
     <button role="tab" aria-selected="true" data-t="t1">AC tonnage</button>
     <button role="tab" aria-selected="false" data-t="t2">BTU / kW / TR</button>
     <button role="tab" aria-selected="false" data-t="t3">Duct size</button>
-    <button role="tab" aria-selected="false" data-t="t4">Electricity cost</button>
+    <button role="tab" aria-selected="false" data-t="t4">Electrical details</button>
   </div>
 
   <section class="panel" id="t1">
@@ -102,17 +102,22 @@ footer{text-align:center;color:var(--muted);font-size:.85rem;padding:20px}
   </section>
 
   <section class="panel" id="t4" hidden>
-    <h2>AC electricity cost</h2>
-    <p class="d">See what your AC costs to run each month.</p>
+    <h2>Electrical details: current, breaker, cable</h2>
+    <p class="d">Enter the load to get full-load current, MCB rating and cable size for an AC, pump, fan or any motor.</p>
     <div class="grid">
-      <div><label for="e_w">AC power input (watts)</label><input id="e_w" type="number" min="1" value="1400"></div>
-      <div><label for="e_h">Hours per day</label><input id="e_h" type="number" min="1" max="24" value="8"></div>
-      <div><label for="e_d">Days per month</label><input id="e_d" type="number" min="1" max="31" value="30"></div>
-      <div><label for="e_r">Rate (₹ per unit)</label><input id="e_r" type="number" step="0.1" min="0" value="8"></div>
+      <div><label for="e_mode">Load given as</label><select id="e_mode"><option value="kw">Electrical input (kW)</option><option value="hp">Motor shaft output (HP)</option></select></div>
+      <div><label for="e_val">Load value</label><input id="e_val" type="number" step="any" min="0" value="5"></div>
+      <div><label for="e_ph">Supply</label><select id="e_ph"><option value="3,415">3-phase, 415 V</option><option value="1,230">Single phase, 230 V</option></select></div>
+      <div><label for="e_pf">Power factor</label><input id="e_pf" type="number" step="0.01" min="0.5" max="1" value="0.85"></div>
+      <div><label for="e_ef">Motor efficiency % (for HP)</label><input id="e_ef" type="number" min="50" max="100" value="90"></div>
+      <div><label for="e_ds">Design margin</label><select id="e_ds"><option value="1.25">125% (motors, compressors)</option><option value="1">100% (heaters, lights)</option></select></div>
+      <div><label for="e_len">Cable length (m)</label><input id="e_len" type="number" min="1" value="30"></div>
+      <div><label for="e_vd">Max voltage drop (%)</label><input id="e_vd" type="number" step="0.5" value="3"></div>
+      <div><label for="e_mat">Cable material</label><select id="e_mat"><option value="cu">Copper</option><option value="al">Aluminium</option></select></div>
     </div>
-    <button class="btn" onclick="calcCost()">Calculate cost</button>
+    <button class="btn" onclick="calcElec()">Get electrical details</button>
     <div class="out" id="e_out" aria-live="polite"></div>
-    <p class="note">An inverter AC cycles its compressor, so real usage is often 50–70% of rated power. Check the power input on the AC label or your bill's unit rate.</p>
+    <p class="note">Indicative values for PVC cable in air or tray at 40 °C, resistive voltage drop only. Compressors need a motor-rated breaker and starter. Always confirm with the local electrical code and a licensed electrician.</p>
   </section>
 
   <div class="cta">
@@ -158,10 +163,37 @@ function calcDuct(){
   show('d_out',`<strong class="big">Round: ${Math.ceil(dia)} inch dia</strong>Rectangular: <b>${w} × ${h} inch</b> (equivalent round ≈ ${de.toFixed(1)} inch)<br>Duct area needed: ${(A*144).toFixed(0)} sq inch at ${v} FPM.`);
 }
 
-function calcCost(){
-  const kwh=+$('e_w').value/1000*+$('e_h').value*+$('e_d').value;
-  const cost=kwh*+$('e_r').value;
-  show('e_out',`<strong class="big">₹${Math.round(cost).toLocaleString('en-IN')} per month</strong>${kwh.toFixed(0)} units at full-time compressor use. With inverter cycling, expect roughly ₹${Math.round(cost*.5).toLocaleString('en-IN')}–₹${Math.round(cost*.7).toLocaleString('en-IN')}.`);
+function calcElec(){
+  const [ph,V]=$('e_ph').value.split(',').map(Number);
+  let kw=+$('e_val').value;
+  if($('e_mode').value==='hp')kw=kw*0.746/(+$('e_ef').value/100);
+  const pf=+$('e_pf').value,k=ph===3?Math.sqrt(3):1;
+  const I=kw*1000/(k*V*pf),Id=I*(+$('e_ds').value);
+  const br=[6,10,16,20,25,32,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000];
+  const mcb=br.find(x=>x>=Id);
+  const need=mcb||Id;
+  const sz=[1.5,2.5,4,6,10,16,25,35,50,70,95,120,150,185,240,300];
+  const am=[18,24,32,41,57,76,101,125,151,192,232,269,309,353,415,480];
+  const al=$('e_mat').value==='al',f=al?0.78:1,rho=al?0.0368:0.0225;
+  const L=+$('e_len').value,lim=+$('e_vd').value/100*V,m=ph===3?Math.sqrt(3):2;
+  let c=-1;
+  for(let i=0;i<sz.length;i++){
+    if(al&&sz[i]<16)continue;
+    if(am[i]*f>=need&&m*I*L*rho/sz[i]<=lim){c=i;break}
+  }
+  const earth=s=>s<=16?s:s<=35?16:(sz.find(x=>x>=s/2)||s/2);
+  let cab='<strong class="big">Cable: larger than 300 mm² or parallel runs</strong>';
+  let vdTxt='';
+  if(c>=0){
+    const vd=m*I*L*rho/sz[c];
+    cab=`<strong class="big">${sz[c]} mm² ${al?'Al':'Cu'} cable · ${mcb||'custom'} A breaker</strong>`;
+    vdTxt=`${vd.toFixed(1)} V (${(vd/V*100).toFixed(1)} %)`;
+  }
+  const kv=a=>'<div class="kv">'+a.map(x=>`<div><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')+'</div>';
+  const rows=[['Full-load current',I.toFixed(1)+' A'],['Design current',Id.toFixed(1)+' A'],['Electrical input',kw.toFixed(2)+' kW'],['Apparent power',(kw/pf).toFixed(2)+' kVA'],['Start current (DOL ≈ 6×)',(I*6).toFixed(0)+' A']];
+  if(c>=0)rows.push(['Cable voltage drop',vdTxt],['Earth wire',earth(sz[c])+' mm²']);
+  $('e_out').innerHTML=cab+kv(rows);
+  $('e_out').classList.add('show');
 }
 calcAC();
 var h=location.hash.slice(1),hb=document.querySelector('.tabs button[data-t="'+h+'"]');if(hb)hb.click();
