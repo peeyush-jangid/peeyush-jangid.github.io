@@ -3,6 +3,16 @@
   "categories": {},
   "overrides": {},
   "custom": [],
-  "order": {},
+  "order": {
+    "emi": 0,
+    "age": 1,
+    "gst": 2,
+    "percentage": 3,
+    "salary": 4,
+    "loan": 5,
+    "datediff": 6,
+    "pdf-tools": 7,
+    "resume-maker": 8
+  },
   "tables": {}
 }
