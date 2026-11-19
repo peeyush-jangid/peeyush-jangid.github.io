@@ -14,5 +14,1618 @@
     "pdf-tools": 7,
     "resume-maker": 8
   },
-  "tables": {}
+  "tables": {
+    "autocad": [
+      [
+        "L",
+        "LINE",
+        "Draw straight lines"
+      ],
+      [
+        "PL",
+        "PLINE",
+        "Draw a polyline"
+      ],
+      [
+        "C",
+        "CIRCLE",
+        "Draw a circle"
+      ],
+      [
+        "A",
+        "ARC",
+        "Draw an arc"
+      ],
+      [
+        "REC",
+        "RECTANG",
+        "Draw a rectangle"
+      ],
+      [
+        "POL",
+        "POLYGON",
+        "Draw a polygon"
+      ],
+      [
+        "EL",
+        "ELLIPSE",
+        "Draw an ellipse"
+      ],
+      [
+        "SPL",
+        "SPLINE",
+        "Draw a smooth curve"
+      ],
+      [
+        "M",
+        "MOVE",
+        "Move objects"
+      ],
+      [
+        "CO",
+        "COPY",
+        "Copy objects"
+      ],
+      [
+        "RO",
+        "ROTATE",
+        "Rotate objects"
+      ],
+      [
+        "SC",
+        "SCALE",
+        "Scale objects"
+      ],
+      [
+        "MI",
+        "MIRROR",
+        "Mirror objects"
+      ],
+      [
+        "O",
+        "OFFSET",
+        "Create parallel copies"
+      ],
+      [
+        "AR",
+        "ARRAY",
+        "Rectangular / polar / path array"
+      ],
+      [
+        "S",
+        "STRETCH",
+        "Stretch objects"
+      ],
+      [
+        "TR",
+        "TRIM",
+        "Trim to cutting edges"
+      ],
+      [
+        "EX",
+        "EXTEND",
+        "Extend to boundary"
+      ],
+      [
+        "F",
+        "FILLET",
+        "Round a corner"
+      ],
+      [
+        "CHA",
+        "CHAMFER",
+        "Bevel a corner"
+      ],
+      [
+        "E",
+        "ERASE",
+        "Delete objects"
+      ],
+      [
+        "X",
+        "EXPLODE",
+        "Break block/polyline into parts"
+      ],
+      [
+        "J",
+        "JOIN",
+        "Join objects"
+      ],
+      [
+        "BR",
+        "BREAK",
+        "Break an object"
+      ],
+      [
+        "T / MT",
+        "MTEXT",
+        "Multiline text"
+      ],
+      [
+        "DT",
+        "TEXT",
+        "Single-line text"
+      ],
+      [
+        "DLI",
+        "DIMLINEAR",
+        "Linear dimension"
+      ],
+      [
+        "DAL",
+        "DIMALIGNED",
+        "Aligned dimension"
+      ],
+      [
+        "DRA",
+        "DIMRADIUS",
+        "Radius dimension"
+      ],
+      [
+        "DDI",
+        "DIMDIAMETER",
+        "Diameter dimension"
+      ],
+      [
+        "LE",
+        "QLEADER",
+        "Leader with text"
+      ],
+      [
+        "H",
+        "HATCH",
+        "Hatch / fill an area"
+      ],
+      [
+        "B",
+        "BLOCK",
+        "Create a block"
+      ],
+      [
+        "I",
+        "INSERT",
+        "Insert a block"
+      ],
+      [
+        "W",
+        "WBLOCK",
+        "Write block to file"
+      ],
+      [
+        "LA",
+        "LAYER",
+        "Layer manager"
+      ],
+      [
+        "MA",
+        "MATCHPROP",
+        "Copy properties between objects"
+      ],
+      [
+        "PR",
+        "PROPERTIES",
+        "Properties palette"
+      ],
+      [
+        "Z",
+        "ZOOM",
+        "Zoom (use E for extents, W for window)"
+      ],
+      [
+        "P",
+        "PAN",
+        "Pan the view"
+      ],
+      [
+        "REGEN / RE",
+        "REGEN",
+        "Regenerate drawing"
+      ],
+      [
+        "DI",
+        "DIST",
+        "Measure distance"
+      ],
+      [
+        "AA",
+        "AREA",
+        "Measure area"
+      ],
+      [
+        "LI",
+        "LIST",
+        "List object information"
+      ],
+      [
+        "PU",
+        "PURGE",
+        "Remove unused items"
+      ],
+      [
+        "UNITS",
+        "UNITS",
+        "Set drawing units"
+      ],
+      [
+        "LTS",
+        "LTSCALE",
+        "Set linetype scale"
+      ],
+      [
+        "F8",
+        "ORTHO",
+        "Toggle ortho mode"
+      ],
+      [
+        "F3",
+        "OSNAP",
+        "Toggle object snap"
+      ],
+      [
+        "F9",
+        "SNAP",
+        "Toggle snap"
+      ],
+      [
+        "Ctrl+Z",
+        "UNDO",
+        "Undo last action"
+      ],
+      [
+        "Ctrl+S",
+        "QSAVE",
+        "Save drawing"
+      ],
+      [
+        "PLOT / Ctrl+P",
+        "PLOT",
+        "Print / plot to PDF"
+      ],
+      [
+        "XL",
+        "XLINE",
+        "Infinite construction line"
+      ],
+      [
+        "RAY",
+        "RAY",
+        "Semi-infinite construction line"
+      ],
+      [
+        "DO",
+        "DONUT",
+        "Filled ring / donut"
+      ],
+      [
+        "PO",
+        "POINT",
+        "Draw a point"
+      ],
+      [
+        "DIV",
+        "DIVIDE",
+        "Place points/blocks at equal divisions"
+      ],
+      [
+        "ME",
+        "MEASURE",
+        "Place points at fixed distances"
+      ],
+      [
+        "REV",
+        "REVCLOUD",
+        "Revision cloud"
+      ],
+      [
+        "BO",
+        "BOUNDARY",
+        "Create closed boundary from area"
+      ],
+      [
+        "REG",
+        "REGION",
+        "Create region from closed objects"
+      ],
+      [
+        "WIPEOUT",
+        "WIPEOUT",
+        "Mask area with background colour"
+      ],
+      [
+        "TB",
+        "TABLE",
+        "Insert a table"
+      ],
+      [
+        "TOL",
+        "TOLERANCE",
+        "Geometric tolerance symbol"
+      ],
+      [
+        "MLINE",
+        "MLINE",
+        "Draw multiple parallel lines"
+      ],
+      [
+        "MLSTYLE",
+        "MLSTYLE",
+        "Multiline style"
+      ],
+      [
+        "HELIX",
+        "HELIX",
+        "3D helix / spring"
+      ],
+      [
+        "SOLID",
+        "SOLID",
+        "2D filled solid"
+      ],
+      [
+        "SKETCH",
+        "SKETCH",
+        "Freehand sketch"
+      ],
+      [
+        "PE",
+        "PEDIT",
+        "Edit polylines (join, width, fit)"
+      ],
+      [
+        "SPE",
+        "SPLINEDIT",
+        "Edit a spline"
+      ],
+      [
+        "ED",
+        "DDEDIT",
+        "Edit text / attribute"
+      ],
+      [
+        "SCALETEXT",
+        "SCALETEXT",
+        "Scale text without moving it"
+      ],
+      [
+        "JUSTIFYTEXT",
+        "JUSTIFYTEXT",
+        "Change text justification"
+      ],
+      [
+        "TEXTEDIT",
+        "TEXTEDIT",
+        "Edit existing text"
+      ],
+      [
+        "STYLE / ST",
+        "STYLE",
+        "Text style manager"
+      ],
+      [
+        "QTEXT",
+        "QTEXT",
+        "Show text as boxes to speed regeneration"
+      ],
+      [
+        "TXT2MTXT",
+        "TXT2MTXT",
+        "Convert single-line to multiline text"
+      ],
+      [
+        "FIND",
+        "FIND",
+        "Find and replace text"
+      ],
+      [
+        "SPELL",
+        "SPELL",
+        "Spell check"
+      ],
+      [
+        "TCOUNT",
+        "TCOUNT",
+        "Auto-number text"
+      ],
+      [
+        "TEXTFIT",
+        "TEXTFIT",
+        "Fit text to a length (Express Tools)"
+      ],
+      [
+        "ARCTEXT",
+        "ARCTEXT",
+        "Text along an arc (Express Tools)"
+      ],
+      [
+        "OV / OVERKILL",
+        "OVERKILL",
+        "Delete duplicate / overlapping objects"
+      ],
+      [
+        "DIMSTYLE / D",
+        "DIMSTYLE",
+        "Dimension style manager"
+      ],
+      [
+        "DCO",
+        "DIMCONTINUE",
+        "Continue dimension chain"
+      ],
+      [
+        "DBA",
+        "DIMBASELINE",
+        "Baseline dimension"
+      ],
+      [
+        "DAN",
+        "DIMANGULAR",
+        "Angular dimension"
+      ],
+      [
+        "DAR",
+        "DIMARC",
+        "Arc length dimension"
+      ],
+      [
+        "DOR",
+        "DIMORDINATE",
+        "Ordinate dimension"
+      ],
+      [
+        "DJL",
+        "DIMJOGGED",
+        "Jogged radius dimension"
+      ],
+      [
+        "DCE",
+        "DIMCENTER",
+        "Centre mark"
+      ],
+      [
+        "DED",
+        "DIMEDIT",
+        "Edit dimension text/obliquing"
+      ],
+      [
+        "DIMTEDIT",
+        "DIMTEDIT",
+        "Move dimension text"
+      ],
+      [
+        "DIMBREAK",
+        "DIMBREAK",
+        "Break dimension line"
+      ],
+      [
+        "DIMSPACE",
+        "DIMSPACE",
+        "Equal spacing between dimensions"
+      ],
+      [
+        "DIMUPDATE",
+        "DIMSTYLE Apply",
+        "Update dimension to current style"
+      ],
+      [
+        "DIM",
+        "DIM",
+        "Smart dimension (auto type)"
+      ],
+      [
+        "MLD",
+        "MLEADER",
+        "Multileader with text"
+      ],
+      [
+        "MLS",
+        "MLEADERSTYLE",
+        "Multileader style"
+      ],
+      [
+        "MLEADERALIGN",
+        "MLEADERALIGN",
+        "Align multileaders"
+      ],
+      [
+        "MLEADERCOLLECT",
+        "MLEADERCOLLECT",
+        "Collect leaders into one"
+      ],
+      [
+        "AL",
+        "ALIGN",
+        "Align objects with points"
+      ],
+      [
+        "LEN",
+        "LENGTHEN",
+        "Change length of open objects"
+      ],
+      [
+        "REVERSE",
+        "REVERSE",
+        "Reverse direction of line/polyline"
+      ],
+      [
+        "BLEND",
+        "BLEND",
+        "Smooth spline between two objects"
+      ],
+      [
+        "OFFSETGAPTYPE",
+        "OFFSETGAPTYPE",
+        "Set corner type when offsetting"
+      ],
+      [
+        "LAYMRG",
+        "LAYMRG",
+        "Merge layers"
+      ],
+      [
+        "LAYDEL",
+        "LAYDEL",
+        "Delete layer with its objects"
+      ],
+      [
+        "LAYFRZ",
+        "LAYFRZ",
+        "Freeze layer of picked object"
+      ],
+      [
+        "LAYOFF",
+        "LAYOFF",
+        "Turn off layer of picked object"
+      ],
+      [
+        "LAYISO",
+        "LAYISO",
+        "Isolate layer of picked object"
+      ],
+      [
+        "LAYUNISO",
+        "LAYUNISO",
+        "Restore isolated layers"
+      ],
+      [
+        "LAYON",
+        "LAYON",
+        "Turn all layers on"
+      ],
+      [
+        "LAYTHW",
+        "LAYTHW",
+        "Thaw all layers"
+      ],
+      [
+        "LAYLCK",
+        "LAYLCK",
+        "Lock layer of picked object"
+      ],
+      [
+        "LAYULK",
+        "LAYULK",
+        "Unlock layer of picked object"
+      ],
+      [
+        "LAYWALK",
+        "LAYWALK",
+        "Walk through layers"
+      ],
+      [
+        "LAYCUR",
+        "LAYCUR",
+        "Change object to current layer"
+      ],
+      [
+        "LAYMCUR",
+        "LAYMCUR",
+        "Make picked object's layer current"
+      ],
+      [
+        "LAYP",
+        "LAYERP",
+        "Previous layer state"
+      ],
+      [
+        "LAYERSTATE",
+        "LAYERSTATE",
+        "Save/restore layer states"
+      ],
+      [
+        "LT",
+        "LINETYPE",
+        "Linetype manager"
+      ],
+      [
+        "LW",
+        "LWEIGHT",
+        "Lineweight settings"
+      ],
+      [
+        "CHPROP",
+        "CHPROP",
+        "Change colour/layer/linetype"
+      ],
+      [
+        "CH",
+        "PROPERTIES",
+        "Open properties (alias)"
+      ],
+      [
+        "COL",
+        "COLOR",
+        "Set current colour"
+      ],
+      [
+        "QSELECT",
+        "QSELECT",
+        "Quick select by property"
+      ],
+      [
+        "SELECTSIMILAR",
+        "SELECTSIMILAR",
+        "Select similar objects"
+      ],
+      [
+        "FILTER / FI",
+        "FILTER",
+        "Advanced object selection filter"
+      ],
+      [
+        "GROUP / G",
+        "GROUP",
+        "Create object group"
+      ],
+      [
+        "UNGROUP",
+        "UNGROUP",
+        "Remove group"
+      ],
+      [
+        "ALL",
+        "SELECT ALL",
+        "Select everything (Ctrl+A)"
+      ],
+      [
+        "BE",
+        "BEDIT",
+        "Block editor"
+      ],
+      [
+        "BC",
+        "BCLOSE",
+        "Close block editor"
+      ],
+      [
+        "BATTMAN",
+        "BATTMAN",
+        "Block attribute manager"
+      ],
+      [
+        "ATT",
+        "ATTDEF",
+        "Define block attribute"
+      ],
+      [
+        "ATE",
+        "ATTEDIT",
+        "Edit attributes"
+      ],
+      [
+        "EATTEDIT",
+        "EATTEDIT",
+        "Enhanced attribute editor"
+      ],
+      [
+        "ATTSYNC",
+        "ATTSYNC",
+        "Sync block attributes"
+      ],
+      [
+        "BCOUNT",
+        "BCOUNT",
+        "Count blocks"
+      ],
+      [
+        "BASE",
+        "BASE",
+        "Set insertion base point"
+      ],
+      [
+        "CLIP",
+        "CLIP",
+        "Clip block / xref / image"
+      ],
+      [
+        "REFEDIT",
+        "REFEDIT",
+        "Edit block/xref in place"
+      ],
+      [
+        "REFCLOSE",
+        "REFCLOSE",
+        "Close reference edit"
+      ],
+      [
+        "XR",
+        "XREF",
+        "External reference manager"
+      ],
+      [
+        "XA",
+        "XATTACH",
+        "Attach an xref"
+      ],
+      [
+        "XB",
+        "XBIND",
+        "Bind xref to drawing"
+      ],
+      [
+        "XC",
+        "XCLIP",
+        "Clip an xref"
+      ],
+      [
+        "IM",
+        "IMAGE",
+        "Attach / manage images"
+      ],
+      [
+        "IAT",
+        "IMAGEATTACH",
+        "Attach raster image"
+      ],
+      [
+        "ATTACH",
+        "ATTACH",
+        "Attach PDF / DWF / image"
+      ],
+      [
+        "PDFATTACH",
+        "PDFATTACH",
+        "Attach PDF underlay"
+      ],
+      [
+        "PDFIMPORT",
+        "PDFIMPORT",
+        "Import PDF as AutoCAD objects"
+      ],
+      [
+        "DATAEXTRACTION",
+        "DATAEXTRACTION",
+        "Extract data to table / Excel"
+      ],
+      [
+        "FIELD",
+        "FIELD",
+        "Insert dynamic field"
+      ],
+      [
+        "OLE",
+        "INSERTOBJ",
+        "Insert OLE object"
+      ],
+      [
+        "REDO",
+        "REDO",
+        "Redo last undo"
+      ],
+      [
+        "OOPS",
+        "OOPS",
+        "Restore last erased objects"
+      ],
+      [
+        "Ctrl+C",
+        "COPYCLIP",
+        "Copy to clipboard"
+      ],
+      [
+        "Ctrl+X",
+        "CUTCLIP",
+        "Cut to clipboard"
+      ],
+      [
+        "Ctrl+V",
+        "PASTECLIP",
+        "Paste"
+      ],
+      [
+        "Ctrl+Shift+C",
+        "COPYBASE",
+        "Copy with base point"
+      ],
+      [
+        "Ctrl+Shift+V",
+        "PASTEBLOCK",
+        "Paste as block"
+      ],
+      [
+        "Ctrl+Shift+S",
+        "SAVEAS",
+        "Save as"
+      ],
+      [
+        "Ctrl+N",
+        "NEW",
+        "New drawing"
+      ],
+      [
+        "Ctrl+O",
+        "OPEN",
+        "Open drawing"
+      ],
+      [
+        "Ctrl+A",
+        "SELECTALL",
+        "Select all"
+      ],
+      [
+        "Ctrl+2",
+        "ADCENTER",
+        "Design Center"
+      ],
+      [
+        "Ctrl+3",
+        "TOOLPALETTES",
+        "Tool palettes"
+      ],
+      [
+        "Ctrl+9",
+        "COMMANDLINE",
+        "Show / hide command line"
+      ],
+      [
+        "Ctrl+0",
+        "CLEANSCREENON",
+        "Clean screen"
+      ],
+      [
+        "Ctrl+Q",
+        "QUIT",
+        "Exit AutoCAD"
+      ],
+      [
+        "Ctrl+Tab",
+        "—",
+        "Switch between open drawings"
+      ],
+      [
+        "F1",
+        "HELP",
+        "Help"
+      ],
+      [
+        "F2",
+        "TEXTSCR",
+        "Text window"
+      ],
+      [
+        "F4",
+        "3DOSNAP",
+        "3D object snap"
+      ],
+      [
+        "F5",
+        "ISOPLANE",
+        "Cycle isometric planes"
+      ],
+      [
+        "F6",
+        "DUCS",
+        "Dynamic UCS / coordinate display"
+      ],
+      [
+        "F7",
+        "GRID",
+        "Toggle grid"
+      ],
+      [
+        "F10",
+        "POLAR",
+        "Toggle polar tracking"
+      ],
+      [
+        "F11",
+        "OTRACK",
+        "Toggle object snap tracking"
+      ],
+      [
+        "F12",
+        "DYN",
+        "Toggle dynamic input"
+      ],
+      [
+        "ESC",
+        "CANCEL",
+        "Cancel current command"
+      ],
+      [
+        "SPACE / ENTER",
+        "REPEAT",
+        "Repeat last command"
+      ],
+      [
+        "ZE",
+        "ZOOM Extents",
+        "Zoom to all objects"
+      ],
+      [
+        "ZW",
+        "ZOOM Window",
+        "Zoom to a window"
+      ],
+      [
+        "ZP",
+        "ZOOM Previous",
+        "Previous zoom"
+      ],
+      [
+        "ZA",
+        "ZOOM All",
+        "Zoom to drawing limits"
+      ],
+      [
+        "ZO",
+        "ZOOM Object",
+        "Zoom to selected object"
+      ],
+      [
+        "ZS",
+        "ZOOM Scale",
+        "Zoom by scale factor"
+      ],
+      [
+        "Z + Enter + .5x",
+        "ZOOM 0.5x",
+        "Zoom out to half"
+      ],
+      [
+        "AV",
+        "DSVIEWER",
+        "Aerial view"
+      ],
+      [
+        "RE",
+        "REGEN",
+        "Regenerate view"
+      ],
+      [
+        "REA",
+        "REGENALL",
+        "Regenerate all viewports"
+      ],
+      [
+        "R",
+        "REDRAW",
+        "Redraw screen"
+      ],
+      [
+        "VIEW / V",
+        "VIEW",
+        "Named views"
+      ],
+      [
+        "VSCURRENT",
+        "VSCURRENT",
+        "Visual style (2D wireframe / realistic …)"
+      ],
+      [
+        "OS",
+        "OSNAP",
+        "Object snap settings"
+      ],
+      [
+        "DS",
+        "DSETTINGS",
+        "Drafting settings"
+      ],
+      [
+        "SE",
+        "DSETTINGS",
+        "Snap / grid / polar settings"
+      ],
+      [
+        "OP",
+        "OPTIONS",
+        "AutoCAD options"
+      ],
+      [
+        "CUI",
+        "CUI",
+        "Customize user interface"
+      ],
+      [
+        "AP",
+        "APPLOAD",
+        "Load LISP / ARX applications"
+      ],
+      [
+        "CAL",
+        "CAL",
+        "On-screen calculator"
+      ],
+      [
+        "QUICKCALC / QC",
+        "QUICKCALC",
+        "Quick calculator palette"
+      ],
+      [
+        "MEASUREGEOM",
+        "MEASUREGEOM",
+        "Distance, radius, angle, area, volume"
+      ],
+      [
+        "ID",
+        "ID",
+        "Show coordinates of a point"
+      ],
+      [
+        "MASSPROP",
+        "MASSPROP",
+        "Mass properties of regions/solids"
+      ],
+      [
+        "TIME",
+        "TIME",
+        "Drawing time and date"
+      ],
+      [
+        "STATUS",
+        "STATUS",
+        "Drawing status information"
+      ],
+      [
+        "SETVAR",
+        "SETVAR",
+        "View/change system variables"
+      ],
+      [
+        "AUDIT",
+        "AUDIT",
+        "Check and fix drawing errors"
+      ],
+      [
+        "RECOVER",
+        "RECOVER",
+        "Recover damaged drawing"
+      ],
+      [
+        "RECOVERALL",
+        "RECOVERALL",
+        "Recover drawing with xrefs"
+      ],
+      [
+        "-PURGE",
+        "-PURGE",
+        "Purge with options (e.g. regapps)"
+      ],
+      [
+        "DWGCHECKSTANDARDS",
+        "CHECKSTANDARDS",
+        "Check drawing against CAD standards"
+      ],
+      [
+        "DRAWINGRECOVERY",
+        "DRAWINGRECOVERY",
+        "Open recovery manager"
+      ],
+      [
+        "QNEW",
+        "QNEW",
+        "New drawing from template"
+      ],
+      [
+        "SAVEALL",
+        "SAVEALL",
+        "Save all open drawings"
+      ],
+      [
+        "CLOSE",
+        "CLOSE",
+        "Close current drawing"
+      ],
+      [
+        "CLOSEALL",
+        "CLOSEALL",
+        "Close all drawings"
+      ],
+      [
+        "ETRANSMIT",
+        "ETRANSMIT",
+        "Package drawing with xrefs & fonts"
+      ],
+      [
+        "ARCHIVE",
+        "ARCHIVE",
+        "Archive drawing set"
+      ],
+      [
+        "EXPORT",
+        "EXPORT",
+        "Export to other formats"
+      ],
+      [
+        "IMPORT",
+        "IMPORT",
+        "Import other formats"
+      ],
+      [
+        "DXFOUT",
+        "DXFOUT",
+        "Save as DXF"
+      ],
+      [
+        "PUBLISH",
+        "PUBLISH",
+        "Publish sheets to PDF/DWF"
+      ],
+      [
+        "EXPORTPDF",
+        "EXPORTPDF",
+        "Export drawing to PDF"
+      ],
+      [
+        "PAGESETUP",
+        "PAGESETUP",
+        "Page setup manager"
+      ],
+      [
+        "PLOTSTYLE",
+        "PLOTSTYLE",
+        "Set plot style"
+      ],
+      [
+        "STYLESMANAGER",
+        "STYLESMANAGER",
+        "Plot style manager (CTB/STB)"
+      ],
+      [
+        "PLOTTERMANAGER",
+        "PLOTTERMANAGER",
+        "Plotter manager"
+      ],
+      [
+        "PREVIEW / PRE",
+        "PREVIEW",
+        "Print preview"
+      ],
+      [
+        "LA",
+        "LAYOUT",
+        "Create / switch layouts"
+      ],
+      [
+        "MV",
+        "MVIEW",
+        "Create layout viewports"
+      ],
+      [
+        "VPORTS",
+        "VPORTS",
+        "Viewport configuration"
+      ],
+      [
+        "MS",
+        "MSPACE",
+        "Switch to model space inside viewport"
+      ],
+      [
+        "PS",
+        "PSPACE",
+        "Switch to paper space"
+      ],
+      [
+        "VPCLIP",
+        "VPCLIP",
+        "Clip viewport boundary"
+      ],
+      [
+        "VPMAX",
+        "VPMAX",
+        "Maximise viewport"
+      ],
+      [
+        "VPMIN",
+        "VPMIN",
+        "Restore viewport"
+      ],
+      [
+        "MVSETUP",
+        "MVSETUP",
+        "Setup drawing sheet / scale"
+      ],
+      [
+        "SCALELISTEDIT",
+        "SCALELISTEDIT",
+        "Edit scale list"
+      ],
+      [
+        "ANNOALLVISIBLE",
+        "ANNOALLVISIBLE",
+        "Show annotative objects at all scales"
+      ],
+      [
+        "ANNOSCALE",
+        "ANNOSCALE",
+        "Set annotation scale"
+      ],
+      [
+        "OBJECTSCALE",
+        "OBJECTSCALE",
+        "Add/remove annotation scales"
+      ],
+      [
+        "UCS",
+        "UCS",
+        "User coordinate system"
+      ],
+      [
+        "UCSMAN",
+        "UCSMAN",
+        "Named UCS manager"
+      ],
+      [
+        "PLAN",
+        "PLAN",
+        "View plan of current UCS"
+      ],
+      [
+        "DDVPOINT",
+        "VPOINT",
+        "Set 3D viewpoint"
+      ],
+      [
+        "3DORBIT / 3DO",
+        "3DORBIT",
+        "Orbit around model"
+      ],
+      [
+        "ORBIT",
+        "ORBIT",
+        "Constrained orbit"
+      ],
+      [
+        "SHADEMODE",
+        "SHADEMODE",
+        "Shading mode"
+      ],
+      [
+        "DRAWORDER / DR",
+        "DRAWORDER",
+        "Send to back / bring to front"
+      ],
+      [
+        "TEXTTOFRONT",
+        "TEXTTOFRONT",
+        "Bring text to front"
+      ],
+      [
+        "HATCHTOBACK",
+        "HATCHTOBACK",
+        "Send hatch to back"
+      ],
+      [
+        "HE",
+        "HATCHEDIT",
+        "Edit hatch"
+      ],
+      [
+        "GRADIENT",
+        "GRADIENT",
+        "Gradient fill"
+      ],
+      [
+        "SOLIDEDIT",
+        "SOLIDEDIT",
+        "Edit solid faces/edges"
+      ],
+      [
+        "EXT",
+        "EXTRUDE",
+        "Extrude 2D to 3D"
+      ],
+      [
+        "PRESSPULL",
+        "PRESSPULL",
+        "Press / pull area"
+      ],
+      [
+        "REV",
+        "REVOLVE",
+        "Revolve profile"
+      ],
+      [
+        "SWEEP",
+        "SWEEP",
+        "Sweep profile along path"
+      ],
+      [
+        "LOFT",
+        "LOFT",
+        "Loft between profiles"
+      ],
+      [
+        "BOX",
+        "BOX",
+        "3D box"
+      ],
+      [
+        "CYL",
+        "CYLINDER",
+        "3D cylinder"
+      ],
+      [
+        "SPH",
+        "SPHERE",
+        "3D sphere"
+      ],
+      [
+        "CONE",
+        "CONE",
+        "3D cone"
+      ],
+      [
+        "UNI",
+        "UNION",
+        "Union solids"
+      ],
+      [
+        "SU",
+        "SUBTRACT",
+        "Subtract solids"
+      ],
+      [
+        "IN",
+        "INTERSECT",
+        "Intersect solids"
+      ],
+      [
+        "SLICE",
+        "SLICE",
+        "Slice a solid"
+      ],
+      [
+        "SECTIONPLANE",
+        "SECTIONPLANE",
+        "Section plane"
+      ],
+      [
+        "FLATSHOT",
+        "FLATSHOT",
+        "2D view from 3D model"
+      ],
+      [
+        "RENDER",
+        "RENDER",
+        "Render the model"
+      ],
+      [
+        "MATERIALS",
+        "MATERIALS",
+        "Materials browser"
+      ],
+      [
+        "LIGHT",
+        "LIGHT",
+        "Add a light"
+      ],
+      [
+        "SHEETSET / SSM",
+        "SHEETSETMANAGER",
+        "Sheet Set Manager"
+      ],
+      [
+        "ADC",
+        "ADCENTER",
+        "Design Center"
+      ],
+      [
+        "TP",
+        "TOOLPALETTES",
+        "Tool palettes"
+      ],
+      [
+        "MARKUP",
+        "MARKUP",
+        "Markup Set Manager"
+      ],
+      [
+        "DESIGNFEEDS",
+        "DESIGNFEEDS",
+        "Share design with team"
+      ],
+      [
+        "SHAREVIEW",
+        "SHAREVIEW",
+        "Publish shared view to web"
+      ],
+      [
+        "TRIMTOGGLE",
+        "TRIM (Shift)",
+        "Hold Shift in TRIM to EXTEND"
+      ],
+      [
+        "ARRAYCLASSIC",
+        "ARRAYCLASSIC",
+        "Classic array dialog"
+      ],
+      [
+        "ARRAYRECT",
+        "ARRAYRECT",
+        "Rectangular array"
+      ],
+      [
+        "ARRAYPOLAR",
+        "ARRAYPOLAR",
+        "Polar array"
+      ],
+      [
+        "ARRAYPATH",
+        "ARRAYPATH",
+        "Array along a path"
+      ],
+      [
+        "ARRAYEDIT",
+        "ARRAYEDIT",
+        "Edit associative array"
+      ],
+      [
+        "CHSPACE",
+        "CHSPACE",
+        "Move objects between model & paper space"
+      ],
+      [
+        "SCRIPT",
+        "SCRIPT",
+        "Run a script file"
+      ],
+      [
+        "ACTRECORD",
+        "ACTRECORD",
+        "Record action macro"
+      ],
+      [
+        "ACTSTOP",
+        "ACTSTOP",
+        "Stop recording action"
+      ],
+      [
+        "ACTUSERINPUT",
+        "ACTUSERINPUT",
+        "Pause for user input in macro"
+      ],
+      [
+        "VLIDE",
+        "VLISP",
+        "Visual LISP editor"
+      ],
+      [
+        "LISPSYS",
+        "LISPSYS",
+        "LISP system setting"
+      ],
+      [
+        "NETLOAD",
+        "NETLOAD",
+        "Load .NET application"
+      ],
+      [
+        "GEO",
+        "GEOGRAPHICLOCATION",
+        "Set geographic location"
+      ],
+      [
+        "MAPCONNECT",
+        "MAPCONNECT",
+        "Connect to online map"
+      ],
+      [
+        "LOGFILEON",
+        "LOGFILEON",
+        "Start logging command-line text"
+      ],
+      [
+        "LOGFILEOFF",
+        "LOGFILEOFF",
+        "Stop logging"
+      ],
+      [
+        "GRAPHSCR",
+        "GRAPHSCR",
+        "Return to drawing window"
+      ],
+      [
+        "NEWSHEET",
+        "NEWSHEET",
+        "New sheet in sheet set"
+      ],
+      [
+        "DWGPROPS",
+        "DWGPROPS",
+        "Drawing properties"
+      ],
+      [
+        "INSUNITS",
+        "INSUNITS",
+        "Units for inserted blocks"
+      ],
+      [
+        "DIMSCALE",
+        "DIMSCALE",
+        "Overall dimension scale (set variable)"
+      ],
+      [
+        "MSLTSCALE",
+        "MSLTSCALE",
+        "Scale linetypes by annotation scale"
+      ],
+      [
+        "PSLTSCALE",
+        "PSLTSCALE",
+        "Paper-space linetype scale"
+      ],
+      [
+        "FILEDIA",
+        "FILEDIA",
+        "File dialog on/off (set 1 = on)"
+      ],
+      [
+        "PICKFIRST",
+        "PICKFIRST",
+        "Select before command"
+      ],
+      [
+        "PICKADD",
+        "PICKADD",
+        "Add to selection setting"
+      ],
+      [
+        "HPSCALE",
+        "HPSCALE",
+        "Default hatch scale"
+      ],
+      [
+        "FILLMODE",
+        "FILLMODE",
+        "Show / hide fills"
+      ],
+      [
+        "FRONTCLIP",
+        "FRONTCLIP",
+        "Clipping planes (set variable)"
+      ],
+      [
+        "PL + width",
+        "PLINE → Width",
+        "Draw duct with width = duct size (e.g. 300)"
+      ],
+      [
+        "DIMLINEAR",
+        "DLI",
+        "Dimension duct size on the drawing"
+      ],
+      [
+        "BLOCK + ATT",
+        "BLOCK + ATTDEF",
+        "Make diffuser / AHU block with attributes (CFM, size)"
+      ],
+      [
+        "LENGTHEN",
+        "LEN → DE",
+        "Get exact duct run lengths for measurement"
+      ],
+      [
+        "LIST",
+        "LI",
+        "Check polyline length / area for duct & insulation quantity"
+      ],
+      [
+        "DIM",
+        "Dimension",
+        "Dimension लगाना"
+      ]
+    ]
+  }
 }
