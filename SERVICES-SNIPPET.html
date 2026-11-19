@@ -1,0 +1,49 @@
+<!-- ===================================================================
+  STEP 1 — "Our Services" ke andar, baaki service cards ke saath ye card paste karein.
+  (class "service-card" ko apne existing card ki class se badal sakte hain)
+  Click karne par neeche wale Tools section par smooth scroll hoga.
+==================================================================== -->
+<a href="#tools" class="service-card" data-open-tools>
+  <div class="service-icon">🛠️</div>
+  <h3>Tools</h3>
+  <p>Free calculators, PDF tools, resume maker, HVAC tools &amp; more – all in one place.</p>
+</a>
+
+
+<!-- ===================================================================
+  STEP 2 — Services section ke theek neeche ye poora Tools section paste karein.
+  "Explore Tools" button tools.html ko NAYI WINDOW me kholta hai.
+==================================================================== -->
+<section id="tools" class="sth-section">
+  <div class="sth-wrap">
+    <span class="sth-badge">☆ Free Online Tools Platform</span>
+    <h2>Free Online <span>Tools</span></h2>
+    <p class="sth-sub">Powerful calculators, converters and utilities designed to boost your productivity – 33 tools, 100% free.</p>
+
+    <div class="sth-grid">
+      <div class="sth-card"><b>🧮 Calculators &amp; Utilities</b><small>Age, EMI, GST, Percentage, Salary, Loan, Date Difference, PDF Tools, Resume Maker</small></div>
+      <div class="sth-card"><b>💼 Career &amp; Jobs</b><small>Resume Builder, Interview Questions, Banking Prep, KYC &amp; BPO, Email Templates</small></div>
+      <div class="sth-card"><b>❄️ Engineering &amp; HVAC</b><small>TR to KW, CFM, Duct Size, Air Velocity, BTU, BOQ Templates, AutoCAD</small></div>
+      <div class="sth-card"><b>📄 Office &amp; Productivity</b><small>Excel Formulas, Salary Slip, Number to Words, Invoice, Attendance, Templates</small></div>
+      <div class="sth-card"><b>🤖 AI Assistant</b><small>Hindi/English Chat, Resume Improvement, Email Writing, Document Help, Interview Practice</small></div>
+    </div>
+
+    <a class="sth-btn" href="tools.html" target="_blank" rel="noopener">Explore Tools →</a>
+  </div>
+</section>
+
+<style>
+  .sth-section{padding:80px 20px;background:linear-gradient(135deg,#eef2ff,#f0f9ff);text-align:center;font-family:'Poppins',system-ui,sans-serif}
+  .sth-wrap{max-width:1100px;margin:auto}
+  .sth-badge{display:inline-block;background:#fff;color:#2563eb;font-size:.8rem;padding:6px 16px;border-radius:99px;box-shadow:0 2px 10px #0001}
+  .sth-section h2{font-size:clamp(2rem,5vw,3rem);margin:16px 0 8px;color:#111827}
+  .sth-section h2 span{background:linear-gradient(90deg,#4f46e5,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sth-sub{color:#4b5563;max-width:620px;margin:0 auto 32px}
+  .sth-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:34px}
+  .sth-card{background:#fff;border-radius:14px;padding:18px;text-align:left;box-shadow:0 4px 18px #1e1b4b14;transition:transform .2s}
+  .sth-card:hover{transform:translateY(-4px)}
+  .sth-card b{display:block;margin-bottom:6px;color:#111827}
+  .sth-card small{color:#6b7280;line-height:1.5;display:block}
+  .sth-btn{display:inline-block;padding:14px 30px;border-radius:12px;background:linear-gradient(90deg,#2563eb,#0d9488);color:#fff;font-weight:600;text-decoration:none;box-shadow:0 8px 20px #2563eb40}
+  .sth-btn:hover{filter:brightness(1.08)}
+</style>
