@@ -12,7 +12,13 @@
     "loan": 5,
     "datediff": 6,
     "pdf-tools": 7,
-    "resume-maker": 8
+    "resume-maker": 8,
+    "salary-slip": 0,
+    "excel-formulas": 1,
+    "number-to-words": 2,
+    "attendance": 3,
+    "invoice": 4,
+    "templates": 5
   },
   "tables": {
     "autocad": [
