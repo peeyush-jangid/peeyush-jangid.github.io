@@ -883,6 +883,11 @@ a.card.file{position:relative;padding-right:80px}
 #v-tools .bar{display:grid;grid-template-columns:120px 1fr 62px;gap:8px;align-items:center;font-size:.78rem;margin:5px 0}
 #v-tools .bar i{display:block;height:9px;background:var(--brand);border-radius:5px;min-width:2px}
 #v-tools .note{font-size:.78rem;color:var(--mute);margin-top:8px}
+#v-tools table{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:10px}
+#v-tools th,#v-tools td{border:1px solid var(--line);padding:5px;text-align:left}
+#v-tools td input{padding:7px;min-width:50px}#v-tools td.n input{text-align:right}
+#v-tools .rm{background:none;border:0;color:#c0392b;font-size:1.1rem;cursor:pointer}
+#v-tools .tw{overflow-x:auto}#v-tools .tot{text-align:right;margin-top:10px;line-height:1.8}
 </style>
 </head>
 <body class="boot">
@@ -1189,8 +1194,8 @@ a.card.file{position:relative;padding-right:80px}
   <h2>HVAC tools</h2>
   <p class="note">Free calculators for everyone. No sign-in needed.</p>
   <button type="button" class="tbtn alt" id="tlBack" hidden>← All tools</button>
-  <div id="tlList"><h3 class="tl-h">Basic</h3><div class="tl-grid"><button type="button" class="tl-item" data-tool="t1"><b>AC tonnage</b><small>Room ke hisaab se AC size</small></button><button type="button" class="tl-item" data-tool="t2"><b>BTU / kW / TR</b><small>Unit converter</small></button><button type="button" class="tl-item" data-tool="t3"><b>Duct size</b><small>CFM se duct size</small></button><button type="button" class="tl-item" data-tool="t4"><b>Electricity cost</b><small>AC ka bijli kharcha</small></button></div>
-  <h3 class="tl-h">Pro toolkit</h3><div class="tl-grid"><button type="button" class="tl-item" data-tool="p1"><b>Cooling load</b><small>Detailed heat load + fresh air</small></button><button type="button" class="tl-item" data-tool="p2"><b>Psychrometrics</b><small>Wet bulb, dew point, enthalpy</small></button><button type="button" class="tl-item" data-tool="p3"><b>Chilled water pipe</b><small>Pipe aur pump sizing</small></button><button type="button" class="tl-item" data-tool="p4"><b>AC cost compare</b><small>Do ACs ka lifetime cost</small></button></div></div>
+  <div id="tlList"><h3 class="tl-h">Basic</h3><div class="tl-grid"><button type="button" class="tl-item" data-tool="t1"><b>AC tonnage</b><small>Room ke hisaab se AC size</small></button><button type="button" class="tl-item" data-tool="t2"><b>BTU / kW / TR</b><small>Unit converter</small></button><button type="button" class="tl-item" data-tool="t3"><b>Duct size</b><small>CFM se duct size</small></button><button type="button" class="tl-item" data-tool="t4"><b>Electrical details</b><small>Current, MCB, cable size</small></button></div>
+  <h3 class="tl-h">Pro toolkit</h3><div class="tl-grid"><button type="button" class="tl-item" data-tool="p1"><b>Cooling load</b><small>Detailed heat load + fresh air</small></button><button type="button" class="tl-item" data-tool="p2"><b>Psychrometrics</b><small>Wet bulb, dew point, enthalpy</small></button><button type="button" class="tl-item" data-tool="p3"><b>Chilled water pipe</b><small>Pipe aur pump sizing</small></button><button type="button" class="tl-item" data-tool="p4"><b>AC cost compare</b><small>Do ACs ka lifetime cost</small></button></div><h3 class="tl-h">Engineer suite</h3><div class="tl-grid"><button type="button" class="tl-item" data-tool="q1"><b>Duct static pressure</b><small>Pa + fan kW</small></button><button type="button" class="tl-item" data-tool="q2"><b>EER / COP / kW/TR</b><small>Efficiency converter</small></button><button type="button" class="tl-item" data-tool="q3"><b>VFD savings</b><small>Fan & pump affinity laws</small></button><button type="button" class="tl-item" data-tool="q4"><b>BOQ maker</b><small>Quotation + CSV export</small></button></div></div>
 <section class="tpanel" id="tp-t1" hidden>
     <h2>Which AC tonnage do I need?</h2>
     <p class="d">Enter your room details to get an estimated AC size.</p>
@@ -1232,17 +1237,22 @@ a.card.file{position:relative;padding-right:80px}
     <p class="note">Rule of thumb: about 400 CFM per TR of cooling. Final duct design needs static pressure and layout checks by an engineer.</p>
   </section>
 <section class="tpanel" id="tp-t4" hidden>
-    <h2>AC electricity cost</h2>
-    <p class="d">See what your AC costs to run each month.</p>
+    <h2>Electrical details: current, breaker, cable</h2>
+    <p class="d">Enter the load to get full-load current, MCB rating and cable size for an AC, pump, fan or any motor.</p>
     <div class="grid">
-      <div><label for="e_w">AC power input (watts)</label><input id="e_w" type="number" min="1" value="1400"></div>
-      <div><label for="e_h">Hours per day</label><input id="e_h" type="number" min="1" max="24" value="8"></div>
-      <div><label for="e_d">Days per month</label><input id="e_d" type="number" min="1" max="31" value="30"></div>
-      <div><label for="e_r">Rate (₹ per unit)</label><input id="e_r" type="number" step="0.1" min="0" value="8"></div>
+      <div><label for="e_mode">Load given as</label><select id="e_mode"><option value="kw">Electrical input (kW)</option><option value="hp">Motor shaft output (HP)</option></select></div>
+      <div><label for="e_val">Load value</label><input id="e_val" type="number" step="any" min="0" value="5"></div>
+      <div><label for="e_ph">Supply</label><select id="e_ph"><option value="3,415">3-phase, 415 V</option><option value="1,230">Single phase, 230 V</option></select></div>
+      <div><label for="e_pf">Power factor</label><input id="e_pf" type="number" step="0.01" min="0.5" max="1" value="0.85"></div>
+      <div><label for="e_ef">Motor efficiency % (for HP)</label><input id="e_ef" type="number" min="50" max="100" value="90"></div>
+      <div><label for="e_ds">Design margin</label><select id="e_ds"><option value="1.25">125% (motors, compressors)</option><option value="1">100% (heaters, lights)</option></select></div>
+      <div><label for="e_len">Cable length (m)</label><input id="e_len" type="number" min="1" value="30"></div>
+      <div><label for="e_vd">Max voltage drop (%)</label><input id="e_vd" type="number" step="0.5" value="3"></div>
+      <div><label for="e_mat">Cable material</label><select id="e_mat"><option value="cu">Copper</option><option value="al">Aluminium</option></select></div>
     </div>
-    <button class="tbtn" onclick="calcCost()">Calculate cost</button>
+    <button class="tbtn" onclick="calcElec()">Get electrical details</button>
     <div class="out" id="e_out" aria-live="polite"></div>
-    <p class="note">An inverter AC cycles its compressor, so real usage is often 50–70% of rated power. Check the power input on the AC label or your bill's unit rate.</p>
+    <p class="note">Indicative values for PVC cable in air or tray at 40 °C, resistive voltage drop only. Compressors need a motor-rated breaker and starter. Always confirm with the local electrical code and a licensed electrician.</p>
   </section>
 <section class="tpanel" id="tp-p1" hidden>
     <h2>Detailed cooling load</h2>
@@ -1324,6 +1334,71 @@ a.card.file{position:relative;padding-right:80px}
     <button class="tbtn" onclick="calcTco()">Compare</button>
     <div class="out" id="k_out" aria-live="polite"></div>
     <p class="note">Use average running power, not the label's maximum. Inverter units usually run well below rated power.</p>
+  </section>
+<section class="tpanel" id="tp-q1" hidden>
+    <h2>Duct static pressure and fan power</h2>
+    <p class="d">Total external static pressure for one duct run, then the fan motor power it needs.</p>
+    <div class="grid">
+      <div><label for="u_q">Airflow (L/s)</label><input id="u_q" type="number" value="1000"></div>
+      <div><label for="u_d">Round duct diameter (mm)</label><input id="u_d" type="number" value="450"></div>
+      <div><label for="u_l">Straight length (m)</label><input id="u_l" type="number" value="40"></div>
+      <div><label for="u_e">90° elbows (nos)</label><input id="u_e" type="number" value="4"></div>
+      <div><label for="u_k">Other fittings, total K</label><input id="u_k" type="number" step="0.1" value="1.5"></div>
+      <div><label for="u_g">Grille / diffuser drop (Pa)</label><input id="u_g" type="number" value="25"></div>
+      <div><label for="u_c">Coil + filter drop (Pa)</label><input id="u_c" type="number" value="180"></div>
+      <div><label for="u_ef">Fan + motor efficiency (%)</label><input id="u_ef" type="number" value="60"></div>
+    </div>
+    <button class="tbtn" onclick="calcDuct2()">Calculate</button>
+    <div class="out" id="u_out" aria-live="polite"></div>
+    <p class="note">Darcy-Weisbach with Swamee-Jain friction (galvanised steel, roughness 0.09 mm, air 1.2 kg/m³). Elbow K = 0.25 for smooth radius elbows. Add 10–15% margin for dirty filters and site changes.</p>
+  </section>
+<section class="tpanel" id="tp-q2" hidden>
+    <h2>EER, COP and kW per TR</h2>
+    <p class="d">Type any one value. The others update, and you get a yearly running cost.</p>
+    <div class="grid">
+      <div><label for="f_cop">COP (W/W). ISEER is similar</label><input id="f_cop" type="number" step="any" oninput="eff('cop')"></div>
+      <div><label for="f_eer">EER (BTU/h per W)</label><input id="f_eer" type="number" step="any" oninput="eff('eer')"></div>
+      <div><label for="f_kw">kW per TR</label><input id="f_kw" type="number" step="any" oninput="eff('kw')"></div>
+    </div>
+    <h3>Yearly running cost</h3>
+    <div class="grid">
+      <div><label for="f_tr">Capacity (TR)</label><input id="f_tr" type="number" value="10" oninput="eff()"></div>
+      <div><label for="f_h">Hours per year</label><input id="f_h" type="number" value="2500" oninput="eff()"></div>
+      <div><label for="f_r">Rate (₹ / unit)</label><input id="f_r" type="number" step="0.5" value="8" oninput="eff()"></div>
+    </div>
+    <div class="out" id="f_out" aria-live="polite"></div>
+    <p class="note">COP = EER ÷ 3.412 and kW/TR = 3.517 ÷ COP. Assumes full load. Part load and weather change real use.</p>
+  </section>
+<section class="tpanel" id="tp-q3" hidden>
+    <h2>Fan and pump VFD savings</h2>
+    <p class="d">Affinity laws: flow ∝ speed, pressure ∝ speed², power ∝ speed³. Slowing a fan 20% cuts its power by about half.</p>
+    <div class="grid">
+      <div><label for="v_q">Rated flow (any unit)</label><input id="v_q" type="number" value="100"></div>
+      <div><label for="v_h">Rated head or pressure</label><input id="v_h" type="number" value="30"></div>
+      <div><label for="v_p">Rated motor power (kW)</label><input id="v_p" type="number" value="15"></div>
+      <div><label for="v_n">New speed (% of full)</label><input id="v_n" type="number" min="20" max="100" value="80"></div>
+      <div><label for="v_hr">Running hours per year</label><input id="v_hr" type="number" value="4000"></div>
+      <div><label for="v_r">Rate (₹ / unit)</label><input id="v_r" type="number" step="0.5" value="8"></div>
+      <div><label for="v_e">VFD efficiency (%)</label><input id="v_e" type="number" value="97"></div>
+      <div><label for="v_c">VFD cost (₹), optional</label><input id="v_c" type="number" value="60000"></div>
+    </div>
+    <button class="tbtn" onclick="calcVfd()">Calculate savings</button>
+    <div class="out" id="v_out" aria-live="polite"></div>
+    <p class="note">Compares full speed with the VFD at the new speed. Real systems with static head or a fixed pressure setpoint save somewhat less.</p>
+  </section>
+<section class="tpanel" id="tp-q4" hidden>
+    <h2>BOQ / quotation maker</h2>
+    <p class="d">Fill in items, quantity and rate. Totals, GST and amount in words are worked out for you. Then print or save as PDF, or export to Excel (CSV).</p>
+    <div class="grid">
+      <div><label for="b_c">Client</label><input id="b_c" placeholder="Client name"></div>
+      <div><label for="b_p">Project</label><input id="b_p" placeholder="Project / site"></div>
+      <div><label for="b_g">GST (%)</label><input id="b_g" type="number" value="18" oninput="boq()"></div>
+    </div>
+    <div class="tw"><table><thead><tr><th>#</th><th>Item description</th><th>Unit</th><th>Qty</th><th>Rate (₹)</th><th>Amount (₹)</th><th class="noprint"></th></tr></thead><tbody id="b_rows"></tbody></table></div>
+    <button class="tbtn alt" onclick="addRow()">+ Add item</button>
+    <div class="tot" id="b_tot" aria-live="polite"></div>
+    <button class="tbtn alt" onclick="csv()">Export CSV</button>
+    <p class="note">Rates are yours to enter. Nothing is saved or sent anywhere.</p>
   </section>
   <a class="btn wa" style="margin-top:16px" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20used%20the%20HVAC%20tools%20in%20your%20app." target="_blank" rel="noopener">Need help? Chat on WhatsApp</a>
 </section>
@@ -2008,13 +2083,40 @@ function calcDuct(){
   show('d_out',`<strong class="big">Round: ${Math.ceil(dia)} inch dia</strong>Rectangular: <b>${w} × ${h} inch</b> (equivalent round ≈ ${de.toFixed(1)} inch)<br>Duct area needed: ${(A*144).toFixed(0)} sq inch at ${v} FPM.`);
 }
 
-function calcCost(){
-  const kwh=+$('e_w').value/1000*+$('e_h').value*+$('e_d').value;
-  const cost=kwh*+$('e_r').value;
-  show('e_out',`<strong class="big">₹${Math.round(cost).toLocaleString('en-IN')} per month</strong>${kwh.toFixed(0)} units at full-time compressor use. With inverter cycling, expect roughly ₹${Math.round(cost*.5).toLocaleString('en-IN')}–₹${Math.round(cost*.7).toLocaleString('en-IN')}.`);
+function calcElec(){
+  const [ph,V]=$('e_ph').value.split(',').map(Number);
+  let kw=+$('e_val').value;
+  if($('e_mode').value==='hp')kw=kw*0.746/(+$('e_ef').value/100);
+  const pf=+$('e_pf').value,k=ph===3?Math.sqrt(3):1;
+  const I=kw*1000/(k*V*pf),Id=I*(+$('e_ds').value);
+  const br=[6,10,16,20,25,32,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000];
+  const mcb=br.find(x=>x>=Id);
+  const need=mcb||Id;
+  const sz=[1.5,2.5,4,6,10,16,25,35,50,70,95,120,150,185,240,300];
+  const am=[18,24,32,41,57,76,101,125,151,192,232,269,309,353,415,480];
+  const al=$('e_mat').value==='al',f=al?0.78:1,rho=al?0.0368:0.0225;
+  const L=+$('e_len').value,lim=+$('e_vd').value/100*V,m=ph===3?Math.sqrt(3):2;
+  let c=-1;
+  for(let i=0;i<sz.length;i++){
+    if(al&&sz[i]<16)continue;
+    if(am[i]*f>=need&&m*I*L*rho/sz[i]<=lim){c=i;break}
+  }
+  const earth=s=>s<=16?s:s<=35?16:(sz.find(x=>x>=s/2)||s/2);
+  let cab='<strong class="big">Cable: larger than 300 mm² or parallel runs</strong>';
+  let vdTxt='';
+  if(c>=0){
+    const vd=m*I*L*rho/sz[c];
+    cab=`<strong class="big">${sz[c]} mm² ${al?'Al':'Cu'} cable · ${mcb||'custom'} A breaker</strong>`;
+    vdTxt=`${vd.toFixed(1)} V (${(vd/V*100).toFixed(1)} %)`;
+  }
+  const kv=a=>'<div class="kv">'+a.map(x=>`<div><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')+'</div>';
+  const rows=[['Full-load current',I.toFixed(1)+' A'],['Design current',Id.toFixed(1)+' A'],['Electrical input',kw.toFixed(2)+' kW'],['Apparent power',(kw/pf).toFixed(2)+' kVA'],['Start current (DOL ≈ 6×)',(I*6).toFixed(0)+' A']];
+  if(c>=0)rows.push(['Cable voltage drop',vdTxt],['Earth wire',earth(sz[c])+' mm²']);
+  $('e_out').innerHTML=cab+kv(rows);
+  $('e_out').classList.add('show');
 }
 calcAC();
-window.show=show;window.calcAC=calcAC;window.conv=conv;window.calcDuct=calcDuct;window.calcCost=calcCost;})();
+window.show=show;window.calcAC=calcAC;window.conv=conv;window.calcDuct=calcDuct;window.calcElec=calcElec;})();
 (function(){
 const $=id=>document.getElementById(id),g=id=>+$(id).value;
 const fmt=(n,d=0)=>n.toLocaleString('en-IN',{maximumFractionDigits:d});
@@ -2085,6 +2187,67 @@ function open(id){list.hidden=!!id;back.hidden=!id;ps.forEach(function(p){p.hidd
 list.addEventListener('click',function(e){var b=e.target.closest('[data-tool]');if(b)open(b.dataset.tool)});
 back.addEventListener('click',function(){open('')});
 addEventListener('hashchange',function(){open('')});})();
+</script>
+<script>
+(function(){
+const $=id=>document.getElementById(id),g=id=>+$(id).value;
+const fmt=(n,d=0)=>n.toLocaleString('en-IN',{maximumFractionDigits:d});
+const show=(id,h)=>{const o=$(id);o.innerHTML=h;o.classList.add('show')};
+const kv=a=>'<div class="kv">'+a.map(x=>`<div><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')+'</div>';
+
+function calcDuct2(){
+  const Q=g('u_q')/1000,D=g('u_d')/1000,A=Math.PI/4*D*D,v=Q/A,rho=1.2,Re=v*D/1.5e-5;
+  const f=0.25/Math.pow(Math.log10(0.09e-3/(3.7*D)+5.74/Math.pow(Re,0.9)),2);
+  const pm=f/D*rho*v*v/2,pdyn=rho*v*v/2;
+  const straight=pm*g('u_l'),fit=(g('u_e')*0.25+g('u_k'))*pdyn;
+  const tot=straight+fit+g('u_g')+g('u_c'),kw=Q*tot/(g('u_ef')/100)/1000;
+  show('u_out',`<strong class="big">${fmt(tot)} Pa static · ${kw.toFixed(2)} kW fan</strong>`+kv([['Velocity',v.toFixed(1)+' m/s'],['Friction rate',pm.toFixed(2)+' Pa/m'],['Straight duct',fmt(straight)+' Pa'],['Fittings',fmt(fit)+' Pa'],['Grille + coil + filter',fmt(g('u_g')+g('u_c'))+' Pa'],['Airflow',fmt(g('u_q')*2.119)+' CFM'],['Total (in. w.g.)',(tot/249.1).toFixed(2)]])+(v>10?'<p class="note">Velocity above 10 m/s will be noisy. Consider a larger duct.</p>':'')+(pm>1.2?'<p class="note">Friction above 1.2 Pa/m is high for a low-pressure system.</p>':''));
+}
+
+function eff(from){
+  const c=$('f_cop'),e=$('f_eer'),k=$('f_kw');
+  if(from){const v=+$('f_'+from).value;if(!v){return}
+    const cop=from==='cop'?v:from==='eer'?v/3.412:3.517/v;
+    if(from!=='cop')c.value=+cop.toFixed(3);if(from!=='eer')e.value=+(cop*3.412).toFixed(2);if(from!=='kw')k.value=+(3.517/cop).toFixed(3);}
+  const kwtr=+k.value;if(!kwtr)return;
+  const kwh=kwtr*g('f_tr')*g('f_h'),cost=kwh*g('f_r');
+  const lvl=kwtr<=0.6?'Excellent':kwtr<=0.75?'Good':kwtr<=1.0?'Average':'Poor';
+  show('f_out',`<strong class="big">${lvl} · ${kwtr.toFixed(2)} kW/TR</strong>`+kv([['Energy per year',fmt(kwh)+' kWh'],['Cost per year','₹'+fmt(cost)],['Cost per TR-hour','₹'+(kwtr*g('f_r')).toFixed(2)]])+'<p class="note">Guide for chiller plants: 0.6 or less is excellent, up to 0.75 good, up to 1.0 average.</p>');
+}
+
+function calcVfd(){
+  const n=g('v_n')/100,P=g('v_p'),Pn=P*n*n*n/(g('v_e')/100);
+  const save=(P-Pn)*g('v_hr'),money=save*g('v_r'),c=g('v_c');
+  show('v_out',`<strong class="big">Save ₹${fmt(money)} per year</strong>`+kv([['Flow',fmt(g('v_q')*n,1)],['Head / pressure',fmt(g('v_h')*n*n,1)],['Power at new speed',Pn.toFixed(2)+' kW'],['Power cut',((1-Pn/P)*100).toFixed(0)+'%'],['Energy saved',fmt(save)+' kWh/yr']])+(c>0&&money>0?`<p>Payback on the VFD: about <b>${(c/money*12).toFixed(1)} months</b>.</p>`:''));
+}
+
+function w2(n){const a=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'],b=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];return n<20?a[n]:b[n/10|0]+(n%10?' '+a[n%10]:'')}
+function words(n){if(!n)return 'Zero';const p=[];const cr=Math.floor(n/1e7);n%=1e7;const lk=Math.floor(n/1e5);n%=1e5;const th=Math.floor(n/1e3);n%=1e3;const h=Math.floor(n/100),t=n%100;
+  if(cr)p.push(words(cr)+' Crore');if(lk)p.push(w2(lk)+' Lakh');if(th)p.push(w2(th)+' Thousand');if(h)p.push(w2(h)+' Hundred');if(t)p.push((p.length?'and ':'')+w2(t));return p.join(' ')}
+var items=['VRV / VRF outdoor unit','Indoor unit with installation','Refrigerant copper piping with insulation','GI ducting with insulation','Chilled water piping','Testing and commissioning'];
+function addRow(name='',unit='Nos',qty=1,rate=''){
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td></td><td><input value="${name}" placeholder="Description"></td><td><input value="${unit}" style="width:70px"></td><td class="n"><input type="number" value="${qty}" min="0" step="any" style="width:80px"></td><td class="n"><input type="number" value="${rate}" min="0" step="any" style="width:110px"></td><td class="n amt">0</td><td class="noprint"><button class="rm" aria-label="Remove row">×</button></td>`;
+  tr.querySelectorAll('input').forEach(i=>i.oninput=boq);
+  tr.querySelector('.rm').onclick=()=>{tr.remove();boq()};
+  $('b_rows').appendChild(tr);boq();
+}
+function boq(){
+  let sub=0;[...$('b_rows').children].forEach((tr,i)=>{
+    const ins=tr.querySelectorAll('input'),a=(+ins[2].value||0)*(+ins[3].value||0);
+    tr.cells[0].textContent=i+1;tr.querySelector('.amt').textContent=fmt(a,2);sub+=a});
+  const gst=sub*g('b_g')/100,tot=sub+gst,r=Math.round(tot);
+  $('b_tot').innerHTML=`Subtotal: <b>₹${fmt(sub,2)}</b><br>GST (${g('b_g')}%): <b>₹${fmt(gst,2)}</b><br><span class="big">Total: ₹${fmt(tot,2)}</span>Rupees ${words(r)} only`;
+}
+function csv(){
+  const rows=[['Item','Unit','Qty','Rate','Amount']];
+  [...$('b_rows').children].forEach(tr=>{const i=tr.querySelectorAll('input');rows.push([i[0].value,i[1].value,i[2].value,i[3].value,(+i[2].value||0)*(+i[3].value||0)])});
+  const t=rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download='boq.csv';a.click();
+}
+items.forEach(n=>addRow(n));
+calcDuct2();
+window.calcDuct2=calcDuct2;window.eff=eff;window.calcVfd=calcVfd;window.w2=w2;window.words=words;window.addRow=addRow;window.boq=boq;window.csv=csv;})();
 </script>
 </body>
 </html>
