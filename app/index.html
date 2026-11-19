@@ -180,7 +180,7 @@ a.card:hover,.proj:hover,.tl:hover{transform:translateY(-3px);box-shadow:var(--s
 .empty{text-align:center;padding:34px 16px;color:var(--mute);border:1.5px dashed var(--line);border-radius:20px;background:color-mix(in srgb,var(--panel) 60%,transparent)}
 .file{display:flex;gap:14px;align-items:center}.file .ic{width:46px;height:46px;border-radius:14px;background:var(--panel2);display:grid;place-items:center;color:var(--brand);font-size:.72rem;font-weight:800;flex:none}
 .file b{font-weight:650;word-break:break-word}
-nav{position:fixed;inset:auto 0 0;height:var(--bot);padding-bottom:env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(5,1fr);background:var(--glass);backdrop-filter:saturate(1.5) blur(16px);-webkit-backdrop-filter:saturate(1.5) blur(16px);border-top:1px solid var(--line);z-index:5}
+nav{position:fixed;inset:auto 0 0;height:var(--bot);padding-bottom:env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(6,1fr);background:var(--glass);backdrop-filter:saturate(1.5) blur(16px);-webkit-backdrop-filter:saturate(1.5) blur(16px);border-top:1px solid var(--line);z-index:5}
 nav a{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--mute);font-size:.7rem;font-weight:600;transition:color .2s}
 nav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
 nav a.on{color:var(--brand)}
@@ -238,7 +238,7 @@ body.locked #amenu,body.boot #amenu{display:none!important}
   #p-reach>h2{margin:14px 0 0}
 }
 @media(min-width:900px){
-  nav{inset:auto auto 20px 50%;transform:translateX(-50%);width:520px;height:66px;padding-bottom:0;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow-lg)}
+  nav{inset:auto auto 20px 50%;transform:translateX(-50%);width:620px;height:66px;padding-bottom:0;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow-lg)}
   nav a.on::before{top:4px}
 }
 @media(max-width:360px){
@@ -858,6 +858,32 @@ a.card.file{position:relative;padding-right:80px}
 .preview-actions .btn{margin:0;min-height:44px;font-size:.85rem}
 @media(max-width:420px){.file-actions .fa,.file-actions .save-file{min-width:0;padding:0 6px;font-size:.74rem}}
 </style>
+<style id="hvac-tools-styles">
+#v-tools .tl-h{margin:18px 0 8px;font-size:.95rem;color:var(--brand)}
+#v-tools .tl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#v-tools .tl-item{display:flex;flex-direction:column;gap:3px;text-align:left;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--panel);color:var(--ink);font:inherit;cursor:pointer}
+#v-tools .tl-item b{font-size:.92rem}#v-tools .tl-item small{font-size:.74rem;color:var(--mute)}
+#v-tools .tl-item:active{transform:scale(.98)}
+#v-tools .tpanel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-top:12px}
+#v-tools .tpanel[hidden]{display:none}
+#v-tools .tpanel h2{margin:0 0 4px;font-size:1.15rem}
+#v-tools .tpanel h3{margin:18px 0 8px;font-size:.92rem;color:var(--brand)}
+#v-tools .d{margin:0 0 14px;color:var(--mute);font-size:.88rem}
+#v-tools .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+#v-tools label{display:block;font-weight:650;font-size:.8rem;margin-bottom:4px}
+#v-tools input,#v-tools select{width:100%;padding:11px;border:1px solid var(--line);border-radius:11px;background:var(--panel2);color:var(--ink);font:inherit;font-size:16px}
+#v-tools .tbtn{margin:16px 8px 0 0;min-height:48px;padding:0 20px;border-radius:13px;border:0;background:var(--brand);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+#v-tools .tbtn.alt{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
+#v-tools .out{display:none;margin-top:16px;padding:14px;border-left:4px solid var(--brand);background:var(--panel2);border-radius:0 12px 12px 0}
+#v-tools .out.show{display:block}
+#v-tools .big{display:block;font-size:1.45rem;font-weight:800;color:var(--brand);line-height:1.2}
+#v-tools .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:10px}
+#v-tools .kv div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px}
+#v-tools .kv b{display:block;font-size:1rem}#v-tools .kv span{font-size:.75rem;color:var(--mute)}
+#v-tools .bar{display:grid;grid-template-columns:120px 1fr 62px;gap:8px;align-items:center;font-size:.78rem;margin:5px 0}
+#v-tools .bar i{display:block;height:9px;background:var(--brand);border-radius:5px;min-width:2px}
+#v-tools .note{font-size:.78rem;color:var(--mute);margin-top:8px}
+</style>
 </head>
 <body class="boot">
 
@@ -1047,6 +1073,7 @@ a.card.file{position:relative;padding-right:80px}
   <div class="btns">
     <a class="btn pri" href="../Peeyush_Kumar_Jangid_Resume.pdf">Download CV</a>
     <a class="btn wa" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20found%20your%20app.">Chat on WhatsApp</a>
+    <a class="btn" href="#tools">Free HVAC tools</a>
     <button class="btn" id="install" type="button">Install this app</button>
     <a class="btn" id="apkdl" href="https://github.com/peeyush-jangid/peeyush-jangid.github.io/releases/latest/download/app.apk" download>Download Android App (APK)</a>
   </div>
@@ -1158,6 +1185,148 @@ a.card.file{position:relative;padding-right:80px}
     <form id="f-apply" data-title="Job application"></form>
   </div>
 </section>
+<section class="view" id="v-tools">
+  <h2>HVAC tools</h2>
+  <p class="note">Free calculators for everyone. No sign-in needed.</p>
+  <button type="button" class="tbtn alt" id="tlBack" hidden>← All tools</button>
+  <div id="tlList"><h3 class="tl-h">Basic</h3><div class="tl-grid"><button type="button" class="tl-item" data-tool="t1"><b>AC tonnage</b><small>Room ke hisaab se AC size</small></button><button type="button" class="tl-item" data-tool="t2"><b>BTU / kW / TR</b><small>Unit converter</small></button><button type="button" class="tl-item" data-tool="t3"><b>Duct size</b><small>CFM se duct size</small></button><button type="button" class="tl-item" data-tool="t4"><b>Electricity cost</b><small>AC ka bijli kharcha</small></button></div>
+  <h3 class="tl-h">Pro toolkit</h3><div class="tl-grid"><button type="button" class="tl-item" data-tool="p1"><b>Cooling load</b><small>Detailed heat load + fresh air</small></button><button type="button" class="tl-item" data-tool="p2"><b>Psychrometrics</b><small>Wet bulb, dew point, enthalpy</small></button><button type="button" class="tl-item" data-tool="p3"><b>Chilled water pipe</b><small>Pipe aur pump sizing</small></button><button type="button" class="tl-item" data-tool="p4"><b>AC cost compare</b><small>Do ACs ka lifetime cost</small></button></div></div>
+<section class="tpanel" id="tp-t1" hidden>
+    <h2>Which AC tonnage do I need?</h2>
+    <p class="d">Enter your room details to get an estimated AC size.</p>
+    <div class="grid">
+      <div><label for="a_len">Room length (ft)</label><input id="a_len" type="number" min="1" value="14"></div>
+      <div><label for="a_wid">Room width (ft)</label><input id="a_wid" type="number" min="1" value="12"></div>
+      <div><label for="a_type">Room type</label>
+        <select id="a_type"><option value="100">Bedroom</option><option value="110">Living room / hall</option><option value="110">Office</option><option value="150">Shop / showroom</option><option value="140">Kitchen / restaurant</option></select></div>
+      <div><label for="a_ppl">People using the room</label><input id="a_ppl" type="number" min="1" value="2"></div>
+      <div><label for="a_top">Room position</label>
+        <select id="a_top"><option value="1">Middle floor</option><option value="1.1">Top floor / under roof</option></select></div>
+      <div><label for="a_sun">Direct sun on walls or windows?</label>
+        <select id="a_sun"><option value="1">Little or none</option><option value="1.1">Yes, afternoon sun</option></select></div>
+    </div>
+    <button class="tbtn" onclick="calcAC()">Get tonnage</button>
+    <div class="out" id="a_out" aria-live="polite"></div>
+  </section>
+<section class="tpanel" id="tp-t2" hidden>
+    <h2>BTU/hr, kW and TR converter</h2>
+    <p class="d">Type a value in any one box. The others update.</p>
+    <div class="grid">
+      <div><label for="c_tr">Tons of refrigeration (TR)</label><input id="c_tr" type="number" step="any" oninput="conv('tr')"></div>
+      <div><label for="c_btu">BTU/hr</label><input id="c_btu" type="number" step="any" oninput="conv('btu')"></div>
+      <div><label for="c_kw">kW (cooling)</label><input id="c_kw" type="number" step="any" oninput="conv('kw')"></div>
+    </div>
+    <p class="note">1 TR = 12,000 BTU/hr = 3.517 kW. Marketing "1.5 ton" split ACs are usually rated about 5 kW cooling.</p>
+  </section>
+<section class="tpanel" id="tp-t3" hidden>
+    <h2>Duct size from airflow</h2>
+    <p class="d">Get round and rectangular duct sizes for a given airflow.</p>
+    <div class="grid">
+      <div><label for="d_cfm">Airflow (CFM)</label><input id="d_cfm" type="number" min="1" value="800"></div>
+      <div><label for="d_v">Air velocity (FPM)</label>
+        <select id="d_v"><option value="600">600 – quiet, branch duct</option><option value="900" selected>900 – normal main duct</option><option value="1200">1200 – large or commercial</option></select></div>
+      <div><label for="d_h">Fixed duct height (inch)</label><input id="d_h" type="number" min="4" value="10"></div>
+    </div>
+    <button class="tbtn" onclick="calcDuct()">Calculate duct</button>
+    <div class="out" id="d_out" aria-live="polite"></div>
+    <p class="note">Rule of thumb: about 400 CFM per TR of cooling. Final duct design needs static pressure and layout checks by an engineer.</p>
+  </section>
+<section class="tpanel" id="tp-t4" hidden>
+    <h2>AC electricity cost</h2>
+    <p class="d">See what your AC costs to run each month.</p>
+    <div class="grid">
+      <div><label for="e_w">AC power input (watts)</label><input id="e_w" type="number" min="1" value="1400"></div>
+      <div><label for="e_h">Hours per day</label><input id="e_h" type="number" min="1" max="24" value="8"></div>
+      <div><label for="e_d">Days per month</label><input id="e_d" type="number" min="1" max="31" value="30"></div>
+      <div><label for="e_r">Rate (₹ per unit)</label><input id="e_r" type="number" step="0.1" min="0" value="8"></div>
+    </div>
+    <button class="tbtn" onclick="calcCost()">Calculate cost</button>
+    <div class="out" id="e_out" aria-live="polite"></div>
+    <p class="note">An inverter AC cycles its compressor, so real usage is often 50–70% of rated power. Check the power input on the AC label or your bill's unit rate.</p>
+  </section>
+<section class="tpanel" id="tp-p1" hidden>
+    <h2>Detailed cooling load</h2>
+    <p class="d">Room heat gain from walls, roof, glass, people, lights, equipment and fresh air. Defaults suit Jaipur summer.</p>
+    <div class="grid">
+      <div><label for="l_name">Project / room name</label><input id="l_name" value="Conference room"></div>
+      <div><label for="l_area">Floor area (m²)</label><input id="l_area" type="number" value="40"></div>
+      <div><label for="l_to">Outdoor temp (°C)</label><input id="l_to" type="number" value="43"></div>
+      <div><label for="l_ti">Indoor temp (°C)</label><input id="l_ti" type="number" value="24"></div>
+      <div><label for="l_wo">Outdoor humidity ratio (g/kg)</label><input id="l_wo" type="number" value="12"></div>
+      <div><label for="l_wi">Indoor humidity ratio (g/kg)</label><input id="l_wi" type="number" value="9.3"></div>
+    </div>
+    <h3>Envelope</h3>
+    <div class="grid">
+      <div><label for="l_wa">External wall area (m²)</label><input id="l_wa" type="number" value="30"></div>
+      <div><label for="l_wu">Wall type</label><select id="l_wu"><option value="2.0">230 mm brick, plastered</option><option value="0.9">Insulated wall</option><option value="3.0">Thin or AAC-less panel wall</option></select></div>
+      <div><label for="l_ws">Wall sun exposure</label><select id="l_ws"><option value="6">Sun-exposed (E/W)</option><option value="3">Partly shaded</option><option value="0">Shaded / internal</option></select></div>
+      <div><label for="l_ra">Roof area exposed (m²)</label><input id="l_ra" type="number" value="40"></div>
+      <div><label for="l_ru">Roof type</label><select id="l_ru"><option value="2.5">RCC slab, no insulation</option><option value="0.6">Insulated roof</option></select></div>
+      <div><label for="l_rs">Roof sun exposure</label><select id="l_rs"><option value="14">Top floor, open to sky</option><option value="0">Not exposed / middle floor</option></select></div>
+      <div><label for="l_ga">Glass area (m²)</label><input id="l_ga" type="number" value="6"></div>
+      <div><label for="l_gt">Glass type</label><select id="l_gt"><option value="5.8,1">Clear single</option><option value="5.8,0.6">Tinted single</option><option value="2.8,0.5">Double glazed</option><option value="1.8,0.3">Low-E double</option></select></div>
+      <div><label for="l_go">Glass faces</label><select id="l_go"><option value="450">West / East</option><option value="250">South</option><option value="100">North</option></select></div>
+    </div>
+    <h3>Internal loads and fresh air</h3>
+    <div class="grid">
+      <div><label for="l_n">People</label><input id="l_n" type="number" value="15"></div>
+      <div><label for="l_li">Lighting (W)</label><input id="l_li" type="number" value="500"></div>
+      <div><label for="l_eq">Equipment (W)</label><input id="l_eq" type="number" value="1500"></div>
+      <div><label for="l_fa">Fresh air per person (L/s)</label><input id="l_fa" type="number" step="0.5" value="2.5"></div>
+      <div><label for="l_sf">Safety margin (%)</label><input id="l_sf" type="number" value="10"></div>
+      <div><label for="l_ts">Supply air temp drop (K)</label><input id="l_ts" type="number" value="10"></div>
+    </div>
+    <button class="tbtn" onclick="calcLoad()">Calculate load</button>
+    <div class="out" id="l_out" aria-live="polite"></div>
+    <p class="note">Uses steady-state U × A × ΔT with solar adders, ASHRAE-style people gains (75 W sensible, 55 W latent) and 0.3 L/s/m² added to fresh air. Good for pre-design and quotations; final design should use a full CLTD or hourly method.</p>
+  </section>
+<section class="tpanel" id="tp-p2" hidden>
+    <h2>Psychrometric calculator</h2>
+    <p class="d">Find wet bulb, dew point, humidity ratio, enthalpy and volume from dry bulb and RH.</p>
+    <div class="grid">
+      <div><label for="s_t">Dry bulb (°C)</label><input id="s_t" type="number" step="0.1" value="35"></div>
+      <div><label for="s_rh">Relative humidity (%)</label><input id="s_rh" type="number" min="1" max="100" value="50"></div>
+      <div><label for="s_h">Altitude (m)</label><input id="s_h" type="number" value="431"></div>
+    </div>
+    <button class="tbtn" onclick="calcPsy()">Calculate</button>
+    <div class="out" id="s_out" aria-live="polite"></div>
+    <p class="note">Magnus saturation formula and ASHRAE equations. Jaipur is about 431 m above sea level.</p>
+  </section>
+<section class="tpanel" id="tp-p3" hidden>
+    <h2>Chilled water pipe and pump sizing</h2>
+    <p class="d">Flow rate, pipe size, friction loss and pump power for a chilled water circuit.</p>
+    <div class="grid">
+      <div><label for="w_tr">Cooling capacity (TR)</label><input id="w_tr" type="number" value="100"></div>
+      <div><label for="w_dt">Water ΔT (K)</label><input id="w_dt" type="number" step="0.5" value="5.5"></div>
+      <div><label for="w_v">Target velocity (m/s)</label><input id="w_v" type="number" step="0.1" value="2"></div>
+      <div><label for="w_len">Pipe run, one way (m)</label><input id="w_len" type="number" value="80"></div>
+      <div><label for="w_hd">Other head: coil, valves, chiller (m)</label><input id="w_hd" type="number" value="12"></div>
+      <div><label for="w_ef">Pump efficiency (%)</label><input id="w_ef" type="number" value="70"></div>
+    </div>
+    <button class="tbtn" onclick="calcPipe()">Size pipe and pump</button>
+    <div class="out" id="w_out" aria-live="polite"></div>
+    <p class="note">Hazen-Williams with C = 120 for steel, nominal bore used as inside diameter, 1.5× run length for fittings. Keep velocity near 1.2–2.5 m/s, and lower in occupied areas.</p>
+  </section>
+<section class="tpanel" id="tp-p4" hidden>
+    <h2>AC lifetime cost comparison</h2>
+    <p class="d">Compare two ACs over their life. A costlier efficient AC often wins on total cost.</p>
+    <div class="grid">
+      <div><label for="k_p1">AC A price (₹)</label><input id="k_p1" type="number" value="38000"></div>
+      <div><label for="k_w1">AC A average running power (W)</label><input id="k_w1" type="number" value="1300"></div>
+      <div><label for="k_p2">AC B price (₹)</label><input id="k_p2" type="number" value="52000"></div>
+      <div><label for="k_w2">AC B average running power (W)</label><input id="k_w2" type="number" value="850"></div>
+      <div><label for="k_h">Hours per day</label><input id="k_h" type="number" value="8"></div>
+      <div><label for="k_d">Days per year</label><input id="k_d" type="number" value="240"></div>
+      <div><label for="k_r">Rate (₹ / unit)</label><input id="k_r" type="number" step="0.5" value="8"></div>
+      <div><label for="k_y">Years of use</label><input id="k_y" type="number" value="10"></div>
+      <div><label for="k_i">Yearly tariff rise (%)</label><input id="k_i" type="number" value="4"></div>
+    </div>
+    <button class="tbtn" onclick="calcTco()">Compare</button>
+    <div class="out" id="k_out" aria-live="polite"></div>
+    <p class="note">Use average running power, not the label's maximum. Inverter units usually run well below rated power.</p>
+  </section>
+  <a class="btn wa" style="margin-top:16px" href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20used%20the%20HVAC%20tools%20in%20your%20app." target="_blank" rel="noopener">Need help? Chat on WhatsApp</a>
+</section>
 </main>
 
 <nav aria-label="Main">
@@ -1165,6 +1334,7 @@ a.card.file{position:relative;padding-right:80px}
   <a href="#career"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V4h6v3"/></svg>Career</a>
   <a href="#skills"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Skills</a>
   <a href="#files"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>Files</a>
+  <a href="#tools"><svg viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M8.5 7h7M8.5 12h.01M12 12h.01M15.5 12h.01M8.5 16h.01M12 16h.01M15.5 16h.01"/></svg>Tools</a>
   <a href="#contact"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0"/></svg>Contact</a>
 </nav>
 
@@ -1172,7 +1342,7 @@ a.card.file{position:relative;padding-right:80px}
 (function(){
   var $=function(i){return document.getElementById(i)};
   /* ---------- routing ---------- */
-  var tabs=['home','career','skills','files','contact'];
+  var tabs=['home','career','skills','files','tools','contact'];
   function show(){
     var h=(location.hash||'#home').slice(1); if(tabs.indexOf(h)<0)h='home';
     tabs.forEach(function(t){$('v-'+t).classList.toggle('on',t===h)});
@@ -1805,5 +1975,116 @@ a.card.file{position:relative;padding-right:80px}
 })();
 </script>
 <script src="pj-chat.js?v=2" defer></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+function show(id,html){const o=$(id);o.innerHTML=html;o.classList.add('show')}
+
+function calcAC(){
+  const area=+$('a_len').value*+$('a_wid').value, f=+$('a_type').value;
+  const ppl=Math.max(1,+$('a_ppl').value);
+  let btu=(area*f+Math.max(0,ppl-2)*600)*+$('a_top').value*+$('a_sun').value;
+  const tr=btu/12000;
+  const sizes=[0.75,1,1.5,2,2.5,3,4,5];
+  const pick=sizes.find(s=>s>=tr-0.05)||Math.ceil(tr*2)/2;
+  show('a_out',`<strong class="big">${pick} ton AC</strong>Room area ${area} sq ft · estimated load ${Math.round(btu).toLocaleString()} BTU/hr (${tr.toFixed(2)} TR).<div class="note">Rounded up to the nearest standard size. For rooms over 400 sq ft, or unusual heat loads, ask an engineer.</div>`);
+}
+
+function conv(from){
+  const tr=$('c_tr'),btu=$('c_btu'),kw=$('c_kw');
+  const v=+$('c_'+from).value; if(!v&&v!==0)return;
+  let t=from==='tr'?v:from==='btu'?v/12000:v/3.5169;
+  if(from!=='tr')tr.value=+t.toFixed(3);
+  if(from!=='btu')btu.value=Math.round(t*12000);
+  if(from!=='kw')kw.value=+(t*3.5169).toFixed(3);
+}
+
+function calcDuct(){
+  const cfm=+$('d_cfm').value, v=+$('d_v').value, h=+$('d_h').value;
+  const A=cfm/v;                       // ft²
+  const dia=Math.sqrt(4*A/Math.PI)*12; // inch
+  const w=Math.ceil(A*144/h);          // inch
+  const de=1.3*Math.pow(w*h,0.625)/Math.pow(w+h,0.25);
+  show('d_out',`<strong class="big">Round: ${Math.ceil(dia)} inch dia</strong>Rectangular: <b>${w} × ${h} inch</b> (equivalent round ≈ ${de.toFixed(1)} inch)<br>Duct area needed: ${(A*144).toFixed(0)} sq inch at ${v} FPM.`);
+}
+
+function calcCost(){
+  const kwh=+$('e_w').value/1000*+$('e_h').value*+$('e_d').value;
+  const cost=kwh*+$('e_r').value;
+  show('e_out',`<strong class="big">₹${Math.round(cost).toLocaleString('en-IN')} per month</strong>${kwh.toFixed(0)} units at full-time compressor use. With inverter cycling, expect roughly ₹${Math.round(cost*.5).toLocaleString('en-IN')}–₹${Math.round(cost*.7).toLocaleString('en-IN')}.`);
+}
+calcAC();
+window.show=show;window.calcAC=calcAC;window.conv=conv;window.calcDuct=calcDuct;window.calcCost=calcCost;})();
+(function(){
+const $=id=>document.getElementById(id),g=id=>+$(id).value;
+const fmt=(n,d=0)=>n.toLocaleString('en-IN',{maximumFractionDigits:d});
+const show=(id,h)=>{const o=$(id);o.innerHTML=h;o.classList.add('show')};
+const kv=a=>'<div class="kv">'+a.map(x=>`<div><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')+'</div>';
+
+function calcLoad(){
+  const dT=g('l_to')-g('l_ti'),[gu,sc]=$('l_gt').value.split(',').map(Number);
+  const fresh=g('l_n')*g('l_fa')+0.3*g('l_area');
+  const items=[
+    ['Walls',g('l_wa')*g('l_wu')*(dT+g('l_ws'))],
+    ['Roof',g('l_ra')*g('l_ru')*(dT+g('l_rs'))],
+    ['Glass conduction',g('l_ga')*gu*dT],
+    ['Glass solar',g('l_ga')*g('l_go')*sc],
+    ['People (sensible)',g('l_n')*75],
+    ['Lights',g('l_li')],
+    ['Equipment',g('l_eq')],
+    ['Fresh air (sensible)',1.2*fresh*dT]
+  ].map(x=>[x[0],Math.max(0,x[1])]);
+  const latP=g('l_n')*55,latV=Math.max(0,3.0*fresh*(g('l_wo')-g('l_wi')));
+  items.push(['People (latent)',latP],['Fresh air (latent)',latV]);
+  const raw=items.reduce((a,x)=>a+x[1],0),tot=raw*(1+g('l_sf')/100);
+  const sens=(raw-latP-latV)*(1+g('l_sf')/100);
+  const ls=sens/(1.2*g('l_ts')),max=Math.max(...items.map(x=>x[1]));
+  const tr=tot/3517;
+  const std=[1,1.5,2,2.5,3,4,5,7.5,10,15,20,25,30,40,50,60,80,100,150,200];
+  const pick=std.find(s=>s>=tr)||Math.ceil(tr/10)*10;
+  show('l_out',`<strong class="big">${tr.toFixed(2)} TR · ${(tot/1000).toFixed(1)} kW</strong>${$('l_name').value||'Room'}: select about <b>${pick} TR</b> equipment.`
+   +kv([['Total with margin',fmt(tot/1000,1)+' kW'],['Sensible heat ratio',(sens/tot).toFixed(2)],['Supply air',fmt(ls)+' L/s'],['Supply air (CFM)',fmt(ls*2.119)],['Fresh air',fmt(fresh)+' L/s'],['Load per m²',fmt(tot/g('l_area'))+' W'],['Area per TR',fmt(g('l_area')*10.764/tr)+' sq ft']])
+   +'<h3>Where the heat comes from</h3>'+items.map(x=>`<div class="bar"><span>${x[0]}</span><i style="width:${max?x[1]/max*100:0}%"></i><span>${fmt(x[1])} W</span></div>`).join(''));
+}
+
+const pws=T=>0.61094*Math.exp(17.625*T/(T+243.04));
+function calcPsy(){
+  const T=g('s_t'),rh=g('s_rh'),P=101.325*Math.pow(1-2.25577e-5*g('s_h'),5.2559);
+  const pw=rh/100*pws(T),w=0.622*pw/(P-pw);
+  const gam=Math.log(rh/100)+17.625*T/(243.04+T),Td=243.04*gam/(17.625-gam);
+  const wTw=Tw=>{const s=0.622*pws(Tw)/(P-pws(Tw));return((2501-2.326*Tw)*s-1.006*(T-Tw))/(2501+1.86*T-4.186*Tw)};
+  let lo=Td,hi=T;for(let i=0;i<50;i++){const m=(lo+hi)/2;wTw(m)>w?hi=m:lo=m}
+  const h=1.006*T+w*(2501+1.86*T),v=0.287042*(T+273.15)*(1+1.607858*w)/P;
+  show('s_out',`<strong class="big">Wet bulb ${((lo+hi)/2).toFixed(1)} °C</strong>`+kv([['Dew point',Td.toFixed(1)+' °C'],['Humidity ratio',(w*1000).toFixed(2)+' g/kg'],['Enthalpy',h.toFixed(1)+' kJ/kg'],['Specific volume',v.toFixed(3)+' m³/kg'],['Air density',(1/v).toFixed(3)+' kg/m³'],['Pressure',P.toFixed(1)+' kPa']]));
+}
+
+function calcPipe(){
+  const kw=g('w_tr')*3.517,Q=kw/(4.186*g('w_dt'))/1000; // m3/s
+  const dia=Math.sqrt(4*Q/(Math.PI*g('w_v')))*1000;
+  const dn=[15,20,25,32,40,50,65,80,100,125,150,200,250,300,350,400,450,500];
+  const D=dn.find(x=>x>=dia)||dn[dn.length-1],v=Q/(Math.PI/4*Math.pow(D/1000,2));
+  const hf=10.67*Math.pow(Q,1.852)/(Math.pow(120,1.852)*Math.pow(D/1000,4.87)); // m per m
+  const head=hf*2*g('w_len')*1.5+g('w_hd'),pk=9.81*Q*head/(g('w_ef')/100);
+  show('w_out',`<strong class="big">DN ${D} pipe · ${fmt(Q*1000,1)} L/s</strong>`+kv([['Flow',fmt(Q*3600,1)+' m³/h'],['Flow (USGPM)',fmt(Q*15850.3)],['Calculated bore',fmt(dia)+' mm'],['Actual velocity',v.toFixed(2)+' m/s'],['Friction per 100 m',(hf*100).toFixed(2)+' m'],['Total pump head',head.toFixed(1)+' m'],['Pump shaft power',pk.toFixed(1)+' kW']])+(v>2.8?'<p class="note">Velocity is high. Consider the next larger size.</p>':''));
+}
+
+function calcTco(){
+  const y=g('k_y'),i=g('k_i')/100,r=g('k_r'),u=g('k_h')*g('k_d');
+  const tot=(p,w)=>{let c=p,rate=r;for(let k=0;k<y;k++){c+=w/1000*u*rate;rate*=1+i}return c};
+  const a=tot(g('k_p1'),g('k_w1')),b=tot(g('k_p2'),g('k_w2'));
+  const sA=g('k_w1')/1000*u*r,sB=g('k_w2')/1000*u*r,diff=g('k_p2')-g('k_p1');
+  const win=b<a?'AC B':'AC A';
+  let pay='';
+  if(diff>0&&sA>sB){let c=0,rate=r,yr=0;while(c<diff&&yr<40){c+=(g('k_w1')-g('k_w2'))/1000*u*rate;rate*=1+i;yr++}pay=yr<40?`AC B costs ₹${fmt(diff)} more upfront and pays back in about <b>${yr} years</b>.`:'AC B does not pay back within 40 years.'}
+  show('k_out',`<strong class="big">${win} saves ₹${fmt(Math.abs(a-b))} over ${y} years</strong>`+kv([['AC A total cost','₹'+fmt(a)],['AC B total cost','₹'+fmt(b)],['AC A power bill / year','₹'+fmt(sA)],['AC B power bill / year','₹'+fmt(sB)]])+(pay?`<p>${pay}</p>`:''));
+}
+calcLoad();
+window.calcLoad=calcLoad;window.calcPsy=calcPsy;window.calcPipe=calcPipe;window.calcTco=calcTco;})();
+(function(){var list=document.getElementById('tlList'),back=document.getElementById('tlBack'),ps=document.querySelectorAll('#v-tools .tpanel');
+function open(id){list.hidden=!!id;back.hidden=!id;ps.forEach(function(p){p.hidden=p.id!=='tp-'+id});scrollTo(0,0)}
+list.addEventListener('click',function(e){var b=e.target.closest('[data-tool]');if(b)open(b.dataset.tool)});
+back.addEventListener('click',function(){open('')});
+addEventListener('hashchange',function(){open('')});})();
+</script>
 </body>
 </html>
