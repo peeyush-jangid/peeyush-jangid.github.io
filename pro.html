@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HVAC Pro Toolkit – cooling load, psychrometrics, chilled water pipe, AC cost comparison</title>
+<meta name="description" content="Advanced free HVAC tools: detailed cooling load with fresh air, psychrometric calculator, chilled water pipe and pump sizing, and AC lifetime cost comparison. By Peeyush Kumar Jangid, Jaipur.">
+<link rel="canonical" href="https://peeyush-jangid.github.io/pro.html">
+<meta name="theme-color" content="#0b5cab">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#0b5cab;--ink:#10243a;--muted:#5a6b7d;--bg:#f3f7fb;--card:#fff;--line:#d5e0ec}
+@media(prefers-color-scheme:dark){:root{--ink:#e8f0f8;--muted:#9fb1c4;--bg:#0c1722;--card:#13212f;--line:#25374a;--blue:#4da3f0}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Manrope,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+header{background:#0b5cab;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header a{color:#fff;text-decoration:none;font-weight:600}
+.wrap{max-width:920px;margin:0 auto;padding:28px 18px 60px}
+h1{font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.15;margin:8px 0 10px;font-weight:800}
+.lead{color:var(--muted);max-width:62ch;margin:0 0 22px}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px}
+.tabs button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:10px 16px;border-radius:999px;font:600 .95rem Manrope,sans-serif;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--blue);border-color:var(--blue);color:#fff}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #f0a500;outline-offset:2px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px}
+.panel[hidden]{display:none}
+h2{margin:0 0 4px;font-size:1.25rem}
+h3{margin:22px 0 10px;font-size:1rem;color:var(--blue)}
+.d{margin:0 0 16px;color:var(--muted);font-size:.95rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+label{display:block;font-weight:600;font-size:.85rem;margin-bottom:4px}
+input,select{width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.btn{margin-top:18px;margin-right:8px;background:var(--blue);color:#fff;border:0;padding:12px 22px;border-radius:8px;font:700 1rem Manrope,sans-serif;cursor:pointer}
+.btn.alt{background:transparent;color:var(--blue);border:1.5px solid var(--blue)}
+.out{margin-top:18px;padding:16px;border-left:4px solid var(--blue);background:var(--bg);border-radius:0 8px 8px 0;display:none}
+.out.show{display:block}
+.big{display:block;font-size:1.7rem;font-weight:800;color:var(--blue);line-height:1.2}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
+.kv div{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px}
+.kv b{display:block;font-size:1.15rem}.kv span{font-size:.8rem;color:var(--muted)}
+.bar{display:grid;grid-template-columns:150px 1fr 70px;gap:8px;align-items:center;font-size:.85rem;margin:5px 0}
+.bar i{display:block;height:10px;background:var(--blue);border-radius:5px;min-width:2px}
+.note{font-size:.82rem;color:var(--muted);margin-top:10px}
+.cta{margin-top:30px;background:var(--blue);color:#fff;border-radius:12px;padding:22px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.cta p{margin:0;max-width:44ch}
+.cta a{background:#fff;color:#0b5cab;padding:11px 20px;border-radius:8px;font-weight:800;text-decoration:none}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:20px}
+@media print{header,.tabs,.btn,.cta,footer{display:none}.panel{border:0}.panel[hidden]{display:none}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<header><a href="index.html">← Peeyush Kumar Jangid</a><a href="tools.html">Basic tools</a></header>
+<main class="wrap">
+  <h1>HVAC Pro Toolkit</h1>
+  <p class="lead">Engineer-level calculators for consultants, contractors, students and building owners. Free, no sign-in, runs in your browser.</p>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-t="p1">Cooling load</button>
+    <button role="tab" aria-selected="false" data-t="p2">Psychrometrics</button>
+    <button role="tab" aria-selected="false" data-t="p3">Chilled water pipe &amp; pump</button>
+    <button role="tab" aria-selected="false" data-t="p4">AC cost comparison</button>
+  </div>
+
+  <section class="panel" id="p1">
+    <h2>Detailed cooling load</h2>
+    <p class="d">Room heat gain from walls, roof, glass, people, lights, equipment and fresh air. Defaults suit Jaipur summer.</p>
+    <div class="grid">
+      <div><label for="l_name">Project / room name</label><input id="l_name" value="Conference room"></div>
+      <div><label for="l_area">Floor area (m²)</label><input id="l_area" type="number" value="40"></div>
+      <div><label for="l_to">Outdoor temp (°C)</label><input id="l_to" type="number" value="43"></div>
+      <div><label for="l_ti">Indoor temp (°C)</label><input id="l_ti" type="number" value="24"></div>
+      <div><label for="l_wo">Outdoor humidity ratio (g/kg)</label><input id="l_wo" type="number" value="12"></div>
+      <div><label for="l_wi">Indoor humidity ratio (g/kg)</label><input id="l_wi" type="number" value="9.3"></div>
+    </div>
+    <h3>Envelope</h3>
+    <div class="grid">
+      <div><label for="l_wa">External wall area (m²)</label><input id="l_wa" type="number" value="30"></div>
+      <div><label for="l_wu">Wall type</label><select id="l_wu"><option value="2.0">230 mm brick, plastered</option><option value="0.9">Insulated wall</option><option value="3.0">Thin or AAC-less panel wall</option></select></div>
+      <div><label for="l_ws">Wall sun exposure</label><select id="l_ws"><option value="6">Sun-exposed (E/W)</option><option value="3">Partly shaded</option><option value="0">Shaded / internal</option></select></div>
+      <div><label for="l_ra">Roof area exposed (m²)</label><input id="l_ra" type="number" value="40"></div>
+      <div><label for="l_ru">Roof type</label><select id="l_ru"><option value="2.5">RCC slab, no insulation</option><option value="0.6">Insulated roof</option></select></div>
+      <div><label for="l_rs">Roof sun exposure</label><select id="l_rs"><option value="14">Top floor, open to sky</option><option value="0">Not exposed / middle floor</option></select></div>
+      <div><label for="l_ga">Glass area (m²)</label><input id="l_ga" type="number" value="6"></div>
+      <div><label for="l_gt">Glass type</label><select id="l_gt"><option value="5.8,1">Clear single</option><option value="5.8,0.6">Tinted single</option><option value="2.8,0.5">Double glazed</option><option value="1.8,0.3">Low-E double</option></select></div>
+      <div><label for="l_go">Glass faces</label><select id="l_go"><option value="450">West / East</option><option value="250">South</option><option value="100">North</option></select></div>
+    </div>
+    <h3>Internal loads and fresh air</h3>
+    <div class="grid">
+      <div><label for="l_n">People</label><input id="l_n" type="number" value="15"></div>
+      <div><label for="l_li">Lighting (W)</label><input id="l_li" type="number" value="500"></div>
+      <div><label for="l_eq">Equipment (W)</label><input id="l_eq" type="number" value="1500"></div>
+      <div><label for="l_fa">Fresh air per person (L/s)</label><input id="l_fa" type="number" step="0.5" value="2.5"></div>
+      <div><label for="l_sf">Safety margin (%)</label><input id="l_sf" type="number" value="10"></div>
+      <div><label for="l_ts">Supply air temp drop (K)</label><input id="l_ts" type="number" value="10"></div>
+    </div>
+    <button class="btn" onclick="calcLoad()">Calculate load</button>
+    <button class="btn alt" onclick="window.print()">Print / save as PDF</button>
+    <div class="out" id="l_out" aria-live="polite"></div>
+    <p class="note">Uses steady-state U × A × ΔT with solar adders, ASHRAE-style people gains (75 W sensible, 55 W latent) and 0.3 L/s/m² added to fresh air. Good for pre-design and quotations; final design should use a full CLTD or hourly method.</p>
+  </section>
+
+  <section class="panel" id="p2" hidden>
+    <h2>Psychrometric calculator</h2>
+    <p class="d">Find wet bulb, dew point, humidity ratio, enthalpy and volume from dry bulb and RH.</p>
+    <div class="grid">
+      <div><label for="s_t">Dry bulb (°C)</label><input id="s_t" type="number" step="0.1" value="35"></div>
+      <div><label for="s_rh">Relative humidity (%)</label><input id="s_rh" type="number" min="1" max="100" value="50"></div>
+      <div><label for="s_h">Altitude (m)</label><input id="s_h" type="number" value="431"></div>
+    </div>
+    <button class="btn" onclick="calcPsy()">Calculate</button>
+    <div class="out" id="s_out" aria-live="polite"></div>
+    <p class="note">Magnus saturation formula and ASHRAE equations. Jaipur is about 431 m above sea level.</p>
+  </section>
+
+  <section class="panel" id="p3" hidden>
+    <h2>Chilled water pipe and pump sizing</h2>
+    <p class="d">Flow rate, pipe size, friction loss and pump power for a chilled water circuit.</p>
+    <div class="grid">
+      <div><label for="w_tr">Cooling capacity (TR)</label><input id="w_tr" type="number" value="100"></div>
+      <div><label for="w_dt">Water ΔT (K)</label><input id="w_dt" type="number" step="0.5" value="5.5"></div>
+      <div><label for="w_v">Target velocity (m/s)</label><input id="w_v" type="number" step="0.1" value="2"></div>
+      <div><label for="w_len">Pipe run, one way (m)</label><input id="w_len" type="number" value="80"></div>
+      <div><label for="w_hd">Other head: coil, valves, chiller (m)</label><input id="w_hd" type="number" value="12"></div>
+      <div><label for="w_ef">Pump efficiency (%)</label><input id="w_ef" type="number" value="70"></div>
+    </div>
+    <button class="btn" onclick="calcPipe()">Size pipe and pump</button>
+    <div class="out" id="w_out" aria-live="polite"></div>
+    <p class="note">Hazen-Williams with C = 120 for steel, nominal bore used as inside diameter, 1.5× run length for fittings. Keep velocity near 1.2–2.5 m/s, and lower in occupied areas.</p>
+  </section>
+
+  <section class="panel" id="p4" hidden>
+    <h2>AC lifetime cost comparison</h2>
+    <p class="d">Compare two ACs over their life. A costlier efficient AC often wins on total cost.</p>
+    <div class="grid">
+      <div><label for="k_p1">AC A price (₹)</label><input id="k_p1" type="number" value="38000"></div>
+      <div><label for="k_w1">AC A average running power (W)</label><input id="k_w1" type="number" value="1300"></div>
+      <div><label for="k_p2">AC B price (₹)</label><input id="k_p2" type="number" value="52000"></div>
+      <div><label for="k_w2">AC B average running power (W)</label><input id="k_w2" type="number" value="850"></div>
+      <div><label for="k_h">Hours per day</label><input id="k_h" type="number" value="8"></div>
+      <div><label for="k_d">Days per year</label><input id="k_d" type="number" value="240"></div>
+      <div><label for="k_r">Rate (₹ / unit)</label><input id="k_r" type="number" step="0.5" value="8"></div>
+      <div><label for="k_y">Years of use</label><input id="k_y" type="number" value="10"></div>
+      <div><label for="k_i">Yearly tariff rise (%)</label><input id="k_i" type="number" value="4"></div>
+    </div>
+    <button class="btn" onclick="calcTco()">Compare</button>
+    <div class="out" id="k_out" aria-live="polite"></div>
+    <p class="note">Use average running power, not the label's maximum. Inverter units usually run well below rated power.</p>
+  </section>
+
+  <div class="cta"><p><strong>Need a design, BOQ or site supervision?</strong><br>HVAC project engineering in Jaipur: VRV/VRF, ducting, chilled water, AutoCAD drawings.</p>
+  <a href="https://wa.me/919928579369?text=Hello%20Peeyush%2C%20I%20used%20your%20HVAC%20Pro%20Toolkit." target="_blank" rel="noopener">Chat on WhatsApp</a></div>
+</main>
+<footer>Estimates for planning only. Verify with a qualified engineer before purchase or installation. © Peeyush Kumar Jangid</footer>
+
+<script>
+const $=id=>document.getElementById(id),g=id=>+$(id).value;
+const fmt=(n,d=0)=>n.toLocaleString('en-IN',{maximumFractionDigits:d});
+const show=(id,h)=>{const o=$(id);o.innerHTML=h;o.classList.add('show')};
+const kv=a=>'<div class="kv">'+a.map(x=>`<div><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')+'</div>';
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('.panel').forEach(p=>p.hidden=p.id!==b.dataset.t);
+});
+
+function calcLoad(){
+  const dT=g('l_to')-g('l_ti'),[gu,sc]=$('l_gt').value.split(',').map(Number);
+  const fresh=g('l_n')*g('l_fa')+0.3*g('l_area');
+  const items=[
+    ['Walls',g('l_wa')*g('l_wu')*(dT+g('l_ws'))],
+    ['Roof',g('l_ra')*g('l_ru')*(dT+g('l_rs'))],
+    ['Glass conduction',g('l_ga')*gu*dT],
+    ['Glass solar',g('l_ga')*g('l_go')*sc],
+    ['People (sensible)',g('l_n')*75],
+    ['Lights',g('l_li')],
+    ['Equipment',g('l_eq')],
+    ['Fresh air (sensible)',1.2*fresh*dT]
+  ].map(x=>[x[0],Math.max(0,x[1])]);
+  const latP=g('l_n')*55,latV=Math.max(0,3.0*fresh*(g('l_wo')-g('l_wi')));
+  items.push(['People (latent)',latP],['Fresh air (latent)',latV]);
+  const raw=items.reduce((a,x)=>a+x[1],0),tot=raw*(1+g('l_sf')/100);
+  const sens=(raw-latP-latV)*(1+g('l_sf')/100);
+  const ls=sens/(1.2*g('l_ts')),max=Math.max(...items.map(x=>x[1]));
+  const tr=tot/3517;
+  const std=[1,1.5,2,2.5,3,4,5,7.5,10,15,20,25,30,40,50,60,80,100,150,200];
+  const pick=std.find(s=>s>=tr)||Math.ceil(tr/10)*10;
+  show('l_out',`<strong class="big">${tr.toFixed(2)} TR · ${(tot/1000).toFixed(1)} kW</strong>${$('l_name').value||'Room'}: select about <b>${pick} TR</b> equipment.`
+   +kv([['Total with margin',fmt(tot/1000,1)+' kW'],['Sensible heat ratio',(sens/tot).toFixed(2)],['Supply air',fmt(ls)+' L/s'],['Supply air (CFM)',fmt(ls*2.119)],['Fresh air',fmt(fresh)+' L/s'],['Load per m²',fmt(tot/g('l_area'))+' W'],['Area per TR',fmt(g('l_area')*10.764/tr)+' sq ft']])
+   +'<h3>Where the heat comes from</h3>'+items.map(x=>`<div class="bar"><span>${x[0]}</span><i style="width:${max?x[1]/max*100:0}%"></i><span>${fmt(x[1])} W</span></div>`).join(''));
+}
+
+const pws=T=>0.61094*Math.exp(17.625*T/(T+243.04));
+function calcPsy(){
+  const T=g('s_t'),rh=g('s_rh'),P=101.325*Math.pow(1-2.25577e-5*g('s_h'),5.2559);
+  const pw=rh/100*pws(T),w=0.622*pw/(P-pw);
+  const gam=Math.log(rh/100)+17.625*T/(243.04+T),Td=243.04*gam/(17.625-gam);
+  const wTw=Tw=>{const s=0.622*pws(Tw)/(P-pws(Tw));return((2501-2.326*Tw)*s-1.006*(T-Tw))/(2501+1.86*T-4.186*Tw)};
+  let lo=Td,hi=T;for(let i=0;i<50;i++){const m=(lo+hi)/2;wTw(m)>w?hi=m:lo=m}
+  const h=1.006*T+w*(2501+1.86*T),v=0.287042*(T+273.15)*(1+1.607858*w)/P;
+  show('s_out',`<strong class="big">Wet bulb ${((lo+hi)/2).toFixed(1)} °C</strong>`+kv([['Dew point',Td.toFixed(1)+' °C'],['Humidity ratio',(w*1000).toFixed(2)+' g/kg'],['Enthalpy',h.toFixed(1)+' kJ/kg'],['Specific volume',v.toFixed(3)+' m³/kg'],['Air density',(1/v).toFixed(3)+' kg/m³'],['Pressure',P.toFixed(1)+' kPa']]));
+}
+
+function calcPipe(){
+  const kw=g('w_tr')*3.517,Q=kw/(4.186*g('w_dt'))/1000; // m3/s
+  const dia=Math.sqrt(4*Q/(Math.PI*g('w_v')))*1000;
+  const dn=[15,20,25,32,40,50,65,80,100,125,150,200,250,300,350,400,450,500];
+  const D=dn.find(x=>x>=dia)||dn[dn.length-1],v=Q/(Math.PI/4*Math.pow(D/1000,2));
+  const hf=10.67*Math.pow(Q,1.852)/(Math.pow(120,1.852)*Math.pow(D/1000,4.87)); // m per m
+  const head=hf*2*g('w_len')*1.5+g('w_hd'),pk=9.81*Q*head/(g('w_ef')/100);
+  show('w_out',`<strong class="big">DN ${D} pipe · ${fmt(Q*1000,1)} L/s</strong>`+kv([['Flow',fmt(Q*3600,1)+' m³/h'],['Flow (USGPM)',fmt(Q*15850.3)],['Calculated bore',fmt(dia)+' mm'],['Actual velocity',v.toFixed(2)+' m/s'],['Friction per 100 m',(hf*100).toFixed(2)+' m'],['Total pump head',head.toFixed(1)+' m'],['Pump shaft power',pk.toFixed(1)+' kW']])+(v>2.8?'<p class="note">Velocity is high. Consider the next larger size.</p>':''));
+}
+
+function calcTco(){
+  const y=g('k_y'),i=g('k_i')/100,r=g('k_r'),u=g('k_h')*g('k_d');
+  const tot=(p,w)=>{let c=p,rate=r;for(let k=0;k<y;k++){c+=w/1000*u*rate;rate*=1+i}return c};
+  const a=tot(g('k_p1'),g('k_w1')),b=tot(g('k_p2'),g('k_w2'));
+  const sA=g('k_w1')/1000*u*r,sB=g('k_w2')/1000*u*r,diff=g('k_p2')-g('k_p1');
+  const win=b<a?'AC B':'AC A';
+  let pay='';
+  if(diff>0&&sA>sB){let c=0,rate=r,yr=0;while(c<diff&&yr<40){c+=(g('k_w1')-g('k_w2'))/1000*u*rate;rate*=1+i;yr++}pay=yr<40?`AC B costs ₹${fmt(diff)} more upfront and pays back in about <b>${yr} years</b>.`:'AC B does not pay back within 40 years.'}
+  show('k_out',`<strong class="big">${win} saves ₹${fmt(Math.abs(a-b))} over ${y} years</strong>`+kv([['AC A total cost','₹'+fmt(a)],['AC B total cost','₹'+fmt(b)],['AC A power bill / year','₹'+fmt(sA)],['AC B power bill / year','₹'+fmt(sB)]])+(pay?`<p>${pay}</p>`:''));
+}
+calcLoad();
+var h=location.hash.slice(1),hb=document.querySelector('.tabs button[data-t="'+h+'"]');if(hb)hb.click();
+</script>
+</body>
+</html>
