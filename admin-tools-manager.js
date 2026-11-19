@@ -1,4 +1,4 @@
-/* Tools Manager (admin): edit / hide / reorder built-in tools, add or delete custom tools,
+/* Tools Manager (admin): edit / hide / delete / restore / reorder built-in tools, add or delete custom tools,
    edit Excel-formula & AutoCAD rows. Saves pj-tools-overrides.json through the GitHub Contents API.
    Uses the token / owner / repo / branch fields already on this page. */
 (function () {
@@ -11,7 +11,7 @@
   wrap.style.cssText = 'margin-top:34px;padding-top:24px;border-top:1px solid #ffffff24';
   wrap.innerHTML = `
     <h2 style="margin:0 0 6px">Tools Manager</h2>
-    <p class="admin-intro">PJ Tools Hub ke tools yahin se edit, hide/show, reorder, delete aur naye add karo. Site ka font aur design same rehta hai.</p>
+    <p class="admin-intro">PJ Tools Hub ke tools yahin se edit, hide/show, reorder, delete/restore aur naye add karo. Site ka font aur design same rehta hai.</p>
     <div class="security-note"><b>Token:</b> upar wale "GitHub access token", username, repository aur branch ke boxes use hote hain. Pehle wahan token bharo, phir "Load Tools" dabao.</div>
     <div style="display:flex;flex-wrap:wrap;gap:8px"><button id="tm-load" class="admin-button" type="button" style="flex:1;min-width:150px">Load Tools ↗</button><button id="tm-new" class="admin-refresh" type="button" style="margin-top:22px">+ Add new tool</button></div>
     <div id="tm-status" class="admin-status" aria-live="polite"></div>
@@ -104,16 +104,17 @@
     ov.custom.forEach(c => list.push({ id: c.id, cat: c.cat, ico: c.ico, name: c.name, desc: c.desc, custom: true, type: c.type }));
     list.forEach((t, i) => {
       t._i = i; const o = ov.overrides[t.id];
-      if (o) { ['name', 'ico', 'desc', 'cat'].forEach(k => { if (o[k]) t[k] = o[k]; }); t.hidden = !!o.hidden; t.edited = true; }
+      if (o) { ['name', 'ico', 'desc', 'cat'].forEach(k => { if (o[k]) t[k] = o[k]; }); t.hidden = !!o.hidden; t.deleted = !!o.deleted; t.edited = true; }
     });
     const key = t => typeof ov.order[t.id] === 'number' ? ov.order[t.id] : 1e6 + t._i;
     return list.sort((a, b) => key(a) - key(b));
   }
   function renderList() {
     if (!base) return;
-    const list = allTools(); $('tm-count').textContent = `${list.length} tools`;
-    $('tm-list').innerHTML = Object.entries(cats()).map(([k, label]) => {
-      const items = list.filter(t => t.cat === k); if (!items.length) return '';
+    const list = allTools(), live = list.filter(t => !t.deleted), gone = list.filter(t => t.deleted);
+    $('tm-count').textContent = `${live.length} tools` + (gone.length ? ` · ${gone.length} deleted` : '');
+    let html = Object.entries(cats()).map(([k, label]) => {
+      const items = live.filter(t => t.cat === k); if (!items.length) return '';
       return `<div style="margin:14px 0 6px;font-weight:700;color:#d9bd7b">${esc(label)} <span style="opacity:.6;font-weight:400">(${items.length})</span></div>` + items.map((t, i) => `
         <div class="admin-file" style="align-items:center;${t.hidden ? 'opacity:.55' : ''}"><div style="min-width:0"><b>${esc(t.ico)} ${esc(t.name)}</b>
           ${t.hidden ? ' <small style="color:#ff9d9d">HIDDEN</small>' : ''}${t.custom ? ' <small style="color:#9fdb9e">CUSTOM</small>' : t.edited ? ' <small style="color:#d9bd7b">EDITED</small>' : ''}
@@ -123,9 +124,17 @@
             <button type="button" class="admin-refresh" data-act="down" data-id="${esc(t.id)}" ${i === items.length - 1 ? 'disabled' : ''}>▼</button>
             <button type="button" class="admin-refresh" data-act="edit" data-id="${esc(t.id)}">Edit</button>
             ${TABLES[t.id] ? `<button type="button" class="admin-refresh" data-act="rows" data-id="${esc(t.id)}">Rows${ov.tables[t.id] ? ' ✎' : ''}</button>` : ''}
-            <button type="button" class="admin-refresh" data-act="${t.custom ? 'delete' : 'hide'}" data-id="${esc(t.id)}">${t.custom ? 'Delete' : t.hidden ? 'Show' : 'Hide'}</button>
+            ${t.custom ? '' : `<button type="button" class="admin-refresh" data-act="hide" data-id="${esc(t.id)}">${t.hidden ? 'Show' : 'Hide'}</button>`}
+            <button type="button" class="admin-refresh" data-act="${t.custom ? 'delete' : 'delbuiltin'}" data-id="${esc(t.id)}">Delete</button>
           </div></div>`).join('');
-    }).join('') || '<p>No tools.</p>';
+    }).join('');
+    if (gone.length) {
+      html += `<div style="margin:22px 0 6px;font-weight:700;color:#ff9d9d">Deleted tools <span style="opacity:.6;font-weight:400">(${gone.length}) – Restore se wapas aa jayenge</span></div>` + gone.map(t => `
+        <div class="admin-file" style="align-items:center;opacity:.7"><div style="min-width:0"><b>${esc(t.ico)} ${esc(t.name)}</b> <small style="color:#ff9d9d">DELETED</small>
+          <div style="opacity:.65;margin-top:3px">${esc(t.desc)}</div></div>
+          <div style="flex-shrink:0"><button type="button" class="admin-refresh" data-act="restore" data-id="${esc(t.id)}">Restore</button></div></div>`).join('');
+    }
+    $('tm-list').innerHTML = html || '<p>No tools.</p>';
   }
 
   /* ---------- list actions ---------- */
@@ -135,11 +144,18 @@
     if (act === 'edit') return openForm(t);
     if (act === 'rows') return openRows(id);
     if (act === 'up' || act === 'down') {
-      const same = allTools().filter(x => x.cat === t.cat), i = same.findIndex(x => x.id === id), j = act === 'up' ? i - 1 : i + 1;
+      const same = allTools().filter(x => x.cat === t.cat && !x.deleted), i = same.findIndex(x => x.id === id), j = act === 'up' ? i - 1 : i + 1;
       [same[i], same[j]] = [same[j], same[i]];
       return commit(() => same.forEach((x, n) => ov.order[x.id] = n), 'Reorder tools', 'Order saved.');
     }
     if (act === 'hide') return commit(() => { const o = ov.overrides[id] = ov.overrides[id] || {}; o.hidden = !o.hidden; if (!o.hidden) delete o.hidden; if (!Object.keys(o).length) delete ov.overrides[id]; }, `${t.hidden ? 'Show' : 'Hide'} ${t.name}`, t.hidden ? 'Tool wapas show ho gaya.' : 'Tool hide ho gaya (kabhi bhi Show kar sakte ho).');
+    if (act === 'delbuiltin') {
+      if (!confirm(`"${t.name}" delete karna hai? (Neeche "Deleted tools" se baad me Restore ho sakta hai)`)) return;
+      return commit(() => { const o = ov.overrides[id] = ov.overrides[id] || {}; o.deleted = true; }, `Delete ${t.name}`, 'Tool delete ho gaya.');
+    }
+    if (act === 'restore') {
+      return commit(() => { const o = ov.overrides[id]; if (o) { delete o.deleted; if (!Object.keys(o).length) delete ov.overrides[id]; } }, `Restore ${t.name}`, 'Tool wapas aa gaya.');
+    }
     if (act === 'delete') {
       if (!confirm(`"${t.name}" ko permanently delete karna hai?`)) return;
       commit(() => { ov.custom = ov.custom.filter(c => c.id !== id); delete ov.overrides[id]; delete ov.order[id]; }, `Delete ${t.name}`, 'Tool delete ho gaya.');

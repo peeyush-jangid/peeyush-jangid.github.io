@@ -1,6 +1,6 @@
 /* ===== Router / Hub UI (with Admin overrides support) =====
    Built-in tools stay exactly as before. If pj-tools-overrides.json exists it is applied on top:
-   rename / re-icon / re-describe / move / hide built-in tools, add custom tools and categories,
+   rename / re-icon / re-describe / move / hide / delete built-in tools, add custom tools and categories,
    and replace the rows of the Excel-formulas and AutoCAD tables. No CSS or markup is changed. */
 (function () {
   // display order inside "Office & Productivity" (as requested)
@@ -57,7 +57,7 @@
     Object.entries(ov.overrides || {}).forEach(([id, o]) => {
       const t = TOOLS.find(x => x.id === id); if (!t || !o) return;
       ['name', 'ico', 'desc', 'cat'].forEach(k => { if (typeof o[k] === 'string' && o[k].trim()) t[k] = o[k]; });
-      if (o.hidden) t.hidden = true;
+      if (o.hidden || o.deleted) t.hidden = true; // deleted built-ins are removed from the site (restorable from admin)
     });
     if (ov.order && typeof ov.order === 'object') {
       const key = t => typeof ov.order[t.id] === 'number' ? ov.order[t.id] : 1e6 + t._i;
