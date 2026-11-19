@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071426">
+<meta name="description" content="Free online calculators and practical tools for HVAC engineers, students, office work and everyday finance.">
+<title>Free Tools Hub | Peeyush Kumar Jangid</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.tools-hub{max-width:1120px;margin:0 auto;padding:42px 22px 70px;color:var(--text,#eaf1ff)}
+.tools-hero{padding:34px;border:1px solid rgba(125,170,230,.2);border-radius:24px;background:linear-gradient(135deg,#0b1d39,#102c52);margin-bottom:28px}
+.tools-hero h1{font-size:clamp(30px,5vw,48px);margin:0 0 10px}.tools-hero p{max-width:680px;color:#c5d5ed;line-height:1.7}
+.tools-search{width:100%;max-width:520px;padding:14px 16px;border-radius:12px;border:1px solid #355477;background:#071426;color:white;font-size:16px}
+.tools-section{margin:30px 0}.tools-section h2{font-size:22px;margin:0 0 15px}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:15px}
+.tool-card{display:block;text-decoration:none;color:inherit;padding:20px;border:1px solid rgba(125,170,230,.2);border-radius:17px;background:rgba(13,31,57,.72);transition:.2s}
+.tool-card:hover{transform:translateY(-3px);border-color:#38bdf8;background:#102b4e}
+.tool-icon{font-size:27px}.tool-card h3{font-size:17px;margin:10px 0 6px}.tool-card p{font-size:13px;line-height:1.55;color:#b7c8df;margin:0}
+.tool-calc{margin-top:10px;padding:10px 15px;border:0;border-radius:9px;background:#168bd2;color:white;font-weight:700;cursor:pointer}.tool-card label{display:block;font-size:12px;color:#b7c8df;margin-top:9px}.tool-card .tools-search{display:block;box-sizing:border-box;max-width:none;width:100%;margin-top:4px;padding:9px 10px;font-size:14px}.tool-card [aria-live]{color:#7dd3fc;font-weight:700;min-height:20px}.tool-tag{display:inline-block;margin-top:13px;font-size:11px;color:#7dd3fc;font-weight:700}
+.tools-back{display:inline-block;margin-bottom:18px;color:#8ddcff;text-decoration:none}
+@media(max-width:600px){.tools-hub{padding:24px 15px 50px}.tools-hero{padding:23px}}
+</style>
+</head>
+<body>
+<main class="tools-hub">
+<a class="tools-back" href="index.html">← Back to website</a>
+<section class="tools-hero">
+<p style="letter-spacing:.14em;text-transform:uppercase;font-size:12px;font-weight:700;color:#7dd3fc">PEEYUSH KUMAR JANGID · FREE RESOURCES</p>
+<h1>Tools for everyday work</h1>
+<p>Useful calculators and practical resources for engineers, students, professionals and everyday users. Select a tool to open it in this tab.</p>
+<input id="toolSearch" class="tools-search" type="search" placeholder="Search tools… (e.g. AC, EMI, duct)" aria-label="Search tools">
+</section>
+<section class="tools-section"><h2>Engineering & HVAC</h2><div class="tools-grid">
+<a class="tool-card" data-search="ac tonnage room size calculator" href="tools.html#t1"><span class="tool-icon">❄️</span><h3>AC Tonnage Calculator</h3><p>Estimate the required AC capacity from room dimensions and conditions.</p><span class="tool-tag">OPEN CALCULATOR →</span></a>
+<a class="tool-card" data-search="btu kw tr converter unit" href="tools.html#t2"><span class="tool-icon">🔁</span><h3>BTU / kW / TR Converter</h3><p>Convert cooling capacity between BTU/hr, kilowatts and tons of refrigeration.</p><span class="tool-tag">OPEN CONVERTER →</span></a>
+<a class="tool-card" data-search="duct size airflow cfm velocity" href="tools.html#t3"><span class="tool-icon">🌬️</span><h3>Duct Size Calculator</h3><p>Estimate round and rectangular duct sizes from airflow and velocity.</p><span class="tool-tag">OPEN CALCULATOR →</span></a>
+<a class="tool-card" data-search="electrical current mcb cable motor" href="tools.html#t4"><span class="tool-icon">⚡</span><h3>Electrical Load Calculator</h3><p>Indicative current, breaker and cable sizing for common electrical loads.</p><span class="tool-tag">OPEN CALCULATOR →</span></a>
+<a class="tool-card" data-search="cooling load hvac room calculation" href="pro.html#p1"><span class="tool-icon">🏢</span><h3>Cooling Load Calculator</h3><p>Estimate room cooling load with building, people, lighting and equipment inputs.</p><span class="tool-tag">OPEN PRO TOOL →</span></a>
+<a class="tool-card" data-search="psychrometric wet bulb dew point humidity enthalpy" href="pro.html#p2"><span class="tool-icon">💧</span><h3>Psychrometric Calculator</h3><p>Explore humidity, dew point, wet-bulb temperature and related air properties.</p><span class="tool-tag">OPEN PRO TOOL →</span></a>
+<a class="tool-card" data-search="chilled water pipe pump flow" href="pro.html#p3"><span class="tool-icon">🚰</span><h3>Chilled Water & Pump</h3><p>Estimate chilled-water flow and pump requirements from system inputs.</p><span class="tool-tag">OPEN PRO TOOL →</span></a>
+<a class="tool-card" data-search="ac energy cost comparison electricity" href="pro.html#p4"><span class="tool-icon">📊</span><h3>AC Cost Comparison</h3><p>Compare estimated running costs and payback between AC options.</p><span class="tool-tag">OPEN PRO TOOL →</span></a>
+</div></section>
+<section class="tools-section"><h2>More useful tools</h2><div class="tools-grid">
+<a class="tool-card" data-search="career resume cv interview jobs" href="career.html"><span class="tool-icon">💼</span><h3>Career Resources</h3><p>Explore career guidance, resume resources and interview preparation.</p><span class="tool-tag">EXPLORE →</span></a>
+<a class="tool-card" data-search="office excel word notes documents" href="index.html#work-files"><span class="tool-icon">📁</span><h3>Office Notes & Files</h3><p>Browse available Excel, Word, PDF notes and downloadable resources.</p><span class="tool-tag">EXPLORE →</span></a>
+<a class="tool-card" data-search="contact ask ai assistant" href="index.html#home"><span class="tool-icon">🤖</span><h3>Ask AI Assistant</h3><p>Ask questions, share figures and get help with supported HVAC calculations.</p><span class="tool-tag">OPEN ASSISTANT ON HOME PAGE →</span></a>
+</div></section>
+<section class="tools-section" id="daily-tools"><h2>Everyday calculators</h2><div class="tools-grid">
+<div class="tool-card"><span class="tool-icon">％</span><h3>Percentage Calculator</h3><p>Find what percentage one number is of another.</p><label>Value <input id="pctA" type="number" class="tools-search" placeholder="e.g. 25"></label><label>Total <input id="pctB" type="number" class="tools-search" placeholder="e.g. 200"></label><button class="tool-calc" data-calc="pct">Calculate</button><p id="pctOut" aria-live="polite"></p></div>
+<div class="tool-card"><span class="tool-icon">🧾</span><h3>GST Calculator</h3><p>Calculate GST amount and total price.</p><label>Base amount ₹ <input id="gstA" type="number" class="tools-search" placeholder="Amount"></label><label>GST rate % <select id="gstR" class="tools-search"><option>5</option><option>12</option><option selected>18</option><option>28</option></select></label><button class="tool-calc" data-calc="gst">Calculate</button><p id="gstOut" aria-live="polite"></p></div>
+<div class="tool-card"><span class="tool-icon">🏷️</span><h3>Discount Calculator</h3><p>Calculate discount amount and final price.</p><label>Price ₹ <input id="disA" type="number" class="tools-search" placeholder="Original price"></label><label>Discount % <input id="disR" type="number" class="tools-search" placeholder="Discount"></label><button class="tool-calc" data-calc="dis">Calculate</button><p id="disOut" aria-live="polite"></p></div>
+<div class="tool-card"><span class="tool-icon">🏦</span><h3>Loan EMI Calculator</h3><p>Estimate monthly EMI, interest and total payment.</p><label>Loan amount ₹ <input id="emiA" type="number" class="tools-search" placeholder="e.g. 500000"></label><label>Annual interest % <input id="emiR" type="number" step=".1" class="tools-search" placeholder="e.g. 9"></label><label>Tenure (months) <input id="emiN" type="number" class="tools-search" placeholder="e.g. 60"></label><button class="tool-calc" data-calc="emi">Calculate</button><p id="emiOut" aria-live="polite"></p></div>
+<div class="tool-card"><span class="tool-icon">📏</span><h3>Length Converter</h3><p>Convert metres, feet, inches and centimetres.</p><label>Value <input id="unitA" type="number" class="tools-search" placeholder="Enter value"></label><label>From <select id="unitF" class="tools-search"><option value="m">Metres</option><option value="ft">Feet</option><option value="in">Inches</option><option value="cm">Centimetres</option></select></label><label>To <select id="unitT" class="tools-search"><option value="ft">Feet</option><option value="m">Metres</option><option value="in">Inches</option><option value="cm">Centimetres</option></select></label><button class="tool-calc" data-calc="unit">Convert</button><p id="unitOut" aria-live="polite"></p></div>
+</div></section>
+<p style="color:#9fb2cc;font-size:12px;line-height:1.6">Note: Engineering outputs are preliminary estimates, not certified designs. Verify final selections against site conditions, applicable codes and qualified professional review.</p>
+</main>
+<script>
+(function(){var input=document.getElementById('toolSearch');input.addEventListener('input',function(){var q=this.value.toLowerCase().trim();document.querySelectorAll('.tool-card').forEach(function(c){if(c.querySelector('.tool-calc')) return;c.hidden=q&&!((c.innerText+' '+(c.dataset.search||'')).toLowerCase().includes(q));});});document.querySelectorAll('[data-calc]').forEach(function(btn){btn.addEventListener('click',function(){var f=function(id){return Number(document.getElementById(id).value)};var n=function(v){return Number.isFinite(v)?v.toLocaleString('en-IN',{maximumFractionDigits:2}):'—'};var type=btn.dataset.calc,out;
+if(type==='pct'){var a=f('pctA'),b=f('pctB');out=b? n(a/b*100)+'%':'Enter a non-zero total.';document.getElementById('pctOut').textContent=out;}
+if(type==='gst'){var a=f('gstA'),r=f('gstR'),tax=a*r/100;document.getElementById('gstOut').textContent='GST: ₹'+n(tax)+' · Total: ₹'+n(a+tax);}
+if(type==='dis'){var a=f('disA'),r=f('disR'),off=a*r/100;document.getElementById('disOut').textContent='Discount: ₹'+n(off)+' · Final price: ₹'+n(a-off);}
+if(type==='emi'){var a=f('emiA'),r=f('emiR')/1200,months=f('emiN');if(a<=0||months<=0){out='Enter valid loan amount and tenure.';}else{var e=r? a*r*Math.pow(1+r,months)/(Math.pow(1+r,months)-1):a/months;out='Monthly EMI: ₹'+n(e)+' · Total interest: ₹'+n(e*months-a)+' · Total payment: ₹'+n(e*months);}document.getElementById('emiOut').textContent=out;}
+if(type==='unit'){var a=f('unitA'),units={m:1,ft:.3048,in:.0254,cm:.01};var v=a*units[document.getElementById('unitF').value]/units[document.getElementById('unitT').value];document.getElementById('unitOut').textContent='Result: '+n(v)+' '+document.getElementById('unitT').selectedOptions[0].text;}
+});});
+})();
+</script>
+</body></html>

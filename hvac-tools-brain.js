@@ -111,7 +111,7 @@
     var kw = get(t, new RegExp(N + '\\s*kw')), hrs = get(t, new RegExp(N + '\\s*(?:hours|hrs|hr|ghante)')), flow = get(t, new RegExp(N + '\\s*%'));
     if (!kw || !flow) return null;
     hrs = hrs || 4000; var x = flow / 100, fixed = 0.5 + 0.5 * x, v = Math.pow(x, 3) / 0.97, saved = kw * hrs * (fixed - v), rate = get(t, new RegExp('(?:rs|₹)\\s*' + N)) || 8;
-    return kw + ' kW motor, ' + flow + '% flow par (damper ke mukable VFD) bachat ~**' + f1(saved, 0) + ' units/saal** = ~₹' + f1(saved * rate, 0) + ' (₹' + rate + '/unit, ' + hrs + ' hrs/saal). Pumps me static head zyada ho to bachat kam hoti hai.' + link('tools2.html#x3', 'Fan & pump VFD savings');
+    return kw + ' kW motor, ' + flow + '% flow par (damper ke mukable VFD) bachat ~**' + f1(saved, 0) + ' units/saal** = ~₹' + f1(saved * rate, 0) + ' (₹' + rate + '/unit, ' + hrs + ' hrs/saal). Pumps me static head zyada ho to bachat kam hoti hai.' + link('tools-center.html', 'Fan & pump VFD savings');
   }
 
   var INFO = [
@@ -119,7 +119,7 @@
     [['boq', 'quotation'], 'BOQ / quotation maker me items, qty, rate, discount aur GST bharo. Total words me aata hai aur Print / save as PDF se client ko bhej sakte ho.', 'tools2.html#x4', 'BOQ / quotation maker'],
     [['cooling load', 'heat load', 'load calculation'], 'Cooling load tool deewar, roof, glass, logon, lights, equipment aur fresh air ka alag heat gain nikaal kar TR, kW aur supply air batata hai.', 'pro.html#p1', 'Cooling load'],
     [['cost comparison', 'compare ac', 'lifetime cost', 'payback'], 'AC cost comparison do ACs ka 10 saal ka total kharcha aur payback dikhata hai.', 'pro.html#p4', 'AC cost comparison'],
-    [['vfd'], 'VFD savings tool load profile se saal ki bachat (units aur ₹) aur payback batata hai.', 'tools2.html#x3', 'Fan & pump VFD savings'],
+    [['vfd'], 'VFD savings tool load profile se saal ki bachat (units aur ₹) aur payback batata hai.', 'tools-center.html', 'Fan & pump VFD savings'],
     [['tool', 'calculator'], 'Site par free HVAC tools hain: AC tonnage, BTU/kW/TR, duct size, electrical details, cooling load, psychrometrics, chilled water pipe, AC cost comparison, duct static pressure, EER/COP, VFD savings aur BOQ maker. Sab Our Services menu (app me Tools tab) me hain. Kisi bhi tool ke numbers yahin bata do, main direct nikaal dunga.', 'tools.html', 'Basic tools']
   ];
 

@@ -134,6 +134,11 @@
     'Aap CV yahan se download kar sakte hain:\n👉 <a href="' + CONFIG.CV + '" target="_blank" rel="noopener">' + CONFIG.CV + '</a>';
 
   function localAnswer(q) {
+    // Deterministic calculation first: use the published HVAC tool formulas when inputs are supplied.
+    if (typeof window.hvacToolsAnswer === "function") {
+      var calculated = window.hvacToolsAnswer(q);
+      if (calculated) return calculated;
+    }
     var t = " " + q.toLowerCase() + " ";
     var action = /(form|link|url|apply|application|submit|bhej|send|bharn|bhar |fill|register)/.test(t);
     if (/offer/.test(t) && (action || /job offer/.test(t))) return OFFER_HTML;
@@ -435,7 +440,7 @@
     fetch(CONFIG.API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: history.slice(-CONFIG.MAX_HISTORY) }),
+      body: JSON.stringify({ messages: (window.HVAC_TOOLS_KB ? [{ role: "system", content: "You are Peeyush's helpful website assistant. Answer in the user's language. Use the following website tool knowledge and formulas when users provide data. Show calculation steps, units, assumptions and safety caveats. If required inputs are missing, ask concise follow-up questions. Do not invent measured/site data.\n\n" + window.HVAC_TOOLS_KB }] : []).concat(history.slice(-CONFIG.MAX_HISTORY)) }),
       signal: ctrl.signal
     })
       .then(function (r) {
