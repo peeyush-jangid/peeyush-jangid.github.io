@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PJ Tools Hub – Free Online Tools</title>
+<meta name="description" content="Free online calculators, PDF tools, resume maker, HVAC tools, office utilities and AI assistant – all in one place.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="pj-tools.css">
+</head>
+<body>
+
+<header class="nav noprint">
+  <div class="wrap navin">
+    <a class="brand" href="#/" id="brand"><span class="logo">🔧</span><span>PJ Tools Hub</span></a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="#/" id="navTools">Tools</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HUB -->
+  <section id="hub">
+    <div class="hero noprint">
+      <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+      <span class="badge">☆ Free Online Tools Platform</span>
+      <h1>PJ Tools Hub</h1>
+      <p>Your free online tools in one place. Powerful calculators, converters, and utilities designed to boost your productivity.</p>
+      <div class="search"><input id="q" type="search" placeholder="Search tools… (e.g. EMI, resume, CFM)" autocomplete="off"></div>
+      <div class="cta">
+        <a class="btn" href="#toolsGrid" id="explore">Explore Tools →</a>
+        <a class="btn ghost" href="index.html">Back to Portfolio</a>
+      </div>
+    </div>
+    <div class="wrap" id="toolsGrid"></div>
+  </section>
+
+  <!-- TOOL VIEW -->
+  <section id="toolView" class="wrap" hidden>
+    <a class="back noprint" href="#/">← All Tools</a>
+    <div class="thead noprint"><span id="tIco" class="tico"></span><div><h2 id="tName"></h2><p id="tDesc"></p></div></div>
+    <div id="toolBody"></div>
+  </section>
+</main>
+
+<footer class="foot noprint">
+  <div class="wrap">© <span id="yr"></span> Peeyush Kumar Jangid · All tools run in your browser – your data never leaves your device.</div>
+</footer>
+<div id="toast" class="toast"></div>
+
+<script src="pj-tools-core.js"></script>
+<script src="pj-tools-docs.js"></script>
+<script src="pj-tools-content.js"></script>
+<script src="pj-tools-app.js"></script>
+</body>
+</html>
