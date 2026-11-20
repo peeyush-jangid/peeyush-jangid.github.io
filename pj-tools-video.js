@@ -6,7 +6,7 @@
   if (TOOLS.some(function (t) { return t.id === 'video-editor'; })) return;
 
   var NAME = 'Video Editor';
-  var DESC = 'Trim, speed up or slow down, rotate, resize, add filters and export your video – free, in your browser.';
+  var DESC = 'Trim, speed up or slow down, rotate, resize, add filters and export your video – plus learn editing like CapCut, VN, Premiere Pro. Free, in your browser.';
   var ICON = '🎬';
 
   /* Build the tool entry by mirroring the fields an existing tool already has,
@@ -38,8 +38,62 @@
   }
   function say(msg) { if (typeof toast === 'function') toast(msg); }
 
+  /* ---------- Learn video editing (CapCut, VN, InShot, Premiere Pro, DaVinci Resolve, Filmora) ---------- */
+  var BASICS = [
+    ['Timeline & tracks', 'The timeline is where your video is built left to right. Video clips sit on the main track; text, stickers, overlays and music go on extra tracks above or below. Zoom the timeline in for frame-accurate cuts.'],
+    ['Cut, split & trim', 'Move the playhead to the exact moment, press Split to cut the clip in two, then delete the part you do not want. Trim = drag a clip edge to shorten it. Use the Trim tool in the Edit tab here to practise.'],
+    ['Pacing & cuts', 'Reels/Shorts: change the shot every 2-4 seconds. Cut on movement (a hand wave, a head turn) so cuts feel smooth. Remove silences and "umm" parts first, then add everything else.'],
+    ['Speed & speed ramp', 'Speed makes a clip faster or slower. A speed ramp (curve) starts slow, speeds up, then slows again - the popular smooth "velocity" edit. Try 0.5x / 2x in the Edit tab.'],
+    ['Transitions', 'Place a transition on the join between two clips. Simple ones (cut, fade, slide) look professional; do not use a fancy effect on every cut.'],
+    ['Text, titles & captions', 'Add text on its own track, pick a readable font, keep it inside the safe area (away from the screen edges). Auto-captions create subtitles from speech - always proof-read them.'],
+    ['Audio & music', 'Keep voice clearly louder than music (music about 10-20% volume under speech). Add fade in/out at the ends. Cut clips on the music beat for energy. Use only music you have the right to use.'],
+    ['Keyframes', 'A keyframe stores a value (position, size, rotation, opacity) at one moment. Add two keyframes with different values and the app animates between them - used for zoom-ins, moving text and pan effects.'],
+    ['Colour & filters', 'Fix first: brightness, contrast, saturation. Then add a filter/LUT for a look. Do not over-saturate skin tones. Try the Filters sliders in the Edit tab.'],
+    ['Aspect ratio & export', '9:16 = Reels, Shorts, TikTok, Status. 16:9 = YouTube. 1:1 / 4:5 = Instagram posts. Export 1080p, 30 fps is enough for social media; use 60 fps only for smooth gameplay or sports.']
+  ];
+  var APPS = [
+    { n: 'CapCut', i: '✂', w: 'Phone, PC, web. Best for beginners and Reels/Shorts.', q: 'capcut video editing tutorial for beginners',
+      s: ['Open CapCut, tap New project and pick your clips.', 'Drag the white playhead to where you want to cut, select the clip and tap Split (PC: Ctrl+B).', 'Tap the unwanted part and Delete. Drag the clip edge to trim.', 'Tap Speed > Normal / Curve to slow down or speed up (curve = speed ramp).', 'Tap Text > Add text, or Captions > Auto captions to generate subtitles.', 'Tap Audio > Sounds to add music; use Volume and Fade for balance.', 'Tap Effects / Filters / Transitions (the small box between two clips).', 'Use Keyframe (diamond icon) for zoom or motion. Set Ratio (9:16 etc.) then Export 1080p, 30 fps.'] },
+    { n: 'VN Video Editor', i: '🎞', w: 'Phone & PC, free, no watermark. Good timeline control.', q: 'VN video editor tutorial hindi',
+      s: ['Tap + > Create project, select the clips and tap Next.', 'Tap a clip to select it, move the playhead and tap Split. Delete the extra part.', 'Tap Speed for normal or Curve speed; use Voice for audio changes.', 'Add music from Audio; Beats can place markers on the beat so you can cut to rhythm.', 'Use Text, Stickers, Filters and Effects from the bottom menu; transitions appear between clips.', 'Keyframes: tap the diamond on a selected clip to animate position and scale.', 'Tap the export (arrow) button, choose 1080p and frame rate, then Save.'] },
+    { n: 'InShot', i: '📱', w: 'Phone. Fast and simple for quick social posts.', q: 'inshot video editing tutorial',
+      s: ['Tap Video > New and choose your clips.', 'Tap the clip, choose Split or Trim, and set start/end.', 'Use Canvas to switch ratio (9:16, 1:1, 16:9) and Background for borders.', 'Add Music, Text, Stickers and Filters from the bottom bar.', 'Use Speed for slow/fast and Transition (icon between clips).', 'Tap Save and pick resolution 1080p.'] },
+    { n: 'Adobe Premiere Pro', i: '🎬', w: 'PC/Mac. Professional editing for YouTube, films and clients.', q: 'premiere pro tutorial for beginners',
+      s: ['File > New Project, then Import your media into the Project panel.', 'Drag clips to the timeline. Press Space to play, V = select tool, C = razor tool.', 'Cut at the playhead with Ctrl+K (Cmd+K on Mac); select the gap and Shift+Delete to ripple-delete.', 'Effect Controls panel: set Position, Scale, Opacity and add keyframes with the stopwatch icon.', 'Effects panel: drag Cross Dissolve etc. onto cuts; right-click a clip > Speed/Duration to change speed.', 'Essential Graphics for titles; Essential Sound to tag audio as Dialogue or Music and auto-balance.', 'Lumetri Color for colour grading.', 'File > Export > Media, choose H.264 and "Match Source", then Export.'] },
+    { n: 'DaVinci Resolve', i: '🎨', w: 'PC/Mac. Free, strongest colour grading + powerful editing.', q: 'davinci resolve beginner tutorial',
+      s: ['Create a project, go to the Media page and import clips (or drag them directly).', 'On the Cut or Edit page, drag clips to the timeline.', 'Split with Ctrl+B (or the blade tool B); Delete to remove; Shift+Delete to ripple-delete.', 'Inspector tab: Transform, Zoom, Position, Opacity and keyframe diamonds.', 'Effects Library: drag Transitions between clips and Titles above them.', 'Colour page: use Primary wheels for balance, then add looks.', 'Deliver page: pick YouTube / H.264 preset, set filename, Add to Render Queue > Render.'] },
+    { n: 'Filmora', i: '🪄', w: 'PC/Mac/phone. Easy drag-and-drop with many built-in effects.', q: 'filmora video editing tutorial',
+      s: ['Import media, drag clips to the timeline.', 'Move the playhead and click the scissors (or Ctrl+B) to split; delete the part you do not need.', 'Double-click a clip to change speed, rotate, crop and colour.', 'Drag effects, titles and transitions from the top library onto the timeline.', 'Add keyframes from the clip settings for motion.', 'Click Export, choose MP4 and 1080p.'] }
+  ];
+  var WORKFLOW = ['1. Collect and name your clips. Watch them and note the best parts.', '2. Rough cut: keep only the good parts, in order. Remove mistakes and silence.', '3. Fine cut: tighten each clip, set the pacing, cut on the beat.', '4. Add speed changes, transitions and keyframe zooms only where they help.', '5. Audio: balance voice and music, add fades.', '6. Text and captions.', '7. Colour: fix exposure, then add a look.', '8. Export, watch the whole video once on your phone, then upload.'];
+  var CHEAT = [['Play / Pause', 'Space', 'Space', 'Space'], ['Split at playhead', 'Ctrl+B', 'Ctrl+K', 'Ctrl+B'], ['Undo', 'Ctrl+Z', 'Ctrl+Z', 'Ctrl+Z'], ['Delete + close gap', 'Delete', 'Shift+Delete', 'Shift+Delete']];
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function learnHTML() {
+    var h = '<div class="card"><h3 style="margin:0 0 6px">📚 Learn video editing</h3>' +
+      '<p style="margin:0 0 8px">Learn the ideas once - they are the same in every app. Then follow the step-by-step guide for the app you use. You can practise cut, speed, rotate and filters right here in the <b>Edit video</b> tab.</p>' +
+      '<button class="btn ghost" type="button" data-goedit="1">🎬 Practise in the editor</button></div>';
+    h += '<div class="card"><h3 style="margin:0 0 8px">Editing basics (every app)</h3>';
+    BASICS.forEach(function (b) { h += '<details style="margin:0 0 6px"><summary style="cursor:pointer;font-weight:600;padding:6px 0">' + esc(b[0]) + '</summary><p style="margin:0 0 8px;opacity:.85">' + esc(b[1]) + '</p></details>'; });
+    h += '</div><div class="card"><h3 style="margin:0 0 8px">Step-by-step: pick your app</h3>';
+    APPS.forEach(function (a) {
+      h += '<details style="margin:0 0 8px"><summary style="cursor:pointer;font-weight:600;padding:6px 0">' + a.i + ' ' + esc(a.n) + ' <span style="font-weight:400;opacity:.7;font-size:12px">- ' + esc(a.w) + '</span></summary><ol style="margin:4px 0 8px 18px;padding:0">';
+      a.s.forEach(function (x) { h += '<li style="margin:0 0 5px">' + esc(x) + '</li>'; });
+      h += '</ol><a class="btn ghost" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=' + encodeURIComponent(a.q) + '">▶ Watch ' + esc(a.n) + ' tutorials on YouTube</a></details>';
+    });
+    h += '<p style="font-size:12px;opacity:.7;margin:8px 0 0">Menus and button names can change a little when the apps update.</p></div>';
+    h += '<div class="card"><h3 style="margin:0 0 8px">A simple editing workflow</h3><ul style="margin:0;padding-left:0;list-style:none">';
+    WORKFLOW.forEach(function (w) { h += '<li style="margin:0 0 5px">' + esc(w) + '</li>'; });
+    h += '</ul></div><div class="card"><h3 style="margin:0 0 8px">Common shortcuts (PC)</h3><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse"><tr><th style="text-align:left;padding:6px">Action</th><th style="text-align:left;padding:6px">CapCut</th><th style="text-align:left;padding:6px">Premiere</th><th style="text-align:left;padding:6px">DaVinci</th></tr>';
+    CHEAT.forEach(function (r) { h += '<tr>' + r.map(function (c) { return '<td style="padding:6px;border-top:1px solid rgba(128,128,128,.25)">' + esc(c) + '</td>'; }).join('') + '</tr>'; });
+    return h + '</table></div><p style="font-size:12px;opacity:.7;margin:8px 0 0">On Mac use Cmd instead of Ctrl.</p></div>';
+  }
+
   tool.render = function (el) {
     el.innerHTML =
+      '<div class="noprint" style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">' +
+      '<button class="btn" id="ve-t-edit" type="button">🎬 Edit video</button>' +
+      '<button class="btn ghost" id="ve-t-learn" type="button">📚 Learn video editing</button></div>' +
+      '<div id="ve-pane-edit">' +
       '<div class="card">' +
       '<p style="margin:0 0 10px">Choose a video from your device. Everything is processed on your device – nothing is uploaded.</p>' +
       '<input id="ve-file" type="file" accept="video/*">' +
@@ -80,9 +134,20 @@
       '<div id="ve-msg" style="margin-top:12px;font-size:13px"></div>' +
       '<div id="ve-out" style="margin-top:12px"></div>' +
       '<p style="font-size:12px;opacity:.7;margin:12px 0 0">Note: export runs in real time (a 1-minute clip takes about 1 minute at 1x), so keep this tab open and visible until it finishes. Filters work in Chrome, Edge and Firefox.</p>' +
-      '</div>';
+      '</div></div>' +
+      '<div id="ve-pane-learn" hidden>' + learnHTML() + '</div>';
 
     var $ = function (id) { return el.querySelector('#' + id); };
+    function tab(which) {
+      var L = which === 'learn';
+      $('ve-pane-edit').hidden = L; $('ve-pane-learn').hidden = !L;
+      $('ve-t-edit').className = 'btn' + (L ? ' ghost' : ''); $('ve-t-learn').className = 'btn' + (L ? '' : ' ghost');
+    }
+    $('ve-t-edit').addEventListener('click', function () { tab('edit'); });
+    $('ve-t-learn').addEventListener('click', function () { tab('learn'); });
+    el.addEventListener('click', function (e) {
+      var g = e.target.closest('[data-goedit]'); if (g) { tab('edit'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    });
     var v = $('ve-vid'), work = $('ve-work'), msg = $('ve-msg'), out = $('ve-out'), goBtn = $('ve-go');
     var curUrl = null, outUrl = null;
 

@@ -50,6 +50,14 @@
     box.addEventListener('click', function (e) { var b = e.target.closest('button[data-l]'); if (b) choose(b.dataset.l); });
 
     var slot = document.querySelector('[data-lang-toggle]'), nav = !slot && (document.querySelector('header nav') || document.querySelector('nav'));
+    /* Tools Hub page: switch lives INSIDE the opened tool only (the hub's #toolView is hidden on the home screen, so nothing shows there) */
+    var tv = document.getElementById('toolView'), th = tv && tv.querySelector('.thead');
+    if (th) {
+      box.style.marginLeft = 'auto'; box.style.alignSelf = 'flex-start'; box.style.flex = '0 0 auto';
+      th.appendChild(box);
+      if (lang === 'hi') { cookie('/en/hi'); mark(); loadGT(); } else cookie(null);
+      return;
+    }
     function place() {
       if (slot) { if (box.parentNode !== slot) slot.appendChild(box); return; }
       var inNav = false;
@@ -62,13 +70,13 @@
     }
     place(); var t; addEventListener('resize', function () { clearTimeout(t); t = setTimeout(place, 200); });
 
-    if (lang === 'hi') {
-      cookie('/en/hi'); mark();
-      var d = document.createElement('div'); d.id = 'pj_gt'; document.body.appendChild(d);
-      window.pjGT = function () { new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'en,hi', autoDisplay: false }, 'pj_gt'); };
-      var s = document.createElement('script'); s.src = 'https://translate.google.com/translate_a/element.js?cb=pjGT'; s.async = true; document.head.appendChild(s);
-      var q; new MutationObserver(function () { clearTimeout(q); q = setTimeout(mark, 50); }).observe(document.body, { childList: true, subtree: true });
-    } else cookie(null);
+    if (lang === 'hi') { cookie('/en/hi'); mark(); loadGT(); } else cookie(null);
+  }
+  function loadGT() {
+    var d = document.createElement('div'); d.id = 'pj_gt'; document.body.appendChild(d);
+    window.pjGT = function () { new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'en,hi', autoDisplay: false }, 'pj_gt'); };
+    var s = document.createElement('script'); s.src = 'https://translate.google.com/translate_a/element.js?cb=pjGT'; s.async = true; document.head.appendChild(s);
+    var q; new MutationObserver(function () { clearTimeout(q); q = setTimeout(mark, 50); }).observe(document.body, { childList: true, subtree: true });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
