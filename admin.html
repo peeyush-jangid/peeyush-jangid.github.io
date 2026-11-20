@@ -1,8 +1,141 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><script>try{localStorage.setItem("ownerNoTrack","1")}catch(e){}</script><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#071426"><title>Owner Admin | Peeyush Portfolio</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="admin.css?v=2"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/svg+xml" href="favicon.svg"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Owner Admin"><meta name="robots" content="noindex,nofollow"><script src="admin-lock.js"></script></head><body><main class="admin-shell"><a class="admin-back" href="index.html">← Back to portfolio</a><div class="admin-card"><div class="admin-kicker">PRIVATE OWNER AREA</div><h1>Work file <span>manager.</span></h1><p class="admin-intro">Upload your work files and your own certificate scans/photos. They will be published to your GitHub Pages repository and shown in the relevant public sections.</p><div class="security-note"><b>Security:</b> Create a GitHub fine-grained personal access token limited to this repository, with <b>Contents: Read and write</b>. In this owner app it is saved only on this device, encrypted with your passcode. Never share it.</div><label for="token">GitHub access token</label><input id="token" type="password" autocomplete="off" placeholder="github_pat_…"><div class="admin-two"><div><label for="owner">GitHub username</label><input id="owner" value="peeyush-jangid"></div><div><label for="repo">Repository</label><input id="repo" value="peeyush-jangid.github.io"></div></div><label for="branch">Publishing branch</label><input id="branch" value="main"><label for="files">Choose Excel, Word, PowerPoint, PDF or AutoCAD files</label><input id="files" type="file" multiple accept=".xlsx,.xls,.csv,.docx,.doc,.rtf,.odt,.pptx,.ppt,.pps,.ppsx,.odp,.pdf"><div class="file-hint">Supported: .xlsx, .xls, .csv, .docx, .doc, .rtf, .odt · Max 50 MB per file</div><button id="upload" class="admin-button">Upload selected files ↗</button><div class="security-note" style="margin-top:30px"><b>Certificates</b><br>Upload your certificate as PDF or an image. You can add more certificates any time from this page.</div><label for="certificates">Choose certificate files (PDF, JPG, PNG, WEBP)</label><input id="certificates" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.webp"><div class="file-hint">Supported: PDF, JPG, JPEG, PNG, WEBP · Max 50 MB per file</div><button id="upload-certificates" class="admin-button">Upload certificates ↗</button><div id="status" class="admin-status" aria-live="polite"></div><div class="admin-list-head"><h2>Published work files</h2><button id="refresh" class="admin-refresh">Refresh list</button></div><div id="admin-files" class="admin-files">Connect with your token and refresh to view published files.</div><div class="admin-list-head"><h2>Published certificates</h2><button id="refresh-certificates" class="admin-refresh">Refresh certificates</button></div><div id="admin-certificates" class="admin-files">Connect with your token to view certificates.</div>
-<div id="u-root" class="se-users">
-<style>.se-users{margin-top:2.2rem;padding-top:1.6rem;border-top:1px solid rgba(255,255,255,.12)}.se-users h2{font-size:1.5rem;margin:0 0 .4rem}.se-users .u-note{color:#9aa4b2;font-size:.9rem;margin:0 0 1rem}.se-users input{width:100%;box-sizing:border-box;margin:.4rem 0 .8rem;font:inherit;color:#e8e8ea;background:#08131f;border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:.65rem 1rem}.se-users button{font:inherit;cursor:pointer;color:#e8e8ea;background:#08131f;border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:.6rem 1rem;margin:0 .5rem .5rem 0}.se-users .u-primary{background:linear-gradient(90deg,#b98f4f,#efd08f);color:#1a1205;font-weight:700;border:0}.u-top{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;justify-content:space-between;margin-bottom:.8rem}.u-who{font-size:.8rem;color:#9aa4b2;word-break:break-all}.u-folder{border:1px solid rgba(255,255,255,.14);border-radius:14px;margin:.6rem 0;background:#08131f}.u-folder summary{cursor:pointer;padding:.8rem 1rem;display:flex;flex-wrap:wrap;gap:.4rem 1rem;justify-content:space-between}.u-folder summary span{color:#d9bd7b;word-break:break-all}.u-body{padding:0 1rem 1rem}.u-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-bottom:.8rem;word-break:break-all}.u-grid small,.u-logins small{display:block;color:#9aa4b2;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}.u-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.08);font-size:.88rem}</style>
-<div id="v-root" style="margin-bottom:2rem;padding-bottom:1.4rem;border-bottom:1px solid rgba(255,255,255,.12)"><h2>Visitors</h2><p class="u-note">Site (<code>/</code>) aur app (<code>/app/</code>) ke visits. Owner account se sign in karne par yahin dikhenge.</p><p id="v-login-note" class="u-note">Pehle neeche "Registered users" me owner account se sign in karo.</p><div id="v-login" style="display:none"><label for="v-email">Owner email</label><input id="v-email" type="email" autocomplete="username"><label for="v-pass">Password</label><input id="v-pass" type="password" autocomplete="current-password"><button id="v-signin" class="u-primary" type="button">Sign in ↗</button><button id="v-google" type="button">Sign in with Google</button></div><div id="v-panel" style="display:none"><div id="v-out"></div><div style="display:flex;flex-wrap:wrap;gap:.5rem;align-items:center"><button id="v-refresh" type="button" class="u-primary">🔄 Refresh visitors</button><label style="display:inline-flex;align-items:center;gap:.4rem;margin:0 .5rem .5rem 0;font-size:.85rem;font-weight:400"><input id="v-auto" type="checkbox" checked style="width:auto;margin:0"> Auto-refresh (30s)</label><span id="v-updated" class="u-who" style="margin-bottom:.5rem"></span></div><p><a href="https://analytics.google.com/" target="_blank" rel="noopener" style="color:#d9bd7b">Detailed reports: Google Analytics ↗</a></p></div></div>
-<h2>Registered users</h2><p class="u-note">Every sign-up / sign-in on the website is saved here automatically, one folder per user. Sign in with your owner account to view.</p>
-<div id="u-login"><label for="u-email">Owner email</label><input id="u-email" type="email" autocomplete="username"><label for="u-pass">Password</label><input id="u-pass" type="password" autocomplete="current-password"><button id="u-signin" class="u-primary" type="button">Sign in ↗</button><button id="u-google" type="button">Sign in with Google</button></div>
-<div id="u-panel" style="display:none"><div class="u-top"><div><b id="u-count"></b><div class="u-who" id="u-who"></div></div><div><button id="u-refresh" type="button">Refresh users</button><button id="u-out" type="button">Sign out</button></div></div><div id="u-list"></div></div>
-<p id="u-status"></p></div></div></main><script src="firebase-config.js"></script><script type="module" src="users.js"></script><script type="module" src="visitors.js"></script><script src="admin.js"></script><script src="admin-certs.js"></script><script src="editor.js"></script><script src="admin-tools-manager.js"></script></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><script>try{localStorage.setItem("ownerNoTrack","1")}catch(e){}</script><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#071426"><title>Owner Admin | Peeyush Portfolio</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="admin.css?v=3"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/svg+xml" href="favicon.svg"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Owner Admin"><meta name="robots" content="noindex,nofollow"><script src="admin-lock.js"></script></head><body>
+<main class="admin-shell dash"><div class="app">
+
+<aside class="side">
+  <div class="brand"><img src="admin-icon-192.png" alt="" width="36" height="36"><b>Owner Admin</b></div>
+  <label class="search" aria-label="Search menu"><span>⌕</span><input type="text" id="navq" placeholder="Search for..." autocomplete="off"></label>
+  <nav class="nav" id="nav">
+    <div class="grp">Dashboard</div>
+    <a href="#overview" class="on"><span class="i">⌂</span>Overview</a>
+    <a href="#connect"><span class="i">⚙</span>GitHub settings</a>
+    <div class="grp">Content</div>
+    <a href="#upload"><span class="i">⬆</span>Upload files</a>
+    <a href="#certs"><span class="i">✦</span>Certificates</a>
+    <a href="#published"><span class="i">▤</span>Published files</a>
+    <a href="#tools"><span class="i">⚒</span>Tools Manager</a>
+    <div class="grp">Analytics</div>
+    <a href="#visitors"><span class="i">◔</span>Visitors</a>
+    <a href="#users"><span class="i">☺</span>Registered users</a>
+  </nav>
+  <div class="me"><div class="av">P</div><div>Peeyush<small>Owner account</small></div></div>
+  <a class="cta admin-back" href="index.html">← Back to portfolio</a>
+</aside>
+
+<div class="mainc">
+  <header class="top">
+    <div><h1>Welcome back, Peeyush</h1><p>Upload your work files and certificate scans. They are published to your GitHub Pages repository and shown in the relevant public sections.</p></div>
+    <div class="tb"><button class="btn" id="refreshAll" type="button">Refresh all</button><a class="btn gold" href="index.html">View portfolio</a></div>
+  </header>
+
+  <div class="notice" data-view="overview connect"><b>Security:</b> Create a GitHub fine-grained personal access token limited to this repository, with <b>Contents: Read and write</b>. In this owner app it is saved only on this device, encrypted with your passcode. Never share it.</div>
+
+  <div class="stats" data-view="overview">
+    <div class="stat"><small>▤ Work files</small><b id="stFiles">–</b></div>
+    <div class="stat"><small>✦ Certificates</small><b id="stCerts">–</b></div>
+    <div class="stat"><small>⚒ Tools</small><b id="stTools">–</b></div>
+    <div class="stat"><small>☺ Registered users</small><b id="stUsers">–</b></div>
+  </div>
+
+  <div class="admin-card cols">
+
+    <section class="panel span2" data-view="overview">
+      <div class="ph"><div><h2>Quick access</h2><p>Open a section from here or from the menu.</p></div></div>
+      <div class="qa">
+        <a href="#connect"><span>⚙</span>GitHub settings</a><a href="#upload"><span>⬆</span>Upload files</a>
+        <a href="#certs"><span>✦</span>Certificates</a><a href="#published"><span>▤</span>Published files</a>
+        <a href="#tools"><span>⚒</span>Tools Manager</a><a href="#visitors"><span>◔</span>Visitors</a>
+        <a href="#users"><span>☺</span>Registered users</a>
+      </div>
+    </section>
+
+    <section class="panel span2" data-view="connect">
+      <div class="ph"><div><h2>Token &amp; GitHub settings</h2><p>Token unlock ke baad apne aap bhar jata hai.</p></div></div>
+      <div class="g2">
+        <div class="full"><label for="token">GitHub access token</label><input id="token" type="password" autocomplete="off" placeholder="github_pat_…"></div>
+        <div><label for="owner">GitHub username</label><input id="owner" value="peeyush-jangid"></div>
+        <div><label for="repo">Repository</label><input id="repo" value="peeyush-jangid.github.io"></div>
+        <div class="full"><label for="branch">Publishing branch</label><input id="branch" value="main"></div>
+      </div>
+    </section>
+
+    <section class="panel span2" data-view="upload">
+      <div class="ph"><div><h2>Upload work files</h2><p>Excel, Word, PowerPoint, PDF or AutoCAD files.</p></div></div>
+      <label class="drop" id="d1" for="files"><div class="ic">⬆</div><strong>Choose Excel, Word, PowerPoint, PDF or AutoCAD files</strong><span>Supported: .xlsx, .xls, .csv, .docx, .doc, .rtf, .odt, .pptx, .pdf, .dwg · Max 50 MB per file</span></label>
+      <input id="files" type="file" multiple accept=".xlsx,.xls,.csv,.docx,.doc,.rtf,.odt,.pptx,.ppt,.pps,.ppsx,.odp,.pdf,.dwg,.dxf">
+      <div class="fn" id="n1"></div>
+      <div class="row-btns"><button id="upload" class="admin-button" type="button">Upload selected files ↗</button></div>
+    </section>
+
+    <section class="panel span2" data-view="certs">
+      <div class="ph"><div><h2>Certificates</h2><p>Upload your certificate as PDF or an image. You can add more any time.</p></div></div>
+      <label class="drop" id="d2" for="certificates"><div class="ic">✦</div><strong>Choose certificate files (PDF, JPG, PNG, WEBP)</strong><span>Supported: PDF, JPG, JPEG, PNG, WEBP · Max 50 MB per file</span></label>
+      <input id="certificates" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.webp">
+      <div class="fn" id="n2"></div>
+      <div class="row-btns"><button id="upload-certificates" class="admin-button" type="button">Upload certificates ↗</button></div>
+    </section>
+
+    <section class="panel" data-view="published">
+      <div class="ph"><div><h2>Published work files</h2><p>Files live on your site.</p></div><button id="refresh" class="admin-refresh" type="button">Refresh list</button></div>
+      <div id="admin-files" class="admin-files">Connect with your token and refresh to view published files.</div>
+    </section>
+    <section class="panel" data-view="published">
+      <div class="ph"><div><h2>Published certificates</h2><p>Shown in the public Certificates section.</p></div><button id="refresh-certificates" class="admin-refresh" type="button">Refresh certificates</button></div>
+      <div id="admin-certificates" class="admin-files">Connect with your token to view certificates.</div>
+    </section>
+
+    <section class="panel span2" data-view="tools"><div id="tools-host"></div></section>
+
+    <section class="panel" id="v-root" data-view="visitors">
+      <div class="ph"><div><h2>Visitors</h2><p>Site (<code>/</code>) aur app (<code>/app/</code>) ke visits.</p></div></div>
+      <p id="v-login-note" class="u-note">Pehle <a href="#users">Registered users</a> section me owner account se sign in karo.</p>
+      <div id="v-login" style="display:none"><label for="v-email">Owner email</label><input id="v-email" type="email" autocomplete="username"><label for="v-pass">Password</label><input id="v-pass" type="password" autocomplete="current-password"><button id="v-signin" class="u-primary" type="button">Sign in ↗</button><button id="v-google" type="button">Sign in with Google</button></div>
+      <div id="v-panel" style="display:none"><div id="v-out"></div><div style="display:flex;flex-wrap:wrap;gap:.5rem;align-items:center"><button id="v-refresh" type="button" class="u-primary">🔄 Refresh visitors</button><label style="display:inline-flex;align-items:center;gap:.4rem;margin:0 .5rem .5rem 0;font-size:.85rem;font-weight:400"><input id="v-auto" type="checkbox" checked style="width:auto;margin:0"> Auto-refresh (30s)</label><span id="v-updated" class="u-who" style="margin-bottom:.5rem"></span></div><p><a href="https://analytics.google.com/" target="_blank" rel="noopener">Detailed reports: Google Analytics ↗</a></p></div>
+    </section>
+
+    <section class="panel se-users" id="u-root" data-view="users">
+<style>.se-users .u-note{color:#9aa4b2;font-size:.9rem;margin:0 0 1rem}.se-users .u-primary{background:linear-gradient(90deg,#b98f4f,#efd08f)!important;color:#1a1205!important;font-weight:700;border:0!important}.u-top{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;justify-content:space-between;margin-bottom:.8rem}.u-who{font-size:.8rem;color:#9aa4b2;word-break:break-all}.u-folder{border:1px solid rgba(255,255,255,.14);border-radius:14px;margin:.6rem 0;background:#08131f}.u-folder summary{cursor:pointer;padding:.8rem 1rem;display:flex;flex-wrap:wrap;gap:.4rem 1rem;justify-content:space-between}.u-folder summary span{color:#d9bd7b;word-break:break-all}.u-body{padding:0 1rem 1rem}.u-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-bottom:.8rem;word-break:break-all}.u-grid small,.u-logins small{display:block;color:#9aa4b2;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}.u-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem;padding:.35rem 0;border-top:1px solid rgba(255,255,255,.08);font-size:.88rem}</style>
+      <div class="ph"><div><h2>Registered users</h2><p>Every sign-up / sign-in on the website is saved here automatically, one folder per user.</p></div></div>
+      <div id="u-login"><label for="u-email">Owner email</label><input id="u-email" type="email" autocomplete="username"><label for="u-pass">Password</label><input id="u-pass" type="password" autocomplete="current-password"><button id="u-signin" class="u-primary" type="button">Sign in ↗</button><button id="u-google" type="button">Sign in with Google</button></div>
+      <div id="u-panel" style="display:none"><div class="u-top"><div><b id="u-count"></b><div class="u-who" id="u-who"></div></div><div><button id="u-refresh" type="button">Refresh users</button><button id="u-out" type="button">Sign out</button></div></div><div id="u-list"></div></div>
+      <p id="u-status"></p>
+    </section>
+
+  </div>
+  <div id="status" class="admin-status" aria-live="polite"></div>
+</div>
+</div></main>
+<script src="firebase-config.js"></script><script type="module" src="users.js"></script><script type="module" src="visitors.js"></script><script src="admin.js"></script><script src="admin-certs.js"></script><script src="editor.js"></script><script src="admin-tools-manager.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},cols=document.querySelector('.cols');
+  /* Tools Manager (and anything else the old scripts append) → into the Tools panel */
+  var host=$('tools-host'),tm=$('admin-tools-manager');
+  if(tm)host.appendChild(tm);
+  [].slice.call(cols.children).forEach(function(el){if(!el.hasAttribute('data-view'))host.appendChild(el)});
+  /* section switching */
+  var L=[].slice.call(document.querySelectorAll('#nav a')),names=L.map(function(a){return a.getAttribute('href').slice(1)});
+  function show(id){
+    if(names.indexOf(id)<0)id='overview';
+    [].slice.call(document.querySelectorAll('[data-view]')).forEach(function(el){el.hidden=el.getAttribute('data-view').split(' ').indexOf(id)<0});
+    L.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+id)});
+    cols.classList.toggle('one',id!=='published');scrollTo(0,0)}
+  document.addEventListener('click',function(e){var a=e.target.closest('a[href^="#"]');if(!a)return;var id=a.getAttribute('href').slice(1);if(names.indexOf(id)<0)return;e.preventDefault();history.replaceState(null,'','#'+id);show(id)});
+  show(location.hash.slice(1)||'overview');
+  $('navq').addEventListener('input',function(e){var v=e.target.value.toLowerCase();L.forEach(function(a){a.style.display=a.textContent.toLowerCase().indexOf(v)>-1?'':'none'})});
+  /* file names + drag highlight */
+  [['files','d1','n1'],['certificates','d2','n2']].forEach(function(x){var i=$(x[0]),d=$(x[1]),n=$(x[2]);
+    i.addEventListener('change',function(){n.textContent=i.files.length?i.files.length+' selected: '+[].map.call(i.files,function(f){return f.name}).join(', '):''});
+    ['dragenter','dragover'].forEach(function(e){d.addEventListener(e,function(v){v.preventDefault();d.classList.add('over')})});
+    d.addEventListener('dragleave',function(){d.classList.remove('over')});
+    d.addEventListener('drop',function(v){v.preventDefault();d.classList.remove('over');if(v.dataTransfer.files.length){i.files=v.dataTransfer.files;i.dispatchEvent(new Event('change'))}})});
+  /* live stat cards */
+  function watch(src,dst,fn){var s=$(src);if(!s)return;var f=function(){$(dst).textContent=fn(s)};new MutationObserver(f).observe(s,{childList:true,subtree:true,characterData:true})}
+  var cnt=function(s){var n=s.querySelectorAll('.admin-file').length;return n||'–'},num=function(s){var m=(s.textContent||'').match(/\d+/);return m?m[0]:'–'};
+  watch('admin-files','stFiles',cnt);watch('admin-certificates','stCerts',cnt);watch('tm-count','stTools',num);watch('u-count','stUsers',num);
+  /* refresh all + auto-load after unlock */
+  function loadAll(){['refresh','refresh-certificates','tm-load'].forEach(function(id){var b=$(id);if(b)b.click()})}
+  $('refreshAll').addEventListener('click',loadAll);
+  var t,last='';$('token').addEventListener('input',function(){clearTimeout(t);t=setTimeout(function(){var v=$('token').value.trim();if(v.length>20&&v!==last){last=v;loadAll()}},900)});
+})();
+</script>
+</body></html>
