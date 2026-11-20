@@ -78,6 +78,18 @@
     window.pjGT = function () { new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'en,hi', autoDisplay: false }, 'pj_gt'); };
     var s = document.createElement('script'); s.src = 'https://translate.google.com/translate_a/element.js?cb=pjGT'; s.async = true; document.head.appendChild(s);
     var q; new MutationObserver(function () { clearTimeout(q); q = setTimeout(mark, 50); }).observe(document.body, { childList: true, subtree: true });
+    /* remove Google's "Translated into Hindi / Show original" bar the moment it appears */
+    function killBar() {
+      document.querySelectorAll('iframe.skiptranslate,body>.skiptranslate,iframe[id$=".container"],iframe[class*="VIpgJd"],div[class*="VIpgJd-ZVi9od"]').forEach(function (e) {
+        if (e.id === 'pj_gt' || e.closest('#pj_gt') || e.classList.contains('pj-lang')) return;
+        e.style.setProperty('display', 'none', 'important'); e.style.setProperty('visibility', 'hidden', 'important'); e.style.setProperty('height', '0', 'important');
+      });
+      document.documentElement.style.setProperty('margin-top', '0', 'important');
+      document.body.style.setProperty('top', '0', 'important'); document.body.style.setProperty('margin-top', '0', 'important');
+    }
+    killBar();
+    new MutationObserver(killBar).observe(document.documentElement, { childList: true, subtree: true });
+    var n = 0, iv = setInterval(function () { killBar(); if (++n > 40) clearInterval(iv); }, 250);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
