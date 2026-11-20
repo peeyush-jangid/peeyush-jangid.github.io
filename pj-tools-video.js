@@ -68,10 +68,68 @@
   var WORKFLOW = ['1. Collect and name your clips. Watch them and note the best parts.', '2. Rough cut: keep only the good parts, in order. Remove mistakes and silence.', '3. Fine cut: tighten each clip, set the pacing, cut on the beat.', '4. Add speed changes, transitions and keyframe zooms only where they help.', '5. Audio: balance voice and music, add fades.', '6. Text and captions.', '7. Colour: fix exposure, then add a look.', '8. Export, watch the whole video once on your phone, then upload.'];
   var CHEAT = [['Play / Pause', 'Space', 'Space', 'Space'], ['Split at playhead', 'Ctrl+B', 'Ctrl+K', 'Ctrl+B'], ['Undo', 'Ctrl+Z', 'Ctrl+Z', 'Ctrl+Z'], ['Delete + close gap', 'Delete', 'Shift+Delete', 'Shift+Delete']];
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  /* ---------- Course: Beginner -> Intermediate -> Advanced ---------- */
+  var LEVELS = [
+    { id: 'b', n: 'Beginner', i: '🌱', goal: 'Make a clean, watchable video from scratch: cut, add music and text, export.', les: [
+      { t: 'Know your screen', c: 'Every editor has the same 4 parts: Preview (what you see), Timeline (where you build), Media/Library (your clips) and Tools/Properties (settings for the selected clip). The vertical line on the timeline is the playhead - it marks "now".', s: ['Open any editor (CapCut, VN, Premiere, DaVinci...) and find the 4 parts.', 'Drag the playhead and watch the preview change.', 'Zoom the timeline in and out.'], k: 'Name the 4 parts in your editor without looking.' },
+      { t: 'Import and organise clips', c: 'Good editing starts before the first cut. Watch your clips, delete bad takes, and put them in the order of your story.', s: ['Import all clips for one video.', 'Watch each once and note the best 2-3 seconds.', 'Rename or sort them (Intro, Main, End).'], k: 'Pick 5 clips and decide the order of your story.' },
+      { t: 'Cut, split and trim', c: 'Split cuts a clip at the playhead. Trim shortens a clip from its edges. 80% of editing is removing the boring parts.', s: ['Put the playhead where the bad part starts and Split.', 'Move to where it ends and Split again.', 'Delete the middle piece, then close the gap.', 'Or drag the clip edge to trim.'], k: 'Take a 30-second clip and make it 10 seconds, keeping only the best parts.', e: 1 },
+      { t: 'Music and volume', c: 'Voice must always be clear. Put music under it at low volume, and fade it in and out so it does not start or stop suddenly.', s: ['Add a music track below your video.', 'Lower music volume until speech is easy to hear.', 'Add fade in at the start and fade out at the end.', 'Use only music you are allowed to use (royalty-free or the app library).'], k: 'Add music to your 10-second video with a fade out.' },
+      { t: 'Text and captions', c: 'Most people watch without sound, so captions help a lot. Keep text short, large and away from the screen edges.', s: ['Add a text layer and type a short title.', 'Pick a clear font and strong contrast (light text on dark or the reverse).', 'Use auto-captions if your app has them, then read and fix every line.'], k: 'Add a title and one caption line.' },
+      { t: 'Export the right way', c: 'Export settings decide quality and file size. For social media 1080p and 30 fps is enough. Choose the ratio that matches where you will post.', s: ['9:16 for Reels/Shorts/Status, 16:9 for YouTube.', 'Resolution 1080p, frame rate 30 fps, format MP4 (H.264).', 'Watch the exported file fully on your phone before uploading.'], k: 'Export your video and check it on your phone.', e: 1 }
+    ], q: [['What do you press to cut a clip in two?', 'Split, with the playhead at the cut point.'], ['Which should be louder, voice or music?', 'Voice. Keep music low underneath.'], ['Best size for Reels/Shorts?', '9:16 vertical, 1080p.']] },
+    { id: 'm', n: 'Intermediate', i: '🚀', goal: 'Make edits feel smooth and professional: rhythm, motion, sound and colour.', les: [
+      { t: 'Pacing and rhythm', c: 'Pacing is how fast the shots change. Fast-paced content changes every 1-3 seconds; calm content can hold shots longer. Cut on an action (a step, a turn of the head) so the cut is hidden.', s: ['Remove every pause and "umm".', 'Cut right after a movement starts.', 'Vary shot length so it does not feel robotic.'], k: 'Re-cut a video so no shot is longer than 4 seconds.' },
+      { t: 'J-cut and L-cut', c: 'In a J-cut the next clip\'s audio starts before its picture; in an L-cut the previous audio continues over the next picture. They make conversations and storytelling flow naturally.', s: ['Split video and audio apart (unlink or detach audio).', 'Slide the audio a little earlier (J) or later (L) than the picture cut.', 'Add a short audio fade at the join.'], k: 'Make one J-cut between two clips.' },
+      { t: 'Speed and speed ramp', c: 'Slow motion adds drama; fast motion adds energy. A speed ramp changes speed smoothly inside one clip (slow -> fast -> slow) and is used with music beats.', s: ['Shoot or pick a clip with clear movement.', 'Apply Speed > Curve (CapCut/VN) or Time Remapping (Premiere/DaVinci).', 'Put the fast part on the action peak and ease in and out.'], k: 'Slow one clip to 0.5x and speed another to 2x, then compare.', e: 1 },
+      { t: 'Transitions that work', c: 'The best transition is often a plain cut. Use motion transitions only when the movement in both clips matches (e.g. a whip pan to a whip pan).', s: ['Use cut or a short dissolve by default.', 'Match direction of movement before using slide/zoom transitions.', 'Keep transitions under 0.5 seconds for fast videos.'], k: 'Use no more than 2 transitions in a 30-second video.' },
+      { t: 'Keyframes and zoom', c: 'A keyframe saves a setting (size, position, rotation, opacity) at one moment. Two keyframes with different values make the app animate between them.', s: ['Move the playhead to the start and add a keyframe for Scale 100%.', 'Move to the end, set Scale 115% - it creates a slow push-in.', 'Use easing (ease in/out) so the motion feels smooth.'], k: 'Add a slow zoom-in to one clip.' },
+      { t: 'Clean audio', c: 'Bad audio makes viewers leave faster than bad video. Remove noise, even out volume, and lower music automatically when someone speaks (ducking).', s: ['Apply noise reduction or voice enhance on the voice clip.', 'Normalise so all voice clips have a similar level.', 'Use auto-ducking or manual volume keyframes on the music.'], k: 'Clean up a voice recording and duck music under it.' },
+      { t: 'Basic colour correction', c: 'First fix the picture (exposure, contrast, white balance), then add a style. Skin tones should look natural.', s: ['Adjust brightness and contrast until blacks and whites look right.', 'Fix white balance so white looks white.', 'Match clips shot in different light so they look like one video.', 'Add a filter only at the end, at 30-60% strength.'], k: 'Colour-correct two clips so they match.', e: 1 }
+    ], q: [['What is a J-cut?', 'Next clip\'s audio starts before its picture.'], ['Why use ease in/out on keyframes?', 'So the motion starts and stops smoothly, not sharply.'], ['Order of colour work?', 'Correct first (exposure, white balance), then add a creative look.']] },
+    { id: 'a', n: 'Advanced', i: '🏆', goal: 'Edit like a professional: storytelling, VFX, grading, sound mixing and efficient workflow.', les: [
+      { t: 'Story structure and retention', c: 'Every good video has a hook (first 3 seconds), a body that keeps promising something new, and an ending that pays off. Retention editing means removing anything that gives people a reason to leave.', s: ['Write the hook first; put the most interesting moment at the start.', 'Add a new visual, sound or fact every 3-5 seconds.', 'Check the analytics of your uploads and see where viewers drop, then re-edit that part.'], k: 'Re-edit the first 5 seconds of an old video as a stronger hook.' },
+      { t: 'B-roll and multicam', c: 'B-roll is extra footage that covers cuts and shows what is being said. Multicam means syncing several cameras and switching between them.', s: ['Lay the main (A-roll) story first.', 'Cover jump cuts with B-roll that matches what is said.', 'For multicam, sync clips by audio waveform and cut between angles on sentence breaks.'], k: 'Cover three jump cuts in an interview with B-roll.' },
+      { t: 'Masking and green screen', c: 'A mask shows only part of a clip. Chroma key removes a solid colour (green/blue) so you can place a subject on any background.', s: ['Apply Chroma Key / Ultra Key to the green-screen clip and pick the green.', 'Tune tolerance and edge feather, then remove green spill.', 'Use a mask with keyframes to reveal or hide objects over time.'], k: 'Replace a green background with an image or video.' },
+      { t: 'Motion tracking', c: 'Tracking follows a moving object so text, blur or effects stick to it (e.g. a name tag following a person or a blurred face).', s: ['Add the text, blur or sticker layer above the clip.', 'Run tracking on the object you want to follow (Track / Motion Tracking).', 'Apply the track to your layer and fix drift with manual keyframes.'], k: 'Make a text label that follows a moving person.' },
+      { t: 'Pro colour grading', c: 'Grading uses scopes (waveform, vectorscope) instead of just your eyes. Log footage needs a technical conversion, then a creative grade.', s: ['Open the waveform: keep important brightness between 0 and 100 (no clipping).', 'Use primary wheels (lift/gamma/gain) to set contrast and colour balance.', 'Use secondary corrections (curves, qualifier, power windows) for skin or sky.', 'Apply a LUT as a starting point and reduce its strength.'], k: 'Grade a clip using the waveform, then compare before and after.' },
+      { t: 'Sound design and mixing', c: 'Sound is half of the video. Layer dialogue, music, ambience and sound effects, and mix them so nothing fights. Final loudness is measured in LUFS.', s: ['Dialogue about -12 to -6 dB peak, music well below it.', 'Add whooshes, hits and room tone to give the cuts weight.', 'Aim for about -14 LUFS for YouTube and social media.', 'Check with a limiter so the audio never clips.'], k: 'Add 3 sound effects and a room tone to a scene.' },
+      { t: 'Pro workflow: proxies, nesting, organisation', c: 'Big projects need structure. Proxies are light copies that make editing smooth; nested sequences group many clips into one block; bins and labels keep things findable.', s: ['Create proxies for 4K footage so playback is smooth.', 'Nest repeated sequences (intro, lower third) and reuse them.', 'Use folders (bins), colour labels and clear names for every file.', 'Save versions (v1, v2) and back up the project and media.'], k: 'Organise one project with folders and a backup.' },
+      { t: 'Export settings: bitrate and codecs', c: 'H.264 is the safe choice everywhere; H.265 (HEVC) gives smaller files with more demanding playback; ProRes is for archive and handing over to other editors. Bitrate controls the quality/size balance.', s: ['YouTube 1080p: H.264, around 8-12 Mbps; 4K: around 35-45 Mbps.', 'Instagram/Reels: 1080x1920, H.264, around 8-10 Mbps.', 'Use two-pass or higher quality for high-motion footage.', 'Keep a master export (high quality) before making smaller versions.'], k: 'Export one master file and one small file for WhatsApp.' }
+    ], q: [['What is a hook?', 'The first 2-3 seconds that make people keep watching.'], ['What does a vectorscope show?', 'Colour (hue and saturation) of the picture.'], ['Why create proxies?', 'Light copies of big files make editing smooth on slower computers.']] }
+  ];
+  var PKEY = 'veProgress';
+  function getProg() { try { return JSON.parse(localStorage.getItem(PKEY) || '{}') || {}; } catch (e) { return {}; } }
+  function setProg(p) { try { localStorage.setItem(PKEY, JSON.stringify(p)); } catch (e) { } }
+  function pathHTML() {
+    var p = getProg(), h = '<div class="card"><h3 style="margin:0 0 6px">🎓 Video editing course - Beginner to Advanced</h3>' +
+      '<p style="margin:0 0 10px">Follow the levels in order. Do the practice task of each lesson, then tick it as done. Your progress is saved on this device.</p>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap" class="noprint">';
+    LEVELS.forEach(function (L, i) { h += '<button class="btn' + (i ? ' ghost' : '') + '" type="button" data-lv="' + L.id + '">' + L.i + ' ' + L.n + ' <span data-pc="' + L.id + '"></span></button>'; });
+    h += '</div></div>';
+    LEVELS.forEach(function (L, i) {
+      h += '<div data-lvp="' + L.id + '"' + (i ? ' hidden' : '') + '><div class="card"><h3 style="margin:0 0 4px">' + L.i + ' ' + L.n + '</h3><p style="margin:0 0 8px;opacity:.85">' + esc(L.goal) + '</p>' +
+        '<div style="height:8px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden"><div data-bar="' + L.id + '" style="height:100%;width:0;background:#2563eb;transition:width .3s"></div></div></div>';
+      L.les.forEach(function (x, j) {
+        var id = L.id + (j + 1);
+        h += '<div class="card"><details><summary style="cursor:pointer;font-weight:600;padding:4px 0">Lesson ' + (j + 1) + ': ' + esc(x.t) + '</summary>' +
+          '<p style="margin:8px 0">' + esc(x.c) + '</p><ol style="margin:0 0 8px 18px;padding:0">';
+        x.s.forEach(function (s) { h += '<li style="margin:0 0 4px">' + esc(s) + '</li>'; });
+        h += '</ol><p style="margin:0 0 10px;padding:8px 10px;border-radius:8px;background:rgba(37,99,235,.1)"><b>Practice task:</b> ' + esc(x.k) + '</p>' +
+          (x.e ? '<button class="btn ghost" type="button" data-goedit="1" style="margin:0 8px 8px 0">🎬 Practise in the editor</button>' : '') +
+          '<label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" data-les="' + id + '"' + (p[id] ? ' checked' : '') + '> I finished this lesson</label></details></div>';
+      });
+      h += '<div class="card"><h3 style="margin:0 0 8px">Quick quiz - ' + L.n + '</h3><p style="font-size:12px;opacity:.7;margin:0 0 8px">Think of the answer first, then tap the question.</p>';
+      L.q.forEach(function (q) { h += '<details style="margin:0 0 6px"><summary style="cursor:pointer;padding:4px 0">' + esc(q[0]) + '</summary><p style="margin:4px 0 6px;opacity:.9">✔ ' + esc(q[1]) + '</p></details>'; });
+      h += '</div></div>';
+    });
+    return h;
+  }
   function learnHTML() {
-    var h = '<div class="card"><h3 style="margin:0 0 6px">📚 Learn video editing</h3>' +
-      '<p style="margin:0 0 8px">Learn the ideas once - they are the same in every app. Then follow the step-by-step guide for the app you use. You can practise cut, speed, rotate and filters right here in the <b>Edit video</b> tab.</p>' +
-      '<button class="btn ghost" type="button" data-goedit="1">🎬 Practise in the editor</button></div>';
+    var h = pathHTML();
+    h += '<div class="card"><h3 style="margin:0 0 6px">📚 Extra reference</h3>' +
+      '<p style="margin:0 0 8px">Basic ideas, step-by-step guides for each app, a workflow and shortcuts. You can practise cut, speed, rotate and filters in the <b>Edit video</b> tab.</p>' +
+      '<button class="btn ghost" type="button" data-goedit="1">🎬 Open the editor</button></div>';
     h += '<div class="card"><h3 style="margin:0 0 8px">Editing basics (every app)</h3>';
     BASICS.forEach(function (b) { h += '<details style="margin:0 0 6px"><summary style="cursor:pointer;font-weight:600;padding:6px 0">' + esc(b[0]) + '</summary><p style="margin:0 0 8px;opacity:.85">' + esc(b[1]) + '</p></details>'; });
     h += '</div><div class="card"><h3 style="margin:0 0 8px">Step-by-step: pick your app</h3>';
@@ -147,7 +205,27 @@
     $('ve-t-learn').addEventListener('click', function () { tab('learn'); });
     el.addEventListener('click', function (e) {
       var g = e.target.closest('[data-goedit]'); if (g) { tab('edit'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      var b = e.target.closest('[data-lv]');
+      if (b) {
+        el.querySelectorAll('[data-lvp]').forEach(function (d) { d.hidden = d.getAttribute('data-lvp') !== b.getAttribute('data-lv'); });
+        el.querySelectorAll('[data-lv]').forEach(function (x) { x.className = 'btn' + (x === b ? '' : ' ghost'); });
+      }
     });
+    function updProg() {
+      var p = getProg();
+      LEVELS.forEach(function (L) {
+        var d = 0; L.les.forEach(function (x, j) { if (p[L.id + (j + 1)]) d++; });
+        var bar = el.querySelector('[data-bar="' + L.id + '"]'), pc = el.querySelector('[data-pc="' + L.id + '"]');
+        if (bar) bar.style.width = Math.round(d / L.les.length * 100) + '%';
+        if (pc) pc.textContent = '(' + d + '/' + L.les.length + ')';
+      });
+    }
+    el.addEventListener('change', function (e) {
+      var c = e.target.closest('[data-les]'); if (!c) return;
+      var p = getProg(); if (c.checked) p[c.getAttribute('data-les')] = 1; else delete p[c.getAttribute('data-les')];
+      setProg(p); updProg();
+    });
+    updProg();
     var v = $('ve-vid'), work = $('ve-work'), msg = $('ve-msg'), out = $('ve-out'), goBtn = $('ve-go');
     var curUrl = null, outUrl = null;
 
