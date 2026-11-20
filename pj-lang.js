@@ -36,7 +36,8 @@
     '.pj-lang button:focus-visible{outline:2px solid currentColor;outline-offset:-2px}' +
     '.pj-lang.pj-fixed{position:fixed;z-index:99999;right:12px;margin:0;background:#fff;color:#0f172a;box-shadow:0 6px 20px rgba(0,0,0,.25)}' +
     '.pj-lang.pj-top{top:10px}.pj-lang.pj-bot{bottom:14px}' +
-    'body{top:0!important;position:static!important}.goog-te-banner-frame,.goog-te-banner-frame.skiptranslate,#goog-gt-tt,.goog-te-balloon-frame,.goog-tooltip{display:none!important}' +
+    'html,body{top:0!important;margin-top:0!important;position:static!important}' +
+    '.goog-te-banner-frame,.goog-te-banner-frame.skiptranslate,iframe.skiptranslate,body>.skiptranslate,iframe.VIpgJd-ZVi9od-ORHb-OEVmcd,.VIpgJd-ZVi9od-ORHb-OEVmcd,.VIpgJd-ZVi9od-aZ2wEe-wOHMyf,#goog-gt-tt,.goog-te-balloon-frame,.goog-tooltip{display:none!important;visibility:hidden!important;height:0!important}' +
     '.goog-text-highlight{background:none!important;box-shadow:none!important}#pj_gt{position:absolute;left:-9999px;top:0;height:0;overflow:hidden}';
   document.head.appendChild(css);
 
