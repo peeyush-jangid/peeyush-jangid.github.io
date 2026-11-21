@@ -5,14 +5,14 @@
   if (typeof TOOLS === 'undefined' || !Array.isArray(TOOLS)) return;
   if (TOOLS.some(function (t) { return t.id === 'video-editor'; })) return;
 
-  var NAME = 'Video Editing Studio';
-  var DESC = 'Edit, trim, crop, resize, filter, add text, change speed, export video, merge clips, create thumbnails and learn from beginner to pro. Browser-based processing.';
+  var NAME = 'Video Editor';
+  var DESC = 'Trim, speed up or slow down, rotate, resize, add filters and export your video – plus learn editing like CapCut, VN, Premiere Pro. Free, in your browser.';
   var ICON = '🎬';
 
   /* Build the tool entry by mirroring the fields an existing tool already has,
      so it fits whatever structure the hub's core file uses. */
   var tpl = TOOLS.find(function (t) { return t.id === 'excel-formulas'; }) || TOOLS[0] || {};
-  var tool = { cat: 'video', id: 'video-editor', name: NAME, title: NAME, desc: DESC, icon: ICON };
+  var tool = { id: 'video-editor', name: NAME, title: NAME, desc: DESC, icon: ICON };
   Object.keys(tpl).forEach(function (k) {
     var v = tpl[k];
     if (k === 'id' || k === 'render') return;
@@ -28,7 +28,6 @@
       tool[k] = v;
     }
   });
-  tool.cat = 'video';
 
   var audioCtx = null, audioSrc = null, audioDest = null, busy = false;
 
@@ -154,7 +153,7 @@
       '<button class="btn ghost" id="ve-t-learn" type="button">📚 Learn video editing</button></div>' +
       '<div id="ve-pane-edit">' +
       '<div class="card">' +
-      '<p style="margin:0 0 10px">Choose a video from your device. Everything is processed on your device – nothing is uploaded. This editor includes trim/cut, speed, rotation, resize, aspect crop, filters, text overlay, mute, frame capture, and browser-supported export/compression.</p>' +
+      '<p style="margin:0 0 10px">Choose a video from your device. Everything is processed on your device – nothing is uploaded.</p>' +
       '<input id="ve-file" type="file" accept="video/*">' +
       '</div>' +
       '<div class="card" id="ve-work" hidden>' +
@@ -174,16 +173,9 @@
       '<label>Speed<br><select id="ve-spd" style="width:100%"><option value="0.5">0.5x (slow)</option><option value="0.75">0.75x</option><option value="1" selected>1x (normal)</option><option value="1.5">1.5x</option><option value="2">2x</option><option value="3">3x</option><option value="4">4x (fast)</option></select></label>' +
       '<label>Rotate<br><select id="ve-rot" style="width:100%"><option value="0">0°</option><option value="90">90° right</option><option value="180">180°</option><option value="270">90° left</option></select></label>' +
       '<label>Output size<br><select id="ve-res" style="width:100%"><option value="0">Original</option><option value="1080">1080p</option><option value="720">720p</option><option value="480">480p</option><option value="360">360p</option></select></label>' +
-      '<label>Crop / Aspect ratio<br><select id="ve-ratio" style="width:100%"><option value="original">Original</option><option value="16:9">16:9 YouTube</option><option value="9:16">9:16 Shorts / Reels</option><option value="1:1">1:1 Square</option><option value="4:5">4:5 Instagram</option></select></label>' +
-      '<label>Export quality<br><select id="ve-bitrate" style="width:100%"><option value="2500000">Smaller file (2.5 Mbps)</option><option value="5000000" selected>Balanced (5 Mbps)</option><option value="8000000">High (8 Mbps)</option><option value="12000000">Best (12 Mbps)</option></select></label>' +
       '<label style="display:flex;align-items:center;gap:8px"><input id="ve-mute" type="checkbox"> Mute audio</label>' +
       '</div>' +
 
-      '<h3 style="margin:16px 0 8px">📝 Text overlay</h3>' +
-      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">' +
-      '<label>Overlay text<br><input id="ve-text" type="text" maxlength="100" placeholder="Add title or watermark" style="width:100%"></label>' +
-      '<label>Text position<br><select id="ve-textpos" style="width:100%"><option value="bottom">Bottom</option><option value="center">Center</option><option value="top">Top</option></select></label>' +
-      '</div>' +
       '<h3 style="margin:16px 0 8px">🎨 Filters</h3>' +
       '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">' +
       '<label>Brightness<br><input id="ve-br" type="range" min="50" max="150" value="100" style="width:100%"></label>' +
@@ -199,7 +191,7 @@
       '</div>' +
       '<div id="ve-msg" style="margin-top:12px;font-size:13px"></div>' +
       '<div id="ve-out" style="margin-top:12px"></div>' +
-      '<p style="font-size:12px;opacity:.7;margin:12px 0 0">Note: export runs in real time (a 1-minute clip takes about 1 minute at 1x), so keep this tab open and visible until it finishes. Crop ratio, text overlay, filters and bitrate options are applied during export. Browser codec support varies.</p>' +
+      '<p style="font-size:12px;opacity:.7;margin:12px 0 0">Note: export runs in real time (a 1-minute clip takes about 1 minute at 1x), so keep this tab open and visible until it finishes. Filters work in Chrome, Edge and Firefox.</p>' +
       '</div></div>' +
       '<div id="ve-pane-learn" hidden>' + learnHTML() + '</div>';
 
@@ -251,22 +243,17 @@
     function liveFilter() { v.style.filter = filterStr(); }
     function size() {
       var rot = parseInt($('ve-rot').value, 10), tall = parseInt($('ve-res').value, 10);
-      var w0 = rot % 180 ? v.videoHeight : v.videoWidth, h0 = rot % 180 ? v.videoWidth : v.videoHeight;
-      var ratio = $('ve-ratio').value, target = 0;
-      if (ratio !== 'original') { var parts = ratio.split(':'); target = parseFloat(parts[0]) / parseFloat(parts[1]); }
-      if (target) { if (w0 / h0 > target) w0 = h0 * target; else h0 = w0 / target; }
-      var k = 1; if (tall && h0 > tall) k = tall / h0;
-      return { rot: rot, W: Math.max(2, Math.round(w0 * k / 2) * 2), H: Math.max(2, Math.round(h0 * k / 2) * 2), crop: target };
+      var w0 = rot % 180 ? v.videoHeight : v.videoWidth, h0 = rot % 180 ? v.videoWidth : v.videoHeight, k = 1;
+      if (tall && h0 > tall) k = tall / h0;
+      return { rot: rot, W: Math.max(2, Math.round(w0 * k / 2) * 2), H: Math.max(2, Math.round(h0 * k / 2) * 2) };
     }
     function paint(ctx, z) {
-      ctx.filter = filterStr(); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, z.W, z.H);
+      ctx.filter = filterStr();
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, z.W, z.H);
       ctx.save(); ctx.translate(z.W / 2, z.H / 2); ctx.rotate(z.rot * Math.PI / 180);
       var dw = z.rot % 180 ? z.H : z.W, dh = z.rot % 180 ? z.W : z.H;
-      var sw = v.videoWidth, sh = v.videoHeight, crop = z.crop ? (z.rot % 180 ? 1 / z.crop : z.crop) : 0;
-      if (crop) { var sourceAR = sw / sh; if (sourceAR > crop) { var nw = sh * crop; ctx.drawImage(v, (sw - nw) / 2, 0, nw, sh, -dw / 2, -dh / 2, dw, dh); } else { var nh = sw / crop; ctx.drawImage(v, 0, (sh - nh) / 2, sw, nh, -dw / 2, -dh / 2, dw, dh); } }
-      else ctx.drawImage(v, -dw / 2, -dh / 2, dw, dh);
-      ctx.restore(); ctx.filter = 'none';
-      var txt = $('ve-text').value.trim(); if (txt) { ctx.save(); var fs = Math.max(22, Math.round(z.W / 24)); ctx.font = 'bold ' + fs + 'px Arial, sans-serif'; ctx.textAlign = 'center'; ctx.lineJoin = 'round'; ctx.lineWidth = Math.max(3, fs / 9); ctx.strokeStyle = 'rgba(0,0,0,.75)'; ctx.fillStyle = '#fff'; var pos = $('ve-textpos').value, y = pos === 'top' ? fs + 18 : pos === 'center' ? z.H / 2 : z.H - fs - 24; ctx.strokeText(txt, z.W / 2, y); ctx.fillText(txt, z.W / 2, y); ctx.restore(); }
+      ctx.drawImage(v, -dw / 2, -dh / 2, dw, dh);
+      ctx.restore();
     }
     function seek(t) {
       return new Promise(function (ok) {
@@ -299,7 +286,7 @@
     $('ve-reset').addEventListener('click', function () {
       if (busy) return;
       $('ve-s').value = 0; $('ve-e').value = dur().toFixed(1);
-      $('ve-spd').value = '1'; $('ve-rot').value = '0'; $('ve-res').value = '0'; $('ve-ratio').value = 'original'; $('ve-bitrate').value = '5000000'; $('ve-text').value = ''; $('ve-textpos').value = 'bottom';
+      $('ve-spd').value = '1'; $('ve-rot').value = '0'; $('ve-res').value = '0';
       $('ve-br').value = 100; $('ve-co').value = 100; $('ve-sa').value = 100;
       $('ve-bw').checked = false; $('ve-mute').checked = false;
       liveFilter(); clearOut(); msg.textContent = '';
@@ -338,7 +325,7 @@
       var types = ['video/mp4;codecs=avc1.42E01E,mp4a.40.2', 'video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm'], mime = '';
       for (var i = 0; i < types.length; i++) { if (MediaRecorder.isTypeSupported(types[i])) { mime = types[i]; break; } }
       var rec, chunks = [];
-      try { rec = new MediaRecorder(stream, mime ? { mimeType: mime, videoBitsPerSecond: parseInt($('ve-bitrate').value, 10) || 5000000 } : { videoBitsPerSecond: parseInt($('ve-bitrate').value, 10) || 5000000 }); }
+      try { rec = new MediaRecorder(stream, mime ? { mimeType: mime, videoBitsPerSecond: 5000000 } : undefined); }
       catch (err) { say('Could not start the recorder in this browser'); busy = false; goBtn.disabled = false; return; }
       var ext = /mp4/.test(rec.mimeType || mime) ? 'mp4' : 'webm';
       rec.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
@@ -375,66 +362,6 @@
       busy = false; goBtn.disabled = false;
     });
   };
-
-  /* Additional real browser-native tools: merger and thumbnail exporter.
-     They intentionally use MediaRecorder/canvas so files stay on-device. */
-  function makeExtraTool(id, name, desc, icon, renderFn) {
-    var extra = { cat: 'video', id: id, name: name, title: name, desc: desc, icon: icon };
-    Object.keys(tpl).forEach(function (k) {
-      if (k === 'id' || k === 'render' || k === 'cat') return;
-      var v = tpl[k];
-      if (typeof v === 'string') {
-        if (/^(name|title|label)$/i.test(k)) extra[k] = name;
-        else if (/desc|sub|summary/i.test(k)) extra[k] = desc;
-        else if (/ico|emoji/i.test(k)) extra[k] = icon;
-        else if (/tag|keyword|search/i.test(k)) extra[k] = 'video editing ' + id + ' ' + v;
-        else extra[k] = v;
-      } else if (Array.isArray(v)) extra[k] = v.slice();
-      else if (v !== undefined && typeof v !== 'function' && typeof v !== 'object') extra[k] = v;
-    });
-    extra.cat = 'video'; extra.render = renderFn; TOOLS.push(extra);
-  }
-  function chooseRecorderType() {
-    var candidates = ['video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];
-    for (var i=0;i<candidates.length;i++) if (MediaRecorder.isTypeSupported(candidates[i])) return candidates[i];
-    return '';
-  }
-  makeExtraTool('video-merger', 'Video Merger', 'Combine multiple local clips into one video file in sequence. Browser-supported output formats.', '🔗', function (el) {
-    el.innerHTML = '<div class="card"><p>Select two or more video clips. They are merged in the order selected, with local browser processing. Audio is included when browser support allows.</p>' +
-      '<input id="vm-files" type="file" accept="video/*" multiple><div id="vm-list" style="margin:10px 0"></div>' +
-      '<button class="btn" id="vm-start" disabled>Merge & Export</button><button class="btn ghost" id="vm-clear" type="button">Clear</button>' +
-      '<div id="vm-msg" style="margin-top:10px"></div><div id="vm-out" style="margin-top:10px"></div></div>';
-    var $=function(id){return el.querySelector('#'+id);}, files=[], urls=[], outUrl=null, busy=false;
-    function cleanup(){ urls.forEach(function(u){URL.revokeObjectURL(u);});urls=[];if(outUrl){URL.revokeObjectURL(outUrl);outUrl=null;}}
-    $('vm-files').addEventListener('change',function(e){files=Array.from(e.target.files||[]);$('vm-start').disabled=files.length<2; $('vm-list').innerHTML=files.map(function(f,i){return '<div style="padding:5px 0">'+(i+1)+'. '+esc(f.name)+' · '+(f.size/1048576).toFixed(1)+' MB</div>';}).join('');$('vm-msg').textContent='';$('vm-out').innerHTML='';cleanup();});
-    $('vm-clear').addEventListener('click',function(){if(busy)return;files=[];$('vm-files').value='';$('vm-list').innerHTML='';$('vm-start').disabled=true;$('vm-msg').textContent='';$('vm-out').innerHTML='';cleanup();});
-    $('vm-start').addEventListener('click',async function(){
-      if(busy||files.length<2)return;if(!window.MediaRecorder||!HTMLCanvasElement.prototype.captureStream){$('vm-msg').textContent='This browser does not support video recording. Try updated Chrome or Edge.';return;}
-      busy=true;$('vm-start').disabled=true;$('vm-msg').textContent='Preparing clips…';$('vm-out').innerHTML='';cleanup();
-      var vids=[], canvas=document.createElement('canvas'), ctx=canvas.getContext('2d'), stream, recorder, chunks=[], audioContext=null, audioDestination=null, audioSources=[];
-      try{
-        for(var i=0;i<files.length;i++){var v=document.createElement('video');v.preload='auto';v.muted=false;v.playsInline=true;v.src=URL.createObjectURL(files[i]);urls.push(v.src);await new Promise(function(resolve,reject){v.onloadedmetadata=resolve;v.onerror=function(){reject(new Error('Could not read clip '+(i+1)+'. Unsupported file format?'));};});vids.push(v);}
-        canvas.width=Math.max(2,Math.min(1920,vids.reduce(function(m,v){return Math.max(m,v.videoWidth||0);},0)));canvas.height=Math.max(2,Math.min(1080,vids.reduce(function(m,v){return Math.max(m,v.videoHeight||0);},0)));
-        stream=canvas.captureStream(30);
-        try{audioContext=new (window.AudioContext||window.webkitAudioContext)();await audioContext.resume();audioDestination=audioContext.createMediaStreamDestination();vids.forEach(function(v){var src=audioContext.createMediaElementSource(v);src.connect(audioDestination);audioSources.push(src);});audioDestination.stream.getAudioTracks().forEach(function(t){stream.addTrack(t);});}catch(ae){$('vm-msg').textContent='Merging video (audio may be unavailable in this browser)…';}
-        var mime=chooseRecorderType();recorder=new MediaRecorder(stream,mime?{mimeType:mime,videoBitsPerSecond:5000000}:undefined);recorder.ondataavailable=function(e){if(e.data&&e.data.size)chunks.push(e.data);};
-        var finished=new Promise(function(resolve){recorder.onstop=resolve;});recorder.start(250);
-        var stopDraw=false;function draw(){if(stopDraw)return;ctx.fillStyle='#000';ctx.fillRect(0,0,canvas.width,canvas.height);var active=vids.find(function(v){return !v.paused&&!v.ended;});if(active){var ar=active.videoWidth/active.videoHeight, cw=canvas.width,ch=canvas.height;if(cw/ch>ar){cw=ch*ar;}else{ch=cw/ar;}ctx.drawImage(active,(canvas.width-cw)/2,(canvas.height-ch)/2,cw,ch);}requestAnimationFrame(draw);}draw();
-        for(var n=0;n<vids.length;n++){var v=vids[n];v.currentTime=0;await new Promise(function(resolve){if(v.readyState>=2)resolve();else v.onloadeddata=resolve;});$('vm-msg').textContent='Merging clip '+(n+1)+' of '+vids.length+' — please keep this tab open.';await new Promise(function(resolve,reject){v.onended=resolve;v.onerror=function(){reject(new Error('Playback failed for clip '+(n+1)));};v.play().catch(reject);});v.pause();}
-        stopDraw=true;recorder.stop();await finished;vids.forEach(function(v){v.pause();v.src='';});if(audioContext)try{await audioContext.close();}catch(_e){}
-        var blob=new Blob(chunks,{type:(recorder.mimeType||mime||'video/webm').split(';')[0]});outUrl=URL.createObjectURL(blob);var ext=/mp4/i.test(blob.type)?'mp4':'webm';$('vm-out').innerHTML='<video controls playsinline style="width:100%;max-height:360px;background:#000;border-radius:10px"></video><p><a class="btn" id="vm-download">⬇ Download merged.'+ext+' · '+(blob.size/1048576).toFixed(1)+' MB</a></p>';$('vm-out').querySelector('video').src=outUrl;$('vm-download').href=outUrl;$('vm-download').download='merged-video.'+ext;$('vm-msg').textContent='Merge complete ✓';
-      }catch(err){if(recorder&&recorder.state!=='inactive')try{recorder.stop();}catch(_e2){}$('vm-msg').textContent='Merge failed: '+(err&&err.message?err.message:'browser processing error');}
-      finally{busy=false;$('vm-start').disabled=files.length<2;}
-    });
-  });
-  makeExtraTool('video-thumbnail', 'Video Thumbnail Maker', 'Load a local video, seek to any frame, preview it and save a thumbnail as JPG or PNG.', '🖼️', function (el) {
-    el.innerHTML='<div class="card"><p>Choose a video, move the time slider to the frame you want, and download it as an image. Processing stays on this device.</p><input id="vt-file" type="file" accept="video/*"><video id="vt-video" controls playsinline style="display:block;width:100%;max-height:360px;background:#000;border-radius:10px;margin-top:10px" hidden></video><div id="vt-controls" hidden style="margin-top:10px"><label>Frame time: <span id="vt-time">0.00</span> sec</label><input id="vt-range" type="range" min="0" max="0" step="0.01" value="0" style="width:100%"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="vt-jpg">Download JPG</button><button class="btn ghost" id="vt-png">Download PNG</button></div><canvas id="vt-canvas" style="display:none"></canvas></div><div id="vt-msg" style="margin-top:8px"></div></div>';
-    var $=function(id){return el.querySelector('#'+id);},v=$('vt-video'),url=null;
-    $('vt-file').addEventListener('change',function(e){var f=e.target.files&&e.target.files[0];if(!f)return;if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(f);v.src=url;v.hidden=false;v.onloadedmetadata=function(){$('vt-controls').hidden=false;$('vt-range').max=v.duration;$('vt-range').value=0;$('vt-time').textContent='0.00';$('vt-msg').textContent='Loaded '+v.videoWidth+'×'+v.videoHeight+' · '+v.duration.toFixed(2)+' sec';};});
-    $('vt-range').addEventListener('input',function(){v.currentTime=parseFloat(this.value)||0;$('vt-time').textContent=(parseFloat(this.value)||0).toFixed(2);});
-    function save(type,ext){if(!v.videoWidth)return;$('vt-msg').textContent='Capturing frame…';var c=$('vt-canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0,c.width,c.height);c.toBlob(function(blob){if(!blob){$('vt-msg').textContent='Image export is not supported for this frame.';return;}var a=document.createElement('a'),u=URL.createObjectURL(blob);a.href=u;a.download='video-thumbnail.'+ext;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},1500);$('vt-msg').textContent='Thumbnail downloaded ✓';},type,type==='image/jpeg'?0.92:undefined);}
-    $('vt-jpg').addEventListener('click',function(){save('image/jpeg','jpg');});$('vt-png').addEventListener('click',function(){save('image/png','png');});
-  });
 
   TOOLS.push(tool);
 })();
