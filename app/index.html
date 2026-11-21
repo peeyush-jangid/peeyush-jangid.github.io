@@ -1191,10 +1191,15 @@ a.card.file{position:relative;padding-right:80px}
   </div>
 </section>
 <section class="view" id="v-tools">
-  <h2>HVAC tools</h2>
-  <p class="note">Free calculators for everyone. No sign-in needed.</p>
+  <h2>Tools</h2>
+  <p class="note">33 free tools: calculators, PDF, resume, HVAC, Excel, AI aur video. Sign-in ki zaroorat nahi.</p>
   <button type="button" class="tbtn alt" id="tlBack" hidden>← All tools</button>
-  <div id="tlList"><h3 class="tl-h">Basic</h3><div class="tl-grid"><button type="button" class="tl-item" data-tool="t1"><b>AC tonnage</b><small>Room ke hisaab se AC size</small></button><button type="button" class="tl-item" data-tool="t2"><b>BTU / kW / TR</b><small>Unit converter</small></button><button type="button" class="tl-item" data-tool="t3"><b>Duct size</b><small>CFM se duct size</small></button><button type="button" class="tl-item" data-tool="t4"><b>Electrical details</b><small>Current, MCB, cable size</small></button></div>
+  <div class="seg" id="tlTabs"><button type="button" class="on" data-tt="web">All tools</button><button type="button" data-tt="hvac">HVAC Pro toolkit</button></div>
+  <div id="tlWeb">
+    <iframe id="tlFrame" title="Peeyush Tools Hub" data-src="../pj-tools.html" loading="lazy" scrolling="no"></iframe>
+    <p class="note" style="text-align:center"><a href="../pj-tools.html" target="_blank" rel="noopener">Tool nahi khul raha? Website par kholein &#8599;</a></p>
+  </div>
+  <div id="tlList" hidden><h3 class="tl-h">Basic</h3><div class="tl-grid"><button type="button" class="tl-item" data-tool="t1"><b>AC tonnage</b><small>Room ke hisaab se AC size</small></button><button type="button" class="tl-item" data-tool="t2"><b>BTU / kW / TR</b><small>Unit converter</small></button><button type="button" class="tl-item" data-tool="t3"><b>Duct size</b><small>CFM se duct size</small></button><button type="button" class="tl-item" data-tool="t4"><b>Electrical details</b><small>Current, MCB, cable size</small></button></div>
   <h3 class="tl-h">Pro toolkit</h3><div class="tl-grid"><button type="button" class="tl-item" data-tool="p1"><b>Cooling load</b><small>Detailed heat load + fresh air</small></button><button type="button" class="tl-item" data-tool="p2"><b>Psychrometrics</b><small>Wet bulb, dew point, enthalpy</small></button><button type="button" class="tl-item" data-tool="p3"><b>Chilled water pipe</b><small>Pipe aur pump sizing</small></button><button type="button" class="tl-item" data-tool="p4"><b>AC cost compare</b><small>Do ACs ka lifetime cost</small></button></div><h3 class="tl-h">Engineer suite</h3><div class="tl-grid"><button type="button" class="tl-item" data-tool="q1"><b>Duct static pressure</b><small>Pa + fan kW</small></button><button type="button" class="tl-item" data-tool="q2"><b>EER / COP / kW/TR</b><small>Efficiency converter</small></button><button type="button" class="tl-item" data-tool="q3"><b>VFD savings</b><small>Fan & pump affinity laws</small></button><button type="button" class="tl-item" data-tool="q4"><b>BOQ maker</b><small>Quotation + CSV export</small></button></div></div>
 <section class="tpanel" id="tp-t1" hidden>
     <h2>Which AC tonnage do I need?</h2>
@@ -2184,7 +2189,7 @@ function calcTco(){
 calcLoad();
 window.calcLoad=calcLoad;window.calcPsy=calcPsy;window.calcPipe=calcPipe;window.calcTco=calcTco;})();
 (function(){var list=document.getElementById('tlList'),back=document.getElementById('tlBack'),ps=document.querySelectorAll('#v-tools .tpanel');
-function open(id){list.hidden=!!id;back.hidden=!id;ps.forEach(function(p){p.hidden=p.id!=='tp-'+id});scrollTo(0,0)}
+function open(id){list.hidden=!!id||!document.querySelector('#tlTabs [data-tt=hvac].on');back.hidden=!id;ps.forEach(function(p){p.hidden=p.id!=='tp-'+id});scrollTo(0,0)}
 list.addEventListener('click',function(e){var b=e.target.closest('[data-tool]');if(b)open(b.dataset.tool)});
 back.addEventListener('click',function(){open('')});
 addEventListener('hashchange',function(){open('')});})();
@@ -2250,114 +2255,77 @@ items.forEach(n=>addRow(n));
 calcDuct2();
 window.calcDuct2=calcDuct2;window.eff=eff;window.calcVfd=calcVfd;window.w2=w2;window.words=words;window.addRow=addRow;window.boq=boq;window.csv=csv;})();
 </script>
+
+
+<style id="pj-desktop-and-tools-fix">
+/* How I work: proper 2x2 grid on wide screens (no empty right side) */
+@media(min-width:760px){
+  #v-home.on{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 16px;align-items:stretch}
+  #v-home.on>*{grid-column:1/-1;margin-bottom:0}
+  #v-home.on>.tl{grid-column:auto;width:auto !important;max-width:none !important;margin:0 !important;min-height:116px !important;display:flex !important}
+  #v-home.on>h2{margin:30px 0 2px}
+  #v-home.on>.stats,#v-home.on>.btns{max-width:none !important}
+}
+/* Tools tab */
+#tlFrame{display:block;width:100%;height:900px;border:0;background:transparent;color-scheme:light dark}
+#tlTabs{position:sticky;top:calc(var(--top,0px) + 6px);z-index:5}
+#v-tools.in-tool #tlTabs{display:none}
+@media(min-width:760px){#v-tools .tl-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}}
+</style>
 <script>
 (function(){
-const $=id=>document.getElementById(id);
-const fmt=(n,d=0)=>(+n).toLocaleString('en-IN',{maximumFractionDigits:d});
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const kv=a=>'<div class="kv">'+a.map(x=>`<div><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')+'</div>';
-const big=t=>`<strong class="big">${t}</strong>`;
-const today=new Date().toISOString().slice(0,10);
-const A=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'],B=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
-const w2=n=>n<20?A[n]:B[Math.floor(n/10)]+(n%10?' '+A[n%10]:'');
-const w3=n=>(n>=100?A[Math.floor(n/100)]+' Hundred'+(n%100?' ':''):'')+(n%100?w2(n%100):'');
-function words(n){if(!n)return 'Zero';const p=[];[[1e7,'Crore'],[1e5,'Lakh'],[1e3,'Thousand']].forEach(d=>{if(n>=d[0]){p.push(words(Math.floor(n/d[0]))+' '+d[1]);n%=d[0]}});if(n)p.push(w3(n));return p.join(' ')}
-function printDoc(title,body){
-  const h=`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><style>body{font:14px Arial,sans-serif;margin:24px;color:#111}table{width:100%;border-collapse:collapse;margin:12px 0}th,td{border:1px solid #999;padding:6px;text-align:left}.r{text-align:right}h1{margin:0 0 4px}.m{color:#555}</style>${body}<script>onload=function(){setTimeout(print,300)}<\/script>`;
-  const w=open('','_blank');
-  if(w){w.document.write(h);w.document.close()}
-  else{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([h],{type:'text/html'}));a.download=title+'.html';a.click()}
-}
-const GST=[[5,'5%'],[12,'12%'],[18,'18%'],[28,'28%']];
-/* field: [key,label,type(n|t|d|x|s),default,options] */
-const T=[
-{id:'age',c:0,n:'Age calculator',d:'Exact age in years, months, days',f:[['dob','Date of birth','d',''],['on','Age on date','d',today]],
- run:v=>{const a=new Date(v.dob),b=new Date(v.on);if(isNaN(a)||isNaN(b)||a>b)return 'Please enter valid dates.';
-  let y=b.getFullYear()-a.getFullYear(),m=b.getMonth()-a.getMonth(),d=b.getDate()-a.getDate();
-  if(d<0){m--;d+=new Date(b.getFullYear(),b.getMonth(),0).getDate()}if(m<0){y--;m+=12}
-  const nx=new Date(b.getFullYear(),a.getMonth(),a.getDate());if(nx<b)nx.setFullYear(b.getFullYear()+1);
-  return big(`${y} years ${m} months ${d} days`)+kv([['Total days',fmt(Math.round((b-a)/864e5))],['Next birthday in',Math.ceil((nx-b)/864e5)+' days']])}},
-{id:'dd',c:0,n:'Date difference',d:'Days between two dates',f:[['a','From','d',today],['b','To','d',today]],
- run:v=>{const a=new Date(v.a),b=new Date(v.b);if(isNaN(a)||isNaN(b))return 'Enter both dates.';const d=Math.abs(Math.round((b-a)/864e5));
-  return big(fmt(d)+' days')+kv([['Weeks',(d/7).toFixed(1)],['Months (approx)',(d/30.4375).toFixed(1)],['Years (approx)',(d/365.25).toFixed(2)]])}},
-{id:'emi',c:0,n:'EMI / Loan calculator',d:'Monthly EMI, total interest',f:[['amt','Loan amount (₹)','n',500000],['rate','Interest rate (% per year)','n',9],['ten','Tenure','n',5],['u','Tenure unit','s','y',[['y','Years'],['m','Months']]]],
- run:v=>{const n=v.u==='y'?v.ten*12:v.ten,r=v.rate/1200;if(!(n>0&&v.amt>0))return 'Enter amount and tenure.';
-  const e=r?v.amt*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1):v.amt/n,t=e*n;
-  return big('EMI ₹'+fmt(e))+kv([['Total interest','₹'+fmt(t-v.amt)],['Total payment','₹'+fmt(t)],['Interest share',((t-v.amt)/t*100).toFixed(0)+'%']])}},
-{id:'gst',c:0,n:'GST calculator',d:'Add or remove GST',f:[['amt','Amount (₹)','n',1000],['r','GST rate','s','18',GST],['m','Mode','s','add',[['add','Add GST'],['rem','Remove GST (amount includes GST)']]]],
- run:v=>{const r=+v.r,g=v.m==='add'?v.amt*r/100:v.amt-v.amt/(1+r/100),base=v.m==='add'?v.amt:v.amt-g;
-  return big('Total ₹'+fmt(base+g,2))+kv([['Base amount','₹'+fmt(base,2)],['GST','₹'+fmt(g,2)],['CGST / SGST each','₹'+fmt(g/2,2)]])}},
-{id:'pct',c:0,n:'Percentage calculator',d:'Percent of, what %, % change',f:[['m','Type','s','1',[['1','A% of B'],['2','A is what % of B'],['3','% change from A to B']]],['a','A','n',20],['b','B','n',500]],
- run:v=>{const a=v.a,b=v.b;if(v.m==='1')return big(fmt(a*b/100,2))+`${a}% of ${fmt(b)}`;
-  if(v.m==='2')return b?big((a/b*100).toFixed(2)+'%')+`${fmt(a)} as a share of ${fmt(b)}`:'B cannot be 0.';
-  return a?big(((b-a)/a*100).toFixed(2)+'%')+(b>=a?'increase':'decrease')+` from ${fmt(a)} to ${fmt(b)}`:'A cannot be 0.'}},
-{id:'sal',c:0,n:'Salary (CTC to in-hand)',d:'Approximate monthly take-home',f:[['ctc','Annual CTC (₹)','n',360000],['b','Basic (% of CTC)','n',40],['pt','Professional tax / month (₹)','n',200]],
- run:v=>{const m=v.ctc/12,basic=m*v.b/100,pf=basic*.12,net=m-pf-pf-v.pt;
-  return big('≈ ₹'+fmt(net)+' per month')+kv([['Monthly CTC','₹'+fmt(m)],['Basic','₹'+fmt(basic)],['Employee PF (12% of basic)','₹'+fmt(pf)],['Employer PF (12%)','₹'+fmt(pf)]])+'<p class="note">Approximate. Income tax (TDS), gratuity and bonus are not included.</p>'}},
-{id:'wrd',c:0,n:'Number to words',d:'Indian system: lakh, crore',f:[['n','Amount (₹)','n',125000.5]],
- run:v=>{const r=Math.floor(Math.abs(v.n)),p=Math.round((Math.abs(v.n)-r)*100);return big('Rupees '+words(r)+(p?' and '+w2(p)+' Paise':'')+' only')+'₹'+fmt(v.n,2)}},
-{id:'att',c:0,n:'Attendance & salary cut',d:'Attendance % and pay for the month',f:[['days','Days in month','n',30],['pr','Days present','n',26],['pl','Paid leave / holidays','n',2],['sal','Monthly salary (₹)','n',25000]],
- run:v=>{const paid=Math.min(v.days,v.pr+v.pl),pay=v.sal/v.days*paid;
-  return big('Pay ₹'+fmt(pay))+kv([['Per day','₹'+fmt(v.sal/v.days,2)],['Paid days',paid+' of '+v.days],['Attendance',(v.pr/v.days*100).toFixed(1)+'%'],['Deduction','₹'+fmt(v.sal-pay)]])}},
-{id:'ach',c:1,n:'Room CFM (air changes)',d:'CFM from room size and ACH',f:[['l','Length (m)','n',8],['w','Width (m)','n',6],['h','Height (m)','n',3],['ach','Air changes per hour','n',6]],
- run:v=>{const vol=v.l*v.w*v.h,m3h=vol*v.ach;return big(fmt(m3h*0.5886)+' CFM')+kv([['Room volume',fmt(vol,1)+' m³'],['Airflow',fmt(m3h)+' m³/h'],['Airflow',fmt(m3h/3.6)+' L/s']])+'<p class="note">Typical ACH: office 6, toilet 10, kitchen 30, hospital OT 20.</p>'}},
-{id:'vel',c:1,n:'Air velocity in duct',d:'FPM / m/s from CFM and duct size',f:[['cfm','Airflow (CFM)','n',1000],['w','Duct width (inch)','n',16],['h','Duct height (inch)','n',10]],
- run:v=>{if(!(v.w>0&&v.h>0))return 'Enter duct size.';const fpm=v.cfm/(v.w*v.h/144);return big(fmt(fpm)+' FPM')+kv([['Velocity',(fpm*0.00508).toFixed(2)+' m/s'],['Area',fmt(v.w*v.h)+' sq inch']])+`<p class="note">${fpm>2000?'High: noise risk, consider a bigger duct.':fpm<500?'Low: duct is oversized.':'Within the usual comfort range.'}</p>`}},
-{id:'inv',c:2,n:'Invoice maker',d:'Printable GST invoice',f:[['fr','Your business name','t','Peeyush Jangid'],['to','Bill to','t',''],['no','Invoice no.','t','001'],['dt','Date','d',today],['gst','GST (%)','n',18],['it','Items: one per line as  description | qty | rate','x','AC installation | 2 | 3500\nCopper piping | 1 | 4200']],
- pr:(v,rows)=>{const L=v.it.split('\n').map(s=>s.split('|').map(x=>x.trim())).filter(r=>r[0]);let sub=0;
-  const tr=L.map((r,i)=>{const q=+r[1]||1,p=+r[2]||0,a=q*p;sub+=a;return `<tr><td>${i+1}</td><td>${esc(r[0])}</td><td class=r>${q}</td><td class=r>${fmt(p,2)}</td><td class=r>${fmt(a,2)}</td></tr>`}).join('');
-  const g=sub*v.gst/100;return ['Invoice '+v.no,`<h1>${esc(v.fr)}</h1><p class=m>Tax invoice no. ${esc(v.no)} · ${esc(v.dt)}</p><p>Bill to: <b>${esc(v.to)}</b></p><table><tr><th>#</th><th>Description</th><th>Qty</th><th>Rate</th><th>Amount</th></tr>${tr}</table><p class=r>Subtotal ₹${fmt(sub,2)}<br>GST ${v.gst}% ₹${fmt(g,2)}<br><b>Total ₹${fmt(sub+g,2)}</b></p><p class=m>Rupees ${words(Math.round(sub+g))} only</p>`]}},
-{id:'slip',c:2,n:'Salary slip maker',d:'Printable monthly salary slip',f:[['co','Company name','t',''],['nm','Employee name','t',''],['ds','Designation','t',''],['mo','Month','t','November 2026'],['ba','Basic (₹)','n',15000],['hr','HRA (₹)','n',6000],['ot','Other allowance (₹)','n',4000],['pf','PF (₹)','n',1800],['dd','Other deductions (₹)','n',200]],
- pr:v=>{const g=v.ba+v.hr+v.ot,d=v.pf+v.dd,r=(a,b)=>`<tr><td>${a}</td><td class=r>${fmt(b,2)}</td></tr>`;
-  return ['Salary slip '+v.mo,`<h1>${esc(v.co||'Salary Slip')}</h1><p class=m>Salary slip for ${esc(v.mo)}</p><p>Employee: <b>${esc(v.nm)}</b> · ${esc(v.ds)}</p><table><tr><th>Earnings</th><th>₹</th></tr>${r('Basic',v.ba)}${r('HRA',v.hr)}${r('Other allowance',v.ot)}${r('<b>Gross</b>',g)}</table><table><tr><th>Deductions</th><th>₹</th></tr>${r('PF',v.pf)}${r('Other',v.dd)}${r('<b>Total</b>',d)}</table><h2>Net pay: ₹${fmt(g-d,2)}</h2><p class=m>Rupees ${words(Math.round(g-d))} only</p>`]}},
-{id:'xl',c:2,n:'Excel formulas',d:'Common formulas, tap to copy',ref:[
-['SUM / AVERAGE','=SUM(B2:B50)   =AVERAGE(B2:B50)'],['IF','=IF(C2>=50,"Pass","Fail")'],['VLOOKUP','=VLOOKUP(A2,Sheet2!A:C,3,FALSE)'],['XLOOKUP','=XLOOKUP(A2,Sheet2!A:A,Sheet2!C:C,"Not found")'],['INDEX + MATCH','=INDEX(C:C,MATCH(A2,A:A,0))'],['SUMIF / SUMIFS','=SUMIF(A:A,"Pipe",C:C)   =SUMIFS(D:D,A:A,"Duct",B:B,">100")'],['COUNTIF','=COUNTIF(B:B,"Done")'],['IFERROR','=IFERROR(A2/B2,0)'],['ROUND','=ROUND(A2*1.18,2)'],['TEXT (date)','=TEXT(A2,"dd-mmm-yyyy")'],['DATEDIF','=DATEDIF(A2,TODAY(),"Y")'],['TEXTJOIN','=TEXTJOIN(", ",TRUE,A2:A10)'],['SUMPRODUCT (qty x rate)','=SUMPRODUCT(C2:C20,D2:D20)'],['Remove extra spaces','=TRIM(A2)'],['Amount with GST','=B2*(1+18%)']]},
-{id:'mail',c:2,n:'Email templates',d:'Ready emails, tap to copy',ref:[
-['Leave application','Subject: Leave application\n\nDear Sir/Madam,\nI request leave from [date] to [date] due to [reason]. I will complete my pending work before leaving.\nThank you.\n[Name]'],['Job application','Subject: Application for HVAC Project Engineer\n\nDear Hiring Manager,\nI am applying for the HVAC Project Engineer role. I have hands-on experience in site supervision, AutoCAD 2D and pre-commissioning. My CV is attached.\nRegards,\n[Name] · [Phone]'],['Interview follow-up','Subject: Thank you for the interview\n\nDear [Name],\nThank you for the opportunity to interview for [role]. I remain very interested and look forward to your update.\nRegards,\n[Name]'],['Resignation','Subject: Resignation\n\nDear [Manager],\nI am resigning from my position as [role]. My last working day will be [date] as per my notice period. I will support a smooth handover.\nRegards,\n[Name]'],['Payment reminder','Subject: Payment reminder: Invoice [no]\n\nDear [Name],\nThis is a gentle reminder that invoice [no] for ₹[amount] was due on [date]. Kindly arrange the payment at the earliest.\nRegards,\n[Name]'],['Site visit request','Subject: Request for site visit\n\nDear Sir,\nWe would like to visit the site on [date] to review the HVAC work and drawings. Please confirm a suitable time.\nRegards,\n[Name]']]},
-{id:'iq',c:3,n:'Interview questions',d:'HVAC, Banking, KYC & BPO',ref:[
-['HVAC: What is 1 TR?','12,000 BTU/hr, which is 3.517 kW of heat removal.'],['HVAC: VRV vs split AC?','VRV uses an inverter compressor and varies refrigerant flow to run many indoor units from one outdoor unit. Splits are one-to-one.'],['HVAC: Normal duct velocity?','Main ducts about 1000-2000 FPM (5-10 m/s), branches 600-1000 FPM. Lower for quiet spaces.'],['HVAC: What is pre-commissioning?','Checks before start-up: pressure/leak tests, vacuuming, flushing, electrical insulation tests, alignment and documentation.'],['HVAC: Why vacuum refrigerant piping?','To remove moisture and non-condensable gases before charging, otherwise efficiency and compressor life suffer.'],['HVAC: Why insulate duct and pipe?','To stop condensation and reduce heat gain or loss.'],['HVAC: Typical chilled water delta-T?','About 5-5.5 °C, for example 7 °C supply and 12 °C return.'],['Banking: KYC full form?','Know Your Customer: verifying a customer\'s identity and address.'],['Banking: NEFT, RTGS, IMPS?','NEFT is batch transfer, RTGS is real-time for large amounts (₹2 lakh+), IMPS is instant 24x7.'],['Banking: What is CIBIL score?','A 300-900 credit score showing repayment behaviour. 750+ is considered good.'],['Banking: Repo rate?','The rate at which RBI lends short-term money to banks.'],['KYC: Valid documents?','Officially valid documents include Aadhaar, passport, driving licence, voter ID, and PAN as additional proof.'],['KYC: What is CKYC?','A central KYC record so a customer completes KYC once for many financial institutions.'],['BPO: Tell me about yourself','Give a 30-second summary: education, skills, relevant experience, and why this role fits.'],['BPO: Handling an angry customer?','Listen without interrupting, empathise, apologise, fix or escalate, then follow up.'],['BPO: What is AHT?','Average Handle Time: total talk + hold + after-call work divided by calls handled.']]}
-];
-const CATS=['Calculators & Utilities','Engineering & HVAC (more)','Office & Productivity','Career & Jobs'];
-const list=$('tlList'),back=$('tlBack'),host=document.querySelector('#v-tools > a.btn.wa');
-if(!list||!host)return;
-const st=document.createElement('style');
-st.textContent='#v-tools textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:11px;background:var(--panel2);color:var(--ink);font:inherit;font-size:16px}#v-tools a.tl-item{text-decoration:none}#v-tools .xr{padding:12px;margin-top:8px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);cursor:pointer}#v-tools .xr p{margin:4px 0;white-space:pre-wrap;font-size:.85rem}#v-tools .xr small{color:var(--mute);font-size:.72rem}';
-document.head.appendChild(st);
-const fld=(t,f)=>{const k=f[0],l=f[1],ty=f[2],df=f[3],op=f[4],id=`x_${t.id}_${k}`;let i;
-  if(ty==='s')i=`<select id="${id}">${op.map(o=>`<option value="${o[0]}"${String(o[0])===String(df)?' selected':''}>${o[1]}</option>`).join('')}</select>`;
-  else if(ty==='x')i=`<textarea id="${id}" rows="4">${esc(df||'')}</textarea>`;
-  else i=`<input id="${id}" type="${ty==='n'?'number':ty==='d'?'date':'text'}" value="${esc(df==null?'':df)}"${ty==='n'?' step="any" inputmode="decimal"':''}>`;
-  return `<div${ty==='x'?' style="grid-column:1/-1"':''}><label for="${id}">${l}</label>${i}</div>`};
-const rd=t=>{const v={};t.f.forEach(f=>{const e=$(`x_${t.id}_${f[0]}`);v[f[0]]=f[2]==='n'?(parseFloat(e.value)||0):e.value});return v};
-CATS.forEach((cn,ci)=>{
-  const ts=T.filter(t=>t.c===ci);
-  list.insertAdjacentHTML('beforeend',`<h3 class="tl-h">${cn}</h3><div class="tl-grid">${ts.map(t=>`<button type="button" class="tl-item" data-xt="${t.id}"><b>${t.n}</b><small>${t.d}</small></button>`).join('')}</div>`);
-});
-list.insertAdjacentHTML('beforeend','<h3 class="tl-h">Resume and learning</h3><div class="tl-grid"><a class="tl-item" href="../resume-maker.html?app=1"><b>Resume maker</b><small>6 templates, with or without photo</small></a><a class="tl-item" href="../video-editing-guide.html?app=1"><b>Video editing guide</b><small>Beginner to advanced, with pictures</small></a></div>');
-list.insertAdjacentHTML('beforeend','<h3 class="tl-h">More on the website</h3><div class="tl-grid"><a class="tl-item" href="https://peeyush-jangid.github.io/pj-tools.html" target="_blank" rel="noopener"><b>PDF tools</b><small>Merge, convert, compress</small></a><a class="tl-item" href="https://peeyush-jangid.github.io/pj-tools.html" target="_blank" rel="noopener"><b>AI assistant</b><small>Hindi/English chat, resume help</small></a></div>');
-T.forEach(t=>{
-  const s=document.createElement('section');s.className='tpanel';s.id='tx-'+t.id;s.hidden=true;
-  if(t.ref){
-    s.innerHTML=`<h2>${t.n}</h2><p class="d">${t.d}</p><input type="search" placeholder="Search…" aria-label="Search">`+t.ref.map(r=>`<div class="xr" role="button" tabindex="0"><b>${esc(r[0])}</b><p>${esc(r[1])}</p><small>Tap to copy</small></div>`).join('');
-    const q=s.querySelector('input'),items=[].slice.call(s.querySelectorAll('.xr'));
-    q.oninput=()=>{const x=q.value.toLowerCase();items.forEach(e=>e.hidden=x&&e.textContent.toLowerCase().indexOf(x)<0)};
-    s.onclick=e=>{const r=e.target.closest('.xr');if(!r)return;const sm=r.querySelector('small');
-      try{navigator.clipboard.writeText(r.querySelector('p').textContent).then(()=>sm.textContent='Copied ✓')}catch(_){sm.textContent='Select and copy manually'}};
-  }else{
-    s.innerHTML=`<h2>${t.n}</h2><p class="d">${t.d}</p><div class="grid">${t.f.map(f=>fld(t,f)).join('')}</div>`+(t.run?'<button type="button" class="tbtn" data-a="run">Calculate</button>':'')+(t.pr?'<button type="button" class="tbtn'+(t.run?' alt':'')+'" data-a="pr">Print / Save PDF</button>':'')+'<div class="out" aria-live="polite"></div>';
-    s.onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;const v=rd(t),o=s.querySelector('.out');
-      if(b.dataset.a==='run'){o.innerHTML=t.run(v);o.classList.add('show')}
-      else{const r=t.pr(v);printDoc(r[0],r[1])}};
+  var v=document.getElementById('v-tools');if(!v)return;
+  var frame=document.getElementById('tlFrame'),web=document.getElementById('tlWeb'),list=document.getElementById('tlList'),
+      tabs=document.getElementById('tlTabs'),back=document.getElementById('tlBack');
+  var ro=null,loaded=false;
+  function css(){
+    var cs=getComputedStyle(document.documentElement),g=function(n,d){return (cs.getPropertyValue(n)||'').trim()||d};
+    var brand=g('--brand','#315efb'),ink=g('--ink','#101c33'),mute=g('--mute','#65748d'),line=g('--line','#e1e8f3'),panel=g('--panel','#fff'),panel2=g('--panel2','#eef2fa');
+    return ':root{--p:'+brand+';--p2:'+brand+';--a:'+g('--brand2',brand)+';--ink:'+ink+';--mut:'+mute+';--bd:'+line+';--bg:transparent;--card:'+panel+';color-scheme:'+(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light')+'}'
+    +'html,body{background:transparent!important;scroll-behavior:auto}body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}'
+    +'.nav,.foot,.hero>*:not(.search){display:none!important}'
+    +'.hero{background:none!important;box-shadow:none!important;border:0!important;padding:0!important;min-height:0!important;margin:4px 0 6px!important;overflow:visible!important}'
+    +'.hero .search{margin:0!important;max-width:none!important}.hero .search input{width:100%;background:'+panel+';color:'+ink+';border:1px solid '+line+'}'
+    +'.wrap{padding-left:0!important;padding-right:0!important;max-width:none!important}'
+    +'main{padding-bottom:8px}.card,.tcard,.res,.panel{background:'+panel+';color:'+ink+';border-color:'+line+'}'
+    +'input,select,textarea{background:'+panel2+';color:'+ink+';border-color:'+line+'}'
+    +'.thead h2,.cat h2{color:'+ink+'}';
   }
-  host.parentNode.insertBefore(s,host);
-});
-const ps=[].slice.call(document.querySelectorAll('#v-tools [id^="tx-"]'));
-const hideX=()=>ps.forEach(p=>p.hidden=true);
-list.addEventListener('click',e=>{const b=e.target.closest('[data-xt]');if(!b)return;
-  list.hidden=true;back.hidden=false;ps.forEach(p=>p.hidden=p.id!=='tx-'+b.dataset.xt);scrollTo(0,0)});
-back.addEventListener('click',hideX);addEventListener('hashchange',hideX);
-const h2=document.querySelector('#v-tools > h2');if(h2)h2.textContent='Tools';
-const nt=document.querySelector('#v-tools > p.note');if(nt)nt.textContent='Free calculators, utilities and HVAC tools. No sign-in needed.';
+  function fit(){
+    try{var d=frame.contentDocument;if(!d||!d.body)return;
+      var h=Math.ceil(Math.max(d.body.getBoundingClientRect().height,d.body.scrollHeight))+16;
+      if(Math.abs(h-frame.offsetHeight)>2)frame.style.height=h+'px';}catch(e){}
+  }
+  function setup(){
+    try{
+      var w=frame.contentWindow,d=frame.contentDocument;if(!d||!d.head)return;
+      var st=d.getElementById('pj-embed-css');if(!st){st=d.createElement('style');st.id='pj-embed-css';d.head.appendChild(st)}
+      st.textContent=css();
+      d.documentElement.classList.add('in-app');
+      if(ro)ro.disconnect();
+      if('ResizeObserver' in window){ro=new ResizeObserver(fit);ro.observe(d.body)}
+      w.addEventListener('hashchange',function(){
+        var inTool=/^#\/?[^\/]+/.test(w.location.hash)&&w.location.hash!=='#/';
+        v.classList.toggle('in-tool',inTool);
+        setTimeout(fit,50);setTimeout(fit,400);
+        var top=v.getBoundingClientRect().top+scrollY-70;scrollTo({top:Math.max(0,top),behavior:'smooth'});
+      });
+      fit();setTimeout(fit,300);setTimeout(fit,1200);
+    }catch(e){}
+  }
+  frame.addEventListener('load',setup);
+  matchMedia('(prefers-color-scheme:dark)').addEventListener&&matchMedia('(prefers-color-scheme:dark)').addEventListener('change',function(){setTimeout(setup,100)});
+  addEventListener('resize',fit);
+  function ensure(){if(!loaded&&v.classList.contains('on')){loaded=true;frame.src=frame.dataset.src}}
+  new MutationObserver(ensure).observe(v,{attributes:true,attributeFilter:['class']});ensure();
+  tabs.addEventListener('click',function(e){var b=e.target.closest('[data-tt]');if(!b)return;
+    [].forEach.call(tabs.children,function(x){x.classList.toggle('on',x===b)});
+    var hv=b.dataset.tt==='hvac';web.hidden=hv;list.hidden=!hv;back.hidden=true;
+    [].forEach.call(v.querySelectorAll('.tpanel'),function(p){p.hidden=true});scrollTo(0,0)});
+  /* opening an HVAC tool hides the tabs; back restores them */
+  list.addEventListener('click',function(e){if(e.target.closest('[data-tool]'))tabs.style.display='none'});
+  back.addEventListener('click',function(){tabs.style.display='';list.hidden=false});
+  addEventListener('hashchange',function(){tabs.style.display=''});
 })();
 </script>
 </body>
