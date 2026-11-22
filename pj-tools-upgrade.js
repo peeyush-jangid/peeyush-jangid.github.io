@@ -62,7 +62,7 @@
     const PK = { font: {}, hfont: {}, rec: {} };
     const wrap = (v, cls, inner) => {
       const auto = v.font === 'auto', ff = auto ? (PK.font[cls] || FONTS.sans) : (FONTS[v.font] || FONTS.sans), hf = auto ? (PK.hfont[cls] || ff) : ff;
-      return '<div class="rs t-' + cls + '" translate="no" style="--rc:' + v.color + ';--rt:' + tint(v.color, .13) + ';--rd:' + shade(v.color, .72) + ';--rx:' + shade(v.color, .42) + ';--rl:' + lighten(v.color, .5) + ';--rf:' + ff + ';--rh:' + hf + '">' + inner + '</div>';
+      return '<div class="rs t-' + cls + '" translate="no" style="--rc:' + v.color + ';--rt:' + tint(v.color, .13) + ';--rd:' + shade(v.color, .72) + ';--rx:' + shade(v.color, .42) + ';--rl:' + lighten(v.color, .5) + ';--rf:' + ff + ';--rh:' + hf + (v.gmode === 'grad' && v.color2 ? ';--rg:linear-gradient(135deg,' + v.color + ',' + v.color2 + ');--rdg:linear-gradient(135deg,' + shade(v.color, .72) + ',' + shade(v.color2, .72) + ');--rxg:linear-gradient(135deg,' + shade(v.color, .42) + ',' + shade(v.color2, .42) + ')' : '') + '">' + inner + '</div>';
     };
     const head = v => '<h1>' + X(v.name) + '</h1><div class="rs-sub">' + X(v.title) + '</div>';
 
@@ -213,28 +213,24 @@
 @media(max-width:820px){.rs-pick{grid-template-columns:repeat(4,1fr)}}
 .rs-gh{grid-column:1/-1;font-size:.78rem;font-weight:700;margin:8px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;color:var(--ink)}.rs-gh:first-child{margin-top:0}.rs-gh small{font-weight:500;color:var(--mut)}
 .rs-pk{position:relative}.rs-pk.pro::after{content:"PRO";position:absolute;top:2px;right:2px;background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;font-size:.52rem;font-weight:800;letter-spacing:.5px;padding:1px 5px;border-radius:99px}
-
-/* dynamic sections */
-.split>*{min-width:0}
-.rb-sec{display:flex;flex-direction:column;gap:10px}
-.rb-sec>.rb-t{font-size:.82rem;font-weight:600;color:#334155}
-.rb-card{border:1px solid var(--bd,#e2e8f0);border-radius:12px;padding:12px;background:#f8fafc;position:relative}
-.rb-card .rb-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:.76rem;font-weight:700;color:#475569}
-.rb-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.rb-g .w{grid-column:1/-1}
-.rb-g label{display:flex;flex-direction:column;gap:3px;font-size:.74rem;font-weight:500;color:#475569}
-.rb-g input,.rb-g textarea,.rb-sk input{width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid var(--bd,#cbd5e1);border-radius:8px;font:inherit;font-size:.85rem;background:#fff}
-.rb-g input:disabled{background:#eef2f7;color:#94a3b8}
-.rb-x{background:#fee2e2;color:#b91c1c;border:0;border-radius:8px;padding:4px 10px;font-size:.74rem;font-weight:600;cursor:pointer}
-.rb-x:hover{background:#fecaca}
-.rb-add{align-self:flex-start;background:#eff6ff;color:#1d4ed8;border:1.5px dashed #93c5fd;border-radius:10px;padding:8px 14px;font-size:.82rem;font-weight:600;cursor:pointer}
-.rb-add:hover{background:#dbeafe}
-.rb-sk{display:grid;grid-template-columns:1fr 84px auto;gap:8px;align-items:center}
-.rb-chk{flex-direction:row!important;align-items:center;gap:6px!important}.rb-chk input{width:auto!important}
-.rb-tg{display:flex;gap:8px}.rb-tg button{flex:1;padding:9px;border-radius:10px;border:1.5px solid var(--bd,#cbd5e1);background:#fff;font:inherit;font-size:.85rem;font-weight:600;cursor:pointer;color:#475569}
-.rb-tg button.on{background:#2563eb;border-color:#2563eb;color:#fff}
-.rb-sec small{color:var(--mut,#64748b);font-weight:400;font-size:.74rem}
-.rs-bdg{background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;font-size:.6rem;font-weight:800;letter-spacing:.6px;padding:2px 8px;border-radius:99px}` + PACKCSS;
+.rs-bdg{background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;font-size:.6rem;font-weight:800;letter-spacing:.6px;padding:2px 8px;border-radius:99px}
+.rs-lt{font-size:.9rem;font-weight:700;color:var(--ink);margin-top:6px}
+.rs-skl{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0}
+.rs-skc{display:inline-flex;align-items:center;gap:6px;background:#eef2ff;color:#1e3a8a;border:1px solid #c7d2fe;border-radius:99px;padding:4px 5px 4px 12px;font-size:.8rem;font-weight:500}
+.rs-skc em{font-style:normal;color:var(--mut);font-size:.72rem}
+.rs-skc button{border:0;background:#c7d2fe;color:#1e3a8a;width:18px;height:18px;border-radius:50%;cursor:pointer;line-height:1;font-size:13px;padding:0}
+.rs-add{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:6px}.rs-add input:first-child{grid-column:1/-1}
+.rs-en{border:1px solid var(--bd);border-radius:12px;padding:12px;margin:6px 0 4px;background:#f8fafc}
+.rs-eh{display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:.8rem;margin-bottom:8px}
+.rs-x{border:0;background:none;color:var(--bad);cursor:pointer;font:inherit;font-size:.75rem}
+.rs-eg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.rs-f{display:flex;flex-direction:column;gap:4px;font-size:.74rem;font-weight:500;color:#475569}.rs-f.w{grid-column:1/-1}
+.rs-f.rs-ck{flex-direction:row;align-items:center;gap:6px;align-self:end;padding-bottom:10px}.rs-f.rs-ck input{width:auto}
+.rs-seg{display:inline-flex;align-self:flex-start;border:1px solid var(--bd);border-radius:99px;overflow:hidden;margin:4px 0}
+.rs-seg button{border:0;background:#fff;padding:7px 16px;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;color:var(--ink)}
+.rs-seg button.on{background:var(--p);color:#fff}
+.rs-gp{display:flex;flex-wrap:wrap;gap:8px}.rs-gp button{width:48px;height:30px;border-radius:8px;border:2px solid #fff;box-shadow:0 0 0 1px var(--bd);cursor:pointer}`
+        .replace(/background:var\(--rc\)/g, 'background:var(--rg,var(--rc))').replace(/background:var\(--rd\)/g, 'background:var(--rdg,var(--rd))').replace(/background:var\(--rx\)/g, 'background:var(--rxg,var(--rx))') + PACKCSS.replace(/background:var\(--rc\)/g, 'background:var(--rg,var(--rc))').replace(/background:var\(--rd\)/g, 'background:var(--rdg,var(--rd))').replace(/background:var\(--rx\)/g, 'background:var(--rxg,var(--rx))');
       document.head.appendChild(s);
     }
 
@@ -253,85 +249,79 @@
       im.onerror = () => { URL.revokeObjectURL(u); no(new Error('img')); }; im.src = u;
     });
 
+    /* ---- gradient presets for accent colour ---- */
+    const GP = [['Ocean', '#2563eb', '#06b6d4'], ['Sunset', '#f97316', '#ec4899'], ['Purple Pink', '#7c3aed', '#ec4899'], ['Forest', '#059669', '#84cc16'], ['Royal', '#1e3a8a', '#7c3aed'], ['Fire', '#dc2626', '#f59e0b'], ['Teal', '#0f766e', '#22d3ee'], ['Midnight', '#0f172a', '#475569']];
+    const cl = s => String(s == null ? '' : s).replace(/\s+/g, ' ').trim();
+    const split2 = h => { const i = h.indexOf(' – '); return i > 0 ? [h.slice(0, i).trim(), h.slice(i + 3).trim()] : [h.trim(), '']; };
+    const splitLoc = s => { const i = s.indexOf(','); return i > 0 ? [s.slice(0, i).trim(), s.slice(i + 1).trim()] : [s.trim(), '']; };
+    const pJobs = s => blocks(s).map(b => {
+      const L = b.split('\n').map(x => x.trim()).filter(Boolean), m = L[0].match(/^(.*?)\s*[\(\[]\s*([^\)\]]+?)\s*[\)\]]\s*$/);
+      return { head: m ? m[1] : L[0], d: m ? m[2] : '', L: L.slice(1).map(x => x.replace(/^[-•*]\s*/, '')) };
+    });
+    const arr = a => Array.isArray(a) ? a : [];
+
     function resumeV2(el) {
-      let saved = {}; try { saved = JSON.parse(localStorage.getItem('pj_resume2') || '{}') || {}; } catch (e) { }
+      let saved = {}; try { saved = JSON.parse(localStorage.getItem('pj_resume3') || 'null') || JSON.parse(localStorage.getItem('pj_resume2') || '{}') || {}; } catch (e) { }
       const D = Object.assign({
         name: 'Rahul Sharma', title: 'Mechanical Engineer', email: 'rahul.sharma@example.com', phone: '+91 98765 43210', loc: 'Jaipur, Rajasthan', link: 'linkedin.com/in/yourname',
         summary: 'Result-oriented engineer with 5+ years of experience in design, estimation and project execution. Known for delivering projects on time, reducing cost and working well with teams and clients.',
         skills: 'AutoCAD:92, Project Management:85, MS Excel:90, Estimation & BOQ:80, Team Leadership:75, Communication:88',
-        exp: 'Senior Engineer – ABC Pvt. Ltd. (2021 – Present)\n- Designed and executed 20+ commercial projects\n- Reduced material wastage by 12% through accurate planning\n\nJunior Engineer – XYZ Co. (2019 – 2021)\n- Assisted in site execution, testing and commissioning',
-        edu: 'B.Tech Mechanical Engineering – XYZ University (2015 – 2019)\n\nSenior Secondary (12th) – ABC School (2015)', extra: 'Certified AutoCAD Professional\nSafety & Quality Training (2022)',
-        lang: 'Hindi, English', personal: 'Date of Birth: 01 Jan 1996\nNationality: Indian', decl: '', font: 'auto', tpl: 'sidebar', color: '#2563eb', photoOn: 'yes', shape: 'circle', photo: ''
+        exp: 'Senior Engineer – ABC Pvt. Ltd., Jaipur, Rajasthan (Jan 2021 – Present)\n- Designed and executed 20+ commercial projects\n- Reduced material wastage by 12% through accurate planning\n\nJunior Engineer – XYZ Co., Delhi, Delhi (Jun 2019 – Dec 2020)\n- Assisted in site execution, testing and commissioning',
+        edu: 'B.Tech Mechanical Engineering – XYZ University, Jaipur, Rajasthan (2019)\n\nSenior Secondary (12th) – ABC School, Jaipur, Rajasthan (2015)', extra: '',
+        lang: 'Hindi, English', personal: 'Date of Birth: 01 Jan 1996\nNationality: Indian', decl: '', font: 'auto', tpl: 'sidebar', color: '#2563eb', gmode: 'solid', color2: '#ec4899', photoOn: 'yes', shape: 'circle', photo: ''
       }, saved);
 
-      /* ---------- structured sections: Skills / Education / Experience ---------- */
-      const clean = x => String(x == null ? '' : x).replace(/\s+/g, ' ').trim();
-      const cd = x => clean(String(x == null ? '' : x).replace(/[()\[\]]/g, ' '));
-      const bul = s => String(s || '').split('\n').map(x => x.replace(/^\s*[-•*]\s*/, '').trim()).filter(Boolean);
-      const splitJobs = str => blocks(str || '').map(b => {
-        const L = b.split('\n').map(x => x.trim()).filter(Boolean), m = L[0].match(/^(.*?)\s*[\(\[]\s*([^\)\]]+?)\s*[\)\]]\s*$/);
-        return { head: m ? m[1] : L[0], dates: m ? m[2] : '', lines: L.slice(1).map(x => x.replace(/^[-•*]\s*/, '')) };
-      });
-      const hd2 = h => { const i = h.indexOf(' – '); return i > 0 ? [h.slice(0, i).trim(), h.slice(i + 3).trim()] : [h.trim(), '']; };
-      const dflt = {
-        sk: [['AutoCAD', 92], ['Project Management', 85], ['MS Excel', 90], ['Estimation & BOQ', 80], ['Team Leadership', 75], ['Communication', 88]].map(a => ({ n: a[0], l: String(a[1]) })),
-        edu: [{ deg: 'B.Tech Mechanical Engineering', inst: 'XYZ University', city: 'Jaipur', state: 'Rajasthan', year: '2015 – 2019', grade: '' },
-              { deg: 'Senior Secondary (12th)', inst: 'ABC School', city: 'Jaipur', state: 'Rajasthan', year: '2015', grade: '' }],
-        ex: [{ post: 'Senior Engineer', co: 'ABC Pvt. Ltd.', city: 'Jaipur', state: 'Rajasthan', from: '2021', to: '', cur: true, proj: '', work: 'Designed and executed 20+ commercial projects\nReduced material wastage by 12% through accurate planning' },
-             { post: 'Junior Engineer', co: 'XYZ Co.', city: 'Jaipur', state: 'Rajasthan', from: '2019', to: '2021', cur: false, proj: '', work: 'Assisted in site execution, testing and commissioning' }],
-        fr: [{ name: '', org: '', city: '', state: '', year: '', work: '' }]
+      /* ---- structured lists (skills / education / experience / certificates) ---- */
+      const S0 = saved.S || {
+        skills: list(D.skills).map(x => { const m = x.match(/^(.*?)\s*[:|]\s*(\d{1,3})\s*%?$/); return m ? { n: m[1].trim(), p: m[2] } : { n: x, p: '' }; }),
+        edu: pJobs(D.edu).map(j => { const [deg, rest] = split2(j.head), [inst, lc] = splitLoc(rest), [city, state] = splitLoc(lc); return { deg, inst, year: j.d, city, state }; }),
+        exp: pJobs(D.exp).map(j => { const [role, rest] = split2(j.head), [co, lc] = splitLoc(rest), [city, state] = splitLoc(lc), dd = j.d.split(/\s*[–—-]\s*/), cur = /present|current|now|till/i.test(dd[1] || ''); return { role, company: co, city, state, from: (dd[0] || '').trim(), to: cur ? '' : (dd[1] || '').trim(), cur, proj: '', desc: j.L.join('\n') }; }),
+        fr: [], expMode: 'exp',
+        certs: String(D.extra || '').split('\n').map(x => x.trim()).filter(Boolean).map(x => { const m = x.match(/^(.*?)\s*[\(\[]\s*([^\)\]]+?)\s*[\)\]]\s*$/), [n, org] = split2(m ? m[1] : x); return { n, org, year: m ? m[2] : '' }; })
       };
-      const SEC = {
-        mode: saved.expMode === 'fresher' ? 'fresher' : 'exp',
-        sk: Array.isArray(saved.skArr) ? saved.skArr : (saved.skills != null && !Array.isArray(saved.skArr) && true ? list(saved.skills).map(x => { const m = x.match(/^(.*?)\s*[:|]\s*(\d{1,3})\s*%?$/); return { n: m ? m[1] : x, l: m ? m[2] : '' }; }) : dflt.sk),
-        edu: Array.isArray(saved.eduArr) ? saved.eduArr : (saved.edu != null && true ? splitJobs(saved.edu).map(j => { const h = hd2(j.head); return { deg: h[0], inst: h[1], city: '', state: '', year: j.dates, grade: '' }; }) : dflt.edu),
-        ex: Array.isArray(saved.exArr) ? saved.exArr : (saved.exp != null && true ? splitJobs(saved.exp).map(j => { const h = hd2(j.head); return { post: h[0], co: h[1], city: '', state: '', from: j.dates, to: '', cur: false, proj: '', work: j.lines.join('\n') }; }) : dflt.ex),
-        fr: Array.isArray(saved.frArr) && saved.frArr.length ? saved.frArr : dflt.fr
+      const ST = {
+        tpl: R[D.tpl] ? D.tpl : 'classic', photo: D.photo || '', ctouch: !!saved.ctouch,
+        skills: arr(S0.skills), edu: arr(S0.edu), exp: arr(S0.exp), fr: arr(S0.fr), certs: arr(S0.certs), expMode: S0.expMode === 'fresher' ? 'fresher' : 'exp'
       };
-      const place = o => [clean(o.city), clean(o.state)].filter(Boolean).join(', ');
-      const ser = {
-        skills: () => SEC.sk.filter(x => clean(x.n)).map(x => { const l = parseInt(x.l, 10); return String(x.n).replace(/[,\n:|]/g, ' ').replace(/\s+/g, ' ').trim() + (l >= 0 && l <= 100 && String(x.l).trim() !== '' ? ':' + l : ''); }).join(', '),
-        edu: () => SEC.edu.filter(x => clean(x.deg) || clean(x.inst)).map(x => {
-          const head = [clean(x.deg), clean(x.inst)].filter(Boolean).join(' – '), pl = place(x), yr = cd(x.year);
-          return head + (pl ? ', ' + pl : '') + (yr ? ' (' + yr + ')' : '') + (clean(x.grade) ? '\n- ' + clean(x.grade) : '');
-        }).join('\n\n'),
-        exp: () => SEC.mode === 'fresher'
-          ? SEC.fr.filter(x => clean(x.name) || clean(x.org) || clean(x.work)).map(x => {
-            const head = [clean(x.name), clean(x.org)].filter(Boolean).join(' – '), pl = place(x), yr = cd(x.year);
-            return head + (pl ? ', ' + pl : '') + (yr ? ' (' + yr + ')' : '') + bul(x.work).map(l => '\n- ' + l).join('');
-          }).join('\n\n')
-          : SEC.ex.filter(x => clean(x.post) || clean(x.co) || clean(x.work) || clean(x.proj)).map(x => {
-            const head = [clean(x.post), clean(x.co)].filter(Boolean).join(' – '), pl = place(x);
-            const to = x.cur ? 'Present' : cd(x.to), fr = cd(x.from), d = fr && to ? fr + ' – ' + to : (fr || to);
-            return (head || 'Experience') + (pl ? ', ' + pl : '') + (d ? ' (' + d + ')' : '') + (clean(x.proj) ? '\n- Project: ' + clean(x.proj) : '') + bul(x.work).map(l => '\n- ' + l).join('');
-          }).join('\n\n')
-      };
-      const ST = { tpl: R[D.tpl] ? D.tpl : 'classic', photo: D.photo || '', ctouch: !!saved.ctouch };
+      const loc = o => [cl(o.city), cl(o.state)].filter(Boolean).join(', ');
+      const dt = (f, t, c) => { f = cl(f); t = c ? 'Present' : cl(t); return f && t ? f + ' – ' + t : (f || t); };
+      const bul = s => String(s || '').split('\n').map(x => cl(x.replace(/^[-•*]\s*/, ''))).filter(Boolean).map(x => '- ' + x);
+      const blk = (head, d, lines) => head ? [head + (d ? ' (' + d.replace(/[()\[\]]/g, '') + ')' : '')].concat(lines).join('\n') : '';
+      const serSk = () => ST.skills.filter(s => cl(s.n)).map(s => cl(String(s.n).replace(/[,:|]+/g, ' ')) + (s.p !== '' && s.p != null && !isNaN(+s.p) ? ':' + Math.max(0, Math.min(100, Math.round(+s.p))) : '')).join(', ');
+      const serEdu = () => ST.edu.map(e => blk([[cl(e.deg), cl(e.inst)].filter(Boolean).join(' – '), loc(e)].filter(Boolean).join(', '), cl(e.year), [])).filter(Boolean).join('\n\n');
+      const serExp = () => ST.exp.map(e => blk([[cl(e.role), cl(e.company)].filter(Boolean).join(' – '), loc(e)].filter(Boolean).join(', '), dt(e.from, e.to, e.cur), (cl(e.proj) ? ['- Project: ' + cl(e.proj)] : []).concat(bul(e.desc)))).filter(Boolean).join('\n\n');
+      const serFr = () => ST.fr.map(e => blk([cl(e.proj), cl(e.company)].filter(Boolean).join(' – '), dt(e.from, e.to, false), bul(e.desc))).filter(Boolean).join('\n\n');
+      const serCert = () => ST.certs.map(c => blk([cl(c.n), cl(c.org)].filter(Boolean).join(' – '), cl(c.year), [])).filter(Boolean).join('\n\n');
+
       const F = [
         { id: 'name', label: 'Full name', value: D.name }, { id: 'title', label: 'Job title', value: D.title }, { id: 'email', label: 'Email', value: D.email }, { id: 'phone', label: 'Phone', value: D.phone },
         { id: 'loc', label: 'Location', value: D.loc }, { id: 'link', label: 'LinkedIn / Website', value: D.link },
         { id: 'photoOn', label: 'Photo', type: 'select', value: D.photoOn, options: [['yes', 'With photo'], ['no', 'Without photo']], hint: 'Photo is common in India / Gulf / Europe. For online (ATS) or US / UK jobs choose “Without photo”.' },
         { id: 'shape', label: 'Photo shape', type: 'select', value: D.shape, options: [['circle', 'Round'], ['rounded', 'Rounded square'], ['square', 'Square']] },
-        { id: 'color', label: 'Accent colour', type: 'color', value: D.color }, { id: 'font', label: 'Font style', type: 'select', value: D.font, options: [['auto', 'Template default (recommended)'], ['sans', 'Modern (Poppins)'], ['serif', 'Classic (Georgia)'], ['arial', 'Simple (Arial)'], ['calibri', 'Office (Calibri)']] },
+        { id: 'color', label: 'Accent colour', type: 'color', value: D.color },
+        { id: 'gmode', label: 'Colour style', type: 'select', value: D.gmode, options: [['solid', 'Solid colour'], ['grad', 'Gradient (2 colours)']] },
+        { id: 'color2', label: 'Gradient – 2nd colour', type: 'color', value: D.color2 },
+        { id: 'font', label: 'Font style', type: 'select', value: D.font, options: [['auto', 'Template default (recommended)'], ['sans', 'Modern (Poppins)'], ['serif', 'Classic (Georgia)'], ['arial', 'Simple (Arial)'], ['calibri', 'Office (Calibri)']] },
         { id: 'summary', label: 'Professional summary', type: 'textarea', rows: 3, value: D.summary, wide: 1 },
-        { id: 'skills', custom: 1 },
-        { id: 'exp', custom: 1 },
-        { id: 'edu', custom: 1 },
-        { id: 'extra', label: 'Projects / Certifications (optional)', type: 'textarea', rows: 3, value: D.extra, wide: 1 },
         { id: 'lang', label: 'Languages (optional, comma separated)', value: D.lang, wide: 1 },
         { id: 'personal', label: 'Personal details (optional)', type: 'textarea', rows: 3, value: D.personal, wide: 1, hint: 'One per line as  Label: value  (e.g. Date of Birth: 01 Jan 1996). Clear this box to hide the section.' },
         { id: 'decl', label: 'Declaration (optional)', type: 'textarea', rows: 2, value: D.decl, wide: 1, hint: 'e.g. I hereby declare that the above information is true to the best of my knowledge.' }
       ];
+      const pre = '<div class="fld wide" id="rs-gpre"><span>Gradient presets (click one)</span><div class="rs-gp">' + GP.map(p => '<button type="button" title="' + p[0] + '" data-a="' + p[1] + '" data-b="' + p[2] + '" style="background:linear-gradient(135deg,' + p[1] + ',' + p[2] + ')"></button>').join('') + '</div><small>Gradient is applied to headers, sidebars, bars and highlights of the template. Text headings use the first colour.</small></div>';
+      const dyn = '<div class="fld wide" id="rs-d-skills"></div><div class="fld wide" id="rs-d-exp"></div><div class="fld wide" id="rs-d-edu"></div><div class="fld wide" id="rs-d-certs"></div>';
       el.innerHTML = `<div class="split"><div class="card noprint"><h3>1. Choose a template</h3><div class="rs-pick" id="rs-pick"></div>
-        <h3 style="margin-top:16px">2. Your details</h3><div class="form">${F.map(f => f.custom ? '<div class="fld wide rb-sec" id="rb-' + f.id + '"></div>' : fld(f, 'rs2_')).join('')}
+        <h3 style="margin-top:16px">2. Your details</h3><div class="form" id="rs-form">${F.map(f => fld(f, 'rs2_') + (f.id === 'color2' ? pre : '') + (f.id === 'summary' ? dyn : '')).join('')}
         <div class="fld wide"><span>Your photo (optional)</span><div class="rs-photo-row"><input type="file" id="rs-file" accept="image/*"><button class="btn ghost sm" type="button" id="rs-rmph">Remove photo</button></div>
         <small>The photo is cropped to a square on your device. It is never uploaded anywhere.</small></div></div>
         <div class="row"><button class="btn" id="rs-pdf" type="button">⬇ Download PDF</button><button class="btn ghost" id="rs-pr" type="button">🖨 Print / Save as PDF</button><button class="btn ghost" id="rs-rst" type="button">Reset</button></div>
         <p class="note"><b>Download PDF</b> is quick (one A4 page picture). <b>Print / Save as PDF</b> keeps real selectable text, which is better for ATS and online job portals. Your data is saved only in this browser.</p></div>
         <div class="card print-area" id="prev"><div class="noprint rs-pg" id="rs-pg"></div><div class="rs-wrap" id="rs-wrap"><div class="rs-fit" id="rs-fit"></div></div></div></div>`;
-      const g = id => { if (ser[id]) return ser[id](); const e = $('#f_rs2_' + id, el); return e ? e.value : ''; };
+      const g = id => { const e = $('#f_rs2_' + id, el); return e ? e.value : ''; };
       const fit = $('#rs-fit', el), wr = $('#rs-wrap', el), pick = $('#rs-pick', el);
-      const vals = () => { const v = {}; F.forEach(f => v[f.id] = g(f.id)); v.tpl = ST.tpl; v.photo = ST.photo; v.ctouch = ST.ctouch; v.expMode = SEC.mode; v.skArr = SEC.sk; v.eduArr = SEC.edu; v.exArr = SEC.ex; v.frArr = SEC.fr; return v; };
+      const vals = () => {
+        const v = {}; F.forEach(f => v[f.id] = g(f.id)); v.tpl = ST.tpl; v.photo = ST.photo; v.ctouch = ST.ctouch;
+        v.skills = serSk(); v.edu = serEdu(); v.exp = ST.expMode === 'fresher' ? serFr() : serExp(); v.extra = serCert(); v.expMode = ST.expMode; return v;
+      };
       const scale = () => {
         const root = fit.firstElementChild; if (!root) return;
         const s = Math.min(1, wr.clientWidth / 794 || 1);
@@ -343,78 +333,98 @@
         const fr = TPL.filter(t => t[2] !== 'pro'), pr = TPL.filter(t => t[2] === 'pro');
         pick.innerHTML = '<div class="rs-gh">Free templates <small>(' + fr.length + ')</small></div>' + fr.map(btn).join('') + (pr.length ? '<div class="rs-gh"><span class="rs-bdg">PRO</span> Pro-level designs <small>(' + pr.length + ') – bars &amp; rings</small></div>' + pr.map(btn).join('') : '');
       };
+
+      /* ---- dynamic "Add new …" sections ---- */
+      const ip = (s, i, k, val, ph, type, extra) => '<input data-s="' + s + '" data-i="' + i + '" data-k="' + k + '" type="' + (type || 'text') + '" value="' + esc(val || '') + '" placeholder="' + esc(ph || '') + '" ' + (extra || '') + '>';
+      const ta = (s, i, k, val, ph) => '<textarea rows="3" data-s="' + s + '" data-i="' + i + '" data-k="' + k + '" placeholder="' + esc(ph || '') + '">' + esc(val || '') + '</textarea>';
+      const lb = (t, inner, w) => '<label class="rs-f' + (w ? ' w' : '') + '"><span>' + t + '</span>' + inner + '</label>';
+      const ehd = (t, s, i) => '<div class="rs-eh"><span>' + t + ' ' + (i + 1) + '</span><button type="button" class="rs-x" data-act="rm" data-s="' + s + '" data-i="' + i + '">✕ Remove</button></div>';
+      const rdSkills = () => {
+        $('#rs-d-skills', el).innerHTML = '<span class="rs-lt">Skills</span>' +
+          (ST.skills.length ? '<div class="rs-skl">' + ST.skills.map((s, i) => '<span class="rs-skc">' + X(s.n) + (s.p !== '' && s.p != null ? ' <em>' + X(String(s.p)) + '%</em>' : '') + '<button type="button" data-act="rm" data-s="skills" data-i="' + i + '" aria-label="Remove skill">×</button></span>').join('') + '</div>' : '<small>No skills added yet. Type a skill below and press “Add new skill”.</small>') +
+          '<div class="rs-add"><input id="rs-sk-n" placeholder="Skill name, e.g. AutoCAD"><input id="rs-sk-p" type="number" min="0" max="100" placeholder="Level % (optional)"><button class="btn sm" type="button" data-act="addSkill">+ Add new skill</button></div>' +
+          '<small>Every skill you add appears here and in the resume. Level (0–100) is optional and used only by PRO templates for bars / rings.</small>';
+      };
+      const rdEdu = () => {
+        $('#rs-d-edu', el).innerHTML = '<span class="rs-lt">Education</span>' + ST.edu.map((e, i) => '<div class="rs-en">' + ehd('Education', 'edu', i) + '<div class="rs-eg">' +
+          lb('Degree / Class', ip('edu', i, 'deg', e.deg, 'e.g. B.Tech Mechanical Engineering')) + lb('University / School name', ip('edu', i, 'inst', e.inst, 'e.g. XYZ University')) +
+          lb('Passing year', ip('edu', i, 'year', e.year, 'e.g. 2019')) + lb('City', ip('edu', i, 'city', e.city, 'e.g. Jaipur')) + lb('State', ip('edu', i, 'state', e.state, 'e.g. Rajasthan')) + '</div></div>').join('') +
+          (ST.edu.length ? '' : '<small>No education added – this section will not be shown in the resume.</small>') + '<div><button class="btn ghost sm" type="button" data-act="addEdu">+ Add new education</button></div>';
+      };
+      const rdExp = () => {
+        const fr = ST.expMode === 'fresher', s = fr ? 'fr' : 'exp', a = ST[s];
+        $('#rs-d-exp', el).innerHTML = '<span class="rs-lt">Experience</span><div class="rs-seg"><button type="button" data-act="mode" data-m="fresher" class="' + (fr ? 'on' : '') + '">I am a Fresher</button><button type="button" data-act="mode" data-m="exp" class="' + (fr ? '' : 'on') + '">I have Experience</button></div>' +
+          (fr ? '<small>Freshers: add your projects, internships or training. The resume section is shown as “Projects &amp; Internships”.</small>' : '') +
+          a.map((e, i) => '<div class="rs-en">' + ehd(fr ? 'Project / Internship' : 'Experience', s, i) + '<div class="rs-eg">' + (fr ?
+            lb('Project / Internship title', ip(s, i, 'proj', e.proj, 'e.g. Solar Water Heater Design')) + lb('College / Company (optional)', ip(s, i, 'company', e.company, 'e.g. XYZ University')) +
+            lb('From (month & year)', ip(s, i, 'from', e.from, 'e.g. Jan 2024')) + lb('To (month & year)', ip(s, i, 'to', e.to, 'e.g. Jun 2024')) +
+            lb('What did you do? (one point per line)', ta(s, i, 'desc', e.desc, 'Designed … \nTested … '), 1)
+            :
+            lb('Post / Job title', ip(s, i, 'role', e.role, 'e.g. Senior Engineer')) + lb('Company name', ip(s, i, 'company', e.company, 'e.g. ABC Pvt. Ltd.')) +
+            lb('From (month & year)', ip(s, i, 'from', e.from, 'e.g. Jan 2021')) + lb('To (month & year)', ip(s, i, 'to', e.to, 'e.g. Dec 2023', 'text', e.cur ? 'disabled' : '')) +
+            '<label class="rs-f rs-ck"><input type="checkbox" data-s="' + s + '" data-i="' + i + '" data-k="cur" ' + (e.cur ? 'checked' : '') + '> I currently work here</label>' +
+            lb('Company city', ip(s, i, 'city', e.city, 'e.g. Jaipur')) + lb('Company state', ip(s, i, 'state', e.state, 'e.g. Rajasthan')) +
+            lb('Project name (optional)', ip(s, i, 'proj', e.proj, 'e.g. City Mall HVAC Project'), 1) +
+            lb('What work did you do? (one point per line)', ta(s, i, 'desc', e.desc, 'Designed … \nReduced cost by … '), 1)) + '</div></div>').join('') +
+          (a.length ? '' : '<small>' + (fr ? 'No projects added' : 'No experience added') + ' – this section will not be shown in the resume.</small>') +
+          '<div><button class="btn ghost sm" type="button" data-act="addExp">+ Add new ' + (fr ? 'project / internship' : 'experience') + '</button></div>';
+      };
+      const rdCerts = () => {
+        $('#rs-d-certs', el).innerHTML = '<span class="rs-lt">Certificates (optional)</span>' + ST.certs.map((c, i) => '<div class="rs-en">' + ehd('Certificate', 'certs', i) + '<div class="rs-eg">' +
+          lb('Certificate name', ip('certs', i, 'n', c.n, 'e.g. AutoCAD Professional')) + lb('Issued by', ip('certs', i, 'org', c.org, 'e.g. Autodesk')) + lb('Year', ip('certs', i, 'year', c.year, 'e.g. 2022')) + '</div></div>').join('') +
+          (ST.certs.length ? '' : '<small>No certificate added – the Certificates section is hidden in the resume until you add one.</small>') + '<div><button class="btn ghost sm" type="button" data-act="addCert">+ Add new certificate</button></div>';
+      };
+      const rdAll = () => { rdSkills(); rdExp(); rdEdu(); rdCerts(); };
+      const rdFor = s => (s === 'skills' ? rdSkills : s === 'edu' ? rdEdu : s === 'certs' ? rdCerts : rdExp)();
+      const lastIn = id => { const n = $$('.rs-en', $(id, el)); const l = n[n.length - 1]; const i = l && l.querySelector('input,textarea'); if (i) i.focus(); };
+
       const draw = () => {
         const v = vals();
-        fit.innerHTML = R[v.tpl](v);
-        if (SEC.mode === 'fresher') { const w = document.createTreeWalker(fit, NodeFilter.SHOW_TEXT); let n; while ((n = w.nextNode())) if (/^\s*(Professional |Work )?Experience\s*$/.test(n.nodeValue)) n.nodeValue = 'Internships / Projects'; }
+        let html = R[v.tpl](v);
+        html = html.replace(/>(Projects \/ Certifications|Certifications \/ Extra|Projects)</g, '>Certificates<');
+        if (v.expMode === 'fresher') html = html.replace(/>(Professional Experience|Work Experience|Experience)</g, '>Projects &amp; Internships<');
+        fit.innerHTML = html;
         const photoRow = $('#rs-file', el).closest('.fld');
         photoRow.style.display = v.photoOn === 'yes' ? '' : 'none';
         const sh = $('#f_rs2_shape', el).closest('.fld'); if (sh) sh.style.display = v.photoOn === 'yes' ? '' : 'none';
+        const gr = v.gmode === 'grad'; $('#f_rs2_color2', el).closest('.fld').style.display = gr ? '' : 'none'; $('#rs-gpre', el).style.display = gr ? '' : 'none';
         scale();
         const root = fit.firstElementChild, pages = Math.max(1, Math.ceil((root.offsetHeight - 6) / 1123));
         $('#rs-pg', el).innerHTML = pages === 1 ? '<span style="color:var(--ok)">✓ Fits on 1 page (A4)</span>' : (pages === 2 ? '<span style="color:#b45309">2 pages – fine for experienced candidates; freshers should keep 1 page.</span>' : '<span class="err">' + pages + ' pages – please shorten the content (2 pages maximum is recommended).</span>');
         if (v.tpl === 'ats' && v.photoOn === 'yes') $('#rs-pg', el).innerHTML += ' <span style="color:var(--mut)">· ATS Plain never shows a photo.</span>';
-        try { localStorage.setItem('pj_resume2', JSON.stringify(Object.assign({}, v))); } catch (e) { try { v.photo = ''; localStorage.setItem('pj_resume2', JSON.stringify(v)); } catch (e2) { } }
+        const S = { skills: ST.skills, edu: ST.edu, exp: ST.exp, fr: ST.fr, certs: ST.certs, expMode: ST.expMode };
+        try { localStorage.setItem('pj_resume3', JSON.stringify(Object.assign({}, v, { S }))); } catch (e) { try { v.photo = ''; localStorage.setItem('pj_resume3', JSON.stringify(Object.assign({}, v, { S }))); } catch (e2) { } }
       };
+      rdAll(); pickUI(); draw();
 
-      /* ---- UI for dynamic sections ---- */
-      const inp = (k, i, label, val, ph, cls, type) => '<label class="' + (cls || '') + '"><span>' + label + '</span><input type="' + (type || 'text') + '" data-k="' + k + '" data-i="' + i + '" value="' + esc(val || '') + '" placeholder="' + esc(ph || '') + '"></label>';
-      const secUI = {
-        skills() {
-          $('#rb-skills', el).innerHTML = '<span class="rb-t">Skills</span>' +
-            SEC.sk.map((x, i) => '<div class="rb-sk" data-s="sk"><input data-k="n" data-i="' + i + '" value="' + esc(x.n) + '" placeholder="Skill name (e.g. AutoCAD)"><input data-k="l" data-i="' + i + '" type="number" min="0" max="100" value="' + esc(x.l) + '" placeholder="0–100"><button type="button" class="rb-x" data-del="sk" data-i="' + i + '">✕</button></div>').join('') +
-            '<button type="button" class="rb-add" data-add="sk">＋ Add new skill</button><small>Level (0–100) is optional – used for skill bars / rings in PRO templates.</small>';
-        },
-        edu() {
-          $('#rb-edu', el).innerHTML = '<span class="rb-t">Education</span>' +
-            SEC.edu.map((x, i) => '<div class="rb-card" data-s="edu"><div class="rb-h"><span>Education ' + (i + 1) + '</span><button type="button" class="rb-x" data-del="edu" data-i="' + i + '">✕ Remove</button></div><div class="rb-g">' +
-              inp('deg', i, 'Degree / Course', x.deg, 'e.g. B.Tech Mechanical', 'w') + inp('inst', i, 'Name of University / School', x.inst, 'e.g. XYZ University', 'w') +
-              inp('year', i, 'Passing year', x.year, 'e.g. 2019 or 2015 – 2019') + inp('city', i, 'University / School location (city)', x.city, 'e.g. Jaipur') + inp('state', i, 'State', x.state, 'e.g. Rajasthan') + inp('grade', i, 'Percentage / CGPA (optional)', x.grade, 'e.g. 8.2 CGPA') +
-              '</div></div>').join('') + '<button type="button" class="rb-add" data-add="edu">＋ Add new education</button>';
-        },
-        exp() {
-          const fr = SEC.mode === 'fresher';
-          let h = '<span class="rb-t">Experience</span><div class="rb-tg"><button type="button" data-mode="fresher" class="' + (fr ? 'on' : '') + '">🎓 Fresher</button><button type="button" data-mode="exp" class="' + (fr ? '' : 'on') + '">💼 Experienced</button></div>';
-          if (fr) {
-            h += '<small>Fresher: add your projects / internships / training.</small>' + SEC.fr.map((x, i) => '<div class="rb-card" data-s="fr"><div class="rb-h"><span>Project / Internship ' + (i + 1) + '</span><button type="button" class="rb-x" data-del="fr" data-i="' + i + '">✕ Remove</button></div><div class="rb-g">' +
-              inp('name', i, 'Project / Internship name', x.name, 'e.g. HVAC Load Calculator', 'w') + inp('org', i, 'College / Company', x.org, 'e.g. XYZ University') + inp('year', i, 'Year / Duration', x.year, 'e.g. 2024 or Jun – Aug 2024') +
-              inp('city', i, 'Location (city)', x.city, 'e.g. Jaipur') + inp('state', i, 'State', x.state, 'e.g. Rajasthan') +
-              '<label class="w"><span>What did you do? (one point per line)</span><textarea rows="3" data-k="work" data-i="' + i + '" placeholder="Designed duct layout using AutoCAD">' + esc(x.work) + '</textarea></label></div></div>').join('') +
-              '<button type="button" class="rb-add" data-add="fr">＋ Add new project / internship</button>';
-          } else {
-            h += SEC.ex.map((x, i) => '<div class="rb-card" data-s="ex"><div class="rb-h"><span>Experience ' + (i + 1) + '</span><button type="button" class="rb-x" data-del="ex" data-i="' + i + '">✕ Remove</button></div><div class="rb-g">' +
-              inp('post', i, 'Post / Designation', x.post, 'e.g. Senior Engineer') + inp('co', i, 'Company name', x.co, 'e.g. ABC Pvt. Ltd.') +
-              inp('from', i, 'From (month / year)', x.from, 'e.g. Jun 2021') + '<label><span>To (month / year)</span><input data-k="to" data-i="' + i + '" value="' + esc(x.cur ? '' : x.to) + '" placeholder="e.g. Mar 2024" ' + (x.cur ? 'disabled' : '') + '></label>' +
-              '<label class="w rb-chk"><input type="checkbox" data-k="cur" data-i="' + i + '" ' + (x.cur ? 'checked' : '') + '><span>I currently work here (shows “Present”)</span></label>' +
-              inp('city', i, 'Company location (city)', x.city, 'e.g. Jaipur') + inp('state', i, 'State', x.state, 'e.g. Rajasthan') + inp('proj', i, 'Project name (optional)', x.proj, 'e.g. Mall HVAC Project', 'w') +
-              '<label class="w"><span>What work did you do? (one point per line)</span><textarea rows="4" data-k="work" data-i="' + i + '" placeholder="Designed and executed 20+ commercial projects">' + esc(x.work) + '</textarea></label></div></div>').join('') +
-              '<button type="button" class="rb-add" data-add="ex">＋ Add new experience</button>';
-          }
-          $('#rb-exp', el).innerHTML = h;
-        }
-      };
-      const blank = { sk: () => ({ n: '', l: '' }), edu: () => ({ deg: '', inst: '', city: '', state: '', year: '', grade: '' }), ex: () => ({ post: '', co: '', city: '', state: '', from: '', to: '', cur: false, proj: '', work: '' }), fr: () => ({ name: '', org: '', city: '', state: '', year: '', work: '' }) };
-      const rerender = k => (k === 'sk' ? secUI.skills : k === 'edu' ? secUI.edu : secUI.exp)();
-      secUI.skills(); secUI.edu(); secUI.exp();
-      ['skills', 'edu', 'exp'].forEach(id => {
-        const box = $('#rb-' + id, el);
-        box.addEventListener('input', e => {
-          const t = e.target, k = t.dataset.k; if (!k) return;
-          const kind = t.closest('[data-s]').dataset.s, o = SEC[kind][+t.dataset.i]; if (!o) return;
-          o[k] = t.type === 'checkbox' ? t.checked : t.value;
-          if (t.type === 'checkbox') secUI.exp(); // enables / disables the "To" box
-          draw();
-        });
-        box.addEventListener('click', e => {
-          const b = e.target.closest('button'); if (!b) return;
-          if (b.dataset.mode) { SEC.mode = b.dataset.mode; secUI.exp(); draw(); return; }
-          if (b.dataset.add) { const k = b.dataset.add; SEC[k].push(blank[k]()); rerender(k); draw(); const f = box.querySelectorAll('[data-s="' + k + '"]'); const last = k === 'sk' ? box.querySelectorAll('.rb-sk') : f; const n = last[last.length - 1]; const i = n && n.querySelector('input'); if (i) i.focus(); return; }
-          if (b.dataset.del) { const k = b.dataset.del; SEC[k].splice(+b.dataset.i, 1); if (!SEC[k].length && k !== 'sk') SEC[k].push(blank[k]()); rerender(k); draw(); }
-        });
-        box.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.closest('.rb-sk')) { e.preventDefault(); box.querySelector('[data-add="sk"]').click(); } });
+      $$('#rs-form > .fld input,#rs-form > .fld select,#rs-form > .fld textarea', el).forEach(x => { if (x.type !== 'file') x.addEventListener('input', () => { if (x.id === 'f_rs2_color' || x.id === 'f_rs2_color2') { ST.ctouch = true; pickUI(); } draw(); }); });
+      $('#rs-gpre', el).addEventListener('click', e => {
+        const b = e.target.closest('button[data-a]'); if (!b) return;
+        $('#f_rs2_color', el).value = b.dataset.a; $('#f_rs2_color2', el).value = b.dataset.b; $('#f_rs2_gmode', el).value = 'grad'; ST.ctouch = true; pickUI(); draw();
       });
-      pickUI(); draw();
-      $$('input,select,textarea', el).forEach(x => { if (x.type !== 'file' && !x.closest('.rb-sec')) x.addEventListener('input', () => { if (x.id === 'f_rs2_color') { ST.ctouch = true; pickUI(); } draw(); }); });
+      const box = $('#rs-form', el);
+      box.addEventListener('input', e => {
+        const t = e.target; if (!t.dataset || t.dataset.k == null) return;
+        const o = ST[t.dataset.s] && ST[t.dataset.s][+t.dataset.i]; if (!o) return;
+        if (t.type === 'checkbox') { o[t.dataset.k] = t.checked; const to = t.closest('.rs-en').querySelector('[data-k="to"]'); if (to) to.disabled = t.checked; } else o[t.dataset.k] = t.value;
+        draw();
+      });
+      box.addEventListener('click', e => {
+        const b = e.target.closest('[data-act]'); if (!b) return; const a = b.dataset.act, s = b.dataset.s;
+        if (a === 'rm') { ST[s].splice(+b.dataset.i, 1); rdFor(s); }
+        else if (a === 'addSkill') {
+          const n = cl($('#rs-sk-n', el).value.replace(/[,:|]+/g, ' ')), p = $('#rs-sk-p', el).value.trim();
+          if (!n) { toast('Please type a skill name first'); return; }
+          if (!ST.skills.some(x => cl(x.n).toLowerCase() === n.toLowerCase())) ST.skills.push({ n, p: p !== '' && !isNaN(+p) ? String(Math.max(0, Math.min(100, Math.round(+p)))) : '' });
+          rdSkills(); $('#rs-sk-n', el).focus();
+        }
+        else if (a === 'addEdu') { ST.edu.push({ deg: '', inst: '', year: '', city: '', state: '' }); rdEdu(); lastIn('#rs-d-edu'); }
+        else if (a === 'addExp') { (ST.expMode === 'fresher' ? ST.fr : ST.exp).push({ role: '', company: '', city: '', state: '', from: '', to: '', cur: false, proj: '', desc: '' }); rdExp(); lastIn('#rs-d-exp'); }
+        else if (a === 'addCert') { ST.certs.push({ n: '', org: '', year: '' }); rdCerts(); lastIn('#rs-d-certs'); }
+        else if (a === 'mode') { ST.expMode = b.dataset.m; rdExp(); }
+        draw();
+      });
+      box.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.target.id === 'rs-sk-n' || e.target.id === 'rs-sk-p')) { e.preventDefault(); const b = $('[data-act="addSkill"]', el); if (b) b.click(); } });
       pick.addEventListener('click', e => { const b = e.target.closest('.rs-pk'); if (!b) return; ST.tpl = b.dataset.t; const rc = PK.rec[ST.tpl]; if (rc && !ST.ctouch) $('#f_rs2_color', el).value = rc; pickUI(); draw(); });
       $('#rs-file', el).addEventListener('change', async e => {
         const f = e.target.files[0]; if (!f) return;
@@ -434,13 +444,13 @@
         try {
           await loadH2P();
           const clone = fit.firstElementChild.cloneNode(true); clone.querySelectorAll('.rs-ph').forEach(e => e.style.visibility = 'hidden');
-          const nm = (g('name') || 'Resume').trim().replace(/[^\w\u0900-\u097F]+/g, '-');
+          const nm = (g('name') || 'Resume').trim().replace(/[^\wऀ-ॿ]+/g, '-');
           await html2pdf().set({ margin: 0, filename: nm + '-Resume.pdf', image: { type: 'jpeg', quality: .98 }, html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', windowWidth: 794 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }, pagebreak: { mode: ['css', 'legacy'], avoid: ['.rs-job'] } }).from(clone).save();
           toast('PDF downloaded ✓');
         } catch (e) { toast('Opening print dialog – choose “Save as PDF”'); $('#rs-pr', el).click(); }
         btn.disabled = false; btn.textContent = label;
       };
-      $('#rs-rst', el).onclick = () => { try { localStorage.removeItem('pj_resume2'); } catch (e) { } resumeV2(el); };
+      $('#rs-rst', el).onclick = () => { try { localStorage.removeItem('pj_resume3'); localStorage.removeItem('pj_resume2'); } catch (e) { } resumeV2(el); };
     }
 
     tools.forEach(t => {
