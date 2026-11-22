@@ -63,7 +63,7 @@
           const ch = $('#ch', lb), post = (t, c) => { const d = document.createElement('div'); d.className = 'msg ' + c; d.textContent = t; ch.appendChild(d); ch.scrollTop = ch.scrollHeight; };
           const ask = () => { cur = pick(pool); post(`How do you say this in Hindi?\n“${cur.en}”`, 'b'); };
           const send = () => { const v = $('#mg', lb).value.trim(); if (!v || !cur) return; $('#mg', lb).value = ''; post(v, 'u'); n++; const s = sim(v, cur.ro); if (s >= .6) { ok++; post(`✅ Very good!\n${cur.hi}\n(${cur.ro})`, 'b'); } else post(`Close – keep trying.\nCorrect: ${cur.hi}\n(${cur.ro})`, 'b'); setTimeout(ask, 500); };
-          $('#sd', lb).onclick = send; $('#mg', lb).onkeydown = e => e.key === 'Enter' && send();
+          $('#sd', lb).onclick = send; $('#mg', lb).addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); send(); } });
           $('#rv', lb).onclick = () => cur && post(`${cur.hi}\n(${cur.ro})`, 'b'); $('#sk', lb).onclick = () => { cur && post('Skipped', 'u'); ask(); };
           post('Namaste! 🙏 Let’s practise Hindi. I will give you English sentences.', 'b'); ask(); return;
         }
@@ -82,7 +82,7 @@
           else { post(`Let’s move on.\n💡 Model: ${t.model}\n${t.tip}`, 'b'); tries = 0; k++; }
           if (k >= sc.turns.length) { setTimeout(() => post(`🎉 Conversation finished! Score: ${good} / ${sc.turns.length}. ${good === sc.turns.length ? 'Excellent English!' : 'Practise again to improve.'}`, 'b'), 400); sc = null; } else setTimeout(bot, 500);
         };
-        $('#sd', lb).onclick = send; $('#mg', lb).onkeydown = e => e.key === 'Enter' && send();
+        $('#sd', lb).onclick = send; $('#mg', lb).addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); send(); } });
         $('#mic', lb).onclick = () => { const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR) return toast('Voice typing is not supported here'); const r = new SR(); r.lang = 'en-IN'; r.onresult = e => { $('#mg', lb).value = e.results[0][0].transcript; }; r.onerror = () => toast('Could not hear you'); r.start(); toast('Listening… speak now 🎤'); };
       },
       quiz() {
