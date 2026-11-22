@@ -1945,6 +1945,11 @@
         "SmartArt",
         "Professional Diagrams",
         "Pro"
+      ],
+      [
+        "Ctrl + Shift + End",
+        "Select from the current cursor position to the end of the document.",
+        "Pro"
       ]
     ]
   },
