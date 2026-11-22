@@ -7,7 +7,7 @@
     const tools = TOOLS.filter(t => ids.includes(t.id));
     if (!tools.length) return;
 
-    const TPL = [['classic', 'Classic'], ['modern', 'Modern Header'], ['sidebar', 'Left Sidebar'], ['executive', 'Executive'], ['minimal', 'Clean Minimal'], ['timeline', 'Timeline'], ['corporate', 'Corporate'], ['ats', 'ATS Plain']];
+    const TPL = [['classic', 'Classic', 'free'], ['modern', 'Modern Header', 'free'], ['sidebar', 'Left Sidebar', 'free'], ['executive', 'Executive', 'free'], ['minimal', 'Clean Minimal', 'free'], ['timeline', 'Timeline', 'free'], ['corporate', 'Corporate', 'free'], ['ats', 'ATS Plain', 'free']];
     const FONTS = { sans: "Poppins,'Segoe UI',Arial,sans-serif", serif: "Georgia,'Times New Roman',serif", arial: 'Arial,Helvetica,sans-serif', calibri: "Calibri,Carlito,Arial,sans-serif" };
     const X = s => esc(s || '');
     const nl2 = s => esc(s || '').replace(/\n/g, '<br>');
@@ -46,7 +46,7 @@
         : '<div class="rs-img rs-ph ' + v.shape + '" style="' + st + '">' + PH + '</div>';
     };
     function parts(v) {
-      const sk = list(v.skills);
+      const sk = list(v.skills).map(x => x.replace(/\s*[:|]\s*\d{1,3}\s*%?$/, ''));
       return {
         summary: v.summary.trim() ? '<p>' + nl2(v.summary) + '</p>' : '',
         exp: jobs(v.exp), edu: jobs(v.edu), extra: jobs(v.extra),
@@ -58,7 +58,12 @@
         kv: kv(v.personal), decl: v.decl.trim() ? '<p>' + nl2(v.decl) + '</p>' : ''
       };
     }
-    const wrap = (v, cls, inner) => '<div class="rs t-' + cls + '" translate="no" style="--rc:' + v.color + ';--rt:' + tint(v.color, .13) + ';--rd:' + shade(v.color, .72) + ';--rf:' + (FONTS[v.font] || FONTS.sans) + '">' + inner + '</div>';
+    const lighten = (h, k) => 'rgb(' + hexRgb(h).map(x => Math.round(x + (255 - x) * k)).join(',') + ')';
+    const PK = { font: {}, hfont: {}, rec: {} };
+    const wrap = (v, cls, inner) => {
+      const auto = v.font === 'auto', ff = auto ? (PK.font[cls] || FONTS.sans) : (FONTS[v.font] || FONTS.sans), hf = auto ? (PK.hfont[cls] || ff) : ff;
+      return '<div class="rs t-' + cls + '" translate="no" style="--rc:' + v.color + ';--rt:' + tint(v.color, .13) + ';--rd:' + shade(v.color, .72) + ';--rx:' + shade(v.color, .42) + ';--rl:' + lighten(v.color, .5) + ';--rf:' + ff + ';--rh:' + hf + '">' + inner + '</div>';
+    };
     const head = v => '<h1>' + X(v.name) + '</h1><div class="rs-sub">' + X(v.title) + '</div>';
 
     /* ---------- the 8 templates ---------- */
@@ -118,6 +123,19 @@
       corporate: c => '<rect width="60" height="20" fill="' + c + '"/><rect x="6" y="6" width="24" height="4" fill="#fff"/><rect x="6" y="13" width="16" height="2" fill="#fff" opacity=".7"/><rect x="46" y="4" width="10" height="12" fill="#fff" opacity=".8"/><rect x="40" y="20" width="20" height="60" fill="#f1f5f9"/><rect x="6" y="28" width="28" height="2" fill="#cbd5e1"/><rect x="6" y="33" width="24" height="2" fill="#cbd5e1"/><rect x="6" y="44" width="28" height="2" fill="#cbd5e1"/><rect x="43" y="28" width="14" height="2" fill="' + c + '"/><rect x="43" y="34" width="12" height="2" fill="#94a3b8"/><rect x="43" y="46" width="14" height="2" fill="' + c + '"/>',
       ats: c => '<rect x="6" y="8" width="26" height="4" fill="#111"/><rect x="6" y="15" width="40" height="2" fill="#94a3b8"/><rect x="6" y="26" width="16" height="2" fill="#111"/><rect x="6" y="30" width="48" height="1" fill="#111"/><rect x="6" y="35" width="48" height="2" fill="#cbd5e1"/><rect x="6" y="40" width="40" height="2" fill="#cbd5e1"/><rect x="6" y="52" width="16" height="2" fill="#111"/><rect x="6" y="56" width="48" height="1" fill="#111"/><rect x="6" y="61" width="44" height="2" fill="#cbd5e1"/>'
     };
+    /* ---------- extra template pack (pj-resume-pack.js): 5 free + 8 PRO ---------- */
+    let PACKCSS = '';
+    try {
+      if (window.PJ_RS_PACK) {
+        const K = window.PJ_RS_PACK({ X, nl2, list, blocks, bl, jobs, kv, ct, sec, photo, parts, wrap, head, IC, tint, shade, hexRgb });
+        Object.assign(R, K.R); Object.assign(TH, K.TH); K.list.forEach(t => TPL.push(t));
+        Object.assign(PK.font, K.font); Object.assign(PK.hfont, K.hfont); Object.assign(PK.rec, K.rec); PACKCSS = K.css;
+      }
+    } catch (e) { console.error('Resume template pack failed', e); }
+    if (!document.getElementById('pj-rs-fonts')) {
+      const l = document.createElement('link'); l.id = 'pj-rs-fonts'; l.rel = 'stylesheet';
+      l.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap'; document.head.appendChild(l);
+    }
     const thumb = (id, c) => '<svg viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">' + TH[id](c) + '</svg>';
 
     /* ---------- styles (injected once) ---------- */
@@ -189,7 +207,10 @@
 .t-ats{padding:40px 50px;color:#000}.t-ats h1{font-size:26px;color:#000}.t-ats .rs-sub{color:#000;font-weight:400}.t-ats .rs-ct{color:#000}
 .t-ats .rs-s h3{color:#000;border-bottom:1px solid #000;padding-bottom:2px}
 @media print{.rs-fit{transform:none!important;width:auto!important}.rs-wrap{height:auto!important;overflow:visible!important}.rs-ph{visibility:hidden}.rs{min-height:296mm}}
-@media(max-width:820px){.rs-pick{grid-template-columns:repeat(4,1fr)}}`;
+@media(max-width:820px){.rs-pick{grid-template-columns:repeat(4,1fr)}}
+.rs-gh{grid-column:1/-1;font-size:.78rem;font-weight:700;margin:8px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;color:var(--ink)}.rs-gh:first-child{margin-top:0}.rs-gh small{font-weight:500;color:var(--mut)}
+.rs-pk{position:relative}.rs-pk.pro::after{content:"PRO";position:absolute;top:2px;right:2px;background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;font-size:.52rem;font-weight:800;letter-spacing:.5px;padding:1px 5px;border-radius:99px}
+.rs-bdg{background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;font-size:.6rem;font-weight:800;letter-spacing:.6px;padding:2px 8px;border-radius:99px}` + PACKCSS;
       document.head.appendChild(s);
     }
 
@@ -213,20 +234,20 @@
       const D = Object.assign({
         name: 'Rahul Sharma', title: 'Mechanical Engineer', email: 'rahul.sharma@example.com', phone: '+91 98765 43210', loc: 'Jaipur, Rajasthan', link: 'linkedin.com/in/yourname',
         summary: 'Result-oriented engineer with 5+ years of experience in design, estimation and project execution. Known for delivering projects on time, reducing cost and working well with teams and clients.',
-        skills: 'AutoCAD, Project Management, MS Excel, Estimation & BOQ, Team Leadership, Communication',
+        skills: 'AutoCAD:92, Project Management:85, MS Excel:90, Estimation & BOQ:80, Team Leadership:75, Communication:88',
         exp: 'Senior Engineer – ABC Pvt. Ltd. (2021 – Present)\n- Designed and executed 20+ commercial projects\n- Reduced material wastage by 12% through accurate planning\n\nJunior Engineer – XYZ Co. (2019 – 2021)\n- Assisted in site execution, testing and commissioning',
         edu: 'B.Tech Mechanical Engineering – XYZ University (2015 – 2019)\n\nSenior Secondary (12th) – ABC School (2015)', extra: 'Certified AutoCAD Professional\nSafety & Quality Training (2022)',
-        lang: 'Hindi, English', personal: 'Date of Birth: 01 Jan 1996\nNationality: Indian', decl: '', font: 'sans', tpl: 'sidebar', color: '#2563eb', photoOn: 'yes', shape: 'circle', photo: ''
+        lang: 'Hindi, English', personal: 'Date of Birth: 01 Jan 1996\nNationality: Indian', decl: '', font: 'auto', tpl: 'sidebar', color: '#2563eb', photoOn: 'yes', shape: 'circle', photo: ''
       }, saved);
-      const ST = { tpl: R[D.tpl] ? D.tpl : 'classic', photo: D.photo || '' };
+      const ST = { tpl: R[D.tpl] ? D.tpl : 'classic', photo: D.photo || '', ctouch: !!saved.ctouch };
       const F = [
         { id: 'name', label: 'Full name', value: D.name }, { id: 'title', label: 'Job title', value: D.title }, { id: 'email', label: 'Email', value: D.email }, { id: 'phone', label: 'Phone', value: D.phone },
         { id: 'loc', label: 'Location', value: D.loc }, { id: 'link', label: 'LinkedIn / Website', value: D.link },
         { id: 'photoOn', label: 'Photo', type: 'select', value: D.photoOn, options: [['yes', 'With photo'], ['no', 'Without photo']], hint: 'Photo is common in India / Gulf / Europe. For online (ATS) or US / UK jobs choose “Without photo”.' },
         { id: 'shape', label: 'Photo shape', type: 'select', value: D.shape, options: [['circle', 'Round'], ['rounded', 'Rounded square'], ['square', 'Square']] },
-        { id: 'color', label: 'Accent colour', type: 'color', value: D.color }, { id: 'font', label: 'Font style', type: 'select', value: D.font, options: [['sans', 'Modern (Poppins)'], ['serif', 'Classic (Georgia)'], ['arial', 'Simple (Arial)'], ['calibri', 'Office (Calibri)']] },
+        { id: 'color', label: 'Accent colour', type: 'color', value: D.color }, { id: 'font', label: 'Font style', type: 'select', value: D.font, options: [['auto', 'Template default (recommended)'], ['sans', 'Modern (Poppins)'], ['serif', 'Classic (Georgia)'], ['arial', 'Simple (Arial)'], ['calibri', 'Office (Calibri)']] },
         { id: 'summary', label: 'Professional summary', type: 'textarea', rows: 3, value: D.summary, wide: 1 },
-        { id: 'skills', label: 'Skills (comma separated)', type: 'textarea', rows: 2, value: D.skills, wide: 1 },
+        { id: 'skills', label: 'Skills (comma separated)', type: 'textarea', rows: 2, value: D.skills, wide: 1, hint: 'Optional level for PRO templates: write  Skill:90  (0–100) to get skill bars / rings, e.g.  Excel:90, AutoCAD:80. Without a number a simple list is shown.' },
         { id: 'exp', label: 'Experience', type: 'textarea', rows: 8, value: D.exp, wide: 1, hint: 'First line of each block = Role – Company (dates). Next lines = bullet points. Leave a blank line between jobs. Freshers: put internships / projects here.' },
         { id: 'edu', label: 'Education', type: 'textarea', rows: 4, value: D.edu, wide: 1, hint: 'Degree – College (years). Blank line between entries.' },
         { id: 'extra', label: 'Projects / Certifications (optional)', type: 'textarea', rows: 3, value: D.extra, wide: 1 },
@@ -243,7 +264,7 @@
         <div class="card print-area" id="prev"><div class="noprint rs-pg" id="rs-pg"></div><div class="rs-wrap" id="rs-wrap"><div class="rs-fit" id="rs-fit"></div></div></div></div>`;
       const g = id => { const e = $('#f_rs2_' + id, el); return e ? e.value : ''; };
       const fit = $('#rs-fit', el), wr = $('#rs-wrap', el), pick = $('#rs-pick', el);
-      const vals = () => { const v = {}; F.forEach(f => v[f.id] = g(f.id)); v.tpl = ST.tpl; v.photo = ST.photo; return v; };
+      const vals = () => { const v = {}; F.forEach(f => v[f.id] = g(f.id)); v.tpl = ST.tpl; v.photo = ST.photo; v.ctouch = ST.ctouch; return v; };
       const scale = () => {
         const root = fit.firstElementChild; if (!root) return;
         const s = Math.min(1, wr.clientWidth / 794 || 1);
@@ -251,7 +272,9 @@
       };
       const pickUI = () => {
         const c = g('color') || '#2563eb';
-        pick.innerHTML = TPL.map(t => '<button type="button" class="rs-pk ' + (t[0] === ST.tpl ? 'on' : '') + '" data-t="' + t[0] + '">' + thumb(t[0], c) + t[1] + '</button>').join('');
+        const btn = t => '<button type="button" class="rs-pk ' + t[2] + ' ' + (t[0] === ST.tpl ? 'on' : '') + '" data-t="' + t[0] + '">' + thumb(t[0], c) + t[1] + '</button>';
+        const fr = TPL.filter(t => t[2] !== 'pro'), pr = TPL.filter(t => t[2] === 'pro');
+        pick.innerHTML = '<div class="rs-gh">Free templates <small>(' + fr.length + ')</small></div>' + fr.map(btn).join('') + (pr.length ? '<div class="rs-gh"><span class="rs-bdg">PRO</span> Pro-level designs <small>(' + pr.length + ') – bars &amp; rings</small></div>' + pr.map(btn).join('') : '');
       };
       const draw = () => {
         const v = vals();
@@ -266,8 +289,8 @@
         try { localStorage.setItem('pj_resume2', JSON.stringify(Object.assign({}, v))); } catch (e) { try { v.photo = ''; localStorage.setItem('pj_resume2', JSON.stringify(v)); } catch (e2) { } }
       };
       pickUI(); draw();
-      $$('input,select,textarea', el).forEach(x => { if (x.type !== 'file') x.addEventListener('input', () => { if (x.id === 'f_rs2_color') pickUI(); draw(); }); });
-      pick.addEventListener('click', e => { const b = e.target.closest('.rs-pk'); if (!b) return; ST.tpl = b.dataset.t; pickUI(); draw(); });
+      $$('input,select,textarea', el).forEach(x => { if (x.type !== 'file') x.addEventListener('input', () => { if (x.id === 'f_rs2_color') { ST.ctouch = true; pickUI(); } draw(); }); });
+      pick.addEventListener('click', e => { const b = e.target.closest('.rs-pk'); if (!b) return; ST.tpl = b.dataset.t; const rc = PK.rec[ST.tpl]; if (rc && !ST.ctouch) $('#f_rs2_color', el).value = rc; pickUI(); draw(); });
       $('#rs-file', el).addEventListener('change', async e => {
         const f = e.target.files[0]; if (!f) return;
         try { ST.photo = await procPhoto(f); $('#f_rs2_photoOn', el).value = 'yes'; draw(); toast('Photo added ✓'); } catch (er) { toast('Could not read this image. Please use JPG or PNG.'); }
@@ -297,7 +320,7 @@
 
     tools.forEach(t => {
       t.render = resumeV2;
-      t.desc = 'Professional resumes with or without photo – 8 ready templates, download as PDF';
+      t.desc = 'Professional resumes with or without photo – ' + TPL.length + ' templates (' + TPL.filter(x => x[2] === 'pro').length + ' PRO), download as PDF';
     });
   } catch (e) { console.error('Resume upgrade failed', e); }
 })();
