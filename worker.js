@@ -11,7 +11,15 @@
  * Model badalna ho to MODEL line badlein (list: dash.cloudflare.com → AI → Workers AI → Models).
  */
 const MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
-const ALLOWED = ["https://peeyush-jangid.github.io", "http://localhost:8080", "http://127.0.0.1:5500"];
+const ALLOWED = ["https://peeyush-jangid.github.io"];
+// Website (github.io), app/PWA, WebView (Capacitor/Ionic/Cordova), localhost aur file:// (origin "null") sab allow
+function originOk(o) {
+  if (!o) return true;
+  return ALLOWED.includes(o) ||
+    o === "null" ||
+    /^(https?|capacitor|ionic|app|file):\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o) ||
+    /^https:\/\/([a-z0-9-]+\.)*peeyush-jangid\.github\.io$/.test(o);
+}
 const MAX_MSGS = 24, MAX_CHARS = 12000, MAX_SYSTEM = 20000, MAX_TOKENS = 3000;
 
 // Server-side base rules (client ka prompt badal bhi jaye to ye hamesha rahenge)
@@ -30,9 +38,9 @@ function limited(ip) {
 export default {
   async fetch(req, env) {
     const origin = req.headers.get("Origin") || "";
-    const okOrigin = ALLOWED.includes(origin);
+    const okOrigin = originOk(origin);
     const cors = {
-      "Access-Control-Allow-Origin": okOrigin ? origin : ALLOWED[0],
+      "Access-Control-Allow-Origin": okOrigin && origin ? origin : ALLOWED[0],
       "Access-Control-Allow-Methods": "POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type",
       "Vary": "Origin"
