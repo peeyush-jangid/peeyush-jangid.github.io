@@ -1950,6 +1950,51 @@
         "Ctrl + Shift + End",
         "Select from the current cursor position to the end of the document.",
         "Pro"
+      ],
+      [
+        "Shift + F5",
+        "Previous Edit",
+        "Intermediate"
+      ],
+      [
+        "Ctrl + Shift + 8",
+        "Show Formatting Marks",
+        "Pro"
+      ],
+      [
+        "Alt + Ctrl + P",
+        "Print Layout",
+        "Pro"
+      ],
+      [
+        "Alt + Ctrl + N",
+        "Draft View",
+        "Pro"
+      ],
+      [
+        "Alt + Ctrl + O",
+        "Outline View",
+        "Pro"
+      ],
+      [
+        "Ctrl + Mouse Wheel",
+        "Zoom In / Zoom Out",
+        "Pro"
+      ],
+      [
+        "Shift + F7",
+        "Thesaurus",
+        "Pro"
+      ],
+      [
+        "Alt + N, T",
+        "Insert Table",
+        "Intermediate"
+      ],
+      [
+        "Alt + N, P",
+        "Insert Picture",
+        "Intermediate"
       ]
     ]
   },
