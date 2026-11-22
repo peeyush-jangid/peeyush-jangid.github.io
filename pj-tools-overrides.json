@@ -1634,6 +1634,319 @@
         "Dimension",
         "Dimension लगाना"
       ]
+    ],
+    "word-commands": [
+      [
+        "Ctrl + N",
+        "New blank document",
+        "Beginner"
+      ],
+      [
+        "Ctrl + O",
+        "Open a document",
+        "Beginner"
+      ],
+      [
+        "Ctrl + S",
+        "Save",
+        "Beginner"
+      ],
+      [
+        "F12",
+        "Save As (new name / location)",
+        "Beginner"
+      ],
+      [
+        "Ctrl + P",
+        "Print / print preview",
+        "Beginner"
+      ],
+      [
+        "Ctrl + C / X / V",
+        "Copy / Cut / Paste",
+        "Beginner"
+      ],
+      [
+        "Ctrl + Z / Y",
+        "Undo / Redo",
+        "Beginner"
+      ],
+      [
+        "Ctrl + B / I / U",
+        "Bold / Italic / Underline",
+        "Beginner"
+      ],
+      [
+        "Ctrl + A",
+        "Select the whole document",
+        "Beginner"
+      ],
+      [
+        "Ctrl + F",
+        "Find (Navigation pane)",
+        "Beginner"
+      ],
+      [
+        "Ctrl + H",
+        "Find and Replace",
+        "Beginner"
+      ],
+      [
+        "Ctrl + L / E / R / J",
+        "Align Left / Center / Right / Justify",
+        "Beginner"
+      ],
+      [
+        "Ctrl + Enter",
+        "Insert a page break",
+        "Beginner"
+      ],
+      [
+        "Ctrl + ] / Ctrl + [",
+        "Increase / decrease font size",
+        "Beginner"
+      ],
+      [
+        "Ctrl + Home / End",
+        "Jump to start / end of the document",
+        "Beginner"
+      ],
+      [
+        "Shift + F3",
+        "Change case (UPPER / lower / Title)",
+        "Beginner"
+      ],
+      [
+        "Ctrl + 1 / 5 / 2",
+        "Line spacing single / 1.5 / double",
+        "Beginner"
+      ],
+      [
+        "F7",
+        "Spelling and grammar check",
+        "Beginner"
+      ],
+      [
+        "Ctrl + Backspace / Delete",
+        "Delete the previous / next whole word",
+        "Beginner"
+      ],
+      [
+        "Home tab",
+        "Font, size, colour, bullets, alignment, styles all live here",
+        "Beginner"
+      ],
+      [
+        "Ctrl + Alt + 1 / 2 / 3",
+        "Apply Heading 1 / 2 / 3 style",
+        "Intermediate"
+      ],
+      [
+        "Ctrl + Shift + N",
+        "Reset to Normal style",
+        "Intermediate"
+      ],
+      [
+        "Ctrl + Shift + L",
+        "Bulleted list",
+        "Intermediate"
+      ],
+      [
+        "Ctrl + Shift + C / V",
+        "Copy / paste formatting (Format Painter by keys)",
+        "Intermediate"
+      ],
+      [
+        "Ctrl + K",
+        "Insert a hyperlink",
+        "Intermediate"
+      ],
+      [
+        "Ctrl + D",
+        "Open the Font dialog box",
+        "Intermediate"
+      ],
+      [
+        "Ctrl + Shift + G",
+        "Word count",
+        "Intermediate"
+      ],
+      [
+        "Ctrl + Alt + M",
+        "Insert a comment",
+        "Intermediate"
+      ],
+      [
+        "Ctrl + Shift + E",
+        "Turn Track Changes on / off",
+        "Intermediate"
+      ],
+      [
+        "Ctrl + Shift + Spacebar",
+        "Non-breaking space (keeps \"Rs. 500\" together)",
+        "Intermediate"
+      ],
+      [
+        "Alt + Shift + ← / →",
+        "Promote / demote a heading level",
+        "Intermediate"
+      ],
+      [
+        "Insert → Table",
+        "Insert a table (Tab key adds a new row at the end)",
+        "Intermediate"
+      ],
+      [
+        "Insert → Header & Footer",
+        "Add page numbers, date and title on every page",
+        "Intermediate"
+      ],
+      [
+        "Layout → Margins / Orientation / Size",
+        "Page setup for A4, letter, landscape",
+        "Intermediate"
+      ],
+      [
+        "Layout → Breaks → Section Break",
+        "Different layout or header in part of the document",
+        "Intermediate"
+      ],
+      [
+        "Layout → Columns",
+        "Newsletter-style columns",
+        "Intermediate"
+      ],
+      [
+        "Design → Watermark / Page Borders",
+        "Draft/confidential watermark, page border",
+        "Intermediate"
+      ],
+      [
+        "Home → Styles",
+        "Use Heading / Title / Normal styles instead of manual formatting",
+        "Intermediate"
+      ],
+      [
+        "Home → Sort (A→Z)",
+        "Sort a list or table column",
+        "Intermediate"
+      ],
+      [
+        "Table Layout → Merge Cells / Repeat Header Rows",
+        "Merge cells; repeat the header on every page",
+        "Intermediate"
+      ],
+      [
+        "References → Table of Contents",
+        "Auto TOC from Heading styles (right-click → Update Field)",
+        "Pro"
+      ],
+      [
+        "F9",
+        "Update selected fields (TOC, page number, cross-reference)",
+        "Pro"
+      ],
+      [
+        "Alt + F9",
+        "Show / hide field codes",
+        "Pro"
+      ],
+      [
+        "Ctrl + F9",
+        "Insert an empty field {  }",
+        "Pro"
+      ],
+      [
+        "Ctrl + Alt + F / D",
+        "Insert footnote / endnote",
+        "Pro"
+      ],
+      [
+        "References → Insert Caption + Cross-reference",
+        "Auto-numbered Figure / Table captions that update",
+        "Pro"
+      ],
+      [
+        "References → Citations & Bibliography",
+        "APA / MLA / Chicago references",
+        "Pro"
+      ],
+      [
+        "Mailings → Start Mail Merge",
+        "Letters, labels, certificates from an Excel list",
+        "Pro"
+      ],
+      [
+        "Mailings → Insert Merge Field / Preview Results / Finish & Merge",
+        "Personalise each copy",
+        "Pro"
+      ],
+      [
+        "Review → Compare / Combine",
+        "See differences between two versions",
+        "Pro"
+      ],
+      [
+        "Review → Restrict Editing / Protect",
+        "Password or limit editing to forms / comments",
+        "Pro"
+      ],
+      [
+        "Developer → Content Controls",
+        "Fillable forms: text box, drop-down, date picker, checkbox",
+        "Pro"
+      ],
+      [
+        "Alt + F8 / Alt + F11",
+        "Macros list / VBA editor – automate repeated work",
+        "Pro"
+      ],
+      [
+        "Ctrl + H → More → Special: ^p ^t ^w",
+        "Find paragraph marks, tabs, white space; Use Wildcards for patterns",
+        "Pro"
+      ],
+      [
+        "F4 or Ctrl + Y",
+        "Repeat the last action (great for formatting many places)",
+        "Pro"
+      ],
+      [
+        "Alt + =",
+        "Insert an equation",
+        "Pro"
+      ],
+      [
+        "Design → Themes / Define New Style → Save as .dotx",
+        "Reusable company template",
+        "Pro"
+      ],
+      [
+        "Insert → Index (Mark Entry Alt+Shift+X)",
+        "Back-of-book index",
+        "Pro"
+      ],
+      [
+        "View → Navigation Pane / Outline view",
+        "Reorder whole chapters by dragging headings",
+        "Pro"
+      ],
+      [
+        "File → Info → Check for Issues → Accessibility / Inspect Document",
+        "Remove hidden data, check accessibility",
+        "Pro"
+      ],
+      [
+        "File → Export → Create PDF/XPS",
+        "Share a locked-layout PDF",
+        "Pro"
+      ],
+      [
+        "SmartArt",
+        "Professional Diagrams",
+        "Pro"
+      ]
     ]
-  }
+  },
+  "qa": {}
 }
