@@ -19,8 +19,8 @@
     "attendance": 3,
     "invoice": 4,
     "templates": 5,
-    "ms-word": 0.3,
-    "ms-powerpoint": 0.6
+    "word-commands": 0.3,
+    "ppt-commands": 0.6
   },
   "tables": {
     "autocad": [

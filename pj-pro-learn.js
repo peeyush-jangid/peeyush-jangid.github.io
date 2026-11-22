@@ -59,8 +59,30 @@
     });
     D.MCQ[id] = DATA.mcq.map(m => m.slice(1));
   }
-  learnTool('ms-word', '📘', 'MS Word – Beginner to Pro', 'All Word commands & shortcuts, lessons, interview questions, practice test and sheet', D.word, 'Microsoft Word');
-  learnTool('ms-powerpoint', '📙', 'MS PowerPoint – Beginner to Pro', 'All PowerPoint commands & shortcuts, lessons, interview questions, practice test and sheet', D.ppt, 'Microsoft PowerPoint');
+
+  /* ---------- Excel-style searchable cheat-sheets: Word Commands & PowerPoint Commands ---------- */
+  function cheatTool(id, ico, name, desc, DATA, ph) {
+    const LV = D.LV, rows = DATA.cmds;
+    TOOLS.push({
+      cat: 'office', id, ico, name, desc: rows.length + '+ ' + desc, render: el => {
+        let lv = 'ALL';
+        el.innerHTML = `<div class="card"><input id="qs" type="search" placeholder="${ph}"><div class="pp-lv" style="margin-top:10px">${[['ALL', 'All']].concat(Object.entries(LV)).map(([k, v]) => `<button data-l="${k}" class="${k === 'ALL' ? 'on' : ''}">${v}</button>`).join('')}</div>
+          <div class="scroll" style="margin-top:6px"><table><tr><th>Shortcut / Command</th><th>What it does</th><th>Level</th><th></th></tr>${rows.map((r, i) => `<tr data-l="${r[0]}" data-s="${esc((r[1] + ' ' + r[2] + ' ' + LV[r[0]]).toLowerCase())}"><td><code>${esc(r[1])}</code></td><td>${esc(r[2])}</td><td><span class="pp-lvb ${r[0]}">${LV[r[0]]}</span></td><td><button class="btn sm" data-i="${i}">Copy</button></td></tr>`).join('')}</table></div><p class="note" id="cn"></p></div>`;
+        const f = () => { const q = $('#qs', el).value.trim().toLowerCase(); let n = 0; $$('tr[data-s]', el).forEach(r => { const h = (lv !== 'ALL' && r.dataset.l !== lv) || (q && !r.dataset.s.includes(q)); r.hidden = h; if (!h) n++; }); $('#cn', el).textContent = n + ' shown · Windows shortcuts (Mac: use ⌘ for Ctrl, ⌥ for Alt)'; };
+        $('#qs', el).addEventListener('input', f); $$('.pp-lv [data-l]', el).forEach(b => b.onclick = () => { lv = b.dataset.l; $$('.pp-lv [data-l]', el).forEach(x => x.classList.toggle('on', x === b)); f(); });
+        $$('button[data-i]', el).forEach(b => b.onclick = () => copy(rows[b.dataset.i][1])); f();
+        const L = D.LV, extra = document.createElement('div');
+        extra.innerHTML = `<div class="card"><h3 style="margin-top:0">🧭 Lessons – Beginner to Pro</h3>${['B', 'I', 'P'].map(k => `<p><span class="pp-lvb ${k}">${L[k]}</span></p>` + DATA.lessons[k].map(l => `<details><summary><b>${esc(l[0])}</b></summary><ol>${l[1].map(x => `<li>${esc(x)}</li>`).join('')}</ol></details>`).join('')).join('')}</div>
+          <div class="card"><h3 style="margin-top:0">🎤 Interview questions</h3>${DATA.qa.map(x => `<details><summary><b>${esc(x[0])}</b></summary><p>${esc(x[1])}</p></details>`).join('')}</div>
+          <div class="card"><h3 style="margin-top:0">📋 Hands-on practice tasks</h3>${['B', 'I', 'P'].map(k => `<p><span class="pp-lvb ${k}">${L[k]}</span></p><ol>${DATA.sheet[k].map(x => `<li>${esc(x)}</li>`).join('')}</ol>`).join('')}</div>`;
+        el.appendChild(extra);
+        const box = PJ.practicePanel(id, name); el.appendChild(box);
+      }
+    });
+    D.MCQ[id] = DATA.mcq.map(m => m.slice(1)); PJ.PRACT.push(id);
+  }
+  cheatTool('word-commands', '📝', 'Word Commands', 'Word shortcuts & commands – Beginner to Pro, with copy and practice', D.word, 'Search Word commands, e.g. page break, table, mail merge…');
+  cheatTool('ppt-commands', '🖥️', 'PowerPoint Commands', 'PowerPoint shortcuts & commands – Beginner to Pro, with copy and practice', D.ppt, 'Search PowerPoint commands, e.g. animation, master, morph…');
 
   /* ---------- Interview Practice v2 ---------- */
   const T = TOOLS.find(t => t.id === 'interview-practice'); if (!T) return;

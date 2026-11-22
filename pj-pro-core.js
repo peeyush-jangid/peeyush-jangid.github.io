@@ -221,7 +221,7 @@
   PJ.renderSheet = renderSheet;
 
   /* ---------- "Practice" panel appended under selected tools ---------- */
-  const PRACT = ['emi', 'age', 'gst', 'percentage', 'salary', 'loan', 'datediff', 'tr-to-kw', 'cfm', 'duct-size', 'air-velocity', 'btu', 'autocad', 'excel-formulas', 'number-to-words', 'attendance', 'invoice', 'salary-slip', 'interview-questions', 'banking-interview', 'kyc-bpo', 'resume-builder', 'resume-maker', 'email-templates', 'email-writing'];
+  const PRACT = ['emi', 'age', 'gst', 'percentage', 'salary', 'loan', 'datediff', 'tr-to-kw', 'cfm', 'duct-size', 'air-velocity', 'btu', 'autocad', 'excel-formulas', 'number-to-words', 'attendance', 'invoice', 'salary-slip', 'interview-questions', 'banking-interview', 'kyc-bpo', 'resume-builder', 'resume-maker', 'resume-improvement', 'email-templates', 'email-writing'];
   PJ.PRACT = PRACT;
   function practicePanel(id, name) {
     const box = document.createElement('div'); box.className = 'pp-wrap pp-noprint'; box.dataset.pp = id;
@@ -232,6 +232,7 @@
     try { const f = sessionStorage.getItem('pjp_open'); if (f && f.split(':')[1] === id) { sessionStorage.removeItem('pjp_open'); setTimeout(() => { open(f.split(':')[0]); box.scrollIntoView({ behavior: 'smooth' }); }, 150); } } catch (e) { }
     return box;
   }
+  PJ.practicePanel = practicePanel;
   PRACT.forEach(id => {
     const t = TOOLS.find(x => x.id === id); if (!t || t._pp) return; t._pp = 1;
     const orig = t.render;
@@ -243,20 +244,4 @@
     };
   });
 
-  /* ---------- Practice Center tool ---------- */
-  TOOLS.push({
-    cat: 'career', id: 'practice-center', ico: '🏋️', name: 'Practice Center', desc: 'Practice tests, worksheets and a mixed challenge for every tool', render: el => {
-      const sc = LS.get('scores', {}), list = PRACT.map(id => TOOLS.find(x => x.id === id)).filter(Boolean).concat(['ms-word', 'ms-powerpoint'].map(id => TOOLS.find(x => x.id === id)).filter(Boolean));
-      const vals = Object.values(sc), avg = vals.length ? Math.round(vals.reduce((a, b) => a + b.last, 0) / vals.length) : 0, att = vals.reduce((a, b) => a + b.attempts, 0);
-      el.innerHTML = `<div class="card"><div class="pp-head"><h3>⚡ Mixed Challenge</h3></div><p class="note">10 random questions from different tools – calculators, HVAC, Excel, banking, interview and more.</p><div class="row"><button class="btn" id="mix">Start 10-question challenge</button></div></div><div id="mixbox"></div>
-        <div class="card"><h3>📊 Your progress</h3>${res([['Tests attempted', att], ['Average of last scores', avg + '%'], ['Tools practised', vals.length + ' / ' + list.length]])}<p class="note">Progress is saved only in this browser.</p></div>
-        <div class="card"><h3>Practice by tool</h3><div class="pp-center-grid">${list.map(t => { const s = sc['test:' + t.id]; return `<a href="#/${t.id}" data-id="${t.id}"><span class="tico">${t.ico}</span><div><b>${esc(t.name)}</b><small>${s ? 'Best ' + s.best + '% · ' + s.attempts + ' attempt(s)' : 'Not tried yet'}</small></div></a>`; }).join('')}</div></div>`;
-      $$('.pp-center-grid a', el).forEach(a => a.addEventListener('click', () => { try { sessionStorage.setItem('pjp_open', 'test:' + a.dataset.id); } catch (e) { } }));
-      $('#mix', el).onclick = () => {
-        const ids = shuffle(PRACT.filter(hasPractice)).slice(0, 10), qs = ids.map(id => buildSet(id, 1)[0]).filter(Boolean);
-        renderQuiz($('#mixbox', el), qs, { minutes: 10, key: 'test:mix', title: 'Mixed challenge', again: () => $('#mix', el).onclick() });
-        $('#mixbox', el).scrollIntoView({ behavior: 'smooth' });
-      };
-    }
-  });
 })();
