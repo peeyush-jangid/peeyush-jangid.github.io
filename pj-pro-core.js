@@ -120,11 +120,20 @@
   }
   function bankFor(id) { const k = D.MCQ_MAP[id]; return (k && D.MCQ[k]) || D.MCQ[id] || []; }
   function hasPractice(id) { return !!(GEN[id] || bankFor(id).length); }
+  /* har test me naye sawaal: pehle wo sawaal jo is device par abhi tak nahi aaye; sab khatam hon to chakra dobara shuru */
+  function takeBank(id, b, k) {
+    if (k <= 0 || !b.length) return [];
+    const key = 'qs:' + id; let seen = new Set(LS.get(key, []));
+    let out = shuffle(b.filter(m => !seen.has(m[0]))).slice(0, k);
+    if (out.length < k) { const used = new Set(out.map(m => m[0])); out = out.concat(shuffle(b.filter(m => !used.has(m[0]))).slice(0, k - out.length)); seen = new Set(); }
+    out.forEach(m => seen.add(m[0])); LS.set(key, [...seen].slice(-500));
+    return out;
+  }
   function buildSet(id, n, bank) {
-    const gens = GEN[id] || [], b = bank || bankFor(id), out = [];
+    const gens = GEN[id] || [], b = bank || bankFor(id), out = [], texts = new Set();
     const ng = gens.length ? (b.length ? Math.ceil(n * .6) : n) : 0;
-    for (let i = 0; i < ng; i++) out.push(G[pick(gens)]());
-    const nb = n - out.length; if (nb > 0) shuffle(b).slice(0, nb).forEach(m => out.push(mcqToQ(m)));
+    for (let i = 0, tries = 0; i < ng && tries < ng * 8; tries++) { const q = G[pick(gens)](); if (!q || texts.has(q.q)) continue; texts.add(q.q); out.push(q); i++; }
+    const nb = n - out.length; if (nb > 0) takeBank(id, b.filter(m => !texts.has(m[0])), nb).forEach(m => out.push(mcqToQ(m)));
     return shuffle(out);
   }
   Object.assign(PJ, { G, GEN, buildSet, mcqToQ, hasPractice, bankFor });
