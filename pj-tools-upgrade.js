@@ -126,11 +126,14 @@
     /* ---------- extra template pack (pj-resume-pack.js): 5 free + 8 PRO ---------- */
     let PACKCSS = '';
     try {
-      if (window.PJ_RS_PACK) {
-        const K = window.PJ_RS_PACK({ X, nl2, list, blocks, bl, jobs, kv, ct, sec, photo, parts, wrap, head, IC, tint, shade, hexRgb });
-        Object.assign(R, K.R); Object.assign(TH, K.TH); K.list.forEach(t => TPL.push(t));
-        Object.assign(PK.font, K.font); Object.assign(PK.hfont, K.hfont); Object.assign(PK.rec, K.rec); PACKCSS = K.css;
-      }
+      [window.PJ_RS_PACK, window.PJ_RS_PACK2].forEach(fn => {
+        if (!fn) return;
+        try {
+          const K = fn({ X, nl2, list, blocks, bl, jobs, kv, ct, sec, photo, parts, wrap, head, IC, tint, shade, hexRgb });
+          Object.assign(R, K.R); Object.assign(TH, K.TH); K.list.forEach(t => TPL.push(t));
+          Object.assign(PK.font, K.font); Object.assign(PK.hfont, K.hfont); Object.assign(PK.rec, K.rec); PACKCSS += K.css;
+        } catch (e) { console.error('Resume template pack failed', e); }
+      });
     } catch (e) { console.error('Resume template pack failed', e); }
     if (!document.getElementById('pj-rs-fonts')) {
       const l = document.createElement('link'); l.id = 'pj-rs-fonts'; l.rel = 'stylesheet';
