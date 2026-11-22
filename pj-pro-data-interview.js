@@ -305,3 +305,43 @@ PJD.IB = {
   }
 };
 PJD.IB_FIELDS = Object.keys(PJD.IB);
+
+/* Extra behavioural / situational / general pool – mixed into every field so sessions differ from person to person */
+PJD.IBX = {
+  F: [
+    ['Describe a challenge you faced in college or a project and how you solved it.', 'Use STAR: situation, your action, result; show learning.'],
+    ['Tell me about a time you worked in a team.', 'Your role, how you helped the team, outcome.'],
+    ['What is your biggest achievement so far?', 'Academic, project, sports or certificate – with a proof or number.'],
+    ['How do you handle stress during exams or deadlines?', 'Planning, breaks, prioritising; a real example.'],
+    ['Why did you choose this field or course?', 'Genuine interest, exposure, future goal.'],
+    ['What do you know about our company?', 'Products, size, values, recent news – shows research.'],
+    ['What would you do if you do not know the answer to a task given to you?', 'Try first, search/learn, then ask politely with what you tried.'],
+    ['How do you keep learning new skills?', 'Online courses, practice projects, YouTube/documentation; name one you finished.'],
+    ['Describe a time you showed leadership.', 'Class project, club or event; how you motivated others.'],
+    ['What motivates you to work every day?', 'Learning, impact, growth; avoid saying only salary.'],
+    ['If you get two tasks with the same deadline, what will you do?', 'Prioritise by urgency/impact, inform the manager, manage time.'],
+    ['What is your learning style – do you prefer working alone or in a team?', 'Honest answer, show you can do both.'],
+    ['Tell me about a mistake you made and what you learned.', 'Own it, fix it, prevent it next time.'],
+    ['How will you adapt if your first job is very different from your studies?', 'Quick learner, training, mentor, practical examples.'],
+    ['What are your salary expectations as a fresher?', 'Say you are flexible, expect fair market pay and focus on learning.'],
+    ['Do you prefer a big company or a startup and why?', 'Pros of each; link to your learning goals.']
+  ],
+  E: [
+    ['Tell me about a time you missed a deadline. What did you do?', 'Honest cause, recovery steps, communication, how you prevent it now.'],
+    ['Describe the most difficult stakeholder you have handled.', 'Listen, align on goals, document, result.'],
+    ['How do you prioritise when everything is urgent?', 'Impact vs urgency, clarify with manager, delegate, communicate trade-offs.'],
+    ['Tell me about a process you improved. What was the impact?', 'Problem, change, measurable result (time/cost/quality).'],
+    ['How do you handle disagreement with your manager?', 'Present data respectfully, understand their view, commit once decided.'],
+    ['Describe a time you failed. What changed afterwards?', 'Ownership, lesson, new process.'],
+    ['How do you mentor or train a new joiner?', 'Plan, shadowing, feedback, check progress.'],
+    ['Tell me about a time you had to learn something quickly at work.', 'What, how fast, how you applied it, result.'],
+    ['What is your biggest professional strength, with proof?', 'Strength + example + number.'],
+    ['Why should we pay you more than a fresher?', 'Experience that saves time/cost, ready to deliver from day one, examples.'],
+    ['How do you handle a team member who is not performing?', 'Private talk, find cause, support, set targets, escalate if needed.'],
+    ['What changes have you introduced that others resisted?', 'How you explained benefits, pilot, got buy-in.'],
+    ['Tell me about the most pressure you worked under.', 'Situation, steps to stay organised, outcome.'],
+    ['What is your notice period and are you flexible?', 'State honestly; mention handover plan and possible buy-out.'],
+    ['Where do you want to grow in the next 3 years in this role?', 'Skills, responsibility, leadership; align with company needs.'],
+    ['How do you stay updated with industry changes?', 'Courses, certifications, communities, trade news – give examples.']
+  ]
+};

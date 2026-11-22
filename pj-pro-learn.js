@@ -98,16 +98,38 @@
       <label>Questions<select id="cnt"><option>5</option><option selected>10</option><option>15</option><option value="0">All</option></select></label>
       <label>Time per question<select id="dur"><option value="30">30 seconds</option><option value="60">1 minute</option><option value="120" selected>2 minutes</option><option value="180">3 minutes</option><option value="300">5 minutes</option><option value="c">Custom…</option><option value="0">No timer</option></select></label>
       <label id="cw" hidden>Custom (min : sec)<span style="display:flex;gap:6px"><input id="cm" type="number" min="0" max="30" value="1"><input id="cs" type="number" min="0" max="59" value="30"></span></label></div>
-      <div class="row"><label class="pp-opt"><input type="checkbox" id="auto" checked><span>Auto-start timer</span></label><label class="pp-opt"><input type="checkbox" id="next"><span>Auto-next when time ends</span></label><label class="pp-opt"><input type="checkbox" id="spk"><span>Read question aloud</span></label></div>
-      <div class="row"><button class="btn" id="go">Start interview practice →</button></div></div>
+      <div class="row"><label class="pp-opt"><input type="checkbox" id="auto" checked><span>Auto-start timer</span></label><label class="pp-opt"><input type="checkbox" id="next"><span>Auto-next when time ends</span></label><label class="pp-opt"><input type="checkbox" id="spk"><span>Read question aloud</span></label><label class="pp-opt"><input type="checkbox" id="mixhr" checked><span>Add behavioural / situational questions</span></label></div>
+      <div class="row"><button class="btn" id="go">Start interview practice →</button><button class="btn ghost" id="rst" title="Dobara sab sawaal naye ki tarah aayenge">↺ Reset seen questions</button></div><p class="note" id="seenn"></p></div>
       <div id="run"></div>
       <div class="card"><h3>Answer framework</h3>${ul(['<b>Fresher:</b> use <b>Present → Past → Future</b> for "Tell me about yourself"; use projects, internships, training and college work as proof.', '<b>Experienced:</b> use <b>STAR</b> – <b>S</b>ituation, <b>T</b>ask, <b>A</b>ction, <b>R</b>esult – with numbers (₹, %, time saved).', 'Keep each answer 60–120 seconds. Be honest, positive and specific.'])}</div>
       ${hist.length ? `<div class="card"><h3>Recent sessions</h3>${ul(hist.slice(0, 5).map(h => `${esc(h.date)} – ${esc(h.field)} (${h.lvl}) · ${h.n} questions · avg self-rating ${h.avg}/5`))}</div>` : ''}`;
+    const sn = () => { $('#seenn', el).textContent = 'Is device par ' + LS.get('ivseen', []).length + ' sawaal aap dekh chuke hain – naye session me pehle naye sawaal aayenge, order bhi har baar alag hoga.'; }; sn();
+    $('#rst', el).onclick = () => { LS.set('ivseen', []); sn(); toast('Reset ho gaya'); };
     $('#dur', el).onchange = e => $('#cw', el).hidden = e.target.value !== 'c';
     $('#go', el).onclick = () => {
       const f = $('#f', el).value, lvl = $('#lvl', el).value, ord = $('#ord', el).value; let cnt = +$('#cnt', el).value;
-      let pool = []; (f === 'ALL' ? fields : [f]).forEach(fl => (lvl === 'B' ? ['F', 'E'] : [lvl]).forEach(l => D.IB[fl][l].forEach(q => pool.push({ q: q[0], h: q[1], fld: fl, l }))));
-      if (ord === 'r') pool = shuffle(pool); if (cnt) pool = pool.slice(0, cnt);
+      const seen = new Set(LS.get('ivseen', []));
+      let base = []; (f === 'ALL' ? fields : [f]).forEach(fl => (lvl === 'B' ? ['F', 'E'] : [lvl]).forEach(l => D.IB[fl][l].forEach(q => base.push({ q: q[0], h: q[1], fld: fl, l }))));
+      let extra = []; if ($('#mixhr', el).checked) (lvl === 'B' ? ['F', 'E'] : [lvl]).forEach(l => D.IBX[l].forEach(q => extra.push({ q: q[0], h: q[1], fld: 'HR / Behavioural', l })));
+      let pool;
+      if (ord === 'r') {
+        // random + naye sawaal pehle (jo is device par pehle nahi aaye), 70% field-specific, 30% behavioural
+        const fresh = a => { a = shuffle(a); const n = a.filter(x => !seen.has(x.q)), o = a.filter(x => seen.has(x.q)); return n.concat(o); };
+        base = fresh(base); extra = fresh(extra);
+        const total = cnt || (base.length + extra.length), nx = extra.length ? Math.min(extra.length, Math.round(total * .3)) : 0;
+        pool = base.slice(0, total - nx).concat(extra.slice(0, nx));
+        // jagah bachi ho to baaki ke naye (unseen) sawaal pehle, phir purane
+        const left = fresh(base.slice(total - nx).concat(extra.slice(nx)));
+        pool = pool.concat(left.slice(0, Math.max(0, total - pool.length)));
+        // agar kuch purane sawaal aa gaye aur naye bache hain to unhe badal do
+        const used = new Set(pool.map(x => x.q)), spare = left.filter(x => !seen.has(x.q) && !used.has(x.q));
+        pool = pool.map(x => (seen.has(x.q) && spare.length) ? spare.shift() : x);
+        pool = shuffle(pool);
+      } else pool = base.concat(extra);
+      if (cnt) pool = pool.slice(0, cnt);
+      const unseenLeft = pool.filter(x => !seen.has(x.q)).length;
+      pool.forEach(x => seen.add(x.q)); LS.set('ivseen', [...seen].slice(-600));
+      toast(unseenLeft === pool.length ? 'Sab naye sawaal 🎯' : unseenLeft + ' naye + ' + (pool.length - unseenLeft) + ' dohraye hue sawaal');
       let dur = $('#dur', el).value; dur = dur === 'c' ? Math.max(10, (+$('#cm', el).value || 0) * 60 + (+$('#cs', el).value || 0)) : +dur;
       startSession(pool, { f, lvl, dur, auto: $('#auto', el).checked, next: $('#next', el).checked, spk: $('#spk', el).checked });
     };
