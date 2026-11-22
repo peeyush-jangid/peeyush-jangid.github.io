@@ -18,7 +18,9 @@
     "number-to-words": 2,
     "attendance": 3,
     "invoice": 4,
-    "templates": 5
+    "templates": 5,
+    "ms-word": 0.3,
+    "ms-powerpoint": 0.6
   },
   "tables": {
     "autocad": [
