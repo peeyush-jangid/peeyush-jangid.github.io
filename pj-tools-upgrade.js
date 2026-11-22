@@ -213,6 +213,27 @@
 @media(max-width:820px){.rs-pick{grid-template-columns:repeat(4,1fr)}}
 .rs-gh{grid-column:1/-1;font-size:.78rem;font-weight:700;margin:8px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;color:var(--ink)}.rs-gh:first-child{margin-top:0}.rs-gh small{font-weight:500;color:var(--mut)}
 .rs-pk{position:relative}.rs-pk.pro::after{content:"PRO";position:absolute;top:2px;right:2px;background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;font-size:.52rem;font-weight:800;letter-spacing:.5px;padding:1px 5px;border-radius:99px}
+
+/* dynamic sections */
+.split>*{min-width:0}
+.rb-sec{display:flex;flex-direction:column;gap:10px}
+.rb-sec>.rb-t{font-size:.82rem;font-weight:600;color:#334155}
+.rb-card{border:1px solid var(--bd,#e2e8f0);border-radius:12px;padding:12px;background:#f8fafc;position:relative}
+.rb-card .rb-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:.76rem;font-weight:700;color:#475569}
+.rb-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.rb-g .w{grid-column:1/-1}
+.rb-g label{display:flex;flex-direction:column;gap:3px;font-size:.74rem;font-weight:500;color:#475569}
+.rb-g input,.rb-g textarea,.rb-sk input{width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid var(--bd,#cbd5e1);border-radius:8px;font:inherit;font-size:.85rem;background:#fff}
+.rb-g input:disabled{background:#eef2f7;color:#94a3b8}
+.rb-x{background:#fee2e2;color:#b91c1c;border:0;border-radius:8px;padding:4px 10px;font-size:.74rem;font-weight:600;cursor:pointer}
+.rb-x:hover{background:#fecaca}
+.rb-add{align-self:flex-start;background:#eff6ff;color:#1d4ed8;border:1.5px dashed #93c5fd;border-radius:10px;padding:8px 14px;font-size:.82rem;font-weight:600;cursor:pointer}
+.rb-add:hover{background:#dbeafe}
+.rb-sk{display:grid;grid-template-columns:1fr 84px auto;gap:8px;align-items:center}
+.rb-chk{flex-direction:row!important;align-items:center;gap:6px!important}.rb-chk input{width:auto!important}
+.rb-tg{display:flex;gap:8px}.rb-tg button{flex:1;padding:9px;border-radius:10px;border:1.5px solid var(--bd,#cbd5e1);background:#fff;font:inherit;font-size:.85rem;font-weight:600;cursor:pointer;color:#475569}
+.rb-tg button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.rb-sec small{color:var(--mut,#64748b);font-weight:400;font-size:.74rem}
 .rs-bdg{background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;font-size:.6rem;font-weight:800;letter-spacing:.6px;padding:2px 8px;border-radius:99px}` + PACKCSS;
       document.head.appendChild(s);
     }
@@ -242,6 +263,49 @@
         edu: 'B.Tech Mechanical Engineering – XYZ University (2015 – 2019)\n\nSenior Secondary (12th) – ABC School (2015)', extra: 'Certified AutoCAD Professional\nSafety & Quality Training (2022)',
         lang: 'Hindi, English', personal: 'Date of Birth: 01 Jan 1996\nNationality: Indian', decl: '', font: 'auto', tpl: 'sidebar', color: '#2563eb', photoOn: 'yes', shape: 'circle', photo: ''
       }, saved);
+
+      /* ---------- structured sections: Skills / Education / Experience ---------- */
+      const clean = x => String(x == null ? '' : x).replace(/\s+/g, ' ').trim();
+      const cd = x => clean(String(x == null ? '' : x).replace(/[()\[\]]/g, ' '));
+      const bul = s => String(s || '').split('\n').map(x => x.replace(/^\s*[-•*]\s*/, '').trim()).filter(Boolean);
+      const splitJobs = str => blocks(str || '').map(b => {
+        const L = b.split('\n').map(x => x.trim()).filter(Boolean), m = L[0].match(/^(.*?)\s*[\(\[]\s*([^\)\]]+?)\s*[\)\]]\s*$/);
+        return { head: m ? m[1] : L[0], dates: m ? m[2] : '', lines: L.slice(1).map(x => x.replace(/^[-•*]\s*/, '')) };
+      });
+      const hd2 = h => { const i = h.indexOf(' – '); return i > 0 ? [h.slice(0, i).trim(), h.slice(i + 3).trim()] : [h.trim(), '']; };
+      const dflt = {
+        sk: [['AutoCAD', 92], ['Project Management', 85], ['MS Excel', 90], ['Estimation & BOQ', 80], ['Team Leadership', 75], ['Communication', 88]].map(a => ({ n: a[0], l: String(a[1]) })),
+        edu: [{ deg: 'B.Tech Mechanical Engineering', inst: 'XYZ University', city: 'Jaipur', state: 'Rajasthan', year: '2015 – 2019', grade: '' },
+              { deg: 'Senior Secondary (12th)', inst: 'ABC School', city: 'Jaipur', state: 'Rajasthan', year: '2015', grade: '' }],
+        ex: [{ post: 'Senior Engineer', co: 'ABC Pvt. Ltd.', city: 'Jaipur', state: 'Rajasthan', from: '2021', to: '', cur: true, proj: '', work: 'Designed and executed 20+ commercial projects\nReduced material wastage by 12% through accurate planning' },
+             { post: 'Junior Engineer', co: 'XYZ Co.', city: 'Jaipur', state: 'Rajasthan', from: '2019', to: '2021', cur: false, proj: '', work: 'Assisted in site execution, testing and commissioning' }],
+        fr: [{ name: '', org: '', city: '', state: '', year: '', work: '' }]
+      };
+      const SEC = {
+        mode: saved.expMode === 'fresher' ? 'fresher' : 'exp',
+        sk: Array.isArray(saved.skArr) ? saved.skArr : (saved.skills != null && !Array.isArray(saved.skArr) && true ? list(saved.skills).map(x => { const m = x.match(/^(.*?)\s*[:|]\s*(\d{1,3})\s*%?$/); return { n: m ? m[1] : x, l: m ? m[2] : '' }; }) : dflt.sk),
+        edu: Array.isArray(saved.eduArr) ? saved.eduArr : (saved.edu != null && true ? splitJobs(saved.edu).map(j => { const h = hd2(j.head); return { deg: h[0], inst: h[1], city: '', state: '', year: j.dates, grade: '' }; }) : dflt.edu),
+        ex: Array.isArray(saved.exArr) ? saved.exArr : (saved.exp != null && true ? splitJobs(saved.exp).map(j => { const h = hd2(j.head); return { post: h[0], co: h[1], city: '', state: '', from: j.dates, to: '', cur: false, proj: '', work: j.lines.join('\n') }; }) : dflt.ex),
+        fr: Array.isArray(saved.frArr) && saved.frArr.length ? saved.frArr : dflt.fr
+      };
+      const place = o => [clean(o.city), clean(o.state)].filter(Boolean).join(', ');
+      const ser = {
+        skills: () => SEC.sk.filter(x => clean(x.n)).map(x => { const l = parseInt(x.l, 10); return String(x.n).replace(/[,\n:|]/g, ' ').replace(/\s+/g, ' ').trim() + (l >= 0 && l <= 100 && String(x.l).trim() !== '' ? ':' + l : ''); }).join(', '),
+        edu: () => SEC.edu.filter(x => clean(x.deg) || clean(x.inst)).map(x => {
+          const head = [clean(x.deg), clean(x.inst)].filter(Boolean).join(' – '), pl = place(x), yr = cd(x.year);
+          return head + (pl ? ', ' + pl : '') + (yr ? ' (' + yr + ')' : '') + (clean(x.grade) ? '\n- ' + clean(x.grade) : '');
+        }).join('\n\n'),
+        exp: () => SEC.mode === 'fresher'
+          ? SEC.fr.filter(x => clean(x.name) || clean(x.org) || clean(x.work)).map(x => {
+            const head = [clean(x.name), clean(x.org)].filter(Boolean).join(' – '), pl = place(x), yr = cd(x.year);
+            return head + (pl ? ', ' + pl : '') + (yr ? ' (' + yr + ')' : '') + bul(x.work).map(l => '\n- ' + l).join('');
+          }).join('\n\n')
+          : SEC.ex.filter(x => clean(x.post) || clean(x.co) || clean(x.work) || clean(x.proj)).map(x => {
+            const head = [clean(x.post), clean(x.co)].filter(Boolean).join(' – '), pl = place(x);
+            const to = x.cur ? 'Present' : cd(x.to), fr = cd(x.from), d = fr && to ? fr + ' – ' + to : (fr || to);
+            return (head || 'Experience') + (pl ? ', ' + pl : '') + (d ? ' (' + d + ')' : '') + (clean(x.proj) ? '\n- Project: ' + clean(x.proj) : '') + bul(x.work).map(l => '\n- ' + l).join('');
+          }).join('\n\n')
+      };
       const ST = { tpl: R[D.tpl] ? D.tpl : 'classic', photo: D.photo || '', ctouch: !!saved.ctouch };
       const F = [
         { id: 'name', label: 'Full name', value: D.name }, { id: 'title', label: 'Job title', value: D.title }, { id: 'email', label: 'Email', value: D.email }, { id: 'phone', label: 'Phone', value: D.phone },
@@ -250,24 +314,24 @@
         { id: 'shape', label: 'Photo shape', type: 'select', value: D.shape, options: [['circle', 'Round'], ['rounded', 'Rounded square'], ['square', 'Square']] },
         { id: 'color', label: 'Accent colour', type: 'color', value: D.color }, { id: 'font', label: 'Font style', type: 'select', value: D.font, options: [['auto', 'Template default (recommended)'], ['sans', 'Modern (Poppins)'], ['serif', 'Classic (Georgia)'], ['arial', 'Simple (Arial)'], ['calibri', 'Office (Calibri)']] },
         { id: 'summary', label: 'Professional summary', type: 'textarea', rows: 3, value: D.summary, wide: 1 },
-        { id: 'skills', label: 'Skills (comma separated)', type: 'textarea', rows: 2, value: D.skills, wide: 1, hint: 'Optional level for PRO templates: write  Skill:90  (0–100) to get skill bars / rings, e.g.  Excel:90, AutoCAD:80. Without a number a simple list is shown.' },
-        { id: 'exp', label: 'Experience', type: 'textarea', rows: 8, value: D.exp, wide: 1, hint: 'First line of each block = Role – Company (dates). Next lines = bullet points. Leave a blank line between jobs. Freshers: put internships / projects here.' },
-        { id: 'edu', label: 'Education', type: 'textarea', rows: 4, value: D.edu, wide: 1, hint: 'Degree – College (years). Blank line between entries.' },
+        { id: 'skills', custom: 1 },
+        { id: 'exp', custom: 1 },
+        { id: 'edu', custom: 1 },
         { id: 'extra', label: 'Projects / Certifications (optional)', type: 'textarea', rows: 3, value: D.extra, wide: 1 },
         { id: 'lang', label: 'Languages (optional, comma separated)', value: D.lang, wide: 1 },
         { id: 'personal', label: 'Personal details (optional)', type: 'textarea', rows: 3, value: D.personal, wide: 1, hint: 'One per line as  Label: value  (e.g. Date of Birth: 01 Jan 1996). Clear this box to hide the section.' },
         { id: 'decl', label: 'Declaration (optional)', type: 'textarea', rows: 2, value: D.decl, wide: 1, hint: 'e.g. I hereby declare that the above information is true to the best of my knowledge.' }
       ];
       el.innerHTML = `<div class="split"><div class="card noprint"><h3>1. Choose a template</h3><div class="rs-pick" id="rs-pick"></div>
-        <h3 style="margin-top:16px">2. Your details</h3><div class="form">${F.map(f => fld(f, 'rs2_')).join('')}
+        <h3 style="margin-top:16px">2. Your details</h3><div class="form">${F.map(f => f.custom ? '<div class="fld wide rb-sec" id="rb-' + f.id + '"></div>' : fld(f, 'rs2_')).join('')}
         <div class="fld wide"><span>Your photo (optional)</span><div class="rs-photo-row"><input type="file" id="rs-file" accept="image/*"><button class="btn ghost sm" type="button" id="rs-rmph">Remove photo</button></div>
         <small>The photo is cropped to a square on your device. It is never uploaded anywhere.</small></div></div>
         <div class="row"><button class="btn" id="rs-pdf" type="button">⬇ Download PDF</button><button class="btn ghost" id="rs-pr" type="button">🖨 Print / Save as PDF</button><button class="btn ghost" id="rs-rst" type="button">Reset</button></div>
         <p class="note"><b>Download PDF</b> is quick (one A4 page picture). <b>Print / Save as PDF</b> keeps real selectable text, which is better for ATS and online job portals. Your data is saved only in this browser.</p></div>
         <div class="card print-area" id="prev"><div class="noprint rs-pg" id="rs-pg"></div><div class="rs-wrap" id="rs-wrap"><div class="rs-fit" id="rs-fit"></div></div></div></div>`;
-      const g = id => { const e = $('#f_rs2_' + id, el); return e ? e.value : ''; };
+      const g = id => { if (ser[id]) return ser[id](); const e = $('#f_rs2_' + id, el); return e ? e.value : ''; };
       const fit = $('#rs-fit', el), wr = $('#rs-wrap', el), pick = $('#rs-pick', el);
-      const vals = () => { const v = {}; F.forEach(f => v[f.id] = g(f.id)); v.tpl = ST.tpl; v.photo = ST.photo; v.ctouch = ST.ctouch; return v; };
+      const vals = () => { const v = {}; F.forEach(f => v[f.id] = g(f.id)); v.tpl = ST.tpl; v.photo = ST.photo; v.ctouch = ST.ctouch; v.expMode = SEC.mode; v.skArr = SEC.sk; v.eduArr = SEC.edu; v.exArr = SEC.ex; v.frArr = SEC.fr; return v; };
       const scale = () => {
         const root = fit.firstElementChild; if (!root) return;
         const s = Math.min(1, wr.clientWidth / 794 || 1);
@@ -282,6 +346,7 @@
       const draw = () => {
         const v = vals();
         fit.innerHTML = R[v.tpl](v);
+        if (SEC.mode === 'fresher') { const w = document.createTreeWalker(fit, NodeFilter.SHOW_TEXT); let n; while ((n = w.nextNode())) if (/^\s*(Professional |Work )?Experience\s*$/.test(n.nodeValue)) n.nodeValue = 'Internships / Projects'; }
         const photoRow = $('#rs-file', el).closest('.fld');
         photoRow.style.display = v.photoOn === 'yes' ? '' : 'none';
         const sh = $('#f_rs2_shape', el).closest('.fld'); if (sh) sh.style.display = v.photoOn === 'yes' ? '' : 'none';
@@ -291,8 +356,65 @@
         if (v.tpl === 'ats' && v.photoOn === 'yes') $('#rs-pg', el).innerHTML += ' <span style="color:var(--mut)">· ATS Plain never shows a photo.</span>';
         try { localStorage.setItem('pj_resume2', JSON.stringify(Object.assign({}, v))); } catch (e) { try { v.photo = ''; localStorage.setItem('pj_resume2', JSON.stringify(v)); } catch (e2) { } }
       };
+
+      /* ---- UI for dynamic sections ---- */
+      const inp = (k, i, label, val, ph, cls, type) => '<label class="' + (cls || '') + '"><span>' + label + '</span><input type="' + (type || 'text') + '" data-k="' + k + '" data-i="' + i + '" value="' + esc(val || '') + '" placeholder="' + esc(ph || '') + '"></label>';
+      const secUI = {
+        skills() {
+          $('#rb-skills', el).innerHTML = '<span class="rb-t">Skills</span>' +
+            SEC.sk.map((x, i) => '<div class="rb-sk" data-s="sk"><input data-k="n" data-i="' + i + '" value="' + esc(x.n) + '" placeholder="Skill name (e.g. AutoCAD)"><input data-k="l" data-i="' + i + '" type="number" min="0" max="100" value="' + esc(x.l) + '" placeholder="0–100"><button type="button" class="rb-x" data-del="sk" data-i="' + i + '">✕</button></div>').join('') +
+            '<button type="button" class="rb-add" data-add="sk">＋ Add new skill</button><small>Level (0–100) is optional – used for skill bars / rings in PRO templates.</small>';
+        },
+        edu() {
+          $('#rb-edu', el).innerHTML = '<span class="rb-t">Education</span>' +
+            SEC.edu.map((x, i) => '<div class="rb-card" data-s="edu"><div class="rb-h"><span>Education ' + (i + 1) + '</span><button type="button" class="rb-x" data-del="edu" data-i="' + i + '">✕ Remove</button></div><div class="rb-g">' +
+              inp('deg', i, 'Degree / Course', x.deg, 'e.g. B.Tech Mechanical', 'w') + inp('inst', i, 'Name of University / School', x.inst, 'e.g. XYZ University', 'w') +
+              inp('year', i, 'Passing year', x.year, 'e.g. 2019 or 2015 – 2019') + inp('city', i, 'University / School location (city)', x.city, 'e.g. Jaipur') + inp('state', i, 'State', x.state, 'e.g. Rajasthan') + inp('grade', i, 'Percentage / CGPA (optional)', x.grade, 'e.g. 8.2 CGPA') +
+              '</div></div>').join('') + '<button type="button" class="rb-add" data-add="edu">＋ Add new education</button>';
+        },
+        exp() {
+          const fr = SEC.mode === 'fresher';
+          let h = '<span class="rb-t">Experience</span><div class="rb-tg"><button type="button" data-mode="fresher" class="' + (fr ? 'on' : '') + '">🎓 Fresher</button><button type="button" data-mode="exp" class="' + (fr ? '' : 'on') + '">💼 Experienced</button></div>';
+          if (fr) {
+            h += '<small>Fresher: add your projects / internships / training.</small>' + SEC.fr.map((x, i) => '<div class="rb-card" data-s="fr"><div class="rb-h"><span>Project / Internship ' + (i + 1) + '</span><button type="button" class="rb-x" data-del="fr" data-i="' + i + '">✕ Remove</button></div><div class="rb-g">' +
+              inp('name', i, 'Project / Internship name', x.name, 'e.g. HVAC Load Calculator', 'w') + inp('org', i, 'College / Company', x.org, 'e.g. XYZ University') + inp('year', i, 'Year / Duration', x.year, 'e.g. 2024 or Jun – Aug 2024') +
+              inp('city', i, 'Location (city)', x.city, 'e.g. Jaipur') + inp('state', i, 'State', x.state, 'e.g. Rajasthan') +
+              '<label class="w"><span>What did you do? (one point per line)</span><textarea rows="3" data-k="work" data-i="' + i + '" placeholder="Designed duct layout using AutoCAD">' + esc(x.work) + '</textarea></label></div></div>').join('') +
+              '<button type="button" class="rb-add" data-add="fr">＋ Add new project / internship</button>';
+          } else {
+            h += SEC.ex.map((x, i) => '<div class="rb-card" data-s="ex"><div class="rb-h"><span>Experience ' + (i + 1) + '</span><button type="button" class="rb-x" data-del="ex" data-i="' + i + '">✕ Remove</button></div><div class="rb-g">' +
+              inp('post', i, 'Post / Designation', x.post, 'e.g. Senior Engineer') + inp('co', i, 'Company name', x.co, 'e.g. ABC Pvt. Ltd.') +
+              inp('from', i, 'From (month / year)', x.from, 'e.g. Jun 2021') + '<label><span>To (month / year)</span><input data-k="to" data-i="' + i + '" value="' + esc(x.cur ? '' : x.to) + '" placeholder="e.g. Mar 2024" ' + (x.cur ? 'disabled' : '') + '></label>' +
+              '<label class="w rb-chk"><input type="checkbox" data-k="cur" data-i="' + i + '" ' + (x.cur ? 'checked' : '') + '><span>I currently work here (shows “Present”)</span></label>' +
+              inp('city', i, 'Company location (city)', x.city, 'e.g. Jaipur') + inp('state', i, 'State', x.state, 'e.g. Rajasthan') + inp('proj', i, 'Project name (optional)', x.proj, 'e.g. Mall HVAC Project', 'w') +
+              '<label class="w"><span>What work did you do? (one point per line)</span><textarea rows="4" data-k="work" data-i="' + i + '" placeholder="Designed and executed 20+ commercial projects">' + esc(x.work) + '</textarea></label></div></div>').join('') +
+              '<button type="button" class="rb-add" data-add="ex">＋ Add new experience</button>';
+          }
+          $('#rb-exp', el).innerHTML = h;
+        }
+      };
+      const blank = { sk: () => ({ n: '', l: '' }), edu: () => ({ deg: '', inst: '', city: '', state: '', year: '', grade: '' }), ex: () => ({ post: '', co: '', city: '', state: '', from: '', to: '', cur: false, proj: '', work: '' }), fr: () => ({ name: '', org: '', city: '', state: '', year: '', work: '' }) };
+      const rerender = k => (k === 'sk' ? secUI.skills : k === 'edu' ? secUI.edu : secUI.exp)();
+      secUI.skills(); secUI.edu(); secUI.exp();
+      ['skills', 'edu', 'exp'].forEach(id => {
+        const box = $('#rb-' + id, el);
+        box.addEventListener('input', e => {
+          const t = e.target, k = t.dataset.k; if (!k) return;
+          const kind = t.closest('[data-s]').dataset.s, o = SEC[kind][+t.dataset.i]; if (!o) return;
+          o[k] = t.type === 'checkbox' ? t.checked : t.value;
+          if (t.type === 'checkbox') secUI.exp(); // enables / disables the "To" box
+          draw();
+        });
+        box.addEventListener('click', e => {
+          const b = e.target.closest('button'); if (!b) return;
+          if (b.dataset.mode) { SEC.mode = b.dataset.mode; secUI.exp(); draw(); return; }
+          if (b.dataset.add) { const k = b.dataset.add; SEC[k].push(blank[k]()); rerender(k); draw(); const f = box.querySelectorAll('[data-s="' + k + '"]'); const last = k === 'sk' ? box.querySelectorAll('.rb-sk') : f; const n = last[last.length - 1]; const i = n && n.querySelector('input'); if (i) i.focus(); return; }
+          if (b.dataset.del) { const k = b.dataset.del; SEC[k].splice(+b.dataset.i, 1); if (!SEC[k].length && k !== 'sk') SEC[k].push(blank[k]()); rerender(k); draw(); }
+        });
+        box.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.closest('.rb-sk')) { e.preventDefault(); box.querySelector('[data-add="sk"]').click(); } });
+      });
       pickUI(); draw();
-      $$('input,select,textarea', el).forEach(x => { if (x.type !== 'file') x.addEventListener('input', () => { if (x.id === 'f_rs2_color') { ST.ctouch = true; pickUI(); } draw(); }); });
+      $$('input,select,textarea', el).forEach(x => { if (x.type !== 'file' && !x.closest('.rb-sec')) x.addEventListener('input', () => { if (x.id === 'f_rs2_color') { ST.ctouch = true; pickUI(); } draw(); }); });
       pick.addEventListener('click', e => { const b = e.target.closest('.rs-pk'); if (!b) return; ST.tpl = b.dataset.t; const rc = PK.rec[ST.tpl]; if (rc && !ST.ctouch) $('#f_rs2_color', el).value = rc; pickUI(); draw(); });
       $('#rs-file', el).addEventListener('change', async e => {
         const f = e.target.files[0]; if (!f) return;
