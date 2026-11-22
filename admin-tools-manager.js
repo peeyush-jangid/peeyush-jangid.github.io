@@ -35,8 +35,18 @@
     <div id="tm-rows" style="display:none;margin-top:18px;padding:16px;border:1px solid #34465c;border-radius:12px">
       <h3 id="tm-rows-title" style="margin:0 0 8px"></h3>
       <div class="file-hint">Har line ek row: <code>Column1 | Column2 | Column3</code>. Line delete karo = row delete, nayi line = nayi row.</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:12px 0 4px;align-items:end"><div><label for="tm-qr-1">Column 1</label><input id="tm-qr-1" placeholder="e.g. Ctrl + K"></div><div><label for="tm-qr-2">Column 2</label><input id="tm-qr-2" placeholder="What it does"></div><div><label for="tm-qr-3" id="tm-qr-3l">Column 3</label><input id="tm-qr-3" placeholder="Use / Level"></div><button id="tm-qr-add" class="admin-refresh" type="button" style="margin:0 0 12px">+ Row add</button></div>
       <textarea id="tm-rows-text" rows="16" style="${F};font-family:monospace;margin-top:8px"></textarea>
       <div style="display:flex;flex-wrap:wrap;gap:8px"><button id="tm-rows-save" class="admin-button" type="button" style="flex:1;min-width:150px">Publish rows ↗</button><button id="tm-rows-reset" class="admin-refresh" type="button" style="margin-top:22px">Reset to default</button><button id="tm-rows-cancel" class="admin-refresh" type="button" style="margin-top:22px">Cancel</button></div>
+    </div>
+
+    <div id="tm-qa" style="display:none;margin-top:18px;padding:16px;border:1px solid #34465c;border-radius:12px">
+      <h3 id="tm-qa-title" style="margin:0 0 8px"></h3>
+      <div class="file-hint">Har line ek pair: <code>Question || Answer</code>. Line delete karo = us Q&amp;A ka delete. Answer me nayi line chahiye to <code>&#92;n</code> likho.</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin:12px 0 4px"><div><label for="tm-qa-q">Naya question</label><input id="tm-qa-q" placeholder="e.g. What is VLOOKUP?"></div><div><label for="tm-qa-a">Answer</label><input id="tm-qa-a" placeholder="Answer likho"></div></div>
+      <button id="tm-qa-add" class="admin-refresh" type="button">+ List me add karo</button>
+      <textarea id="tm-qa-text" rows="14" style="${F};font-family:monospace;margin-top:8px"></textarea>
+      <div style="display:flex;flex-wrap:wrap;gap:8px"><button id="tm-qa-save" class="admin-button" type="button" style="flex:1;min-width:150px">Publish Q&amp;A ↗</button><button id="tm-qa-reset" class="admin-refresh" type="button" style="margin-top:22px">Reset to default</button><button id="tm-qa-cancel" class="admin-refresh" type="button" style="margin-top:22px">Cancel</button></div>
     </div>
 
     <div class="admin-list-head"><h2>All tools</h2><span id="tm-count" class="admin-files"></span></div>
@@ -47,9 +57,10 @@
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const val = id => (document.getElementById(id)?.value || '').trim();
   const slug = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 30) || 'tool';
-  const TABLES = { 'excel-formulas': ['Excel formulas & shortcuts', 'Function | Example | Use'], autocad: ['AutoCAD commands', 'Shortcut | Command | What it does'] };
-  const emptyOv = () => ({ version: 1, categories: {}, overrides: {}, custom: [], order: {}, tables: {} });
-  let base = null, ov = emptyOv(), sha = '', loaded = false, editing = null, rowsFor = null;
+  const TABLES = { 'excel-formulas': ['Excel formulas & shortcuts', 'Function | Example | Use'], autocad: ['AutoCAD commands', 'Shortcut | Command | What it does'], 'word-commands': ['Word commands', 'Shortcut / Command | What it does | Level (Beginner / Intermediate / Pro)'], 'ppt-commands': ['PowerPoint commands', 'Shortcut / Command | What it does | Level (Beginner / Intermediate / Pro)'] };
+  const QAT = { 'word-commands': 'Word', 'ppt-commands': 'PowerPoint', 'excel-formulas': 'Excel', autocad: 'AutoCAD' };
+  const emptyOv = () => ({ version: 1, categories: {}, overrides: {}, custom: [], order: {}, tables: {}, qa: {} });
+  let base = null, ov = emptyOv(), sha = '', loaded = false, editing = null, rowsFor = null, qaFor = null;
 
   const say = (s, good = false) => { $('tm-status').textContent = s; $('tm-status').style.color = good ? '#9fdb9e' : '#d9bd7b'; };
   function creds() { return { token: val('token'), owner: val('owner') || 'peeyush-jangid', repo: val('repo') || 'peeyush-jangid.github.io', branch: val('branch') || 'main' }; }
@@ -123,7 +134,8 @@
             <button type="button" class="admin-refresh" data-act="up" data-id="${esc(t.id)}" ${i === 0 ? 'disabled' : ''}>▲</button>
             <button type="button" class="admin-refresh" data-act="down" data-id="${esc(t.id)}" ${i === items.length - 1 ? 'disabled' : ''}>▼</button>
             <button type="button" class="admin-refresh" data-act="edit" data-id="${esc(t.id)}">Edit</button>
-            ${TABLES[t.id] ? `<button type="button" class="admin-refresh" data-act="rows" data-id="${esc(t.id)}">Rows${ov.tables[t.id] ? ' ✎' : ''}</button>` : ''}
+            ${TABLES[t.id] ? `<button type="button" class="admin-refresh" data-act="rows" data-id="${esc(t.id)}">${QAT[t.id] === 'Word' || QAT[t.id] === 'PowerPoint' ? 'Commands' : 'Rows'}${ov.tables[t.id] ? ' ✎' : ''}</button>` : ''}
+            ${QAT[t.id] ? `<button type="button" class="admin-refresh" data-act="qa" data-id="${esc(t.id)}">Q&amp;A${ov.qa && ov.qa[t.id] ? ' ✎' : ''}</button>` : ''}
             ${t.custom ? '' : `<button type="button" class="admin-refresh" data-act="hide" data-id="${esc(t.id)}">${t.hidden ? 'Show' : 'Hide'}</button>`}
             <button type="button" class="admin-refresh" data-act="${t.custom ? 'delete' : 'delbuiltin'}" data-id="${esc(t.id)}">Delete</button>
           </div></div>`).join('');
@@ -143,6 +155,7 @@
     const id = b.dataset.id, act = b.dataset.act, t = allTools().find(x => x.id === id); if (!t) return;
     if (act === 'edit') return openForm(t);
     if (act === 'rows') return openRows(id);
+    if (act === 'qa') return openQA(id);
     if (act === 'up' || act === 'down') {
       const same = allTools().filter(x => x.cat === t.cat && !x.deleted), i = same.findIndex(x => x.id === id), j = act === 'up' ? i - 1 : i + 1;
       [same[i], same[j]] = [same[j], same[i]];
@@ -187,7 +200,7 @@
   }
   function openForm(t) {
     if (!loaded) return say('Pehle "Load Tools" dabao.');
-    editing = t ? t.id : null; $('tm-rows').style.display = 'none';
+    editing = t ? t.id : null; $('tm-rows').style.display = 'none'; closeQA();
     $('tm-form').style.display = ''; $('tm-form-title').textContent = t ? `Edit: ${t.name}` : 'Add new tool';
     fillCats(t ? t.cat : Object.keys(cats())[0]); $('tm-newcat').value = '';
     $('tm-ico').value = t ? t.ico : '🧩'; $('tm-name').value = t ? t.name : ''; $('tm-desc').value = t ? t.desc : '';
@@ -239,9 +252,11 @@
 
   /* ---------- built-in table rows ---------- */
   function openRows(id) {
-    closeForm(); rowsFor = id; const rows = ov.tables[id] || base.tables[id] || [];
+    closeForm(); closeQA(); rowsFor = id; const rows = ov.tables[id] || base.tables[id] || [];
     $('tm-rows-title').textContent = `${TABLES[id][0]} – ${rows.length} rows (${TABLES[id][1]})`;
     $('tm-rows-text').value = rows.map(r => r.join(' | ')).join('\n');
+    const wp = id === 'word-commands' || id === 'ppt-commands', hd = TABLES[id][1].split('|').map(x => x.trim());
+    $('tm-qr-1').previousElementSibling.textContent = hd[0] || 'Column 1'; $('tm-qr-2').previousElementSibling.textContent = hd[1] || 'Column 2'; $('tm-qr-3l').textContent = wp ? 'Level' : (hd[2] || 'Column 3'); $('tm-qr-3').placeholder = wp ? 'Beginner / Intermediate / Pro' : '';
     $('tm-rows').style.display = ''; $('tm-rows').scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
   const closeRows = () => { $('tm-rows').style.display = 'none'; rowsFor = null; };
@@ -254,6 +269,42 @@
   $('tm-rows-reset').addEventListener('click', () => {
     if (!confirm('Original rows wapas laani hain? Aapke changes hat jayenge.')) return;
     commit(() => { delete ov.tables[rowsFor]; }, `Reset ${rowsFor} rows`, 'Original rows wapas aa gayi.').then(ok => ok && closeRows());
+  });
+
+  /* quick add one row */
+  $('tm-qr-add').addEventListener('click', () => {
+    const a = $('tm-qr-1').value.trim(), b = $('tm-qr-2').value.trim(), c = $('tm-qr-3').value.trim();
+    if (!a || !b) return say('Column 1 aur Column 2 bharo.');
+    const ta = $('tm-rows-text'); ta.value = (ta.value.trim() ? ta.value.trim() + '\n' : '') + [a, b, c].join(' | ');
+    ['tm-qr-1', 'tm-qr-2', 'tm-qr-3'].forEach(i => $(i).value = ''); ta.scrollTop = ta.scrollHeight; say('Row list me add ho gayi – ab "Publish rows" dabao.', true);
+  });
+
+  /* ---------- Questions & Answers (Word, PowerPoint, Excel, AutoCAD) ---------- */
+  const qaLines = list => list.map(x => x[0] + ' || ' + String(x[1]).replace(/\n/g, '\\n')).join('\n');
+  function openQA(id) {
+    closeForm(); closeRows(); qaFor = id;
+    const list = (ov.qa && ov.qa[id]) || (base.qa && base.qa[id]) || [];
+    $('tm-qa-title').textContent = `${QAT[id]} – Questions & Answers (${list.length})`;
+    $('tm-qa-text').value = qaLines(list); $('tm-qa-q').value = ''; $('tm-qa-a').value = '';
+    $('tm-qa').style.display = ''; $('tm-qa').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  function closeQA() { $('tm-qa').style.display = 'none'; qaFor = null; }
+  $('tm-qa-cancel').addEventListener('click', closeQA);
+  $('tm-qa-add').addEventListener('click', () => {
+    const q = $('tm-qa-q').value.trim(), a = $('tm-qa-a').value.trim().replace(/\n/g, '\\n');
+    if (!q || !a) return say('Question aur Answer dono likho.');
+    const ta = $('tm-qa-text'); ta.value = (ta.value.trim() ? ta.value.trim() + '\n' : '') + q + ' || ' + a;
+    $('tm-qa-q').value = ''; $('tm-qa-a').value = ''; ta.scrollTop = ta.scrollHeight; say('Q&A list me add ho gaya – ab "Publish Q&A" dabao.', true);
+  });
+  $('tm-qa-save').addEventListener('click', () => {
+    const id = qaFor; if (!id) return;
+    const items = $('tm-qa-text').value.split('\n').map(l => l.trim()).filter(Boolean).map(l => { const i = l.indexOf('||'); return i < 0 ? null : [l.slice(0, i).trim(), l.slice(i + 2).trim().replace(/\\n/g, '\n')]; }).filter(x => x && x[0] && x[1]);
+    if (!items.length && !confirm('Saare Q&A delete karke list khaali karni hai?')) return;
+    commit(() => { ov.qa = ov.qa || {}; ov.qa[id] = items; }, `Update ${QAT[id]} Q&A`, `${items.length} Q&A publish ho gaye.`).then(ok => ok && closeQA());
+  });
+  $('tm-qa-reset').addEventListener('click', () => {
+    if (!confirm('Original Q&A wapas laane hain? Aapke changes hat jayenge.')) return;
+    commit(() => { if (ov.qa) delete ov.qa[qaFor]; }, `Reset ${QAT[qaFor]} Q&A`, 'Original Q&A wapas aa gaye.').then(ok => ok && closeQA());
   });
 
   /* ---------- load ---------- */

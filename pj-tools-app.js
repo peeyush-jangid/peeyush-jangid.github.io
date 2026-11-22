@@ -16,7 +16,8 @@
     window.PJ_BASE = JSON.parse(JSON.stringify({
       cats: CATS,
       tools: TOOLS.map(t => ({ id: t.id, cat: t.cat, ico: t.ico, name: t.name, desc: t.desc })),
-      tables: Object.fromEntries(Object.entries(tbl).filter(e => e[1]).map(([k, v]) => [k, v.map(r => r.slice(0, 3))]))
+      tables: Object.assign(Object.fromEntries(Object.entries(tbl).filter(e => e[1]).map(([k, v]) => [k, v.map(r => r.slice(0, 3))])), window.PJ_PRO_ADMIN ? PJ_PRO_ADMIN.baseTables() : {}),
+      qa: window.PJ_PRO_ADMIN ? PJ_PRO_ADMIN.baseQA() : {}
     }));
   } catch (e) { }
 
@@ -40,6 +41,7 @@
 
   function applyOverrides(ov) {
     if (!ov || typeof ov !== 'object') return;
+    if (window.PJ_PRO_ADMIN) { try { PJ_PRO_ADMIN.apply(ov); } catch (e) { console.error('pro admin overrides failed', e); } }
     Object.entries(ov.categories || {}).forEach(([k, v]) => { if (typeof v === 'string' && v.trim()) CATS[k] = v.trim(); });
     Object.entries(ov.tables || {}).forEach(([id, rows]) => {
       const target = tbl[id];
