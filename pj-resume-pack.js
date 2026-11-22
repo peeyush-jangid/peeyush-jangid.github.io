@@ -1,5 +1,5 @@
 /* =====================================================================
-   PJ Resume Template Pack – 5 new free templates + 8 PRO-level templates
+   PJ Resume Template Pack – 5 new free templates + 13 PRO-level templates
    Load BEFORE pj-tools-upgrade.js. It exposes window.PJ_RS_PACK(helpers),
    which pj-tools-upgrade.js calls to merge these templates into Resume Maker.
    (Only html2canvas-safe CSS is used so "Download PDF" matches the preview.)
@@ -130,6 +130,51 @@ window.PJ_RS_PACK = function (H) {
       ts('Profile', P.summary) + ts('Experience', P.exp) + ts('Education', P.edu) + ts('Skills', chips) + ts('Projects / Certifications', P.extra) + ts('Languages', P.lang) + ts('Personal Details', P.kv) + ts('Declaration', P.decl) + '</div>');
   }, c => '<defs><radialGradient id="g8" cx=".85" cy="0" r=".8"><stop offset="0" stop-color="' + c + '" stop-opacity=".6"/><stop offset="1" stop-color="#0b1220" stop-opacity="0"/></radialGradient></defs><rect width="60" height="30" fill="#0b1220"/><rect width="60" height="30" fill="url(#g8)"/><circle cx="6" cy="5" r="1" fill="#f87171"/><circle cx="10" cy="5" r="1" fill="#fbbf24"/><circle cx="14" cy="5" r="1" fill="#4ade80"/><rect x="6" y="12" width="26" height="4" fill="#fff"/><rect x="6" y="19" width="18" height="2" fill="' + lighten(c, .35) + '"/><rect x="43" y="10" width="11" height="12" rx="2" fill="none" stroke="' + lighten(c, .35) + '"/><text x="6" y="40" font-size="3.4" font-family="monospace" fill="' + c + '">// experience</text><rect x="6" y="44" width="48" height="2" fill="#cbd5e1"/><rect x="6" y="49" width="38" height="2" fill="#cbd5e1"/><text x="6" y="60" font-size="3.4" font-family="monospace" fill="' + c + '">// skills</text><rect x="6" y="64" width="10" height="5" rx="2.5" fill="none" stroke="' + c + '" stroke-width=".6"/><rect x="19" y="64" width="12" height="5" rx="2.5" fill="none" stroke="' + c + '" stroke-width=".6"/><rect x="34" y="64" width="9" height="5" rx="2.5" fill="none" stroke="' + c + '" stroke-width=".6"/>');
 
+  /* ================= PRO – Canva-style rich designs ================= */
+  const labc = v => [['Mobile', v.phone], ['Email', v.email], ['Address', v.loc], ['Web', v.link]].filter(x => (x[1] || '').trim()).map(x => '<div class="rs-lb"><b>' + x[0] + ':</b> <span>' + X(x[1]) + '</span></div>').join('');
+
+  /* 9 – Sage Arch */
+  add('p-arch', 'Sage Arch', 'pro', '#5f8f72', SANS, SANS, v => {
+    const P = parts(v), p = pho(v, 138);
+    return wrap(v, 'arch', '<div class="rs-hd"><div class="rs-blob"></div>' + (p ? '<div class="rs-ph2">' + p + '</div>' : '') + '<div class="rs-hi"><h1>' + X(v.name) + '</h1><div class="rs-sub">' + X(v.title) + '</div><div class="rs-ct">' + ct(v) + '</div></div></div><div class="rs-cols"><aside class="rs-sd"><div class="rs-arc">' +
+      sec('Profile', P.summary) + sec('Skills', bars(v)) + sec('Languages', P.lang) + sec('Personal', P.kv) + '</div></aside><div class="rs-mn">' +
+      sec('Education', P.edu) + sec('Experience', P.exp) + sec('Projects / Certifications', P.extra) + sec('Declaration', P.decl) + '</div></div>');
+  }, c => '<circle cx="14" cy="16" r="15" fill="' + tint(c, .2) + '"/><circle cx="14" cy="16" r="8" fill="#fff" stroke="' + c + '" stroke-width="1"/><rect x="28" y="9" width="26" height="4" fill="#1f2937"/><rect x="28" y="16" width="16" height="2" fill="' + c + '"/><rect x="28" y="21" width="26" height="1" fill="#1f2937"/><path d="M4 80V50Q4 38 17 38Q30 38 30 50V80Z" fill="' + tint(c, .22) + '"/><rect x="8" y="46" width="16" height="2.4" fill="#1f2937"/><rect x="8" y="52" width="18" height="2" fill="#cbd5e1"/><rect x="8" y="57" width="14" height="2" fill="#cbd5e1"/><rect x="36" y="36" width="18" height="2.6" fill="#1f2937"/><rect x="36" y="42" width="1" height="12" fill="#1f2937"/><rect x="40" y="42" width="14" height="2" fill="#cbd5e1"/><rect x="40" y="47" width="12" height="2" fill="#cbd5e1"/><rect x="36" y="60" width="18" height="2.6" fill="#1f2937"/><rect x="40" y="66" width="14" height="2" fill="#cbd5e1"/>');
+
+  /* 10 – Navy Panel */
+  add('p-panel', 'Navy Panel', 'pro', '#1d6fd8', SANS, SANS, v => {
+    const P = parts(v), p = pho(v, 142), np = nameParts(v.name), c = v.color;
+    const pf = (t, h) => h ? '<h4>' + t + '</h4>' + h : '';
+    return wrap(v, 'panel', '<aside class="rs-sb"><div class="rs-card2" style="background:' + lighten(c, .9) + '">' + (p ? '<div class="rs-pf">' + p + '</div>' : '') +
+      pf('Contact', '<div class="rs-ct col">' + ct(v) + '</div>') + pf('Education', P.edu) + pf('Skills', bars(v)) + pf('Languages', P.langList) + pf('Personal', P.kv) + '</div></aside><div class="rs-mn"><h1><span>' + X(np[0]) + '</span> ' + X(np[1]) + '</h1><div class="rs-sub">' + X(v.title) + '</div>' + (P.summary ? '<div class="rs-sm">' + P.summary + '</div>' : '') + '<div class="rs-dot"></div>' +
+      sec('Experience', P.exp) + sec('Projects / Certifications', P.extra) + sec('Declaration', P.decl) + '</div>');
+  }, c => '<rect width="22" height="80" fill="' + shade(c, .42) + '"/><rect x="3" y="24" width="17" height="52" rx="3" fill="' + lighten(c, .9) + '"/><circle cx="11.5" cy="22" r="8" fill="#fff"/><circle cx="11.5" cy="22" r="6.4" fill="#cbd5e1"/><rect x="5" y="36" width="12" height="3.4" fill="' + c + '"/><rect x="5" y="44" width="12" height="1.4" fill="' + c + '"/><rect x="5" y="50" width="12" height="1.4" fill="' + c + '"/><rect x="28" y="9" width="12" height="4" fill="' + c + '"/><rect x="41" y="9" width="14" height="4" fill="#1e293b"/><rect x="28" y="16" width="16" height="2" fill="#475569"/><rect x="28" y="24" width="27" height="1" fill="' + c + '" opacity=".5"/><rect x="28" y="30" width="14" height="4" fill="' + c + '"/><rect x="28" y="38" width="20" height="3.4" rx="1.7" fill="' + tint(c, .15) + '"/><rect x="28" y="45" width="26" height="2" fill="#cbd5e1"/><rect x="28" y="52" width="14" height="4" fill="' + c + '"/><rect x="28" y="60" width="26" height="2" fill="#cbd5e1"/>');
+
+  /* 11 – Cocoa Hero */
+  add('p-cocoa', 'Cocoa Hero', 'pro', '#8a6347', SANS, SANS, v => {
+    const P = parts(v), p = pho(v, 250);
+    const lb = (t, h) => h ? '<h4>' + t + '</h4>' + h : '';
+    return wrap(v, 'cocoa', '<div class="rs-hd"><div class="rs-hl">' + head(v) + (P.summary ? '<div class="rs-sm">' + P.summary + '</div>' : '') + '</div>' + (p ? '<div class="rs-hr">' + p + '</div>' : '') + '</div><div class="rs-cols"><aside class="rs-sd">' +
+      lb('Contact', '<div class="rs-ct col">' + ct(v) + '</div>') + lb('Skills', dots(v)) + lb('Languages', P.langList) + lb('Personal', P.kv) + '</aside><div class="rs-mn">' +
+      sec('Experience', P.exp) + sec('Education', P.edu) + sec('Projects / Certifications', P.extra) + sec('Declaration', P.decl) + '</div></div>');
+  }, c => '<rect width="60" height="30" fill="' + shade(c, .7) + '"/><rect x="42" width="18" height="30" fill="#cbd5e1"/><circle cx="51" cy="12" r="4" fill="#94a3b8"/><rect x="6" y="9" width="26" height="4" fill="#fff"/><rect x="6" y="16" width="16" height="2" fill="' + lighten(c, .5) + '"/><rect x="6" y="22" width="30" height="1.4" fill="#fff" opacity=".6"/><rect y="30" width="24" height="50" fill="' + tint(c, .12) + '"/><rect x="3" y="36" width="18" height="4" fill="' + c + '"/><rect x="3" y="44" width="15" height="1.6" fill="#94a3b8"/><rect x="3" y="49" width="13" height="1.6" fill="#94a3b8"/><rect x="3" y="56" width="18" height="4" fill="' + c + '"/><rect x="29" y="36" width="26" height="3" fill="#1f2937"/><rect x="29" y="42" width="26" height="2" fill="#cbd5e1"/><rect x="29" y="47" width="22" height="2" fill="#cbd5e1"/><rect x="29" y="58" width="26" height="3" fill="#1f2937"/>');
+
+  /* 12 – Olive Band */
+  add('p-olive', 'Olive Band', 'pro', '#4d6b4a', SANS, SANS, v => {
+    const P = parts(v), p = pho(v, 150);
+    return wrap(v, 'olive', '<div class="rs-hd"><div class="rs-hlc">' + (p ? '<div class="rs-ringp">' + p + '</div>' : '') + '</div><div class="rs-hr"><h1>' + X(v.name) + '</h1><div class="rs-sub">' + X(v.title) + '</div>' + (P.summary ? '<div class="rs-sm">' + P.summary + '</div>' : '') + '</div></div><div class="rs-cols"><aside class="rs-sd">' +
+      sec('Contact', '<div class="rs-ct col">' + ct(v) + '</div>') + sec('Skills', bars(v)) + sec('Languages', P.lang) + sec('Personal', P.kv) + '</aside><div class="rs-mn">' +
+      sec('Work Experience', P.exp) + sec('Education', P.edu) + sec('Projects / Certifications', P.extra) + sec('Declaration', P.decl) + '</div></div>');
+  }, c => '<rect width="60" height="26" fill="' + c + '"/><rect y="26" width="22" height="54" fill="' + tint(c, .1) + '"/><circle cx="11" cy="24" r="9" fill="#fff"/><circle cx="11" cy="24" r="7.4" fill="#cbd5e1"/><rect x="27" y="8" width="26" height="4" fill="#fff"/><rect x="27" y="15" width="16" height="2" fill="#fff" opacity=".75"/><rect x="4" y="42" width="14" height="2" fill="' + c + '"/><rect x="4" y="48" width="14" height="1.6" rx=".8" fill="' + c + '"/><rect x="4" y="53" width="11" height="1.6" rx=".8" fill="' + c + '"/><rect x="26" y="33" width="30" height="4.4" fill="' + c + '"/><rect x="26" y="41" width="30" height="2" fill="#cbd5e1"/><rect x="26" y="46" width="24" height="2" fill="#cbd5e1"/><rect x="26" y="57" width="30" height="4.4" fill="' + c + '"/>');
+
+  /* 13 – Label Classic */
+  add('p-label', 'Label Classic', 'pro', '#111827', SANS, SANS, v => {
+    const P = parts(v), p = pho(v, 128);
+    const row = (t, h) => h ? '<section class="rs-row"><h3>' + t + '</h3><div>' + h + '</div></section>' : '';
+    return wrap(v, 'label', '<div class="rs-hd">' + p + '<div class="rs-hi"><h1>' + X(v.name) + '</h1><div class="rs-sub">' + X(v.title) + '</div><div class="rs-lbg">' + labc(v) + '</div></div></div>' +
+      row('Summary', P.summary) + row('Experience', P.exp) + row('Education', P.edu) + row('Skills', P.chips) + row('Projects', P.extra) + row('Languages', P.lang) + row('Personal', P.kv) + row('Declaration', P.decl));
+  }, c => '<rect x="6" y="7" width="16" height="18" rx="2" fill="#cbd5e1"/><rect x="27" y="8" width="26" height="5" fill="#111"/><rect x="27" y="16" width="16" height="2" fill="' + c + '"/><rect x="27" y="21" width="12" height="1.4" fill="#94a3b8"/><rect x="42" y="21" width="12" height="1.4" fill="#94a3b8"/><rect x="6" y="30" width="48" height="1.4" fill="#111"/><rect x="6" y="35" width="11" height="2" fill="#111"/><rect x="22" y="35" width="32" height="2" fill="#cbd5e1"/><rect x="22" y="40" width="26" height="2" fill="#cbd5e1"/><rect x="6" y="48" width="48" height=".7" fill="#111"/><rect x="6" y="53" width="11" height="2" fill="#111"/><rect x="22" y="53" width="32" height="2" fill="#cbd5e1"/><rect x="6" y="66" width="48" height=".7" fill="#111"/>');
+
   /* ================= CSS ================= */
   const css = `
 .rs-sk{margin:0 0 10px}.rs-skt{display:flex;justify-content:space-between;font-size:12px;font-weight:500;margin-bottom:4px}.rs-skt i{font-style:normal;opacity:.7;font-size:11px}
@@ -230,6 +275,49 @@ window.PJ_RS_PACK = function (H) {
 .t-luxe .rs-s{margin-top:22px}.t-luxe .rs-s h3{display:flex;align-items:center;gap:14px;font-family:var(--rh);font-style:italic;text-transform:none;letter-spacing:1.5px;font-size:16px;font-weight:500;color:#2b2622}
 .t-luxe .rs-s h3::before,.t-luxe .rs-s h3::after{content:"";flex:1;border-top:1px solid var(--rc);opacity:.6}.t-luxe .rs-jh b{font-family:var(--rh);font-size:14px}
 .t-luxe .rs-g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px 18px}.t-luxe .rs-g3 span{font-size:12.5px;display:flex;gap:8px;align-items:center}.t-luxe .rs-g3 span::before{content:"◆";color:var(--rc);font-size:7px}
+/* ---- PRO: arch ---- */
+.t-arch .rs-hd{position:relative;display:flex;align-items:center;gap:28px;padding:38px 44px 18px}.t-arch .rs-blob{position:absolute;left:-40px;top:-60px;width:270px;height:270px;border-radius:50%;background:var(--rt)}
+.t-arch .rs-ph2,.t-arch .rs-hi{position:relative}.t-arch .rs-img{border:5px solid #fff;box-shadow:0 0 0 2px var(--rc)}
+.t-arch h1{font-size:33px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#1f2937}.t-arch .rs-sub{letter-spacing:3px;text-transform:uppercase;font-size:12.5px;color:var(--rd);font-weight:500;padding-bottom:7px;border-bottom:2px solid #1f2937;margin-bottom:2px}
+.t-arch .rs-ct{display:grid;grid-template-columns:1fr 1fr;gap:5px 16px;margin-top:8px;font-size:11.5px}
+.t-arch .rs-cols{display:grid;grid-template-columns:292px 1fr;gap:0;min-height:800px}.t-arch .rs-sd{padding:0 0 0 0}
+.t-arch .rs-arc{background:var(--rt);border-radius:146px 146px 0 0;padding:70px 26px 30px 34px;min-height:800px;margin-left:26px}
+.t-arch .rs-mn{padding:6px 40px 36px 34px}.t-arch .rs-s h3{font-size:18px;letter-spacing:.8px;color:#1f2937;margin-bottom:9px}
+.t-arch .rs-mn .rs-s>:not(h3){border-left:2px solid #1f2937;padding-left:14px}.t-arch .rs-mn .rs-s .rs-job{margin-bottom:11px}
+.t-arch .rs-kv{flex-direction:column;gap:0;margin-bottom:6px}.t-arch .rs-trk{background:#fff}
+/* ---- PRO: panel ---- */
+.t-panel{display:grid;grid-template-columns:276px 1fr}.t-panel .rs-sb{background:var(--rx);padding:0 0 0 22px;position:relative}
+.t-panel .rs-card2{margin:150px 0 30px;border-radius:18px 0 0 18px;padding:84px 20px 26px 20px;position:relative;color:#1e293b;min-height:760px}
+.t-panel .rs-pf{position:absolute;left:50%;top:-72px;margin-left:-76px;border-radius:50%;background:#fff;padding:5px;box-shadow:0 4px 14px rgba(0,0,0,.3)}.t-panel .rs-pf .rs-img{display:block}
+.t-panel h4{display:table;background:var(--rc);color:#fff;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 14px;margin:16px 0 10px;font-weight:700}.t-panel .rs-card2 h4:first-of-type{margin-top:0}
+.t-panel .rs-ct{color:#1e293b;font-size:11.5px}.t-panel .rs-c svg{width:20px;height:20px;padding:4px;border-radius:50%;background:var(--rc);color:#fff;stroke:#fff}.t-panel .rs-c{gap:8px}
+.t-panel .rs-kv{flex-direction:column;gap:0;margin-bottom:6px}.t-panel .rs-card2 .rs-jh{flex-direction:column;gap:0}.t-panel .rs-trk{background:var(--rt)}
+.t-panel .rs-mn{padding:46px 40px 40px 34px}.t-panel h1{font-size:36px;font-weight:800;color:#1e293b;letter-spacing:-.3px}.t-panel h1 span{color:var(--rc)}.t-panel .rs-sub{font-size:16px;color:#1e293b;font-weight:500;margin:2px 0 10px}
+.t-panel .rs-sm{font-size:12.5px;color:#475569}.t-panel .rs-dot{border-top:2px dotted var(--rc);opacity:.6;margin:16px 0 4px}
+.t-panel .rs-s h3{display:table;background:var(--rc);color:#fff;font-size:12.5px;padding:5px 16px;letter-spacing:1.4px;margin-bottom:12px}
+.t-panel .rs-mn .rs-jh b{background:var(--rt);color:var(--rd);padding:3px 14px;border-radius:99px;display:inline-block}
+.t-panel .rs-mn ul{list-style:none;padding-left:4px}.t-panel .rs-mn li{position:relative;padding-left:16px}.t-panel .rs-mn li::before{content:"";position:absolute;left:0;top:7px;width:7px;height:7px;border-radius:50%;background:var(--rc)}
+/* ---- PRO: cocoa ---- */
+.t-cocoa .rs-hd{display:flex;align-items:stretch;background:var(--rd);color:#fff}.t-cocoa .rs-hl{flex:1;padding:42px 36px 30px 44px}.t-cocoa h1{color:#fff;font-size:35px;font-weight:800;text-transform:uppercase;letter-spacing:2px}.t-cocoa .rs-sub{color:var(--rl);letter-spacing:4px;text-transform:uppercase;font-size:12.5px;font-weight:500}
+.t-cocoa .rs-sm{margin-top:14px;font-size:12px;opacity:.92;line-height:1.6}.t-cocoa .rs-hr .rs-img{border-radius:0!important;display:block}
+.t-cocoa .rs-cols{display:grid;grid-template-columns:262px 1fr;min-height:870px}.t-cocoa .rs-sd{background:var(--rt);padding:24px 0 30px}
+.t-cocoa h4{background:var(--rc);color:#fff;padding:5px 22px;font-size:12.5px;letter-spacing:3px;text-transform:uppercase;margin:0 0 12px;font-weight:600}.t-cocoa .rs-sd h4:not(:first-child){margin-top:22px}
+.t-cocoa .rs-sd>:not(h4){margin-left:22px;margin-right:18px}.t-cocoa .rs-ct{color:#44403c;font-size:11.5px}.t-cocoa .rs-c svg{color:var(--rc)}.t-cocoa .rs-kv{flex-direction:column;gap:0;margin-bottom:6px}
+.t-cocoa .rs-mn{padding:12px 36px 38px 34px}.t-cocoa .rs-s h3{font-size:14px;color:#1c1917;letter-spacing:2px;padding-bottom:5px;border-bottom:2px solid var(--rc);margin-bottom:10px}
+/* ---- PRO: olive ---- */
+.t-olive .rs-hd{display:flex;background:var(--rc);color:#fff;min-height:196px}.t-olive .rs-hlc{width:276px;flex:none;display:flex;justify-content:center;align-items:flex-start;padding-top:40px;position:relative;z-index:2}
+.t-olive .rs-ringp{margin-bottom:-90px;border-radius:50%;background:#fff;padding:6px;box-shadow:0 0 0 3px var(--rl)}.t-olive .rs-ringp .rs-img{display:block}
+.t-olive .rs-hr{flex:1;padding:44px 40px 26px 8px}.t-olive h1{color:#fff;font-size:33px;font-weight:800;letter-spacing:2px;text-transform:uppercase}.t-olive .rs-sub{color:var(--rl);letter-spacing:3.5px;text-transform:uppercase;font-size:12.5px;font-weight:500}
+.t-olive .rs-sm{margin-top:12px;font-size:12px;opacity:.92;line-height:1.6}
+.t-olive .rs-cols{display:grid;grid-template-columns:276px 1fr;min-height:900px}.t-olive .rs-sd{background:var(--rt);padding:96px 24px 30px}.t-olive .rs-sd .rs-s:first-child{margin-top:0}
+.t-olive .rs-sd .rs-s h3{color:#fff;background:var(--rc);padding:4px 12px;font-size:12px}.t-olive .rs-ct{color:#292524;font-size:11.5px}.t-olive .rs-c svg{color:var(--rc)}.t-olive .rs-kv{flex-direction:column;gap:0;margin-bottom:6px}.t-olive .rs-trk{background:#fff}
+.t-olive .rs-mn{padding:18px 38px 38px 34px}.t-olive .rs-mn .rs-s h3{background:var(--rc);color:#fff;padding:5px 14px;letter-spacing:2.2px;font-size:12.5px;margin-bottom:11px}
+/* ---- PRO: label ---- */
+.t-label{padding:44px 48px}.t-label .rs-hd{display:flex;gap:26px;align-items:center;padding-bottom:18px;border-bottom:3px solid var(--rc)}.t-label .rs-img{border-radius:6px!important}
+.t-label h1{font-size:42px;font-weight:800;letter-spacing:-.8px;color:#111827;line-height:1}.t-label .rs-sub{font-size:15px;font-weight:500;color:#374151;margin:6px 0 12px}
+.t-label .rs-lbg{display:grid;grid-template-columns:1fr 1fr;gap:3px 22px;font-size:11.5px}.t-label .rs-lb b{font-weight:700;text-transform:uppercase;font-size:10.5px;letter-spacing:.8px}
+.t-label .rs-row{display:grid;grid-template-columns:118px 1fr;gap:20px;padding:15px 0;border-bottom:1px solid #d1d5db;page-break-inside:avoid}.t-label .rs-row h3{font-size:11.5px;text-transform:uppercase;letter-spacing:1.8px;color:var(--rc);font-weight:800;padding-top:2px}
+.t-label .rs-chip{background:#f3f4f6;color:#111827;border-radius:4px}
 /* ---- PRO: tech ---- */
 .t-tech{font-family:var(--rf)}.t-tech .rs-hd{background:radial-gradient(circle at 88% 0%,var(--rd) 0%,rgba(11,18,32,0) 58%),#0b1220;color:#e2e8f0;padding:20px 46px 34px}
 .t-tech .rs-term{display:flex;align-items:center;gap:7px;margin-bottom:22px}.t-tech .rs-term i{width:10px;height:10px;border-radius:50%;background:#f87171}.t-tech .rs-term i:nth-child(2){background:#fbbf24}.t-tech .rs-term i:nth-child(3){background:#4ade80}.t-tech .rs-term span{font-family:${MONO};font-size:11px;color:#64748b;margin-left:8px}
