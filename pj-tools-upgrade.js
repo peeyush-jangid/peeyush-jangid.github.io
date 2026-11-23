@@ -126,7 +126,7 @@
     /* ---------- extra template pack (pj-resume-pack.js): 5 free + 8 PRO ---------- */
     let PACKCSS = '';
     try {
-      [window.PJ_RS_PACK, window.PJ_RS_PACK2].forEach(fn => {
+      [window.PJ_RS_PACK, window.PJ_RS_PACK2, window.PJ_RS_PACK3].forEach(fn => {
         if (!fn) return;
         try {
           const K = fn({ X, nl2, list, blocks, bl, jobs, kv, ct, sec, photo, parts, wrap, head, IC, tint, shade, hexRgb });
@@ -137,15 +137,16 @@
     } catch (e) { console.error('Resume template pack failed', e); }
     if (!document.getElementById('pj-rs-fonts')) {
       const l = document.createElement('link'); l.id = 'pj-rs-fonts'; l.rel = 'stylesheet';
-      l.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap'; document.head.appendChild(l);
+      l.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@400;500;600;700;800&family=Lora:wght@400;500;600;700&family=Raleway:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Merriweather:wght@400;700;900&family=Cormorant+Garamond:wght@500;600;700&family=DM+Serif+Display&display=swap'; document.head.appendChild(l);
     }
+    TPL.forEach(t => { if (!t[3]) t[3] = t[2] === 'pro' ? ['Original', 'PRO'] : ['Original']; });
     const thumb = (id, c) => '<svg viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">' + TH[id](c) + '</svg>';
 
     /* ---------- styles (injected once) ---------- */
     if (!document.getElementById('pj-rs-css')) {
       const s = document.createElement('style'); s.id = 'pj-rs-css';
       s.textContent = `
-.rs-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:10px;margin:0 0 6px}
+.rs-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px;margin:0 0 6px}
 .rs-pk{border:2px solid var(--bd);background:#fff;border-radius:10px;padding:5px 4px 5px;cursor:pointer;font:inherit;font-size:.7rem;font-weight:600;color:var(--ink);text-align:center}
 .rs-pk.on{border-color:var(--p);box-shadow:0 0 0 3px #2563eb22}
 .rs-pk svg{width:100%;height:auto;display:block;margin-bottom:3px;border:1px solid #e2e8f0;border-radius:4px;background:#fff}
@@ -229,6 +230,7 @@
 .rs-seg{display:inline-flex;align-self:flex-start;border:1px solid var(--bd);border-radius:99px;overflow:hidden;margin:4px 0}
 .rs-seg button{border:0;background:#fff;padding:7px 16px;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;color:var(--ink)}
 .rs-seg button.on{background:var(--p);color:#fff}
+.rs-cats{grid-column:1/-1}.rs-more{grid-column:1/-1;border:1.5px dashed var(--p);background:#fff;color:var(--p);border-radius:10px;padding:9px;font:inherit;font-weight:600;font-size:.8rem;cursor:pointer}
 .rs-gp{display:flex;flex-wrap:wrap;gap:8px}.rs-gp button{width:48px;height:30px;border-radius:8px;border:2px solid #fff;box-shadow:0 0 0 1px var(--bd);cursor:pointer}`
         .replace(/background:var\(--rc\)/g, 'background:var(--rg,var(--rc))').replace(/background:var\(--rd\)/g, 'background:var(--rdg,var(--rd))').replace(/background:var\(--rx\)/g, 'background:var(--rxg,var(--rx))') + PACKCSS.replace(/background:var\(--rc\)/g, 'background:var(--rg,var(--rc))').replace(/background:var\(--rd\)/g, 'background:var(--rdg,var(--rd))').replace(/background:var\(--rx\)/g, 'background:var(--rxg,var(--rx))');
       document.head.appendChild(s);
@@ -309,7 +311,7 @@
       ];
       const pre = '<div class="fld wide" id="rs-gpre"><span>Gradient presets (click one)</span><div class="rs-gp">' + GP.map(p => '<button type="button" title="' + p[0] + '" data-a="' + p[1] + '" data-b="' + p[2] + '" style="background:linear-gradient(135deg,' + p[1] + ',' + p[2] + ')"></button>').join('') + '</div><small>Gradient is applied to headers, sidebars, bars and highlights of the template. Text headings use the first colour.</small></div>';
       const dyn = '<div class="fld wide" id="rs-d-skills"></div><div class="fld wide" id="rs-d-exp"></div><div class="fld wide" id="rs-d-edu"></div><div class="fld wide" id="rs-d-certs"></div>';
-      el.innerHTML = `<div class="split"><div class="card noprint"><h3>1. Choose a template</h3><div class="rs-pick" id="rs-pick"></div>
+      el.innerHTML = `<div class="split"><div class="card noprint"><h3>1. Choose a template <small style="font-weight:500;color:var(--mut)">(${TPL.length} designs)</small></h3><div class="rs-cats" id="rs-cats"></div><input id="rs-q" type="search" placeholder="Search template name… e.g. Navy, Rose, Studio" style="margin:0 0 10px"><div class="rs-pick" id="rs-pick"></div>
         <h3 style="margin-top:16px">2. Your details</h3><div class="form" id="rs-form">${F.map(f => fld(f, 'rs2_') + (f.id === 'color2' ? pre : '') + (f.id === 'summary' ? dyn : '')).join('')}
         <div class="fld wide"><span>Your photo (optional)</span><div class="rs-photo-row"><input type="file" id="rs-file" accept="image/*"><button class="btn ghost sm" type="button" id="rs-rmph">Remove photo</button></div>
         <small>The photo is cropped to a square on your device. It is never uploaded anywhere.</small></div></div>
@@ -327,12 +329,19 @@
         const s = Math.min(1, wr.clientWidth / 794 || 1);
         fit.style.transform = 'scale(' + s + ')'; fit.style.transformOrigin = 'top left'; wr.style.height = Math.ceil(root.offsetHeight * s) + 'px';
       };
+      const CATS = ['All', 'Original', 'PRO', 'Sidebar', 'Header', 'Centered', 'Editorial', 'Cards', 'Arch', 'Overlap', 'Diagonal', 'Dark', 'Skill bars / rings'];
+      const PG = 30; let cat = 'All', q = '', shown = PG;
+      const pool = () => TPL.filter(t => (cat === 'All' || (t[3] || []).includes(cat)) && (!q || t[1].toLowerCase().includes(q)));
+      const catsUI = () => { $('#rs-cats', el).innerHTML = CATS.map(k => '<button type="button" data-c="' + k + '" class="' + (k === cat ? 'on' : '') + '">' + k + ' <small>' + TPL.filter(t => k === 'All' || (t[3] || []).includes(k)).length + '</small></button>').join(''); };
       const pickUI = () => {
-        const c = g('color') || '#2563eb';
+        const c = g('color') || '#2563eb', list = pool(), vis = list.slice(0, shown);
         const btn = t => '<button type="button" class="rs-pk ' + t[2] + ' ' + (t[0] === ST.tpl ? 'on' : '') + '" data-t="' + t[0] + '">' + thumb(t[0], c) + t[1] + '</button>';
-        const fr = TPL.filter(t => t[2] !== 'pro'), pr = TPL.filter(t => t[2] === 'pro');
-        pick.innerHTML = '<div class="rs-gh">Free templates <small>(' + fr.length + ')</small></div>' + fr.map(btn).join('') + (pr.length ? '<div class="rs-gh"><span class="rs-bdg">PRO</span> Pro-level designs <small>(' + pr.length + ') – bars &amp; rings</small></div>' + pr.map(btn).join('') : '');
+        pick.innerHTML = vis.map(btn).join('') + (list.length > shown ? '<button type="button" class="rs-more" data-more="1">Show more (' + (list.length - shown) + ' left)</button>' : '') + (list.length ? '' : '<div class="rs-gh">No template found – try another word or category.</div>');
       };
+      catsUI();
+      $('#rs-cats', el).addEventListener('click', e => { const b = e.target.closest('button[data-c]'); if (!b) return; cat = b.dataset.c; shown = PG; catsUI(); pickUI(); pick.scrollTop = 0; });
+      $('#rs-q', el).addEventListener('input', e => { q = e.target.value.trim().toLowerCase(); shown = PG; pickUI(); });
+      pick.addEventListener('click', e => { if (e.target.closest('[data-more]')) { shown += PG; pickUI(); } });
 
       /* ---- dynamic "Add new …" sections ---- */
       const ip = (s, i, k, val, ph, type, extra) => '<input data-s="' + s + '" data-i="' + i + '" data-k="' + k + '" type="' + (type || 'text') + '" value="' + esc(val || '') + '" placeholder="' + esc(ph || '') + '" ' + (extra || '') + '>';
