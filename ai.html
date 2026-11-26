@@ -60,6 +60,8 @@ h2{margin:6px 0 12px;font-size:1.3rem}h3{margin:0 0 8px;font-size:1rem}
 .toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:#000c;border:1px solid #4a43b8;padding:8px 16px;border-radius:99px;font-size:.82rem;display:none;z-index:99}
 .ty span{display:inline-block;width:7px;height:7px;margin:0 2px;border-radius:50%;background:var(--c);animation:p 1s infinite}@keyframes p{50%{opacity:.25}}
 .rec{background:#dc2626!important;animation:p 1s infinite}
+.mb table{border-collapse:collapse;font-size:.82rem;display:block;overflow:auto}.mb td{border:1px solid #4a43b8;padding:4px 8px}.mb p{margin:0 0 6px}.mb h1,.mb h2,.mb h3,.mb h4{margin:8px 0 4px;font-size:1rem}.mb ul{margin:4px 0;padding-left:20px}
+#pjx-sheet{position:absolute;inset:0;z-index:50;background:#000b;display:none;align-items:flex-end}#pjx-sheet.on{display:flex}.pjx-in{width:100%;max-height:90%;overflow:auto;background:#0a0830;border:1.5px solid #4c3bd6;border-radius:22px 22px 0 0;padding:16px}
 </style></head><body>
 <svg width="0" height="0" style="position:absolute"><symbol id="rb" viewBox="0 0 100 100"><path d="M17 50Q50-8 83 50" stroke="#22d3ee" stroke-width="5" fill="none"/><circle cx="13" cy="54" r="9" fill="#22d3ee"/><circle cx="87" cy="54" r="9" fill="#22d3ee"/><rect x="30" y="80" width="40" height="18" rx="9" fill="#c7d7ff"/><rect x="18" y="20" width="64" height="62" rx="28" fill="#eaf1ff"/><rect x="25" y="31" width="50" height="40" rx="18" fill="#0a0a22"/><path d="M33 53q6-10 13 0M54 53q6-10 13 0" stroke="#22d3ee" stroke-width="4.5" fill="none" stroke-linecap="round"/><path d="M43 62q7 5 14 0" stroke="#22d3ee" stroke-width="3" fill="none" stroke-linecap="round"/></symbol></svg>
 <div id="app">
@@ -95,7 +97,15 @@ h2{margin:6px 0 12px;font-size:1.3rem}h3{margin:0 0 8px;font-size:1rem}
 const CFG={API:"https://morning-union-c527.pusjangid123.workers.dev",ADMIN:"peeyush.jangid@outlook.com",FB:"10.12.2"};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const md=s=>esc(s).replace(/```(\w*)\n?([\s\S]*?)```/g,'<pre><code>$2</code></pre>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/(https?:\/\/[^\s<)]+)/g,'<a href="$1" target="_blank" rel="noopener" style="color:#7dd3fc">$1</a>').replace(/\n/g,'<br>');
+const inl=s=>esc(s).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/(https?:\/\/[^\s<)]+)/g,'<a href="$1" target="_blank" rel="noopener" style="color:#7dd3fc">$1</a>');
+function mdBlock(t){let o='',ul=false,tb=false;const cl=()=>{if(ul){o+='</ul>';ul=false}if(tb){o+='</table>';tb=false}};
+ for(const l of t.split('\n')){let m;
+  if(m=l.match(/^(#{1,4})\s+(.*)/)){cl();o+=`<h${m[1].length}>${inl(m[2])}</h${m[1].length}>`}
+  else if(m=l.match(/^\s*[-*•]\s+(.*)/)){if(!ul){cl();o+='<ul>';ul=true}o+=`<li>${inl(m[1])}</li>`}
+  else if(/^\s*\|/.test(l)){if(/^\s*\|[\s:|-]+\|?\s*$/.test(l))continue;if(!tb){cl();o+='<table>';tb=true}o+='<tr>'+l.trim().replace(/^\||\|$/g,'').split('|').map(c=>`<td>${inl(c.trim())}</td>`).join('')+'</tr>'}
+  else{cl();if(l.trim())o+=`<p>${inl(l)}</p>`}}
+ cl();return o}
+const md=s=>String(s??'').split('```').map((p,i)=>{if(i%2){const m=p.match(/^[\w+-]*\n?([\s\S]*)$/);return'<pre><code>'+esc(m?m[1]:p)+'</code></pre><button class="pill" onclick="PJX.code(this)">▶ Preview / Save</button>'}return mdBlock(p)}).join('');
 const toast=t=>{const e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2200)};
 const blank=()=>({chats:[],set:{mem:true,cloud:true},pts:0,streak:0,last:"",reqs:0,likes:{}});
 let D=blank(),U=null,db=null,auth=null,FB=null,cfgAI={},cfgTools={disabled:[]},pub={},blocked=false;
@@ -168,7 +178,7 @@ async function send(){if(busy)return;const q=inp.value.trim();if(!q&&!files.leng
  inp.value='';inp.style.height='auto';files=[];renderAtt();renderMsgs();typing();await reply(ctx,imgs,hadFile)}
 async function reply(ctx,imgs,hadFile){busy=true;let out,part='';
  try{out=await ask(ctx,imgs,t=>{part=t;const b=document.querySelector('#typ .mb');if(b){b.classList.remove('ty');b.innerHTML=md(t);msgs.scrollTop=msgs.scrollHeight}})}catch(e){out={c:part.trim()?part:'⚠️ Jawab laane me dikkat hui, dobara try karein. ('+e.message+')'}}
- $('typ')?.remove();cur.m.push({r:'ai',c:out.c,src:out.sources});busy=false;
+ $('typ')?.remove();cur.m.push({r:'ai',c:out.c,src:out.sources||(window.PJX?PJX.takeSrc():null)});busy=false;
  D.reqs++;D.pts+=10;const d=new Date().toDateString();if(D.last!=d){const y=new Date(Date.now()-864e5).toDateString();D.streak=D.last==y?D.streak+1:1;D.last=d;if(D.streak%7==0)D.pts+=100}
  save();renderMsgs();hist();
  if(db){const f={requests:1,chat:1};if(web)f.web=1;if(agent)f.agent=1;if(rec||D.voiceUsed)f.voice=1;if(hadFile)f.file=1;
@@ -205,12 +215,13 @@ const HV_RE=/(hvac|\bac\b|tonnage|\btr\b|btu|cfm|duct|chiller|vrv|vrf|cooling|he
 async function ask(ctx,imgs,onTok){const s=D.set,api=s.api||CFG.API,l=lang.value;
  let sys=[CORE_PROMPT,(l=='hi'?"Language style: the user likes Hinglish (Hindi written in English letters) like a WhatsApp chat. Use simple everyday words and keep technical terms in English (formula, sheet, cell, notes, project). NEVER use formal or Sanskrit-style Hindi such as 'vatavaran', 'ghatnaon', 'prayas', 'pramukh', 'madadgar', 'kripya'. Example of the right style: 'Excel me VLOOKUP ek formula hai jo table me value dhoondhta hai. Example: =VLOOKUP(A2,Sheet2!A:B,2,0)'. If the user writes in Devanagari, reply in Devanagari; if in English, reply in English.":"Reply in clear, simple English unless the user writes in another language.")+" Do not mention the CV, resume or Peeyush unless the user asks about him. Finish every task completely and correctly; if unsure, say so instead of guessing.",cfgAI.system,SYS[mode.value],agent?'Agent mode: break the task into steps, give a plan, then do it.':'',s.style=='short'?'Keep answers short.':s.style=='long'?'Give detailed answers.':'',s.pref?'User preference: '+s.pref:'',(s.mem!==false&&s.memo)?'About the user: '+s.memo:'','Aaj ki date/time: '+new Date().toLocaleString('en-IN',{dateStyle:'full',timeStyle:'short'})+'.'].filter(Boolean).join('\n');
  const last=cur.m[cur.m.length-1].c;if(needsProfile(last))sys+='\n\n'+PROFILE_PROMPT;
+ try{if(window.PJX)sys+=await PJX.extra(last,{web})}catch(e){}
  try{const kb=window.parent!==window&&window.parent.HVAC_TOOLS_KB;if(kb&&HV_RE.test(last))sys+='\n\nWebsite HVAC tool knowledge (use only for HVAC calculations; show steps, units, assumptions; do not invent site data):\n'+kb}catch(e){}
  let hist=cur.m.map(m=>({role:m.r=='ai'?'assistant':'user',content:m.c}));if(ctx)hist[hist.length-1].content+=ctx;
  hist=hist.slice(-30);let tot=0,keep=[];for(let i=hist.length-1;i>=0;i--){tot+=hist[i].content.length;if(tot>36000&&keep.length)break;keep.unshift(hist[i])}while(keep.length&&keep[0].role!='user')keep.shift();
  if(!api)return demo(last);
  const ctrl=new AbortController();let idle;const arm=()=>{clearTimeout(idle);idle=setTimeout(()=>ctrl.abort(),45000)};arm();
- const r=await fetch(api,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stream:true,messages:[{role:'system',content:sys}].concat(keep)}),signal:ctrl.signal});
+ const r=await fetch(api,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stream:true,model:s.model||undefined,messages:[{role:'system',content:sys}].concat(keep)}),signal:ctrl.signal});
  if(!r.ok)throw new Error('Server '+r.status);
  if((r.headers.get('content-type')||'').indexOf('text/event-stream')<0||!r.body){clearTimeout(idle);const j=await r.json();if(!j.reply)throw new Error('empty');return{c:String(j.reply)}}
  const rd=r.body.getReader(),dec=new TextDecoder();let buf='',full='';
@@ -305,4 +316,172 @@ async function saveModel(){cfgAI={model:mM.value.trim(),temperature:+mT.value,ma
 async function tglTool(n,on){const s=new Set(cfgTools.disabled||[]);on?s.delete(n):s.add(n);cfgTools.disabled=[...s];await db.doc('config/tools').set(cfgTools);buildTools();toast('Updated ✅')}
 
 loadD();buildTools();buildNav();live();hist();renderMsgs();if(D.set.lang)lang.value=D.set.lang;initFB();
+</script><script>
+(function(){
+const X=window.PJX={};
+const K=()=>'pjx_'+(U?U.uid:'g')+'_';
+const LS=(k,d)=>{try{const v=localStorage.getItem(K()+k);return v?JSON.parse(v):d}catch(e){return d}};
+const SV=(k,v)=>{try{localStorage.setItem(K()+k,JSON.stringify(v))}catch(e){}};
+const dl=(b,n)=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;a.click()};
+const T=p=>()=>{newChat();inp.value=p;inp.focus()};
+const en=encodeURIComponent;
+const lastAI=()=>cur&&[...cur.m].reverse().find(m=>m.r=='ai');
+const PJ='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',PW='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js',MM='https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js',XL='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',PP='https://cdnjs.cloudflare.com/ajax/libs/pptxgenjs/3.12.0/pptxgen.bundle.js';
+const sh=document.createElement('div');sh.id='pjx-sheet';$('app').appendChild(sh);sh.onclick=e=>{if(e.target==sh)X.close()};
+X.sheet=(t,h)=>{sh.innerHTML=`<div class="pjx-in"><div class="row" style="justify-content:space-between;margin-bottom:8px"><h3 style="margin:0">${t}</h3><button class="pill" onclick="PJX.close()">✕</button></div>${h}</div>`;sh.classList.add('on')};
+X.close=()=>sh.classList.remove('on');
+
+/* ---- LLM helper (non-chat) ---- */
+X.llm=async(sys,user)=>{const api=D.set.api||CFG.API;if(!api)throw new Error('no api');
+ const r=await fetch(api,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:D.set.model||undefined,messages:[{role:'system',content:sys},{role:'user',content:user}]})});
+ if(!r.ok)throw new Error('Server '+r.status);const ct=r.headers.get('content-type')||'',t=await r.text();
+ if(ct.includes('event-stream')){let f='';t.split('\n').forEach(l=>{l=l.trim();if(l.indexOf('data:')!=0)return;const d=l.slice(5).trim();if(!d||d=='[DONE]')return;try{const j=JSON.parse(d);f+=typeof j.response=='string'?j.response:(j.choices&&j.choices[0]&&j.choices[0].delta&&j.choices[0].delta.content)||''}catch(e){}});return f}
+ try{const j=JSON.parse(t);return j.reply||j.response||''}catch(e){return t}};
+
+/* ---- Extra context: memory, projects, knowledge base, web ---- */
+let SRC=null;X.takeSrc=()=>{const s=SRC;SRC=null;return s};
+async function wiki(q){const clean=q.replace(/\b(search|khojo|khoj|batao|bataiye|kya|hai|latest|news|ke bare me|ke baare me|about|tell me|what is|who is|research karo)\b/gi,'').trim()||q;
+ for(const l of [lang.value=='hi'?'hi':'en','en']){try{const r=await fetch(`https://${l}.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${en(clean)}&gsrlimit=3&prop=extracts|info&exintro=1&explaintext=1&exchars=800&inprop=url&format=json&origin=*`);const j=await r.json();const p=j.query&&Object.values(j.query.pages).sort((a,b)=>a.index-b.index);if(p&&p.length)return p}catch(e){}}return[]}
+X.extra=async(q,o)=>{let s='';
+ if(/(yaad rakh|yaad rakho|remember (that|this))/i.test(q)&&D.set.mem!==false){const a=LS('mem',[]);a.unshift({t:q.replace(/(please|kripya)/ig,'').trim().slice(0,200),n:''});SV('mem',a);toast('Memory me save ✅')}
+ if(D.set.mem!==false){const m=LS('mem',[]);if(m.length)s+='\nUser memory (use naturally; mention only if relevant):\n'+m.slice(0,30).map(x=>'- '+x.t).join('\n');
+  const p=LS('proj',[]);if(p.length)s+='\nUser projects:\n'+p.slice(0,10).map(x=>`- ${x.t}: ${(x.n||'').slice(0,200)}`).join('\n');
+  const w=q.toLowerCase().split(/\W+/).filter(x=>x.length>3);
+  const k=LS('kb',[]).map(x=>[w.filter(y=>(x.t+' '+x.n).toLowerCase().includes(y)).length,x]).filter(x=>x[0]).sort((a,b)=>b[0]-a[0]).slice(0,3);
+  if(k.length)s+='\nUser knowledge-base notes (use if relevant):\n'+k.map(x=>`## ${x[1].t}\n${(x[1].n||'').slice(0,1500)}`).join('\n')}
+ s+='\nSelf-check: verify facts and calculations before answering; if an earlier reply of yours had an error, say so and give the corrected answer. Explain simply when asked. For documents use clear headings and lists; for slides use "# Slide title" followed by "- bullet" lines; for spreadsheets use markdown tables.';
+ if(o&&o.web){const p=await wiki(q);if(p.length){SRC=p.map(x=>({title:x.title+' (Wikipedia)',url:x.fullurl}));s+='\n\nWeb results (Wikipedia). Use them, mention the titles, and say clearly if they are not enough or not the latest news:\n'+p.map(x=>`### ${x.title}\n${x.extract||''}`).join('\n')}else s+='\n\nWeb search found nothing; say that you could not find live info.'}
+ return s};
+
+/* ---- Export (PDF / Word / Excel / PPT) ---- */
+const htmlDoc=(t,b)=>`<!doctype html><html><head><meta charset="utf-8"><title>${esc(t)}</title><style>body{font-family:Arial,sans-serif;line-height:1.6;padding:28px;color:#111}table{border-collapse:collapse}td{border:1px solid #888;padding:4px 8px}pre{background:#eee;padding:8px;white-space:pre-wrap}</style></head><body>${b}</body></html>`;
+const body=t=>md(t).replace(/<button[\s\S]*?<\/button>/g,'');
+X.pdf=(t,b)=>{const f=document.createElement('iframe');f.style.cssText='position:fixed;width:0;height:0;border:0';document.body.appendChild(f);const d=f.contentDocument;d.open();d.write(htmlDoc(t,b));d.close();setTimeout(()=>{f.contentWindow.focus();f.contentWindow.print();setTimeout(()=>f.remove(),5000)},400);toast('Print dialog me "Save as PDF" chunein')};
+const nm=()=>(X.cur.title||'peeyush-ai').replace(/[^\w\u0900-\u097F -]/g,'').trim().slice(0,40)||'document';
+X.exp=i=>{const t=cur.m[i].c;X.cur={text:t,title:(t.split('\n').find(l=>l.trim())||'document').replace(/[#*|]/g,'').trim()};X.expUI()};
+X.expUI=()=>X.sheet('⬇ Export / Share',`<div class="grid4">${[['pdf','📄','PDF'],['doc','📝','Word'],['xls','📊','Excel'],['ppt','🎞','PPT'],['save','💾','Save'],['mail','📧','Gmail'],['wa','💬','WhatsApp'],['copy','📋','Copy']].map(x=>`<button class="tl" style="color:inherit" onclick="PJX.do('${x[0]}')"><span>${x[1]}</span>${x[2]}</button>`).join('')}</div>`);
+X.do=async k=>{const c=X.cur,n=nm();try{
+ if(k=='pdf')X.pdf(n,body(c.text));
+ else if(k=='doc')dl(new Blob([htmlDoc(n,body(c.text))],{type:'application/msword'}),n+'.doc');
+ else if(k=='xls'){let rows=[];c.text.split('\n').forEach(l=>{if(/^\s*\|/.test(l)){if(/^\s*\|[\s:|-]+\|?\s*$/.test(l))return;rows.push(l.trim().replace(/^\||\|$/g,'').split('|').map(x=>{x=x.trim().replace(/\*\*/g,'');return x!==''&&!isNaN(x)?+x:x}))}});
+  if(!rows.length)rows=c.text.split('\n').filter(l=>l.trim()).map(l=>l.includes(',')?l.split(',').map(x=>x.trim()):[l]);
+  if(!window.XLSX)await lib(XL);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),'Sheet1');XLSX.writeFile(wb,n+'.xlsx')}
+ else if(k=='ppt'){if(!window.PptxGenJS)await lib(PP);const p=new PptxGenJS();let s=null,it=[];const cl=x=>x.replace(/\*\*/g,'').trim();
+  const fl=()=>{if(s&&it.length)s.addText(it.map(t=>({text:t,options:{bullet:true,breakLine:true}})),{x:.6,y:1.4,w:8.8,h:3.9,fontSize:20,color:'333333',valign:'top'});it=[]};
+  c.text.replace(/```\w*\n?/g,'').split('\n').forEach(l=>{let m;if(m=l.match(/^\s*(?:#{1,3}|Slide\s*\d+\s*[:.\-])\s*(.*)/i)){fl();s=p.addSlide();s.background={color:'F4F7FF'};s.addText(cl(m[1]),{x:.6,y:.4,w:8.8,h:.9,fontSize:30,bold:true,color:'1E3A8A'})}else if(m=l.match(/^\s*[-*•]\s+(.*)/)){if(!s)s=p.addSlide();it.push(cl(m[1]))}});
+  fl();if(!s)return toast('Slides nahi mile. PPT Maker se banwayein');p.writeFile({fileName:n+'.pptx'})}
+ else if(k=='save'){const a=LS('docs',[]);a.unshift({t:c.title.slice(0,60),n:c.text,d:Date.now()});SV('docs',a);toast('Saved Documents me ✅')}
+ else if(k=='mail')window.open(`https://mail.google.com/mail/?view=cm&fs=1&su=${en(c.title.slice(0,80))}&body=${en(c.text.slice(0,1800))}`);
+ else if(k=='wa')window.open('https://wa.me/?text='+en(c.text.slice(0,1500)));
+ else if(k=='copy'){navigator.clipboard.writeText(c.text);toast('Copied ✅')}
+}catch(e){toast('Export nahi hua: '+e.message)}};
+X.fix=()=>{if(busy)return;inp.value='Tumhare pichhle jawab me galti ho sakti hai. Dhyan se dobara check karo; galti mile to batao aur poora sahi jawab do.';send()};
+X.more=()=>{if(busy)return;inp.value='Aage continue karo, jahan ruke the wahin se.';send()};
+const om=msgHTML;msgHTML=function(m,i,last){let h=om(m,i,last);if(m.r=='ai')h=h.replace(/<\/div>$/,`<button onclick="PJX.exp(${i})">⬇ Export</button><button onclick="PJX.fix()">🛠 Sahi karo</button>${last?'<button onclick="PJX.more()">➕ Aage</button>':''}</div>`);return h};
+X.conv=k=>{const i=document.createElement('input');i.type='file';i.accept=k=='pdf'?'.pdf':'.docx';i.onchange=async()=>{const f=i.files[0];if(!f)return;toast('Convert ho raha hai…');try{
+ if(k=='pdf'){if(!window.pdfjsLib){await lib(PJ);pdfjsLib.GlobalWorkerOptions.workerSrc=PW}const p=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise;let t='';for(let n=1;n<=p.numPages;n++)t+=(await(await p.getPage(n)).getTextContent()).items.map(x=>x.str).join(' ')+'\n\n';
+  if(!t.trim())return toast('Is PDF me text nahi mila (scanned ho sakti hai)');dl(new Blob([htmlDoc(f.name,t.split('\n\n').map(x=>'<p>'+esc(x)+'</p>').join(''))],{type:'application/msword'}),f.name.replace(/\.pdf$/i,'')+'.doc');toast('Word file ban gayi ✅')}
+ else{if(!window.mammoth)await lib(MM);const r=await mammoth.convertToHtml({arrayBuffer:await f.arrayBuffer()});X.pdf(f.name,r.value)}}catch(e){toast('Convert nahi hua')}};i.click()};
+
+/* ---- Images ---- */
+const IS={image:['🖼 Text to Image','',1024,1024],logo:['🏷 Logo Generator','minimalist professional vector logo, flat design, clean white background, ',1024,1024],poster:['📰 Poster / Banner','professional poster design, bold typography, eye-catching layout, ',768,1024],thumb:['▶ Thumbnail','youtube thumbnail, vibrant colors, high contrast, dramatic lighting, ',1280,720],social:['📱 Social Post','modern social media post design, clean layout, ',1024,1024],cartoon:['🎭 Image to Cartoon (AI)','cartoon illustration, pixar style, colorful, ',1024,1024],profile:['👤 Profile Photo','professional corporate headshot portrait, soft studio lighting, ',768,1024]};
+X.img=k=>{X.ik=k;X.sheet(IS[k][0],`<div class="f"><label>Kya banana hai? (Hindi / Hinglish / English)</label><textarea id="ip" rows="3"></textarea><button class="btn" style="width:100%;margin-top:10px" onclick="PJX.igo()">✨ Generate</button></div><div id="io" style="margin-top:10px;text-align:center"></div>`)};
+X.igo=async()=>{const t=$('ip').value.trim();if(!t)return;const s=IS[X.ik];$('io').innerHTML='<p>Ban rahi hai… (10–40 sec)</p>';let p=t;try{p=((await X.llm('Convert the idea into ONE vivid English image-generation prompt (max 40 words). Output ONLY the prompt.',t))||t).trim().replace(/^"|"$/g,'')}catch(e){}
+ const u=`https://image.pollinations.ai/prompt/${en(s[1]+p)}?width=${s[2]}&height=${s[3]}&nologo=true&seed=${Math.floor(Math.random()*1e6)}`;
+ $('io').innerHTML=`<img src="${u}" style="max-width:100%;border-radius:14px" onerror="this.outerHTML='<p>Image nahi bani, dobara try karein.</p>'"><p><a class="btn sm" style="display:inline-block;text-decoration:none" href="${u}" target="_blank" rel="noopener">⬇ Open / Save</a></p>`};
+X.lab=()=>{X.sheet('📷 Photo Lab',`<input type="file" id="lf" accept="image/*" style="width:100%;margin-bottom:8px"><canvas id="lc" style="width:100%;border-radius:12px;background:repeating-conic-gradient(#222 0 25%,#333 0 50%) 50%/16px 16px"></canvas><div class="row" style="margin-top:8px"><button class="btn sm" onclick="PJX.lf('enh')">✨ Enhance</button><button class="btn sm" onclick="PJX.lf('car')">🎭 Cartoon</button><button class="btn sm" onclick="PJX.lf('bg')">✂️ BG Remove</button><button class="btn sm o" onclick="PJX.lf('dl')">⬇ PNG</button></div><p style="font-size:.74rem;color:var(--mt)">BG Remove sirf saaf / ek rang ke background par theek chalta hai.</p>`);
+ $('lf').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{const c=$('lc'),s=Math.min(1,900/Math.max(im.width,im.height));c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height)};im.src=URL.createObjectURL(f)}};
+X.lf=m=>{const c=$('lc'),x=c.getContext('2d');if(!c.width)return toast('Pehle photo chunein');
+ if(m=='dl')return c.toBlob(b=>dl(b,'peeyush-ai-photo.png'));
+ if(m=='enh'){const t=document.createElement('canvas');t.width=c.width;t.height=c.height;t.getContext('2d').drawImage(c,0,0);x.clearRect(0,0,c.width,c.height);x.filter='contrast(1.12) saturate(1.2) brightness(1.06)';x.drawImage(t,0,0);x.filter='none';return}
+ const d=x.getImageData(0,0,c.width,c.height),p=d.data;
+ if(m=='car'){for(let i=0;i<p.length;i+=4){p[i]=Math.round(p[i]/42)*42;p[i+1]=Math.round(p[i+1]/42)*42;p[i+2]=Math.round(p[i+2]/42)*42}x.putImageData(d,0,0);return}
+ const w=c.width,h=c.height,q=[],seen=new Uint8Array(w*h),co=[0,w-1,(h-1)*w,h*w-1],bg=[0,1,2].map(j=>co.reduce((a,k)=>a+p[k*4+j],0)/4);
+ const ok=k=>Math.abs(p[k*4]-bg[0])+Math.abs(p[k*4+1]-bg[1])+Math.abs(p[k*4+2]-bg[2])<110;
+ for(let i=0;i<w;i++)q.push(i,(h-1)*w+i);for(let j=0;j<h;j++)q.push(j*w,j*w+w-1);
+ while(q.length){const k=q.pop();if(seen[k]||!ok(k))continue;seen[k]=1;p[k*4+3]=0;const x0=k%w;if(x0>0)q.push(k-1);if(x0<w-1)q.push(k+1);if(k>=w)q.push(k-w);if(k<w*h-w)q.push(k+w)}
+ x.putImageData(d,0,0)};
+
+/* ---- Voice: Jarvis ---- */
+const jp=document.createElement('span');jp.className='pill';jp.textContent='🎧 Jarvis';jp.onclick=()=>X.jarvis();document.querySelector('.tg').insertBefore(jp,$('tAgent'));
+let jr=null,jon=false,armed=0;
+X.jarvis=()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(jon){jon=false;try{jr&&jr.stop()}catch(e){}jr=null;jp.classList.remove('on');return toast('Jarvis band')}
+ if(!SR)return toast('Voice ke liye Chrome use karein');jon=true;jp.classList.add('on');toast('Jarvis ON. Bolo: "Hey Peeyush, ..."');sj()};
+function sj(){if(!jon)return;const SR=window.SpeechRecognition||window.webkitSpeechRecognition;jr=new SR();jr.lang=lang.value=='hi'?'hi-IN':'en-IN';jr.continuous=true;jr.interimResults=false;
+ jr.onresult=e=>{const t=e.results[e.results.length-1][0].transcript.trim();if(busy||speechSynthesis.speaking)return;jh(t)};
+ jr.onend=()=>{if(jon)setTimeout(sj,300)};jr.onerror=ev=>{if(ev.error=='not-allowed'||ev.error=='service-not-allowed'){jon=false;jp.classList.remove('on');toast('Mic allow karein')}};try{jr.start()}catch(e){}}
+function jh(t){const W=/(hey|hay|hi|he|हे|हेय)\s*(peeyush|piyush|pheeyush|peeush|पीयूष|पियूष)/i;let c=t;const m=t.match(W);
+ if(m){c=t.slice(m.index+m[0].length).replace(/^[\s,.:!\-]+/,'');armed=Date.now();if(!c){speak(lang.value=='hi'?'Ji, boliye':'Yes, tell me');return}}else if(Date.now()-armed>10000)return;
+ armed=0;const l=c.toLowerCase();
+ if(/(new chat|naya chat|नई चैट)/.test(l))return newChat();
+ if(/(studio)/.test(l))return go('studio');if(/(tools|टूल)/.test(l)&&/(open|khol|kholo|खोल)/.test(l))return go('tools');
+ if(/(history|purani chat)/.test(l))return go('history');if(/(band karo|stop|bye|alvida|बंद)/.test(l)){speak('Theek hai, bye');return X.jarvis()}
+ if(view!='chat'||!cur)newChat();inp.value=c;D.voiceUsed=true;send()}
+
+/* ---- Quiz ---- */
+X.quiz=()=>X.sheet('📝 MCQ Quiz',`<div class="f"><label>Topic</label><input id="qt" placeholder="Banking awareness / Excel / HVAC…"><label>Questions</label><select id="qn"><option>5</option><option>10</option></select><label>Level</label><select id="ql"><option>Beginner</option><option>Medium</option><option>Advanced</option></select><button class="btn" style="width:100%;margin-top:10px" onclick="PJX.qgo()">Generate</button></div><div id="qb"></div>`);
+X.qgo=async()=>{const t=$('qt').value.trim();if(!t)return;$('qb').innerHTML='<p>Quiz ban raha hai…</p>';
+ try{const r=await X.llm('You write MCQ tests. Output ONLY a JSON array, nothing else. Each item: {"q":"question","o":["A","B","C","D"],"a":0,"e":"short explanation"}. "a" is the index of the correct option. Write in simple Hinglish (Roman Hindi) unless the topic is in English.',`Topic: ${t}\nLevel: ${$('ql').value}\nCount: ${$('qn').value}`);
+  const j=JSON.parse(r.match(/\[[\s\S]*\]/)[0]);X.qz={q:j,s:0,a:{}};X.qr()}catch(e){$('qb').innerHTML='<p>Quiz nahi ban paya, dobara try karein.</p>'}};
+X.qr=()=>{const z=X.qz;$('qb').innerHTML=z.q.map((x,i)=>`<div class="li"><b>${i+1}. ${esc(x.q)}</b>${x.o.map((o,j)=>{const a=z.a[i],st=a==null?'':j==x.a?'background:#14532d':a==j?'background:#7f1d1d':'';return`<button class="pill" style="display:block;width:100%;text-align:left;margin-top:6px;${st}" onclick="PJX.qa(${i},${j})">${esc(o)}</button>`}).join('')}${z.a[i]!=null?`<small>💡 ${esc(x.e||'')}</small>`:''}</div>`).join('')+`<div class="box"><b>Score: ${z.s}/${z.q.length}</b></div>`};
+X.qa=(i,j)=>{const z=X.qz;if(z.a[i]!=null)return;z.a[i]=j;if(z.q[i].a==j)z.s++;X.qr()};
+
+/* ---- Business ---- */
+X.inv=()=>X.sheet('🧾 Invoice Generator',`<div class="f"><label>Aapka business</label><input id="iv1"><label>Client</label><input id="iv2"><label>Items (har line: naam, qty, rate)</label><textarea id="iv3" rows="4" placeholder="Website design, 1, 15000"></textarea><label>GST %</label><input id="iv4" type="number" value="18"><button class="btn" style="width:100%;margin-top:10px" onclick="PJX.ivgo()">Invoice banao</button></div>`);
+X.ivgo=()=>{const rows=$('iv3').value.split('\n').map(l=>l.split(',').map(x=>x.trim())).filter(r=>r[0]);let sub=0;const tr=rows.map(r=>{const q=+r[1]||1,p=+r[2]||0;sub+=q*p;return`| ${r[0]} | ${q} | ${p} | ${q*p} |`});const g=sub*(+$('iv4').value||0)/100;
+ const t=`# INVOICE\n**From:** ${$('iv1').value}\n**To:** ${$('iv2').value}\n**Date:** ${new Date().toLocaleDateString('en-IN')}\n\n| Item | Qty | Rate | Amount |\n|---|---|---|---|\n${tr.join('\n')}\n\n**Subtotal:** ${sub}\n**GST (${$('iv4').value}%):** ${g.toFixed(2)}\n**Total:** ${(sub+g).toFixed(2)}`;X.cur={text:t,title:'Invoice'};X.expUI()};
+X.prof=()=>X.sheet('💹 Profit Calculator',`<div class="f"><label>Cost per unit</label><input id="p1" type="number"><label>Selling price per unit</label><input id="p2" type="number"><label>Quantity</label><input id="p3" type="number"><label>Fixed kharche (rent, salary…)</label><input id="p4" type="number" value="0"><button class="btn" style="width:100%;margin-top:10px" onclick="PJX.pgo()">Calculate</button></div><div id="po"></div>`);
+X.pgo=()=>{const c=+$('p1').value,p=+$('p2').value,q=+$('p3').value,e=+$('p4').value,rev=p*q,cost=c*q+e,pr=rev-cost;$('po').innerHTML=`<div class="kpi" style="margin-top:10px"><div><b>₹${rev}</b><small>Revenue</small></div><div><b>₹${cost}</b><small>Total cost</small></div><div><b style="color:${pr>=0?'#22c55e':'#ef4444'}">₹${pr}</b><small>${pr>=0?'Profit':'Loss'}</small></div><div><b>${rev?(pr/rev*100).toFixed(1):0}%</b><small>Margin</small></div></div><p>Break-even: ${p>c?Math.ceil(e/(p-c)):'—'} units</p>`};
+
+/* ---- Automation ---- */
+const sched=r=>{const ms=r.at-Date.now();if(ms<0)return;setTimeout(()=>{toast('⏰ '+r.t);speak('Reminder. '+r.t);try{Notification.permission=='granted'&&new Notification('Peeyush AI ⏰',{body:r.t})}catch(e){}},Math.min(ms,2e9))};
+X.rem=()=>{try{Notification.requestPermission()}catch(e){}const L=LS('rem',[]).filter(r=>r.at>Date.now());X.sheet('⏰ Reminders',`<div class="f"><label>Kya yaad dilana hai?</label><input id="rt"><label>Kitne minute baad?</label><input id="rm" type="number" value="30"><button class="btn" style="width:100%;margin-top:10px" onclick="PJX.radd()">Add</button></div>${L.map(r=>`<div class="li">${esc(r.t)}<small>${new Date(r.at).toLocaleString()}</small></div>`).join('')}<small style="color:var(--mt)">Reminder tabhi bajega jab ye page khula ho.</small>`)};
+X.radd=()=>{const t=$('rt').value.trim();if(!t)return;const r={t,at:Date.now()+(+$('rm').value||30)*6e4},a=LS('rem',[]);a.push(r);SV('rem',a);sched(r);X.rem()};
+X.mail=()=>{const m=lastAI();if(!m)return toast('Pehle AI se email likhwayein');X.cur={text:m.c,title:(m.c.split('\n').find(l=>l.trim())||'Email').replace(/^(subject:?)/i,'').replace(/[#*]/g,'').trim()};X.do('mail')};
+X.wa=()=>{const m=lastAI();if(!m)return toast('Pehle AI se kuch likhwayein');window.open('https://wa.me/?text='+en(m.c.slice(0,1500)))};
+X.cal=()=>{const t=prompt('Meeting ka title:');if(!t)return;const d=prompt('Date aur time (YYYY-MM-DD HH:MM):',new Date(Date.now()+864e5).toISOString().slice(0,10)+' 10:00'),s=new Date((d||'').replace(' ','T'));if(isNaN(s))return toast('Date format galat');const f=x=>x.toISOString().replace(/[-:]|\.\d+/g,'');window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${en(t)}&dates=${f(s)}/${f(new Date(+s+36e5))}`)};
+X.day=()=>{const t0=new Date().setHours(0,0,0,0),c=D.chats.filter(c=>c.id>=t0);if(!c.length)return toast('Aaj ki koi chat nahi');const txt=c.map(c=>'## '+c.t+'\n'+c.m.map(m=>(m.r=='user'?'Me: ':'AI: ')+m.c.slice(0,300)).join('\n')).join('\n\n').slice(0,6000);newChat();inp.value='Meri aaj ki chats se Daily Work Summary banao (kya kiya, pending kaam, kal ke next steps):\n\n'+txt;send()};
+
+/* ---- Model / code / GitHub ---- */
+X.model=()=>X.sheet('🔀 AI Model',`<div class="f"><label>Model (Worker me support hona chahiye)</label><select id="mdl">${[['','Auto (Worker ka default)'],['@cf/meta/llama-3.3-70b-instruct-fp8-fast','Llama 3.3 70B (behtar Hindi)'],['@cf/meta/llama-3.1-8b-instruct','Llama 3.1 8B (fast)'],['@cf/mistralai/mistral-small-3.1-24b-instruct','Mistral Small 24B']].map(m=>`<option value="${m[0]}" ${D.set.model==m[0]?'selected':''}>${m[1]}</option>`).join('')}</select><p style="font-size:.74rem;color:var(--mt)">Ye choice Worker ko "model" field me jaati hai. Worker me us field ko use karne ka code hona chahiye, warna default model hi chalega.</p><button class="btn" onclick="D.set.model=$('mdl').value;save();PJX.close();toast('Saved ✅')">Save</button></div>`);
+X.code=b=>{const code=b.previousElementSibling.querySelector('code'),t=code.textContent;const html=/<(!doctype|html|body|div|head|script|style|section|header|nav|main|footer|form|table|ul|ol|h[1-6]|p|span|img|button|input|a)[\s>]/i.test(t),py=/^\s*(def |import |from \w+ import|print\()/m.test(t),css=!html&&/[\w.#-]+\s*\{[^}]*:[^}]*\}/.test(t),js=!html&&/(function |const |let |=>|console\.)/.test(t);
+ X.cd={text:t,name:html?'index.html':py?'main.py':css?'style.css':js?'script.js':'code.txt'};
+ X.sheet('💻 Code',`${html?'<iframe id="pv" sandbox="allow-scripts" style="width:100%;height:320px;border:1px solid #3b3590;border-radius:12px;background:#fff"></iframe>':'<p style="color:var(--mt);font-size:.82rem">Live preview sirf HTML ke liye hai.</p>'}<div class="row" style="margin-top:10px"><button class="btn sm" onclick="PJX.cdl()">⬇ ${X.cd.name}</button><button class="btn sm o" onclick="navigator.clipboard.writeText(PJX.cd.text);toast('Copied ✅')">📋 Copy</button><button class="btn sm o" onclick="PJX.gpush()">🐙 GitHub</button></div>`);if(html)$('pv').srcdoc=t};
+X.cdl=()=>dl(new Blob([X.cd.text],{type:'text/plain'}),X.cd.name);
+X.ghset=()=>{const g=LS('gh',{});X.sheet('🐙 GitHub Integration',`<div class="f"><label>Repo (owner/repo)</label><input id="gr" value="${esc(g.repo||'peeyush-jangid/peeyush-jangid.github.io')}"><label>Branch</label><input id="gb" value="${esc(g.branch||'main')}"><label>Personal Access Token (fine-grained, sirf is repo ka Contents: Read & Write)</label><input id="gt" type="password" value="${esc(g.token||'')}"><p style="font-size:.74rem;color:var(--mt)">Token sirf is device ke browser me rahega. Kisi ko share na karein.</p><button class="btn" onclick="PJX.gsave()">Save</button></div>`)};
+X.gsave=()=>{SV('gh',{repo:$('gr').value.trim(),branch:$('gb').value.trim(),token:$('gt').value.trim()});X.close();toast('Saved ✅')};
+X.gpush=async()=>{const g=LS('gh',null);if(!g||!g.token)return X.ghset();const path=prompt('Repo me file path:',X.cd.name);if(!path)return;const url=`https://api.github.com/repos/${g.repo}/contents/${path}`,H={Authorization:'Bearer '+g.token,Accept:'application/vnd.github+json'};
+ try{let sha;const r0=await fetch(url+'?ref='+(g.branch||'main'),{headers:H});if(r0.ok)sha=(await r0.json()).sha;const r=await fetch(url,{method:'PUT',headers:H,body:JSON.stringify({message:'Update '+path+' via Peeyush AI',content:btoa(unescape(encodeURIComponent(X.cd.text))),sha,branch:g.branch||'main'})});toast(r.ok?'GitHub par save ✅':'GitHub error '+r.status)}catch(e){toast('GitHub error')}};
+X.vo=()=>X.sheet('🎙 AI Voiceover',`<div class="f"><label>Script</label><textarea id="vt" rows="5"></textarea><button class="btn" style="width:100%;margin-top:10px" onclick="speak($('vt').value)">▶ Bolkar sunao (${lang.value=='hi'?'Hindi':'English'})</button></div><p style="font-size:.74rem;color:var(--mt)">Awaaz browser ki hai; audio file save karne ke liye external tool chahiye.</p>`);
+
+/* ---- Studio screen ---- */
+const SEC=[
+['🧠 AI Chat & Research',[['🔎','Web Research',()=>{newChat();web=true;sync();inp.value='Research karo: ';inp.focus()}],['💡','Simple Explain',T('Is topic ko bahut aasan bhasha me example ke saath samjhao: ')],['🔀','AI Model',()=>X.model()],['🧠','Memory & Projects',()=>go('memory')]]],
+['📄 Document Creator',[['📝','Resume Maker',T('Meri professional ATS-friendly resume banao. Meri details (naam, education, experience, skills, contact): ')],['✉️','Cover Letter',T('Cover letter likho. Job role aur meri details: ')],['📃','Offer Letter',T('Professional offer letter draft likho. Company, post, salary, joining date: ')],['🏛','Application',T('Formal application (aavedan patra) likho. Vishay aur details: ')],['📧','Email Writer',T('Professional email likho. Kisko, kis baare me: ')],['📊','Report Maker',T('Detailed report banao (headings aur tables ke saath). Topic: ')],['🎞','PPT Maker',T('PPT banao. Format: har slide "# Slide title" aur niche "- bullet" lines. Topic aur slides ki sankhya: ')],['📗','Excel Assistant',T('Excel sheet/formula banao. Data markdown table (| col |) me do. Kaam: ')],['🔁','PDF → Word',()=>X.conv('pdf')],['🔄','Word → PDF',()=>X.conv('docx')]]],
+['🎨 Image & Design',[['🖼','Text to Image',()=>X.img('image')],['🏷','Logo',()=>X.img('logo')],['📰','Poster / Banner',()=>X.img('poster')],['▶️','Thumbnail',()=>X.img('thumb')],['📱','Social Post',()=>X.img('social')],['🎭','Cartoon (AI)',()=>X.img('cartoon')],['👤','Profile Photo',()=>X.img('profile')],['📷','Photo Lab',()=>X.lab()]]],
+['🎬 Video Helpers',[['🎥','Reel / Shorts Script',T('Reel/Shorts ka script banao (hook, scenes, voiceover, captions, hashtags). Topic: ')],['💬','Subtitles (SRT)',T('Is transcript se SRT subtitle text banao (timestamps ke saath): ')],['📺','Video Summary',T('Is video transcript ka summary aur key points banao: ')],['🎙','AI Voiceover',()=>X.vo()],['🎞','Text → Video Plan',T('Is idea ka storyboard + shot list + voiceover + music suggestion banao: ')]]],
+['🎧 Voice',[['🎧','Jarvis Mode',()=>{go('chat');X.jarvis()}]]],
+['💻 Coding',[['🌐','Website Builder',T('Ek complete responsive single-file website (HTML+CSS+JS) banao. Details: ')],['➕','Add Feature',T('Is code me ye feature jodo: ')],['🐞','Fix / Debug',T('Is code ki galti dhundo aur fix karo: ')],['📖','Explain Code',T('Is code ko line by line aasan bhasha me samjhao: ')],['🎨','Improve Design',T('Is website ka design modern aur mobile responsive banao: ')],['🐙','GitHub',()=>X.ghset()]]],
+['📚 Study',[['📚','Notes',T('Is topic ke clean exam-ready notes banao (key points, definitions, examples, summary): ')],['📝','MCQ Quiz',()=>X.quiz()],['🎤','Mock Interview',T('Mujhse mock interview lo. Ek ek question poochho aur mere jawab par feedback do. Role: ')],['🏦','Banking Prep',T('Banking interview ke important questions aur model answers do. Role/bank: ')],['➗','Math Solver',T('Step by step solve karo: ')],['📅','Study Planner',T('Daily study planner banao. Goal, kitne din aur roz ke ghante: ')],['📘','PDF Explain',()=>{newChat();file.click();inp.value='Is PDF/book ko aasan bhasha me samjhao aur summary do.'}],['🎓','Course Roadmap',T('Beginner se Advanced tak step-by-step course roadmap banao: ')]]],
+['💼 Business',[['💡','Business Ideas',T('Mere liye business ideas do. Budget aur interest: ')],['📋','Business Plan',T('Complete business plan banao. Idea: ')],['📣','Marketing Plan',T('Marketing strategy banao. Business: ')],['📱','Social Content',T('7 din ka social media content calendar + captions banao. Business: ')],['🧾','Invoice',()=>X.inv()],['💹','Profit Calc',()=>X.prof()],['🤝','Client Proposal',T('Client proposal banao. Client, kaam, budget: ')],['🧑‍💻','Freelance Help',T('Freelancing me kaam paane ka plan aur gig description likho. Skill: ')],['📈','Sales Report',T('Sales report banao (table me, Excel export ke liye). Data: ')],['🛎','Support Bot Script',T('Customer support chatbot ke FAQs aur replies banao. Business: ')]]],
+['⚙️ Automation',[['⏰','Reminders',()=>X.rem()],['📧','Gmail Draft',()=>X.mail()],['📅','Calendar',()=>X.cal()],['💬','WhatsApp Share',()=>X.wa()],['🗒','Daily Summary',()=>X.day()]]]];
+const ITEMS=[];
+function studio(){$('s-studio').innerHTML='<h2>✨ Studio</h2>'+SEC.map(s=>`<h3 style="margin-top:14px">${s[0]}</h3><div class="grid4">${s[1].map(it=>{ITEMS.push(it[2]);return`<button class="tl" style="color:inherit" onclick="PJX.run(${ITEMS.length-1})"><span>${it[0]}</span>${it[1]}</button>`}).join('')}</div>`).join('')+'<p style="color:var(--mt);font-size:.76rem;margin-top:14px">Note: AI video generation / auto-send Gmail ke liye alag paid backend chahiye. Yahan unke helper tools hain.</p>'}
+X.run=i=>ITEMS[i]();
+/* ---- Memory screen ---- */
+const ST=[['mem','🧠 AI Memory','Kya yaad rakhun? (jaise: Main Jaipur me HVAC engineer hoon)'],['proj','📁 Projects','Project ka naam:'],['kb','📚 Knowledge Base','Note ka title:'],['docs','🗂 Saved Documents','']];
+function memScr(){$('s-memory').innerHTML=`<div class="row" style="justify-content:space-between"><h2>🧠 Memory</h2><label class="sw"><input type="checkbox" ${D.set.mem!==false?'checked':''} onchange="D.set.mem=this.checked;save()"> On</label></div><div class="f"><input id="ms" placeholder="🔍 Search…" oninput="PJX.ms()"></div><div id="mb"></div>`;X.ms()}
+X.ms=()=>{const q=($('ms')?.value||'').toLowerCase();$('mb').innerHTML=ST.map(([k,t])=>{const it=LS(k,[]).map((x,i)=>[x,i]).filter(([x])=>(x.t+' '+(x.n||'')).toLowerCase().includes(q));return`<div class="box"><div class="row" style="justify-content:space-between"><b>${t}</b>${k=='docs'?'':`<button class="btn sm" onclick="PJX.madd('${k}')">＋ Add</button>`}</div>${it.map(([x,i])=>`<div class="li"><b>${esc(x.t)}</b>${x.n?`<small>${esc(x.n.slice(0,120))}</small>`:''}<div class="row" style="margin-top:6px">${k=='docs'?`<button class="btn sm o" onclick="PJX.mopen(${i})">▶ Continue</button>`:`<button class="btn sm o" onclick="PJX.medit('${k}',${i})">✏️ Edit</button>`}<button class="btn sm o" onclick="PJX.mdel('${k}',${i})">🗑 Delete</button></div></div>`).join('')||'<small style="color:var(--mt)">Khaali</small>'}</div>`}).join('')};
+X.madd=k=>{const t=prompt(ST.find(s=>s[0]==k)[2]);if(!t)return;const n=k=='mem'?'':(prompt('Details:')||''),a=LS(k,[]);a.unshift({t,n});SV(k,a);X.ms()};
+X.medit=(k,i)=>{const a=LS(k,[]),x=a[i],t=prompt('Title / text:',x.t);if(t==null)return;x.t=t;if(k!='mem'){const n=prompt('Details:',x.n);if(n!=null)x.n=n}SV(k,a);X.ms()};
+X.mdel=(k,i)=>{if(!confirm('Delete karein?'))return;const a=LS(k,[]);a.splice(i,1);SV(k,a);X.ms()};
+X.mopen=i=>{const x=LS('docs',[])[i];newChat();inp.value='Ye pichhla document hai, isi par aage kaam karo:\n\n'+x.n.slice(0,6000)+'\n\nAb: ';inp.focus()};
+['studio','memory'].forEach(n=>{const s=document.createElement('section');s.className='scr';s.id='s-'+n;$('app').insertBefore(s,$('nav'))});
+const og=go;go=function(v){og(v);if(v=='studio')studio();if(v=='memory')memScr()};
+buildNav=function(){const n=[['home','🏠','Home'],['studio','✨','Studio'],['tools','🧰','Tools'],['rewards','🏆','Rewards'],['account','👤','Account']];if(isAdmin())n.push(['admin','🛡','Admin']);$('nav').innerHTML=n.map(x=>`<button data-v="${x[0]}" class="${view==x[0]?'on':''}" onclick="go('${x[0]}')"><i>${x[1]}</i>${x[2]}</button>`).join('')};
+$('tWeb').onclick=()=>{web=!web;sync();if(web)toast('Web Search ON: Wikipedia se jaankari (live news ke liye Worker me search chahiye)')};
+buildNav();LS('rem',[]).forEach(sched);
+})();
+
 </script></body></html>
