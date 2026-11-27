@@ -146,6 +146,17 @@
     return h + '</table></div><p style="font-size:12px;opacity:.7;margin:8px 0 0">On Mac use Cmd instead of Ctrl.</p></div>';
   }
 
+  /* ---------- PJ Studio Pro loader: uses already-loaded scripts, otherwise loads them on demand ---------- */
+  var BASE = (function () { try { var c = document.currentScript || Array.prototype.filter.call(document.scripts, function (x) { return /pj-tools-video\.js/.test(x.src); })[0]; return c.src.replace(/[^\/]*(\?.*)?$/, ''); } catch (e) { return ''; } })();
+  function loadJS(f) { return new Promise(function (res, rej) { var x = document.createElement('script'); x.src = BASE + f + '?v=' + Date.now(); x.onload = res; x.onerror = function () { rej(new Error(f)); }; document.head.appendChild(x); }); }
+  function loadCSS(f) { if (document.querySelector('link[data-pjvs]')) return; var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = BASE + f + '?v=' + Date.now(); l.setAttribute('data-pjvs', '1'); document.head.appendChild(l); }
+  function openStudio() {
+    if (window.PJVS && PJVS.open) { PJVS.open(); return; }
+    say('Loading PJ Studio Pro…'); loadCSS('pj-vs.css');
+    loadJS('pj-vs-engine.js').then(function () { return loadJS('pj-vs-ui.js'); }).then(function () { PJVS.open(); })
+      .catch(function (e) { alert('PJ Studio Pro could not load: file "' + e.message + '" was not found on your website.\n\nUpload pj-vs-engine.js, pj-vs-ui.js and pj-vs.css to the SAME folder as pj-tools.html (the website root, not inside a "site" folder), then press Ctrl+Shift+R / Cmd+Shift+R.'); });
+  }
+
   tool.render = function (el) {
     el.innerHTML =
       '<div class="card" style="background:linear-gradient(135deg,#0e0f13,#1b1440);color:#fff;border:0;margin-bottom:14px"><h3 style="margin:0 0 6px;color:#fff">🎬 PJ Studio Pro – CapCut-style Video Editor</h3>' +
@@ -204,8 +215,8 @@
       $('ve-pane-edit').hidden = L; $('ve-pane-learn').hidden = !L;
       $('ve-t-edit').className = 'btn' + (L ? ' ghost' : ''); $('ve-t-learn').className = 'btn' + (L ? '' : ' ghost');
     }
-    $('ve-pro').addEventListener('click', function () { if (window.PJVS && PJVS.open) PJVS.open(); else say('Studio failed to load – refresh the page.'); });
-    if (/[?&#]studio\b/.test(location.href) && window.PJVS && PJVS.open) setTimeout(function () { PJVS.open(); }, 0);
+    $('ve-pro').addEventListener('click', function () { openStudio(); });
+    if (/[?&#]studio\b/.test(location.href)) setTimeout(openStudio, 0);
     $('ve-t-edit').addEventListener('click', function () { tab('edit'); });
     $('ve-t-learn').addEventListener('click', function () { tab('learn'); });
     el.addEventListener('click', function (e) {
