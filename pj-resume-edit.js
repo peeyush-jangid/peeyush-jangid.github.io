@@ -1,13 +1,14 @@
 /* ===== PJ – Upload & Edit your own resume (inside Resume Maker) =====
-   PDF / DOCX / TXT → editable page → Word (.doc) or PDF. The file is not uploaded anywhere. */
+   DOCX / PDF → change the text, keep the original design. The file is not uploaded anywhere. */
 (function () {
   if (typeof TOOLS === 'undefined') return;
   const T = TOOLS.find(t => t.id === 'resume-maker');
   if (!T || typeof T.render !== 'function') return;
 
-  const KEY = 'pj-resume-edit-draft';
   const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
-  const MAMMOTH = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.13.0/mammoth.browser.min.js';
+  const PDFLIB = 'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js';
+  const JSZIP = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+  const PREVIEW = 'https://cdn.jsdelivr.net/npm/docx-preview@0.3.5/dist/docx-preview.min.js';
   const escHtml = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   const loadScript = src => new Promise((ok, no) => {
@@ -16,222 +17,298 @@
     document.head.appendChild(s);
   });
 
-  /* Keep only simple formatting tags (uploaded files and pasted text are untrusted). */
-  const ALLOWED = new Set('H1 H2 H3 H4 P DIV BR UL OL LI B STRONG I EM U A TABLE THEAD TBODY TR TD TH IMG SPAN SUP SUB HR'.split(' '));
-  function clean(html) {
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    doc.querySelectorAll('script,style,iframe,object,embed,link,meta,svg,math,form,template,noscript').forEach(n => n.remove());
-    [...doc.body.querySelectorAll('*')].reverse().forEach(n => {
-      if (!ALLOWED.has(n.tagName)) { n.replaceWith(...n.childNodes); return; }
-      [...n.attributes].forEach(a => {
-        const name = a.name.toLowerCase(), v = a.value.trim();
-        const ok = (n.tagName === 'A' && name === 'href' && /^(https?:|mailto:|tel:)/i.test(v)) ||
-          (n.tagName === 'IMG' && name === 'src' && /^data:image\/(png|jpe?g|gif|webp);base64,/i.test(v)) ||
-          ((name === 'colspan' || name === 'rowspan') && /^\d+$/.test(v));
-        if (!ok) n.removeAttribute(a.name);
+  const save = (data, type, name) => {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type })); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  };
+
+  /* ---------- ZIP: untouched entries are copied byte for byte ---------- */
+  const CRC = Array.from({ length: 256 }, (_, n) => { for (let k = 0; k < 8; k++) n = n & 1 ? 0xedb88320 ^ (n >>> 1) : n >>> 1; return n >>> 0; });
+  const crc32 = b => { let c = ~0; for (const x of b) c = CRC[(c ^ x) & 255] ^ (c >>> 8); return ~c >>> 0; };
+  function unzip(buf) {
+    const u = new Uint8Array(buf), v = new DataView(buf); let e = u.length - 22;
+    while (e >= 0 && v.getUint32(e, true) !== 0x06054b50) e--;
+    if (e < 0) throw new Error('Yeh sahi .docx file nahi hai.');
+    let p = v.getUint32(e + 16, true);
+    return Array.from({ length: v.getUint16(e + 10, true) }, () => {
+      const nl = v.getUint16(p + 28, true), off = v.getUint32(p + 42, true), size = v.getUint32(p + 20, true);
+      const start = off + 30 + v.getUint16(off + 26, true) + v.getUint16(off + 28, true);
+      const f = { nameBytes: u.slice(p + 46, p + 46 + nl), flag: v.getUint16(p + 8, true) & ~8, method: v.getUint16(p + 10, true), time: v.getUint32(p + 12, true), crc: v.getUint32(p + 16, true), usize: v.getUint32(p + 24, true), data: u.slice(start, start + size) };
+      f.name = new TextDecoder().decode(f.nameBytes);
+      p += 46 + nl + v.getUint16(p + 30, true) + v.getUint16(p + 32, true);
+      return f;
+    });
+  }
+  async function entryText(f) {
+    if (f.method === 0) return new TextDecoder().decode(f.data);
+    const stream = new Blob([f.data]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+    return new Response(stream).text();
+  }
+  function zip(files) {
+    const parts = [], central = []; let off = 0, csize = 0;
+    files.forEach(f => {
+      const head = (central_) => {
+        const h = new Uint8Array(central_ ? 46 : 30), v = new DataView(h.buffer), o = central_ ? 2 : 0;
+        v.setUint32(0, central_ ? 0x02014b50 : 0x04034b50, true);
+        if (central_) v.setUint16(4, 20, true);
+        v.setUint16(4 + o, 20, true); v.setUint16(6 + o, f.flag, true); v.setUint16(8 + o, f.method, true);
+        v.setUint32(10 + o, f.time, true); v.setUint32(14 + o, f.crc, true); v.setUint32(18 + o, f.data.length, true);
+        v.setUint32(22 + o, f.usize, true); v.setUint16(26 + o, f.nameBytes.length, true);
+        if (central_) v.setUint32(42, off, true);
+        return h;
+      };
+      const c = head(true), l = head(false);
+      central.push(c, f.nameBytes); csize += c.length + f.nameBytes.length;
+      parts.push(l, f.nameBytes, f.data); off += l.length + f.nameBytes.length + f.data.length;
+    });
+    const end = new Uint8Array(22), v = new DataView(end.buffer);
+    v.setUint32(0, 0x06054b50, true); v.setUint16(8, files.length, true); v.setUint16(10, files.length, true);
+    v.setUint32(12, csize, true); v.setUint32(16, off, true);
+    return new Blob([...parts, ...central, end]);
+  }
+
+  /* ---------- DOCX: change only the text inside the original file ---------- */
+  /* Replace only the changed part, so bold / colour of the other words stays. */
+  function setText(nodes, value) {
+    const old = nodes.map(n => n.textContent).join('');
+    if (old === value) return;
+    let a = 0, z = 0;
+    while (a < old.length && a < value.length && old[a] === value[a]) a++;
+    while (z < old.length - a && z < value.length - a && old[old.length - 1 - z] === value[value.length - 1 - z]) z++;
+    const end = old.length - z, insert = value.slice(a, value.length - z);
+    let pos = 0, done = false;
+    nodes.forEach((n, i) => {
+      const t = n.textContent, from = pos, to = pos + t.length; pos = to;
+      const here = !done && (a < to || i === nodes.length - 1);
+      if (!here && (to <= a || from >= end)) return;
+      n.textContent = t.slice(0, Math.max(0, a - from)) + (here ? insert : '') + t.slice(Math.max(0, end - from));
+      n.setAttribute('xml:space', 'preserve');
+      if (here) done = true;
+    });
+  }
+  /* One field = the text of a paragraph between tabs / line breaks. */
+  function groupsOf(xml) {
+    const groups = [];
+    [...xml.getElementsByTagName('w:p')].forEach(p => {
+      let g = [];
+      const flush = () => { if (g.map(n => n.textContent).join('').trim()) groups.push(g); g = []; };
+      [...p.getElementsByTagName('*')].forEach(n => {
+        let up = n.parentNode; while (up && up.nodeName !== 'w:p') up = up.parentNode;
+        if (up !== p) return;
+        if (n.nodeName === 'w:t') g.push(n);
+        else if ((n.nodeName === 'w:tab' && n.parentNode.nodeName === 'w:r') || n.nodeName === 'w:br') flush();
       });
+      flush();
     });
-    return doc.body.innerHTML;
+    return groups;
+  }
+  const inFallback = n => { for (; n; n = n.parentNode) if (n.nodeName === 'mc:Fallback') return true; return false; };
+
+  async function openDocx(buf, box) {
+    const files = unzip(buf), parts = [], fields = [];
+    for (const f of files.filter(x => /^word\/(document|header\d*|footer\d*)\.xml$/.test(x.name))) {
+      const xml = new DOMParser().parseFromString(await entryText(f), 'application/xml');
+      const all = groupsOf(xml), text = g => g.map(n => n.textContent).join('');
+      const spare = all.filter(g => inFallback(g[0])), part = { f, xml, dirty: false };
+      parts.push(part);
+      all.filter(g => !inFallback(g[0])).forEach(g => {
+        // text boxes are stored twice in Word files; update both copies
+        const i = spare.findIndex(s => text(s) === text(g));
+        fields.push({ part, copies: i < 0 ? [g] : [g, spare.splice(i, 1)[0]], value: text(g) });
+      });
+    }
+    if (!fields.length) throw new Error('Is file mein text nahi mila.');
+
+    box.innerHTML = `<p class="note">Neeche har line ka text badlein. Font, colour, layout aur photo asli file wale hi rahenge.</p>
+      <div class="pe-two"><div class="pe-fields"></div><div><b>Preview (andaazan)</b><div class="pe-preview">Preview load ho raha hai…</div></div></div>
+      <div class="row"><button type="button" class="btn" data-down>⬇ Word (.docx) download – same design</button></div>
+      <p class="note">PDF chahiye to download ki hui file Word ya Google Docs mein kholkar “Save as PDF” karein.</p>`;
+    const list = box.querySelector('.pe-fields'), view = box.querySelector('.pe-preview');
+    const build = () => {
+      const out = files.map(f => {
+        const part = parts.find(p => p.f === f && p.dirty);
+        if (!part) return f;
+        const data = new TextEncoder().encode(new XMLSerializer().serializeToString(part.xml));
+        return Object.assign({}, f, { method: 0, data, usize: data.length, crc: crc32(data) });
+      });
+      return zip(out);
+    };
+    const preview = async () => {
+      try {
+        if (!window.JSZip) await loadScript(JSZIP);
+        if (!window.docx || !window.docx.renderAsync) await loadScript(PREVIEW);
+        const next = document.createElement('div');
+        await window.docx.renderAsync(build(), next);
+        next.querySelectorAll('a[href]').forEach(a => { if (!/^(https?:|mailto:|tel:|#)/i.test(a.getAttribute('href'))) a.removeAttribute('href'); });
+        view.replaceChildren(next);
+      } catch (e) { view.textContent = 'Preview nahi ban paya, lekin editing aur download chalega.'; }
+    };
+    let timer;
+    fields.forEach(fd => {
+      const t = document.createElement('textarea');
+      t.rows = Math.max(1, Math.ceil(fd.value.length / 45)); t.value = fd.value;
+      t.oninput = () => {
+        const value = t.value.replace(/\n/g, ' ');
+        fd.copies.forEach(g => setText(g, value)); fd.part.dirty = true;
+        clearTimeout(timer); timer = setTimeout(preview, 700);
+      };
+      list.appendChild(t);
+    });
+    box.querySelector('[data-down]').onclick = () => save(build(), 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'my-resume.docx');
+    preview();
   }
 
-  /* ---------- text lines → headings, paragraphs, bullet lists ---------- */
-  const BULLET = /^\s*([•●▪■◦·\-–—*➢➤✓]|\d{1,2}[.)])\s+/;
-  const HEAD = /^(professional |career |work |technical |key |core )?(summary|profile|objective|experience|employment|education|qualifications?|skills|projects?|certifications?|achievements?|awards|languages?|declaration|internships?|personal details)\s*:?$/i;
-  function linesToHtml(lines) {
-    let out = '', inList = false, first = true;
-    const close = () => { if (inList) { out += '</ul>'; inList = false; } };
-    lines.forEach(({ t, big }) => {
-      const text = t.trim();
-      if (!text) { close(); return; }
-      if (BULLET.test(text)) {
-        if (!inList) { out += '<ul>'; inList = true; }
-        out += `<li>${escHtml(text.replace(BULLET, ''))}</li>`;
-      } else {
-        close();
-        const caps = text.length <= 40 && /[A-Z]{3}/.test(text) && text === text.toUpperCase() && !/[@\d]/.test(text);
-        const tag = first ? 'h1' : (HEAD.test(text) || caps || (big && text.length <= 60)) ? 'h2' : 'p';
-        out += `<${tag}>${escHtml(text)}</${tag}>`;
-      }
-      first = false;
-    });
-    close();
-    return out;
-  }
-
-  async function pdfToHtml(buf) {
+  /* ---------- PDF: keep the original pages, redraw only the edited lines ---------- */
+  async function openPdf(buf, box) {
     if (!window.pdfjsLib) await loadScript(PDFJS + 'pdf.min.js');
     window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + 'pdf.worker.min.js';
+    const original = buf.slice(0);
     // isEvalSupported:false blocks script execution from a malicious PDF in this pdf.js version
     const doc = await window.pdfjsLib.getDocument({ data: new Uint8Array(buf), isEvalSupported: false }).promise;
-    const rows = [];
+    box.innerHTML = `<p class="note">Page par jis line ko badalna hai us par click karein. Baaki design waisa hi rahega.</p><div data-pages></div>
+      <label class="note"><input type="checkbox" data-flat style="width:auto"> Purana text file se poori tarah hatayein (PDF photo jaisi banegi, job portal/ATS use padh nahi payega)</label>
+      <div class="row"><button type="button" class="btn" data-down>⬇ PDF download – same design</button></div>
+      <p class="note">Badli hui line ka font milta-julta hoga, hubahu nahi. Dhyan dein: badli hui line photo ki tarah judti hai. Upar wala box tick na karne par job portal/ATS abhi bhi PURANA text padhega. Job apply karne ke liye Word file se edit karna behtar hai.</p>`;
+    const holder = box.querySelector('[data-pages]'), pages = [], S = 2;
+    let count = 0;
+
     for (let i = 1; i <= doc.numPages; i++) {
-      const tc = await (await doc.getPage(i)).getTextContent();
-      const items = tc.items.filter(x => x.str && x.str.trim())
-        .map(x => ({ s: x.str, x: x.transform[4], y: x.transform[5], w: x.width, h: Math.abs(x.transform[3]) || x.height }))
-        .sort((a, b) => b.y - a.y || a.x - b.x);
-      const page = [];
-      items.forEach(it => {
-        const r = page[page.length - 1];
-        if (r && Math.abs(r.y - it.y) < 3) r.items.push(it); else page.push({ y: it.y, items: [it] });
-      });
-      page.forEach(r => {
-        r.items.sort((a, b) => a.x - b.x);
-        let t = '', end = null;
-        r.items.forEach(it => {
-          if (end !== null && it.x - end > it.h * 0.15 && !/\s$/.test(t) && !/^\s/.test(it.s)) t += ' ';
-          t += it.s; end = it.x + it.w;
+      const page = await doc.getPage(i), vp = page.getViewport({ scale: S });
+      const canvas = document.createElement('canvas'); canvas.width = vp.width; canvas.height = vp.height;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      await page.render({ canvasContext: ctx, viewport: vp }).promise;
+      const base = document.createElement('canvas'); base.width = canvas.width; base.height = canvas.height;
+      base.getContext('2d').drawImage(canvas, 0, 0);
+      const wrap = document.createElement('div'); wrap.className = 'pe-page'; wrap.appendChild(canvas); holder.appendChild(wrap);
+      const info = { canvas, base, lines: [] }; pages.push(info);
+
+      const tc = await page.getTextContent(), segs = [];
+      const items = tc.items.filter(x => x.str && x.str.trim()).map(x => {
+        const m = window.pdfjsLib.Util.transform(vp.transform, x.transform);
+        return { s: x.str, x: m[4], y: m[5], w: x.width * S, h: Math.hypot(m[2], m[3]), font: x.fontName, flat: Math.abs(m[1]) < 0.01 };
+      }).filter(x => x.flat).sort((a, b) => a.y - b.y || a.x - b.x);
+      const rows = [];
+      items.forEach(it => { const r = rows[rows.length - 1]; if (r && Math.abs(r[0].y - it.y) < 4) r.push(it); else rows.push([it]); });
+      rows.forEach(r => {
+        let g = null;
+        r.sort((a, b) => a.x - b.x).forEach(it => {
+          const gap = g ? it.x - (g.x + g.w) : 0;
+          // a wide gap or a different size / font means another column or style
+          if (g && gap < it.h * 1.2 && it.font === g.font && Math.abs(it.h - g.h) < 1) {
+            g.s += (gap > it.h * 0.15 && !/\s$/.test(g.s) ? ' ' : '') + it.s; g.w = it.x + it.w - g.x;
+          } else { g = Object.assign({}, it); segs.push(g); }
         });
-        rows.push({ t, h: Math.max(...r.items.map(x => x.h)), x: r.items[0].x });
+      });
+
+      segs.forEach(g => {
+        const x = Math.max(0, Math.floor(g.x - 2)), y = Math.max(0, Math.floor(g.y - g.h)), w = Math.ceil(g.w + 4), h = Math.ceil(g.h * 1.3);
+        const px = ctx.getImageData(x, y, w, h).data, bg = [px[0], px[1], px[2]];
+        let fg = bg, far = 0;
+        for (let k = 0; k < px.length; k += 4) {
+          const d = Math.abs(px[k] - bg[0]) + Math.abs(px[k + 1] - bg[1]) + Math.abs(px[k + 2] - bg[2]);
+          if (d > far) { far = d; fg = [px[k], px[k + 1], px[k + 2]]; }
+        }
+        let real = '';
+        try { real = page.commonObjs.get(g.font).name || ''; } catch (e) { /* font name not available */ }
+        const family = ((tc.styles[g.font] || {}).fontFamily) === 'serif' ? 'Georgia, serif' : 'Arial, Helvetica, sans-serif';
+        const line = { x, y, w, h, tx: g.x, ty: g.y, size: g.h, old: g.s, value: g.s, bg: `rgb(${bg})`, fg: `rgb(${fg})`,
+          font: `${/italic|oblique/i.test(real) ? 'italic ' : ''}${/bold|black|semi/i.test(real) ? 'bold ' : ''}${g.h}px ${family}` };
+        info.lines.push(line);
+
+        const hit = document.createElement('button');
+        hit.type = 'button'; hit.className = 'pe-hit'; hit.title = 'Badalne ke liye click karein'; hit.setAttribute('aria-label', g.s);
+        Object.assign(hit.style, { left: x / canvas.width * 100 + '%', top: y / canvas.height * 100 + '%', width: w / canvas.width * 100 + '%', height: h / canvas.height * 100 + '%' });
+        hit.onclick = () => {
+          const value = prompt('Naya text likhein:', line.value);
+          if (value === null) return;
+          count += (value !== line.old) - (line.value !== line.old);
+          line.value = value; redraw(info);
+        };
+        wrap.appendChild(hit);
       });
     }
-    const sizes = rows.map(r => r.h).sort((a, b) => a - b), mid = sizes[Math.floor(sizes.length / 2)] || 10;
-    const merged = [];
-    rows.forEach(r => {
-      const prev = merged[merged.length - 1];
-      // an indented line under a bullet is the rest of that bullet
-      if (prev && BULLET.test(prev.t) && !BULLET.test(r.t) && r.x > prev.x + 4) prev.t += ' ' + r.t.trim();
-      else merged.push({ t: r.t, x: r.x, big: r.h > mid * 1.18 });
-    });
-    return linesToHtml(merged);
-  }
+    if (!pages.some(p => p.lines.length)) throw new Error('Is PDF mein text nahi mila (shayad scan/photo wali hai). Iski Word file upload karein.');
 
-  async function fileToHtml(file) {
-    if (file.size > 10 * 1024 * 1024) throw new Error('File 10 MB se chhoti honi chahiye.');
-    const ext = file.name.split('.').pop().toLowerCase(), buf = await file.arrayBuffer();
-    if (ext === 'docx') {
-      if (!window.mammoth) await loadScript(MAMMOTH);
-      return (await window.mammoth.convertToHtml({ arrayBuffer: buf })).value;
+    function redraw(info) {
+      const c = info.canvas.getContext('2d');
+      c.drawImage(info.base, 0, 0);
+      info.lines.filter(l => l.value !== l.old).forEach(l => paintLine(c, l));
     }
-    if (ext === 'pdf') return pdfToHtml(buf);
-    if (ext === 'txt') return linesToHtml(new TextDecoder().decode(buf).split(/\r?\n/).map(t => ({ t })));
-    throw new Error('Sirf PDF, DOCX ya TXT file chunein (purani .doc file ko pehle DOCX mein save karein).');
-  }
+    function paintLine(c, l) {
+      c.fillStyle = l.bg; c.fillRect(l.x, l.y, l.w, l.h);
+      c.font = l.font; c.fillStyle = l.fg; c.textBaseline = 'alphabetic';
+      const room = c.canvas.width - l.tx - 4;
+      c.fillText(l.value, l.tx, l.ty, Math.min(room, Math.max(l.w * 1.15, c.measureText(l.old).width * 1.15)));
+    }
 
-  /* ---------- export ---------- */
-  const docCss = (color, size, font) => `
-    body{font-family:${font};font-size:${size}pt;line-height:1.4;color:#111;margin:0}
-    h1{font-size:${size * 2}pt;margin:0 0 4pt;color:${color}}
-    h2{font-size:${size * 1.15}pt;margin:12pt 0 5pt;color:${color};border-bottom:1.5pt solid ${color};text-transform:uppercase}
-    h3,h4{font-size:${size * 1.05}pt;margin:8pt 0 3pt}
-    p{margin:0 0 3pt} ul,ol{margin:2pt 0 6pt;padding-left:18pt} li{margin:0 0 2pt}
-    table{width:100%;border-collapse:collapse} td,th{vertical-align:top;padding:2pt 4pt;text-align:left}
-    img{max-width:140px;height:auto} a{color:${color}}`;
-  const fullDoc = (body, css, title) => `<!doctype html><html><head><meta charset="utf-8"><title>${escHtml(title)}</title><style>@page{size:A4;margin:14mm}${css}</style></head><body>${body}</body></html>`;
+    box.querySelector('[data-down]').onclick = async function () {
+      const flat = box.querySelector('[data-flat]').checked;
+      if (!count && !flat) return save(original, 'application/pdf', 'my-resume.pdf');
+      this.disabled = true;
+      try {
+        if (!window.PDFLib) await loadScript(PDFLIB);
+        const src = await window.PDFLib.PDFDocument.load(original);
+        const out = flat ? await window.PDFLib.PDFDocument.create() : src;
+        for (let i = 0; i < pages.length; i++) {
+          const info = pages[i], page = await doc.getPage(i + 1), vp = page.getViewport({ scale: S });
+          if (flat) {
+            const img = await out.embedJpg(info.canvas.toDataURL('image/jpeg', 0.95));
+            const w = vp.width / S, h = vp.height / S;
+            out.addPage([w, h]).drawImage(img, { x: 0, y: 0, width: w, height: h });
+            continue;
+          }
+          // each edited line is placed as a small sharp image (works for ₹ and Hindi too)
+          for (const l of info.lines.filter(x => x.value !== x.old)) {
+            const c = document.createElement('canvas').getContext('2d');
+            c.font = l.font;
+            const width = Math.ceil(Math.min(info.canvas.width - l.x, Math.max(l.w, c.measureText(l.value).width + 6)));
+            c.canvas.width = width * 2; c.canvas.height = l.h * 2;
+            c.scale(2, 2); c.translate(-l.x, -l.y);
+            c.drawImage(info.canvas, 0, 0);
+            const img = await out.embedPng(c.canvas.toDataURL('image/png'));
+            const [x0, y0] = vp.convertToPdfPoint(l.x, l.y + l.h);
+            out.getPage(i).drawImage(img, { x: x0, y: y0, width: width / S, height: l.h / S, rotate: window.PDFLib.degrees(page.rotate) });
+          }
+        }
+        save(await out.save(), 'application/pdf', 'my-resume.pdf');
+      } catch (e) { alert('PDF nahi ban payi: ' + e.message); }
+      this.disabled = false;
+    };
+  }
 
   const css = document.createElement('style');
   css.textContent = `
-  .pe-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;position:sticky;top:64px;background:#fff;padding:8px 0;z-index:5}
-  .pe-bar select,.pe-bar input[type=color]{width:auto}
-  .pe-bar input[type=color]{width:48px;padding:2px}
-  .pe-paper{max-width:794px;min-height:600px;margin:12px auto;background:#fff;border:1px solid #cbd5e1;box-shadow:0 8px 24px #0f172a14;padding:40px;overflow-wrap:anywhere;outline:none}
-  .pe-paper:focus{border-color:#2563eb}
-  @media(max-width:600px){.pe-paper{padding:18px}.pe-bar{position:static}}`;
+  .pe-two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:12px}
+  .pe-fields,.pe-preview{max-height:70vh;overflow:auto}
+  .pe-fields textarea{margin-bottom:6px}
+  .pe-preview{border:1px solid #cbd5e1;border-radius:10px;background:#f1f5f9}
+  .pe-page{position:relative;max-width:850px;margin:12px auto;box-shadow:0 4px 18px #0f172a22}
+  .pe-page canvas{width:100%;display:block}
+  .pe-hit{position:absolute;border:1px dashed transparent;background:transparent;cursor:text;padding:0}
+  .pe-hit:hover,.pe-hit:focus-visible{border-color:#2563eb;background:#2563eb1a}`;
   document.head.appendChild(css);
 
   function editor(el) {
-    el.innerHTML = `
-      <div class="card noprint">
-        <h3>📤 Apna purana resume upload karein</h3>
-        <input type="file" data-file accept=".pdf,.docx,.txt">
-        <p class="note" data-status role="status">Word (.docx) file se formatting sabse achhi aati hai. PDF ka text edit ho sakta hai, lekin uska design, photo aur columns waise nahi rahenge. Scan/photo wali PDF nahi chalegi.</p>
-      </div>
-      <div class="card" data-work hidden>
-        <div class="pe-bar">
-          <button type="button" class="btn ghost sm" data-cmd="bold"><b>B</b></button>
-          <button type="button" class="btn ghost sm" data-cmd="italic"><i>I</i></button>
-          <button type="button" class="btn ghost sm" data-cmd="underline"><u>U</u></button>
-          <button type="button" class="btn ghost sm" data-cmd="formatBlock" data-val="H2">Heading</button>
-          <button type="button" class="btn ghost sm" data-cmd="formatBlock" data-val="P">Normal</button>
-          <button type="button" class="btn ghost sm" data-cmd="insertUnorderedList">• List</button>
-          <button type="button" class="btn ghost sm" data-cmd="undo" title="Undo">↶</button>
-          <button type="button" class="btn ghost sm" data-cmd="redo" title="Redo">↷</button>
-          <select data-font title="Font">
-            <option value="Calibri, Arial, sans-serif">Calibri</option>
-            <option value="Arial, Helvetica, sans-serif">Arial</option>
-            <option value="Georgia, serif">Georgia</option>
-            <option value="'Times New Roman', serif">Times New Roman</option>
-          </select>
-          <select data-size title="Text size"><option>10</option><option selected>11</option><option>12</option></select>
-          <input type="color" data-color value="#1d4ed8" title="Heading colour">
-        </div>
-        <style data-style></style>
-        <div class="pe-paper" data-paper contenteditable="true" spellcheck="true" aria-label="Resume editor"></div>
-        <div class="row">
-          <button type="button" class="btn" data-pdf>🖨️ PDF save karein</button>
-          <button type="button" class="btn ghost" data-word>⬇ Word (.doc)</button>
-          <button type="button" class="btn red" data-clear>🗑️ Saaf karein</button>
-        </div>
-        <p class="note">Draft isi browser mein save hota hai. Shared computer par kaam ke baad “Saaf karein” dabayein. PDF ke liye print window mein “Save as PDF” chunein.</p>
-      </div>`;
-
-    const q = s => el.querySelector(s);
-    const file = q('[data-file]'), status = q('[data-status]'), work = q('[data-work]'), paper = q('[data-paper]'),
-      styleTag = q('[data-style]'), font = q('[data-font]'), size = q('[data-size]'), color = q('[data-color]');
-
-    const currentCss = () => docCss(color.value, Number(size.value), font.value);
-    const restyle = () => {
-      // same rules as the export, limited to the editor page
-      styleTag.textContent = currentCss().replace(/(^|\})\s*([^{}]+)\{/g, (m, end, sel) =>
-        end + sel.split(',').map(s => s.trim() === 'body' ? '.pe-paper' : '.pe-paper ' + s.trim()).join(',') + '{');
-    };
-    const store = () => {
-      try { localStorage.setItem(KEY, JSON.stringify({ html: paper.innerHTML, font: font.value, size: size.value, color: color.value })); } catch (e) { /* storage full or blocked */ }
-    };
-    const show = html => { paper.innerHTML = clean(html); work.hidden = false; restyle(); };
-
-    try {
-      const d = JSON.parse(localStorage.getItem(KEY));
-      if (d && d.html) { font.value = d.font; size.value = d.size; color.value = d.color; show(d.html); status.textContent = '📝 Aapka pichhla draft wapas khul gaya hai.'; }
-    } catch (e) { /* no draft */ }
-
+    el.innerHTML = `<div class="card"><h3>📤 Apna resume upload karein – design wahi rahega</h3>
+        <input type="file" data-file accept=".pdf,.docx">
+        <p class="note" data-status role="status">DOCX ya PDF (10 MB tak). Sabse sahi result Word (.docx) file se aata hai. Page band karne se pehle download kar lein, changes save nahi rehte.</p></div>
+      <div class="card" data-work hidden></div>`;
+    const file = el.querySelector('[data-file]'), status = el.querySelector('[data-status]'), work = el.querySelector('[data-work]');
+    try { localStorage.removeItem('pj-resume-edit-draft'); } catch (e) { /* blocked */ }
     file.onchange = async () => {
       const f = file.files[0]; if (!f) return;
-      if (!work.hidden && !confirm('Maujooda draft hata kar nayi file kholein?')) { file.value = ''; return; }
-      status.textContent = '⏳ File padh rahe hain…';
+      if (!work.hidden && !confirm('Maujooda changes hata kar nayi file kholein?')) { file.value = ''; return; }
+      status.textContent = '⏳ File khul rahi hai…'; work.hidden = true; file.disabled = true;
       try {
-        const html = await fileToHtml(f);
-        const probe = document.createElement('div'); probe.innerHTML = clean(html);
-        if (probe.textContent.trim().length < 40) throw new Error('Is file mein text nahi mila (shayad scan ki hui hai).');
-        show(html); store();
-        status.textContent = '✅ File khul gayi. Neeche kahin bhi click karke badlein, phir poora resume ek baar check karein.';
+        if (f.size > 10 * 1024 * 1024) throw new Error('File 10 MB se chhoti honi chahiye.');
+        const ext = f.name.split('.').pop().toLowerCase();
+        if (ext !== 'pdf' && ext !== 'docx') throw new Error('Sirf PDF ya DOCX file chunein.');
+        const buf = await f.arrayBuffer(), box = document.createElement('div');
+        work.replaceChildren(box);
+        await (ext === 'pdf' ? openPdf : openDocx)(buf, box);
+        work.hidden = false; status.textContent = '✅ File khul gayi.';
       } catch (e) { status.textContent = '❌ ' + (e.message || 'File nahi khul payi'); }
-      file.value = '';
-    };
-
-    el.querySelectorAll('[data-cmd]').forEach(b => {
-      b.onmousedown = e => e.preventDefault(); // keep the text selection
-      b.onclick = () => { paper.focus(); document.execCommand(b.dataset.cmd, false, b.dataset.val || null); store(); };
-    });
-    [font, size, color].forEach(c => c.oninput = () => { restyle(); store(); });
-    paper.oninput = store;
-    paper.onpaste = e => { // paste as plain text so outside styling does not break the layout
-      e.preventDefault();
-      document.execCommand('insertText', false, e.clipboardData.getData('text/plain'));
-    };
-    paper.ondrop = e => e.preventDefault();
-
-    q('[data-word]').onclick = () => {
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(new Blob(['\ufeff', fullDoc(clean(paper.innerHTML), currentCss(), 'Resume')], { type: 'application/msword' }));
-      a.download = 'my-resume.doc'; document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-    };
-    q('[data-pdf]').onclick = () => {
-      const frame = document.createElement('iframe');
-      frame.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0';
-      frame.onload = () => {
-        const w = frame.contentWindow;
-        w.onafterprint = () => frame.remove();
-        w.focus(); w.print();
-      };
-      frame.srcdoc = fullDoc(clean(paper.innerHTML), currentCss(), 'Resume');
-      document.body.appendChild(frame);
-      setTimeout(() => frame.remove(), 120000);
-    };
-    q('[data-clear]').onclick = () => {
-      if (!confirm('Draft hamesha ke liye hata dein?')) return;
-      try { localStorage.removeItem(KEY); } catch (e) { /* blocked */ }
-      paper.innerHTML = ''; work.hidden = true; status.textContent = 'Draft hata diya gaya.';
+      file.value = ''; file.disabled = false;
     };
   }
 
