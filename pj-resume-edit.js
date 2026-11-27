@@ -119,17 +119,16 @@
     }
     if (!fields.length) throw new Error('Is file mein text nahi mila.');
 
-    box.innerHTML = `<p class="note">Neeche har line ka text badlein. Font, colour, layout aur photo asli file wale hi rahenge.</p>
-      <div class="pe-two"><div class="pe-fields"></div><div><b>Preview (andaazan)</b><div class="pe-preview">Preview load ho raha hai…</div></div></div>
-      <div class="row"><button type="button" class="btn" data-down>⬇ Word (.docx) download – same design</button></div>
-      <p class="note">PDF chahiye to download ki hui file Word ya Google Docs mein kholkar “Save as PDF” karein.</p>`;
+    box.innerHTML = `<div class="pe-two"><div><div class="pe-fields"></div></div><div><b>Preview (andaazan)</b><div class="pe-preview">Preview load ho raha hai…</div></div></div>
+      <div data-photos></div>
+      <div class="row"><button type="button" class="btn" data-down>⬇ Word (.docx) download</button></div>`;
+    const replaced = new Map();
     const list = box.querySelector('.pe-fields'), view = box.querySelector('.pe-preview');
     const build = () => {
       const out = files.map(f => {
         const part = parts.find(p => p.f === f && p.dirty);
-        if (!part) return f;
-        const data = new TextEncoder().encode(new XMLSerializer().serializeToString(part.xml));
-        return Object.assign({}, f, { method: 0, data, usize: data.length, crc: crc32(data) });
+        const data = replaced.get(f) || (part && new TextEncoder().encode(new XMLSerializer().serializeToString(part.xml)));
+        return data ? Object.assign({}, f, { method: 0, data, usize: data.length, crc: crc32(data) }) : f;
       });
       return zip(out);
     };
@@ -144,43 +143,218 @@
       } catch (e) { view.textContent = 'Preview nahi ban paya, lekin editing aur download chalega.'; }
     };
     let timer;
-    fields.forEach(fd => {
-      const t = document.createElement('textarea');
-      t.rows = Math.max(1, Math.ceil(fd.value.length / 45)); t.value = fd.value;
-      t.oninput = () => {
-        const value = t.value.replace(/\n/g, ' ');
-        fd.copies.forEach(g => setText(g, value)); fd.part.dirty = true;
-        clearTimeout(timer); timer = setTimeout(preview, 700);
+    const later = () => { clearTimeout(timer); timer = setTimeout(preview, 700); };
+    const paraOf = n => { while (n.nodeName !== 'w:p') n = n.parentNode; return n; };
+    const drawFields = () => {
+      list.replaceChildren();
+      // show lines in their current order in the document
+      fields.sort((a, b) => parts.indexOf(a.part) - parts.indexOf(b.part) || (a.copies[0][0].compareDocumentPosition(b.copies[0][0]) & 4 ? -1 : 1));
+      fields.forEach(fd => {
+        const row = document.createElement('div'); row.className = 'pe-line';
+        const t = document.createElement('textarea');
+        const value = () => fd.copies[0].map(n => n.textContent).join('');
+        t.rows = Math.max(1, Math.ceil(value().length / 40)); t.value = value();
+        t.oninput = () => { fd.copies.forEach(g => setText(g, t.value.replace(/\n/g, ' '))); fd.part.dirty = true; later(); };
+        row.appendChild(t);
+        [['↑', 'Upar', -1], ['↓', 'Neeche', 1], ['✕', 'Hatayein', 0]].forEach(([label, title, dir]) => {
+          const b = document.createElement('button'); b.type = 'button'; b.textContent = label; b.title = title;
+          b.onclick = () => {
+            if (!dir) { fd.copies.forEach(g => setText(g, '')); fd.part.dirty = true; fields.splice(fields.indexOf(fd), 1); }
+            else fd.copies.forEach(g => {
+              const p = paraOf(g[0]), other = dir < 0 ? p.previousElementSibling : p.nextElementSibling;
+              if (!other || other.nodeName === 'w:sectPr') return;
+              p.parentNode.insertBefore(p, dir < 0 ? other : other.nextSibling); fd.part.dirty = true;
+            });
+            drawFields(); later();
+          };
+          row.appendChild(b);
+        });
+        list.appendChild(row);
+      });
+    };
+    drawFields();
+
+    files.filter(f => /^word\/media\/.+\.(png|jpe?g)$/i.test(f.name)).forEach(f => {
+      const label = document.createElement('label'); label.className = 'note';
+      label.textContent = '🖼️ Photo badlein (' + f.name.split('/').pop() + '): ';
+      const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/png,image/jpeg,image/webp';
+      input.onchange = async () => {
+        if (!input.files[0]) return;
+        try {
+          const type = /png$/i.test(f.name) ? 'image/png' : 'image/jpeg';
+          const raw = f.method === 0 ? new Blob([f.data]) : await new Response(new Blob([f.data]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).blob();
+          const old = await createImageBitmap(raw), next = await createImageBitmap(input.files[0]);
+          const c = document.createElement('canvas'); c.width = old.width; c.height = old.height;
+          const k = Math.max(c.width / next.width, c.height / next.height);
+          c.getContext('2d').drawImage(next, (c.width - next.width * k) / 2, (c.height - next.height * k) / 2, next.width * k, next.height * k);
+          const blob = await new Promise(ok => c.toBlob(ok, type, 0.95));
+          replaced.set(f, new Uint8Array(await blob.arrayBuffer())); later();
+        } catch (e) { alert('Yeh photo nahi badal payi.'); }
       };
-      list.appendChild(t);
+      label.appendChild(input); box.querySelector('[data-photos]').appendChild(label);
     });
     box.querySelector('[data-down]').onclick = () => save(build(), 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'my-resume.docx');
     preview();
   }
 
-  /* ---------- PDF: keep the original pages, redraw only the edited lines ---------- */
+  /* ---------- PDF: every text line and photo is an object that can be edited and moved ----------
+     Untouched parts keep their original pixels. */
   async function openPdf(buf, box) {
     if (!window.pdfjsLib) await loadScript(PDFJS + 'pdf.min.js');
     window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + 'pdf.worker.min.js';
     const original = buf.slice(0);
     // isEvalSupported:false blocks script execution from a malicious PDF in this pdf.js version
     const doc = await window.pdfjsLib.getDocument({ data: new Uint8Array(buf), isEvalSupported: false }).promise;
-    box.innerHTML = `<p class="note">Page par jis line ko badalna hai us par click karein. Baaki design waisa hi rahega.</p><div data-pages></div>
-      <label class="note"><input type="checkbox" data-flat style="width:auto"> Purana text file se poori tarah hatayein (PDF photo jaisi banegi, job portal/ATS use padh nahi payega)</label>
-      <div class="row"><button type="button" class="btn" data-down>⬇ PDF download – same design</button></div>
-      <p class="note">Badli hui line ka font milta-julta hoga, hubahu nahi. Dhyan dein: badli hui line photo ki tarah judti hai. Upar wala box tick na karne par job portal/ATS abhi bhi PURANA text padhega. Job apply karne ke liye Word file se edit karna behtar hai.</p>`;
-    const holder = box.querySelector('[data-pages]'), pages = [], S = 2;
-    let count = 0;
+    box.innerHTML = `<div class="pe-tools">
+        <input type="text" data-text placeholder="Text ya photo chunein" disabled aria-label="Chuna hua text">
+        <div class="pe-btns">
+          <button type="button" data-a="left" title="Left">←</button><button type="button" data-a="up" title="Upar">↑</button>
+          <button type="button" data-a="down" title="Neeche">↓</button><button type="button" data-a="right" title="Right">→</button>
+          <button type="button" data-a="smaller" title="Chhota">−</button><button type="button" data-a="bigger" title="Bada">+</button>
+          <button type="button" data-a="bold" title="Bold"><b>B</b></button><input type="color" data-color title="Text colour">
+          <button type="button" data-a="photo">🖼️ Photo badlein</button><button type="button" data-a="delete">🗑️ Hatayein</button>
+          <button type="button" data-a="reset">↺ Wapas</button>
+          <button type="button" data-a="addtext">＋ Text</button><button type="button" data-a="addphoto">＋ Photo</button>
+        </div></div>
+      <div data-pages></div><input type="file" data-img accept="image/png,image/jpeg,image/webp" hidden>
+      <div class="row"><button type="button" class="btn" data-down>⬇ PDF download</button></div>`;
+    const q = s => box.querySelector(s);
+    const textBox = q('[data-text]'), colorBox = q('[data-color]'), imgInput = q('[data-img]'), holder = q('[data-pages]');
+    const pages = [], S = 2.5;
+    let sel = null, active = null, imgMode = '';
+
+    const make = (w, h) => { const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h)); return c; };
+
+    /* Render a page; hide = 'text' or 'image' leaves that kind out. Also records where images are. */
+    async function renderPage(page, vp, hide, images) {
+      const c = make(vp.width, vp.height), ctx = c.getContext('2d', { willReadFrequently: true });
+      const draw = ctx.drawImage;
+      if (hide === 'text') ctx.fillText = ctx.strokeText = () => {};
+      ctx.drawImage = function (...a) {
+        if (images) {
+          const m = this.getTransform(), n = a.length;
+          const [dx, dy, dw, dh] = n === 9 ? a.slice(5) : n === 5 ? a.slice(1) : [a[1], a[2], a[0].width, a[0].height];
+          const pts = [[dx, dy], [dx + dw, dy], [dx, dy + dh], [dx + dw, dy + dh]].map(([x, y]) => m.transformPoint({ x, y }));
+          images.push([Math.min(...pts.map(p => p.x)), Math.min(...pts.map(p => p.y)), Math.max(...pts.map(p => p.x)), Math.max(...pts.map(p => p.y))]);
+        }
+        if (hide !== 'image') draw.apply(this, a);
+      };
+      await page.render({ canvasContext: ctx, viewport: vp }).promise;
+      return c;
+    }
+
+    /* Cut one object out of the page: the pixels that differ from the page without it. */
+    function cutOut(full, without, x, y, w, h, solid) {
+      const sprite = make(w, h), sc = sprite.getContext('2d');
+      const A = full.getContext('2d').getImageData(x, y, w, h), B = without.getContext('2d').getImageData(x, y, w, h).data, d = A.data;
+      const far = i => Math.abs(d[i] - B[i]) + Math.abs(d[i + 1] - B[i + 1]) + Math.abs(d[i + 2] - B[i + 2]);
+      let fg = null, best = 12;
+      for (let row = 0; row < h; row++) {
+        let first = -1, last = -1;
+        for (let col = 0; col < w; col++) {
+          const i = (row * w + col) * 4, f = far(i);
+          if (f > best) { best = f; fg = [d[i], d[i + 1], d[i + 2]]; }
+          if (f > 12) { if (first < 0) first = col; last = col; }
+        }
+        for (let col = 0; col < w; col++) {
+          const i = (row * w + col) * 4;
+          // a photo is filled edge to edge in each row, so dark clothes do not become holes
+          const keep = solid ? col >= first && col <= last && first >= 0 : far(i) > 12;
+          if (!keep) d[i + 3] = 0;
+        }
+      }
+      sc.putImageData(A, 0, 0);
+      return { sprite, fg };
+    }
+
+    const fontOf = o => `${o.italic ? 'italic ' : ''}${o.bold ? 'bold ' : ''}${o.size}px ${o.family}`;
+    const measure = make(1, 1).getContext('2d');
+    const redrawn = o => o.type === 'text' && (o.added || o.value !== o.first.value || o.bold !== o.first.bold || o.color !== o.first.color);
+    const changed = o => o.added || o.deleted || o.x !== o.first.x || o.y !== o.first.y || o.scale !== 1 || o.src !== o.first.src || redrawn(o);
+    function size(o) {
+      if (o.type === 'text' && redrawn(o)) { measure.font = fontOf(o); return [(measure.measureText(o.value).width + 4) * o.scale, o.size * 1.15 * o.scale]; }
+      return [o.w * o.scale, o.h * o.scale];
+    }
+    function compose(info) {
+      const c = info.canvas.getContext('2d');
+      c.drawImage(info.full, 0, 0);
+      const moved = info.objects.filter(changed);
+      moved.filter(o => !o.added).forEach(o => {
+        const from = o.type === 'text' ? info.noText : info.noImage;
+        c.drawImage(from, o.first.x, o.first.y, o.w, o.h, o.first.x, o.first.y, o.w, o.h);
+      });
+      moved.filter(o => !o.deleted).sort((a, b) => (a.type === 'text') - (b.type === 'text')).forEach(o => {
+        const [w, h] = size(o);
+        if (!redrawn(o)) { c.drawImage(o.src, o.x, o.y, w, h); return; }
+        c.save(); c.translate(o.x, o.y); c.scale(o.scale, o.scale);
+        c.font = fontOf(o); c.fillStyle = o.color; c.textBaseline = 'alphabetic';
+        c.fillText(o.value, 2, o.size * 0.88); c.restore();
+      });
+    }
+    function place(info, o) {
+      const [w, h] = size(o), W = info.canvas.width, H = info.canvas.height;
+      Object.assign(o.el.style, { left: o.x / W * 100 + '%', top: o.y / H * 100 + '%', width: w / W * 100 + '%', height: h / H * 100 + '%' });
+      o.el.hidden = !!o.deleted;
+    }
+    const refresh = () => { if (!sel) return; compose(sel.info); place(sel.info, sel.o); };
+    function select(info, o) {
+      if (sel) sel.o.el.classList.remove('on');
+      sel = o ? { info, o } : null;
+      const isText = !!o && o.type === 'text';
+      textBox.disabled = colorBox.disabled = !isText;
+      textBox.value = isText ? o.value : '';
+      if (isText) colorBox.value = o.color;
+      if (o) { o.el.classList.add('on'); active = info; }
+    }
+    function move(dx, dy) {
+      const { info, o } = sel, [w, h] = size(o);
+      o.x = Math.max(0, Math.min(info.canvas.width - Math.min(w, 20), o.x + dx));
+      o.y = Math.max(0, Math.min(info.canvas.height - Math.min(h, 20), o.y + dy));
+      refresh();
+    }
+    function addObject(info, o) {
+      o.scale = 1; o.src = o.src || null;
+      o.first = { x: o.x, y: o.y, value: o.value, bold: o.bold, color: o.color, src: o.src };
+      const el = document.createElement('div');
+      el.className = 'pe-hit'; el.tabIndex = 0; el.setAttribute('aria-label', o.type === 'text' ? o.value : 'Photo');
+      o.el = el; info.objects.push(o); info.wrap.appendChild(el);
+      el.onfocus = () => select(info, o);
+      el.onpointerdown = e => {
+        e.preventDefault(); select(info, o); el.focus({ preventScroll: true }); el.setPointerCapture(e.pointerId);
+        const k = info.canvas.width / info.canvas.getBoundingClientRect().width;
+        let px = e.clientX, py = e.clientY, dragging = false;
+        el.onpointermove = ev => {
+          if (!dragging && Math.hypot(ev.clientX - px, ev.clientY - py) < 4) return;
+          dragging = true; move((ev.clientX - px) * k, (ev.clientY - py) * k); px = ev.clientX; py = ev.clientY;
+        };
+        el.onpointerup = el.onpointercancel = () => { el.onpointermove = null; };
+      };
+      el.ondblclick = () => { if (o.type === 'text') textBox.focus(); };
+      el.onkeydown = e => {
+        const step = (e.shiftKey ? 10 : 1) * S, d = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[e.key];
+        if (d) { e.preventDefault(); move(...d); }
+        if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); o.deleted = true; refresh(); }
+      };
+      place(info, o);
+      return o;
+    }
 
     for (let i = 1; i <= doc.numPages; i++) {
-      const page = await doc.getPage(i), vp = page.getViewport({ scale: S });
-      const canvas = document.createElement('canvas'); canvas.width = vp.width; canvas.height = vp.height;
-      const ctx = canvas.getContext('2d', { willReadFrequently: true });
-      await page.render({ canvasContext: ctx, viewport: vp }).promise;
-      const base = document.createElement('canvas'); base.width = canvas.width; base.height = canvas.height;
-      base.getContext('2d').drawImage(canvas, 0, 0);
+      const page = await doc.getPage(i), vp = page.getViewport({ scale: S }), rects = [];
+      const full = await renderPage(page, vp, '', rects);
+      const noText = await renderPage(page, vp, 'text'), noImage = await renderPage(page, vp, 'image');
+      const canvas = make(vp.width, vp.height); canvas.getContext('2d').drawImage(full, 0, 0);
       const wrap = document.createElement('div'); wrap.className = 'pe-page'; wrap.appendChild(canvas); holder.appendChild(wrap);
-      const info = { canvas, base, lines: [] }; pages.push(info);
+      const info = { canvas, full, noText, noImage, wrap, objects: [], page: i - 1 };
+      pages.push(info); active = active || info;
+      wrap.onpointerdown = e => { if (e.target === canvas) { active = info; select(info, null); } };
+
+      rects.forEach(r => {
+        const x = Math.max(0, Math.floor(r[0])), y = Math.max(0, Math.floor(r[1]));
+        const w = Math.min(full.width, Math.ceil(r[2])) - x, h = Math.min(full.height, Math.ceil(r[3])) - y;
+        if (w < 20 || h < 20 || w * h > full.width * full.height * 0.85) return;
+        addObject(info, { type: 'image', x, y, w, h, src: cutOut(full, noImage, x, y, w, h, true).sprite });
+      });
 
       const tc = await page.getTextContent(), segs = [];
       const items = tc.items.filter(x => x.str && x.str.trim()).map(x => {
@@ -193,82 +367,90 @@
         let g = null;
         r.sort((a, b) => a.x - b.x).forEach(it => {
           const gap = g ? it.x - (g.x + g.w) : 0;
-          // a wide gap or a different size / font means another column or style
-          if (g && gap < it.h * 1.2 && it.font === g.font && Math.abs(it.h - g.h) < 1) {
+          // bold words stay in the same line; a wide gap or a bullet starts a new object
+          if (g && gap < it.h * 0.9 && Math.abs(it.h - g.h) < 1 && !/^[•●▪]$/.test(g.s.trim())) {
             g.s += (gap > it.h * 0.15 && !/\s$/.test(g.s) ? ' ' : '') + it.s; g.w = it.x + it.w - g.x;
           } else { g = Object.assign({}, it); segs.push(g); }
         });
       });
-
       segs.forEach(g => {
-        const x = Math.max(0, Math.floor(g.x - 2)), y = Math.max(0, Math.floor(g.y - g.h)), w = Math.ceil(g.w + 4), h = Math.ceil(g.h * 1.3);
-        const px = ctx.getImageData(x, y, w, h).data, bg = [px[0], px[1], px[2]];
-        let fg = bg, far = 0;
-        for (let k = 0; k < px.length; k += 4) {
-          const d = Math.abs(px[k] - bg[0]) + Math.abs(px[k + 1] - bg[1]) + Math.abs(px[k + 2] - bg[2]);
-          if (d > far) { far = d; fg = [px[k], px[k + 1], px[k + 2]]; }
-        }
+        const x = Math.max(0, Math.floor(g.x - 2)), y = Math.max(0, Math.floor(g.y - g.h * 0.88));
+        const w = Math.min(full.width - x, Math.ceil(g.w + 4)), h = Math.min(full.height - y, Math.ceil(g.h * 1.15));
+        if (w < 2 || h < 2) return;
+        const cut = cutOut(full, noText, x, y, w, h, false);
+        if (!cut.fg) return;
         let real = '';
         try { real = page.commonObjs.get(g.font).name || ''; } catch (e) { /* font name not available */ }
-        const family = ((tc.styles[g.font] || {}).fontFamily) === 'serif' ? 'Georgia, serif' : 'Arial, Helvetica, sans-serif';
-        const line = { x, y, w, h, tx: g.x, ty: g.y, size: g.h, old: g.s, value: g.s, bg: `rgb(${bg})`, fg: `rgb(${fg})`,
-          font: `${/italic|oblique/i.test(real) ? 'italic ' : ''}${/bold|black|semi/i.test(real) ? 'bold ' : ''}${g.h}px ${family}` };
-        info.lines.push(line);
-
-        const hit = document.createElement('button');
-        hit.type = 'button'; hit.className = 'pe-hit'; hit.title = 'Badalne ke liye click karein'; hit.setAttribute('aria-label', g.s);
-        Object.assign(hit.style, { left: x / canvas.width * 100 + '%', top: y / canvas.height * 100 + '%', width: w / canvas.width * 100 + '%', height: h / canvas.height * 100 + '%' });
-        hit.onclick = () => {
-          const value = prompt('Naya text likhein:', line.value);
-          if (value === null) return;
-          count += (value !== line.old) - (line.value !== line.old);
-          line.value = value; redraw(info);
-        };
-        wrap.appendChild(hit);
+        addObject(info, { type: 'text', x, y, w, h, src: cut.sprite, value: g.s, size: g.h,
+          family: ((tc.styles[g.font] || {}).fontFamily) === 'serif' ? 'Georgia, serif' : 'Arial, Helvetica, sans-serif',
+          bold: /bold|black|semi/i.test(real), italic: /italic|oblique/i.test(real),
+          color: '#' + cut.fg.map(n => n.toString(16).padStart(2, '0')).join('') });
       });
     }
-    if (!pages.some(p => p.lines.length)) throw new Error('Is PDF mein text nahi mila (shayad scan/photo wali hai). Iski Word file upload karein.');
+    if (!pages.some(p => p.objects.length)) throw new Error('Is PDF mein edit karne layak kuch nahi mila.');
 
-    function redraw(info) {
-      const c = info.canvas.getContext('2d');
-      c.drawImage(info.base, 0, 0);
-      info.lines.filter(l => l.value !== l.old).forEach(l => paintLine(c, l));
-    }
-    function paintLine(c, l) {
-      c.fillStyle = l.bg; c.fillRect(l.x, l.y, l.w, l.h);
-      c.font = l.font; c.fillStyle = l.fg; c.textBaseline = 'alphabetic';
-      const room = c.canvas.width - l.tx - 4;
-      c.fillText(l.value, l.tx, l.ty, Math.min(room, Math.max(l.w * 1.15, c.measureText(l.old).width * 1.15)));
-    }
+    textBox.oninput = () => { if (sel) { sel.o.value = textBox.value; refresh(); } };
+    colorBox.oninput = () => { if (sel) { sel.o.color = colorBox.value; refresh(); } };
+    box.querySelectorAll('[data-a]').forEach(b => b.onclick = () => {
+      const a = b.dataset.a;
+      if (a === 'addtext') {
+        const o = addObject(active, { type: 'text', added: true, x: active.canvas.width * 0.4, y: active.canvas.height * 0.05, w: 1, h: 1,
+          value: 'Naya text', size: 11 * S, family: 'Arial, Helvetica, sans-serif', bold: false, italic: false, color: '#111111' });
+        compose(active); select(active, o); textBox.focus(); textBox.select(); return;
+      }
+      if (a === 'addphoto') { imgMode = 'add'; imgInput.click(); return; }
+      if (!sel) return alert('Pehle page par koi text ya photo chunein.');
+      const o = sel.o, step = 3 * S;
+      if (a === 'left') return move(-step, 0);
+      if (a === 'right') return move(step, 0);
+      if (a === 'up') return move(0, -step);
+      if (a === 'down') return move(0, step);
+      if (a === 'photo') { if (o.type !== 'image') return alert('Pehle photo par click karein.'); imgMode = 'replace'; imgInput.click(); return; }
+      if (a === 'smaller') o.scale = Math.max(0.3, o.scale / 1.08);
+      if (a === 'bigger') o.scale = Math.min(4, o.scale * 1.08);
+      if (a === 'bold' && o.type === 'text') o.bold = !o.bold;
+      if (a === 'delete') o.deleted = true;
+      if (a === 'reset') { Object.assign(o, o.first, { scale: 1, deleted: false }); select(sel.info, o); }
+      refresh();
+    });
+    imgInput.onchange = async () => {
+      const f = imgInput.files[0]; imgInput.value = '';
+      if (!f) return;
+      try {
+        const bmp = await createImageBitmap(f);
+        if (imgMode === 'replace' && sel) {
+          const o = sel.o, c = make(o.w, o.h), x = c.getContext('2d'), k = Math.max(o.w / bmp.width, o.h / bmp.height);
+          x.drawImage(bmp, (o.w - bmp.width * k) / 2, (o.h - bmp.height * k) / 2, bmp.width * k, bmp.height * k);
+          x.globalCompositeOperation = 'destination-in'; x.drawImage(o.first.src || o.src, 0, 0, o.w, o.h); // same shape (round stays round)
+          o.src = c; o.deleted = false; refresh();
+        } else {
+          const w = active.canvas.width * 0.2, h = w * bmp.height / bmp.width, c = make(w, h);
+          c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+          const o = addObject(active, { type: 'image', added: true, x: active.canvas.width * 0.4, y: active.canvas.height * 0.1, w: c.width, h: c.height, src: c });
+          compose(active); select(active, o);
+        }
+      } catch (e) { alert('Yeh photo nahi khul payi.'); }
+    };
 
-    box.querySelector('[data-down]').onclick = async function () {
-      const flat = box.querySelector('[data-flat]').checked;
-      if (!count && !flat) return save(original, 'application/pdf', 'my-resume.pdf');
+    q('[data-down]').onclick = async function () {
+      if (!pages.some(p => p.objects.some(changed))) return save(original, 'application/pdf', 'my-resume.pdf');
       this.disabled = true;
       try {
         if (!window.PDFLib) await loadScript(PDFLIB);
-        const src = await window.PDFLib.PDFDocument.load(original);
-        const out = flat ? await window.PDFLib.PDFDocument.create() : src;
-        for (let i = 0; i < pages.length; i++) {
-          const info = pages[i], page = await doc.getPage(i + 1), vp = page.getViewport({ scale: S });
-          if (flat) {
-            const img = await out.embedJpg(info.canvas.toDataURL('image/jpeg', 0.95));
-            const w = vp.width / S, h = vp.height / S;
-            out.addPage([w, h]).drawImage(img, { x: 0, y: 0, width: w, height: h });
-            continue;
-          }
-          // each edited line is placed as a small sharp image (works for ₹ and Hindi too)
-          for (const l of info.lines.filter(x => x.value !== x.old)) {
-            const c = document.createElement('canvas').getContext('2d');
-            c.font = l.font;
-            const width = Math.ceil(Math.min(info.canvas.width - l.x, Math.max(l.w, c.measureText(l.value).width + 6)));
-            c.canvas.width = width * 2; c.canvas.height = l.h * 2;
-            c.scale(2, 2); c.translate(-l.x, -l.y);
-            c.drawImage(info.canvas, 0, 0);
-            const img = await out.embedPng(c.canvas.toDataURL('image/png'));
-            const [x0, y0] = vp.convertToPdfPoint(l.x, l.y + l.h);
-            out.getPage(i).drawImage(img, { x: x0, y: y0, width: width / S, height: l.h / S, rotate: window.PDFLib.degrees(page.rotate) });
-          }
+        const L = window.PDFLib, src = await L.PDFDocument.load(original), out = await L.PDFDocument.create();
+        const font = await out.embedFont(L.StandardFonts.Helvetica);
+        for (const info of pages) {
+          if (!info.objects.some(changed)) { const [copy] = await out.copyPages(src, [info.page]); out.addPage(copy); continue; }
+          const W = info.canvas.width / S, H = info.canvas.height / S, pg = out.addPage([W, H]);
+          pg.drawImage(await out.embedJpg(info.canvas.toDataURL('image/jpeg', 0.95)), { x: 0, y: 0, width: W, height: H });
+          // invisible text over the picture, so job portals read the NEW text
+          info.objects.filter(o => o.type === 'text' && !o.deleted).sort((a, b) => a.y - b.y || a.x - b.x).forEach(o => {
+            const text = o.value.replace(/₹/g, 'Rs ').replace(/[^\x20-\x7e\xa0-\xff•–—‘’“”]/g, '');
+            if (!text.trim()) return;
+            const [w] = size(o), size1 = o.size * o.scale / S;
+            const fit = Math.min(size1, size1 * (w / S) / font.widthOfTextAtSize(text, size1));
+            pg.drawText(text, { x: o.x / S, y: H - (o.y + o.size * 0.88 * o.scale) / S, size: fit, font, opacity: 0 });
+          });
         }
         save(await out.save(), 'application/pdf', 'my-resume.pdf');
       } catch (e) { alert('PDF nahi ban payi: ' + e.message); }
@@ -280,16 +462,22 @@
   css.textContent = `
   .pe-two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:12px}
   .pe-fields,.pe-preview{max-height:70vh;overflow:auto}
-  .pe-fields textarea{margin-bottom:6px}
   .pe-preview{border:1px solid #cbd5e1;border-radius:10px;background:#f1f5f9}
   .pe-page{position:relative;max-width:850px;margin:12px auto;box-shadow:0 4px 18px #0f172a22}
   .pe-page canvas{width:100%;display:block}
-  .pe-hit{position:absolute;border:1px dashed transparent;background:transparent;cursor:text;padding:0}
-  .pe-hit:hover,.pe-hit:focus-visible{border-color:#2563eb;background:#2563eb1a}`;
+  .pe-hit{position:absolute;border:1px dashed transparent;cursor:move;touch-action:none;outline:none}
+  .pe-hit:hover{border-color:#93c5fd}
+  .pe-hit.on{border:1px solid #2563eb;background:#2563eb14}
+  .pe-tools{position:sticky;top:64px;z-index:6;background:#fff;padding:8px 0;border-bottom:1px solid #e2e8f0}
+  .pe-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .pe-btns button,.pe-line button{border:1px solid #cbd5e1;background:#fff;color:#0f172a;border-radius:8px;padding:5px 11px;cursor:pointer;font:inherit;font-size:.82rem}
+  .pe-btns input[type=color]{width:44px;padding:2px}
+  .pe-line{display:flex;gap:4px;align-items:flex-start;margin-bottom:6px}
+  .pe-line textarea{flex:1;min-width:0}`;
   document.head.appendChild(css);
 
   function editor(el) {
-    el.innerHTML = `<div class="card"><h3>📤 Apna resume upload karein – design wahi rahega</h3>
+    el.innerHTML = `<div class="card"><h3>📤 Apna resume upload karein</h3>
         <input type="file" data-file accept=".pdf,.docx">
         <p class="note" data-status role="status">DOCX ya PDF (10 MB tak). Sabse sahi result Word (.docx) file se aata hai. Page band karne se pehle download kar lein, changes save nahi rehte.</p></div>
       <div class="card" data-work hidden></div>`;
