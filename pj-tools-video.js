@@ -148,8 +148,11 @@
 
   tool.render = function (el) {
     el.innerHTML =
+      '<div class="card" style="background:linear-gradient(135deg,#0e0f13,#1b1440);color:#fff;border:0;margin-bottom:14px"><h3 style="margin:0 0 6px;color:#fff">🎬 PJ Studio Pro – CapCut-style Video Editor</h3>' +
+      '<p style="margin:0 0 12px;opacity:.85;font-size:14px">Multi-track timeline, text animations, transitions, effects, filters, stickers, keyframes, chroma key, auto captions, music &amp; MP4/WebM export. 100% in your browser – nothing is uploaded.</p>' +
+      '<button class="btn" id="ve-pro" type="button">🚀 Open PJ Studio Pro</button></div>' +
       '<div class="noprint" style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">' +
-      '<button class="btn" id="ve-t-edit" type="button">🎬 Edit video</button>' +
+      '<button class="btn" id="ve-t-edit" type="button">🎬 Quick edit (simple)</button>' +
       '<button class="btn ghost" id="ve-t-learn" type="button">📚 Learn video editing</button></div>' +
       '<div id="ve-pane-edit">' +
       '<div class="card">' +
@@ -201,6 +204,8 @@
       $('ve-pane-edit').hidden = L; $('ve-pane-learn').hidden = !L;
       $('ve-t-edit').className = 'btn' + (L ? ' ghost' : ''); $('ve-t-learn').className = 'btn' + (L ? '' : ' ghost');
     }
+    $('ve-pro').addEventListener('click', function () { if (window.PJVS && PJVS.open) PJVS.open(); else say('Studio failed to load – refresh the page.'); });
+    if (/[?&#]studio\b/.test(location.href) && window.PJVS && PJVS.open) setTimeout(function () { PJVS.open(); }, 0);
     $('ve-t-edit').addEventListener('click', function () { tab('edit'); });
     $('ve-t-learn').addEventListener('click', function () { tab('learn'); });
     el.addEventListener('click', function (e) {
