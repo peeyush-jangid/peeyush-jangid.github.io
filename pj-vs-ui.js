@@ -39,10 +39,30 @@
     { n: 'Handwritten', s: { font: 'Dancing Script', size: 130, shadow: { on: true, c: '#000000aa', b: 10, x: 0, y: 5 } }, a: { in: ['wipeL', .9] } },
     { n: 'Fire', s: { font: 'Anton', size: 140, grad: { on: true, c1: '#ff0000', c2: '#ffd000' }, glow: { on: true, c: '#ff6a00', b: 34 }, shadow: { on: false } }, a: { in: ['zoomIn', .5], loop: ['pulse', .8] } },
     { n: 'Letters pop', s: { font: 'Poppins', size: 110, stroke: { on: true, c: '#000000', w: 10 }, shadow: { on: false } }, a: { in: ['cpop', 1] } }
+    ,{ n: 'Neon pink', s: { font: 'Poppins', size: 120, color: '#ffffff', glow: { on: true, c: '#ff2bd6', b: 40 }, shadow: { on: false } }, a: { in: ['neonOn', .9], loop: ['neon', .8] } },
+    { n: 'Neon blue', s: { font: 'Orbitron', size: 104, color: '#e8fbff', glow: { on: true, c: '#00d0ff', b: 40 }, shadow: { on: false } }, a: { in: ['neonOn', .9], loop: ['neon', .8] } },
+    { n: 'Gold luxury', s: { font: 'Playfair Display', size: 120, ls: 6, upper: true, grad: { on: true, c1: '#fff3b0', c2: '#c8921a' }, shadow: { on: true, c: '#000000aa', b: 14, x: 0, y: 6 } }, a: { in: ['zoomBlur', .9] } },
+    { n: 'Chrome', s: { font: 'Anton', size: 140, grad: { on: true, c1: '#ffffff', c2: '#7b8794' }, stroke: { on: true, c: '#111111', w: 6 }, shadow: { on: true, c: '#000000cc', b: 10, x: 0, y: 8 } }, a: { in: ['pop', .5] } },
+    { n: 'RGB glitch', s: { font: 'Orbitron', size: 110, color: '#ffffff', shadow: { on: true, c: '#00ffff', b: 0, x: 7, y: 0 }, glow: { on: true, c: '#ff0066', b: 8 } }, a: { in: ['cglitch', 1.2], loop: ['glitchLoop', .8] } },
+    { n: 'Cinematic title', s: { font: 'Playfair Display', size: 96, ls: 18, upper: true, bold: false, shadow: { on: true, c: '#000000aa', b: 16, x: 0, y: 4 } }, a: { in: ['cblur', 1.6], out: ['fade', .6] } },
+    { n: 'Sticker outline', s: { font: 'Bangers', size: 130, color: '#ffffff', upper: true, stroke: { on: true, c: '#7c3aed', w: 22 }, shadow: { on: true, c: '#000000aa', b: 0, x: 0, y: 9 } }, a: { in: ['jelly', .8], loop: ['wobble', 1] } },
+    { n: 'Instagram', s: { font: 'Montserrat', size: 112, grad: { on: true, c1: '#f9ce34', c2: '#ee2a7b' }, shadow: { on: false } }, a: { in: ['slideU', .5], loop: ['float', 1.4] } },
+    { n: 'Horror', s: { font: 'Permanent Marker', size: 124, color: '#e11d1d', bold: false, shadow: { on: true, c: '#000000', b: 18, x: 0, y: 8 }, glow: { on: true, c: '#ff0000', b: 26 } }, a: { in: ['cscatter', 1.1], loop: ['jitter', .6] } },
+    { n: 'Hindi neon', s: { font: 'Noto Sans Devanagari', size: 120, color: '#ffffff', glow: { on: true, c: '#22ffb0', b: 36 }, shadow: { on: false } }, a: { in: ['neonOn', .9], loop: ['neon', .9] } },
+    { n: 'Sale tag', s: { font: 'Anton', size: 96, color: '#ffffff', upper: true, bg: { on: true, c: '#e11d48', a: 1, pad: 26, r: 14 }, shadow: { on: false } }, a: { in: ['tada', .8], loop: ['tada', 2] } },
+    { n: 'Bubble', s: { font: 'Righteous', size: 80, color: '#111111', bold: false, bg: { on: true, c: '#ffffff', a: 1, pad: 28, r: 40 }, shadow: { on: true, c: '#00000066', b: 14, x: 0, y: 8 } }, a: { in: ['squash', .6] } },
+    { n: 'Highlight', s: { font: 'Poppins', size: 78, color: '#111111', bg: { on: true, c: '#ffe600', a: 1, pad: 16, r: 6 }, shadow: { on: false } }, a: { in: ['wipeL', .5] } },
+    { n: 'Cyber', s: { font: 'Orbitron', size: 100, color: '#00fff0', upper: true, stroke: { on: true, c: '#0a0a2a', w: 8 }, glow: { on: true, c: '#00fff0', b: 22 }, shadow: { on: false } }, a: { in: ['cscatter', 1], loop: ['glitchLoop', .8] } },
+    { n: 'Pixel game', s: { font: 'Press Start 2P', size: 62, bold: false, color: '#fff700', stroke: { on: true, c: '#000000', w: 10 }, shadow: { on: true, c: '#ff3b3b', b: 0, x: 6, y: 6 } }, a: { in: ['tw', 1.4], loop: ['cflicker', 1] } },
+    { n: 'Subscribe pill', s: { font: 'Poppins', size: 64, color: '#ffffff', upper: true, bg: { on: true, c: '#ff0000', a: 1, pad: 24, r: 60 }, shadow: { on: true, c: '#00000055', b: 12, x: 0, y: 6 } }, y: 30, a: { in: ['elasticU', .9], loop: ['zoomPunch', 1.6] } },
+    { n: 'Quote script', s: { font: 'Dancing Script', size: 110, color: '#fff6e0', shadow: { on: true, c: '#000000aa', b: 14, x: 0, y: 6 } }, a: { in: ['cslide', 1.4] } },
+    { n: 'Blur reveal', s: { font: 'Montserrat', size: 100, ls: 8, upper: true, shadow: { on: false } }, a: { in: ['zoomBlur', .9], out: ['blur', .5] } },
+    { n: 'Rainbow pop', s: { font: 'Bangers', size: 130, upper: true, stroke: { on: true, c: '#000000', w: 14 }, shadow: { on: false } }, a: { in: ['cpop', 1], loop: ['cneon', .7] } },
+    { n: 'Flip title', s: { font: 'Bebas Neue', size: 160, ls: 8, color: '#ffffff', shadow: { on: true, c: '#ff0055', b: 0, x: 8, y: 8 } }, a: { in: ['cflip', 1.2], loop: ['cwobble', 1.6] } }
   ];
   const EMO = {
     'Smiles': '😀😂🤣😍🥰😎🤩😜🤪😇🥳😭😱🤯😡🥺😴🤔🙄😏🤗🤫🤭🥵🥶😈💀👻🤡', 'Love': '❤🧡💛💚💙💜🖤🤍💖💗💘💝💕💞💓💔❣💌🌹😘', 'Hands': '👍👎👏🙌🙏💪👊✌🤞🤟🤘👌👆👇👉👈🫶🤝✋🖐👋', 'Fun': '🔥⭐🌟✨💥💫🎉🎊🎈🎁🏆🥇👑💎💰💸🚀🌈⚡☀🌙❄💯✅❌⚠❗❓',
-    'Objects': '🎬🎥📷🎤🎧🎵🎶📱💻⌚📺📢🔔💡📌📍🔒🔑🛒🏠🚗✈⚽🏀🎮', 'Animals': '🐶🐱🐭🐻🐼🦁🐯🐸🐵🦄🐔🐧🦋🐝🐢🐬', 'Food': '🍕🍔🍟🌭🍿🍩🍪🎂🍫🍎🍉🍓☕🍺🥤🍜', 'India': '🇮🇳🕉🪔🛕🙏🥭🏏🧿🪁🎆🚩'
+    'Objects': '🎬🎥📷🎤🎧🎵🎶📱💻⌚📺📢🔔💡📌📍🔒🔑🛒🏠🚗✈⚽🏀🎮', 'Animals': '🐶🐱🐭🐻🐼🦁🐯🐸🐵🦄🐔🐧🦋🐝🐢🐬', 'Food': '🍕🍔🍟🌭🍿🍩🍪🎂🍫🍎🍉🍓☕🍺🥤🍜', 'India': '🇮🇳🕉🪔🛕🙏🥭🏏🧿🪁🎆🚩', 'Festive': '🎉🎊🎆🎇✨🎈🎁🔥💥⚡🌟⭐🏆👑💎💯🎂🥳📣🔔'
   };
   const SH_COLORS = ['#ffffff', '#ff3366', '#ffcc00', '#00e0c6', '#4d7cff', '#a855f7', '#22c55e', '#000000'];
 
