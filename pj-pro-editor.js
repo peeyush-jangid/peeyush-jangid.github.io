@@ -20,6 +20,8 @@
 .pe-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.pe-row input[type=text]{flex:1;min-width:120px}
 .pe-tb button,.pe-mini{border:1px solid #cbd5e1;background:#fff;border-radius:8px;padding:3px 9px;cursor:pointer;font:inherit;font-size:.8rem}
 .pe-sec textarea,.pe-ta{width:100%;box-sizing:border-box;min-height:90px;font:inherit;font-size:.86rem;margin-top:6px;border:1px solid #cbd5e1;border-radius:8px;padding:8px}
+.pe-fmt{position:sticky;top:0;z-index:5;background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:6px;align-items:center}.pe-fmt button{border:1px solid #cbd5e1;background:#fff;border-radius:8px;padding:4px 10px;cursor:pointer;font:inherit;font-size:.82rem}.pe-fmt input[type=color]{width:34px;height:30px;padding:0;border:0;background:none}.pe-ed{outline:none}.pe-ed:hover{outline:1px dashed #94a3b8}
+.pe-modal{position:fixed;inset:0;background:#0008;z-index:9999;display:flex;align-items:center;justify-content:center;padding:14px}.pe-modal>div{background:#fff;border-radius:14px;padding:14px;width:min(760px,100%);max-height:92vh;display:flex;flex-direction:column;gap:8px}.pe-modal textarea{flex:1;min-height:55vh;font:inherit;font-size:.86rem;border:1px solid #cbd5e1;border-radius:8px;padding:8px}
 .pe-prev{background:#cbd5e1;border-radius:12px;padding:10px;overflow:hidden;position:sticky;top:8px}.pe-prev .box{transform-origin:top left;box-shadow:0 4px 20px #0004}
 .pe-bar{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
 .bg-wrap{display:grid;grid-template-columns:minmax(260px,340px) 1fr;gap:14px;align-items:start}@media(max-width:900px){.bg-wrap{grid-template-columns:1fr}}
@@ -115,7 +117,7 @@
   const fontLink = f => GF.includes(f) ? `https://fonts.googleapis.com/css2?family=${encodeURIComponent(f).replace(/%20/g, '+')}:wght@400;600;700&display=swap` : '';
   const ensureFont = f => { const u = fontLink(f); if (u && !q('link[data-pef="' + f + '"]')) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = u; l.dataset.pef = f; document.head.appendChild(l); } };
   const SIDE_RE = /skill|language|interest|hobb|tool|certif|strength|software|course|award/i;
-  const inline = s => E(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  const inline = s => E(s).replace(/\{c=(#[0-9a-fA-F]{3,8})\|(.+?)\}/g, '<span style="color:$1">$2</span>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/~~(.+?)~~/g, '<i>$1</i>').replace(/__(.+?)__/g, '<u>$1</u>');
   function body(text) {
     let o = '', ul = false; const cl = () => { if (ul) { o += '</ul>'; ul = false; } };
     text.split('\n').forEach(l => {
@@ -131,7 +133,7 @@
   function build(M, S) {
     const t = TPL[S.tpl] || TPL.classic, ac = S.accent || t.ac, side = !!t.side, secs = M.sections.filter(s => s.show && s.text.trim());
     const ph = (M.photo && S.photo) ? `<img class="ph" src="${M.photo}" alt="">` : '';
-    const sec = s => `<section><h2>${E(s.title)}</h2>${body(s.text)}</section>`;
+    const sec = s => `<section data-id="${s.id}"><h2>${E(s.title)}</h2>${body(s.text)}</section>`;
     const cj = M.contact.filter(Boolean);
     let html;
     if (side) {
@@ -176,7 +178,7 @@ ${t.head === 'center' ? '.rs .hd .ct{text-align:center}' : ''}`;
     if (!M) M = JSON.parse(JSON.stringify(SAMPLE));
     el.innerHTML = `
 <div class="card"><b>✏️ Edit your own resume</b> – upload your existing PDF / Word resume (or start from the sample), then change the template, font, colours, text, sections and photo. Download as <b>PDF or Word</b>.
-<p class="note" style="margin:6px 0 0">Your file is read on your device only. The text is rebuilt inside the chosen template (the original design of your file is not copied). Your work is auto-saved in this browser.</p></div>
+<p class="note" style="margin:6px 0 0">Your file is read on your device only. The text is rebuilt inside the chosen template (the original design of your file is not copied) – after that you can change <b>everything</b>: click on the resume itself and type, or use the forms on the left. Your work is auto-saved in this browser.</p></div>
 <div class="pe-grid"><div id="pe-left">
  <div class="card"><h3 style="margin-top:0">1️⃣ Upload resume</h3>
   <div class="pe-drop" id="pe-dz"><b>📄 Click to upload</b> or drop PDF / DOCX / TXT<br><small class="note">Scanned (photo) PDFs cannot be read – use a text PDF or DOCX</small><input id="pe-fi" type="file" accept=".pdf,.docx,.txt" hidden></div>
@@ -200,7 +202,7 @@ ${t.head === 'center' ? '.rs .hd .ct{text-align:center}' : ''}`;
   <div class="pe-row"><select id="pe-addsel"><option value="">+ Add section…</option>${['Summary', 'Experience', 'Education', 'Skills', 'Projects', 'Certifications', 'Achievements', 'Languages', 'Interests', 'Internship', 'Training', 'Declaration', 'Custom…'].map(x => `<option>${x}</option>`).join('')}</select></div>
   <p class="note" style="margin:8px 0 0">Tips: <b>• </b>starts a bullet · <b>## Job title | 2024–25</b> makes a heading with date on the right · <b>**bold**</b> makes text bold.</p></div>
 </div>
-<div><div class="pe-bar"><button class="btn" id="pe-pdf">📄 Download PDF</button><button class="btn" id="pe-doc">📝 Download Word</button><button class="btn ghost" id="pe-txt">Text</button><button class="btn ghost" id="pe-cp">Copy text</button><button class="btn ghost" id="pe-reset">Reset</button></div>
+<div><div class="card" style="padding:8px 12px"><b>👆 Click anywhere on the resume below and type</b> – change, add or delete any text, line, bullet or section directly.</div><div class="pe-fmt pe-bar" id="pe-fmt"><button data-c="bold" title="Bold"><b>B</b></button><button data-c="italic" title="Italic"><i>I</i></button><button data-c="underline" title="Underline"><u>U</u></button><input type="color" id="pe-fc" value="#dc2626" title="Text colour (select text first)"><button data-c="insertUnorderedList">• List</button><button data-c="head">## Heading line</button><button data-c="bar">| Date</button><button data-c="del">🗑 Delete line</button><button data-c="undo">↶</button><button data-c="redo">↷</button><button data-c="full">📝 Edit full text</button></div><div class="pe-bar"><button class="btn" id="pe-pdf">📄 Download PDF</button><button class="btn" id="pe-doc">📝 Download Word</button><button class="btn ghost" id="pe-txt">Text</button><button class="btn ghost" id="pe-cp">Copy text</button><button class="btn ghost" id="pe-reset">Reset</button></div>
 <div class="pe-prev" id="pe-prev"><div class="box" id="pe-box"></div></div>
 <p class="note">PDF: in the print window choose <b>“Save as PDF”</b>. Word: the file opens in MS Word / Google Docs and stays fully editable (Google fonts need to be installed on your PC to show exactly in Word).</p></div></div>`;
     const $e = s => q(s, el);
@@ -218,9 +220,11 @@ ${t.head === 'center' ? '.rs .hd .ct{text-align:center}' : ''}`;
     function preview() {
       ensureFont(S.font); const b = build(M, S), pg = PAGE[S.page], pad = b.side ? 0 : S.margin * 3.78;
       $e('#pe-box').innerHTML = `<style>${b.css}</style><div style="padding:${pad}px;min-height:${pg[1]}px;background:#fff;box-sizing:border-box">${b.html}</div>`;
+      const rs = q('.rs', $e('#pe-box')); rs.contentEditable = 'true'; rs.spellcheck = false; rs.classList.add('pe-ed'); qa('.ph', rs).forEach(x => x.contentEditable = 'false');
+      rendered = new Set(qa('section[data-id]', rs).map(x => x.dataset.id));
       fit();
     }
-    let st; const save = () => { clearTimeout(st); st = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify({ M, S })); } catch (e) { say('Auto-save is full – use “Save project”.'); } }, 400); };
+    let rendered = new Set(), savedRange = null, st; const save = () => { clearTimeout(st); st = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify({ M, S })); } catch (e) { say('Auto-save is full – use “Save project”.'); } }, 400); };
     const change = () => { preview(); save(); };
     function syncUI() {
       $e('#pe-font').value = S.font; $e('#pe-sz').value = S.size; $e('#pe-lh').value = S.lh; $e('#pe-mg').value = S.margin; $e('#pe-ac').value = S.accent || TPL[S.tpl].ac; $e('#pe-pg').value = S.page; $e('#pe-phon').checked = !!S.photo;
@@ -239,7 +243,7 @@ ${t.head === 'center' ? '.rs .hd .ct{text-align:center}' : ''}`;
     dz.onclick = () => fi.click(); fi.onchange = () => take(fi.files[0]);
     dz.ondragover = e => { e.preventDefault(); dz.classList.add('on'); }; dz.ondragleave = () => dz.classList.remove('on'); dz.ondrop = e => { e.preventDefault(); dz.classList.remove('on'); take(e.dataTransfer.files[0]); };
     $e('#pe-sample').onclick = () => { if (confirm('Replace current content with the sample resume?')) { const p = M.photo; M = JSON.parse(JSON.stringify(SAMPLE)); M.photo = p; syncUI(); save(); } };
-    $e('#pe-json-s').onclick = () => dl(new Blob([JSON.stringify({ M, S })], { type: 'application/json' }), 'resume-project.json');
+    $e('#pe-json-s').onclick = () => (syncFromDom(), dl(new Blob([JSON.stringify({ M, S })], { type: 'application/json' }), 'resume-project.json'));
     $e('#pe-json-l').onclick = () => $e('#pe-jf').click();
     $e('#pe-jf').onchange = async e => { try { const d = JSON.parse(await e.target.files[0].text()); if (!d.M || !d.M.sections) throw 0; M = d.M; S = Object.assign(S, d.S); syncUI(); save(); say('Project opened ✅'); } catch (x) { say('This is not a valid project file'); } };
     /* template & style */
@@ -277,16 +281,89 @@ ${t.head === 'center' ? '.rs .hd .ct{text-align:center}' : ''}`;
       drawSecs(); change();
     });
     $e('#pe-addsel').onchange = e => { let n = e.target.value; if (!n) return; if (n === 'Custom…') n = prompt('Section name?') || ''; e.target.value = ''; if (!n.trim()) return; M.sections.push(mkSec(n.trim(), n === 'Skills' ? '• ' : n === 'Experience' ? '## Job title | Year – Year\nCompany, City\n• ' : '')); drawSecs(); change(); const t = qa('.pe-tx', secs).pop(); if (t) t.focus(); };
+
+    /* ---- direct editing on the preview ---- */
+    const hex = c => { const m = String(c).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/); return m ? '#' + [m[1], m[2], m[3]].map(x => (+x).toString(16).padStart(2, '0')).join('') : (/^#/.test(c) ? c : ''); };
+    function inl(n) {
+      if (n.nodeType === 3) return n.textContent.replace(/\u00a0/g, ' ');
+      if (n.nodeType !== 1) return '';
+      if (n.nodeName === 'BR') return '\n';
+      let t = inlKids(n); const s = n.style || {}, tag = n.nodeName;
+      if (!t.trim()) return t;
+      if (tag === 'U' || /underline/.test(s.textDecoration || s.textDecorationLine || '')) t = '__' + t + '__';
+      if (tag === 'I' || tag === 'EM' || s.fontStyle === 'italic') t = '~~' + t + '~~';
+      if (tag === 'B' || tag === 'STRONG' || s.fontWeight === 'bold' || +s.fontWeight >= 600) t = '**' + t + '**';
+      const col = s.color ? hex(s.color) : (tag === 'FONT' && n.color ? n.color : '');
+      if (col && !/^#(000000|111111|000)$/i.test(col)) t = '{c=' + col + '|' + t + '}';
+      return t;
+    }
+    const inlKids = n => [...n.childNodes].map(inl).join('');
+    function domText(se) {
+      const L = [], push = t => { t = t.replace(/\s+$/, ''); L.push(t); };
+      [...se.childNodes].forEach(n => {
+        if (n.nodeName === 'H2') return;
+        if (n.nodeType === 3) { const t = n.textContent.trim(); if (t) L.push(t); return; }
+        if (n.nodeType !== 1) return;
+        if (n.nodeName === 'UL' || n.nodeName === 'OL') { [...n.children].forEach(li => { const t = inl(li).replace(/\n+/g, ' ').trim(); if (t) L.push(/^##\s/.test(t) ? t : '• ' + t); }); return; }
+        if (n.classList.contains('eh')) { const b = n.children[0], sp = n.children[1]; L.push('## ' + (b ? inlKids(b).trim() : '') + (sp && sp.textContent.trim() ? ' | ' + inlKids(sp).trim() : '')); return; }
+        if (n.classList.contains('sp')) { L.push(''); return; }
+        inl(n).split('\n').forEach(t => { t = t.trim(); if (/^[•\-–▪●]\s/.test(t) || /^##\s/.test(t)) L.push(t); else L.push(t); });
+      });
+      return L.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+    }
+    function syncFromDom() {
+      const rs = q('.rs', $e('#pe-box')); if (!rs) return;
+      const h1 = q('h1', rs); if (h1) M.name = h1.textContent.trim();
+      const ttl = q('.ttl', rs); M.title = ttl ? ttl.textContent.trim() : '';
+      const ct = q('.ct', rs); if (ct) M.contact = ct.children.length ? [...ct.children].map(x => x.textContent.trim()).filter(Boolean) : ct.textContent.split(/\s*[|\n]\s*/).map(x => x.trim()).filter(Boolean);
+      const present = new Set();
+      qa('section[data-id]', rs).forEach(se => { const s = M.sections.find(x => x.id === se.dataset.id); if (!s) return; present.add(s.id); const h = q('h2', se); if (h && h.textContent.trim()) s.title = h.textContent.trim(); s.text = domText(se); });
+      M.sections = M.sections.filter(s => !(rendered.has(s.id) && !present.has(s.id)));
+    }
+    function fillForms() {
+      $e('#pe-name').value = M.name; $e('#pe-ttl').value = M.title; $e('#pe-ct').value = M.contact.join('\n');
+      const boxes = qa('.pe-sec', secs); if (boxes.length !== M.sections.length) return drawSecs();
+      boxes.forEach((b, i) => { q('.pe-st', b).value = M.sections[i].title; q('.pe-tx', b).value = M.sections[i].text; });
+    }
+    const pv = $e('#pe-box');
+    pv.addEventListener('input', () => { syncFromDom(); save(); });
+    pv.addEventListener('focusout', e => {
+      if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('#pe-fmt')) return;
+      setTimeout(() => { if (pv.contains(document.activeElement)) return; syncFromDom(); fillForms(); preview(); save(); }, 60);
+    });
+    document.addEventListener('selectionchange', () => { const s = getSelection(); if (s.rangeCount && pv.contains(s.anchorNode)) savedRange = s.getRangeAt(0).cloneRange(); });
+    const focusRs = () => { const rs = q('.rs', pv); rs.focus(); if (savedRange) { const s = getSelection(); s.removeAllRanges(); s.addRange(savedRange); } return rs; };
+    const after = () => { syncFromDom(); save(); };
+    const blockOf = () => { const s = getSelection(); if (!s.rangeCount) return null; let n = s.anchorNode; n = n && (n.nodeType === 1 ? n : n.parentNode); const b = n && n.closest('li,p,div'), se = b && b.closest('section'); return (b && se && se !== b && b.nodeName !== 'H2' && pv.contains(b)) ? b : null; };
+    const fmt = $e('#pe-fmt');
+    fmt.addEventListener('mousedown', e => { if (e.target.id !== 'pe-fc') e.preventDefault(); });
+    fmt.addEventListener('click', e => {
+      const b = e.target.closest('button[data-c]'); if (!b) return; const c = b.dataset.c;
+      if (c === 'full') return fullText();
+      focusRs();
+      if (c === 'head') { const s = getSelection(); if (!s.rangeCount) return; s.collapseToStart(); if (s.modify) s.modify('move', 'backward', 'lineboundary'); document.execCommand('insertText', false, '## '); }
+      else if (c === 'bar') document.execCommand('insertText', false, ' | ');
+      else if (c === 'del') { const blk = blockOf(); if (!blk) return say('Click inside the line you want to delete'); const ul = blk.parentNode; blk.remove(); if (ul && ul.nodeName === 'UL' && !ul.children.length) ul.remove(); }
+      else { document.execCommand('styleWithCSS', false, false); document.execCommand(c, false, null); }
+      after();
+    });
+    $e('#pe-fc').addEventListener('input', e => { focusRs(); document.execCommand('styleWithCSS', false, true); document.execCommand('foreColor', false, e.target.value); after(); });
+    function fullText() {
+      syncFromDom(); const raw = [M.name, M.title, M.contact.join(' | ')].join('\n') + '\n\n' + M.sections.filter(s => s.show).map(s => s.title.toUpperCase() + '\n' + s.text).join('\n\n');
+      const m = document.createElement('div'); m.className = 'pe-modal'; m.innerHTML = `<div><b>📝 Edit the whole resume as text</b><span class="note">Line 1 = name, line 2 = headline, line 3 = contact. Put each section title in CAPITAL LETTERS on its own line (e.g. EXPERIENCE).</span><textarea id="pe-raw"></textarea><div class="pe-row"><button class="btn" id="pe-rok">Apply</button><button class="btn ghost" id="pe-rno">Cancel</button></div></div>`;
+      document.body.appendChild(m); q('#pe-raw', m).value = raw; q('#pe-rno', m).onclick = () => m.remove();
+      q('#pe-rok', m).onclick = () => { const t = q('#pe-raw', m).value; if (t.trim().length < 5) return; const hidden = M.sections.filter(s => !s.show), ph = M.photo, n = parse(t); n.photo = ph; if (!n.sections.length) n.sections.push(mkSec('Profile', '')); n.sections.push(...hidden); M = n; m.remove(); syncUI(); save(); };
+    }
     /* export */
     const wait = ms => new Promise(r => setTimeout(r, ms));
     $e('#pe-pdf').onclick = async () => {
-      ensureFont(S.font); const f = document.createElement('iframe'); f.style.cssText = 'position:fixed;width:0;height:0;border:0;right:0;bottom:0'; document.body.appendChild(f);
+      syncFromDom(); ensureFont(S.font); const f = document.createElement('iframe'); f.style.cssText = 'position:fixed;width:0;height:0;border:0;right:0;bottom:0'; document.body.appendChild(f);
       const d = f.contentDocument; d.open(); d.write(fullDoc(M, S, false)); d.close(); await wait(GF.includes(S.font) ? 1200 : 300);
       try { await f.contentDocument.fonts.ready; } catch (e) { } f.contentWindow.focus(); f.contentWindow.print(); setTimeout(() => f.remove(), 8000); say('Choose “Save as PDF” in the print window');
     };
-    $e('#pe-doc').onclick = () => dl(new Blob(['\ufeff' + fullDoc(M, S, true)], { type: 'application/msword' }), (M.name || 'resume').replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '-') + '.doc');
-    $e('#pe-txt').onclick = () => dl(new Blob([toText(M)], { type: 'text/plain' }), 'resume.txt');
-    $e('#pe-cp').onclick = () => { try { navigator.clipboard.writeText(toText(M)); say('Copied ✅'); } catch (e) { say('Copy failed'); } };
+    $e('#pe-doc').onclick = () => (syncFromDom(), dl(new Blob(['\ufeff' + fullDoc(M, S, true)], { type: 'application/msword' }), (M.name || 'resume').replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '-') + '.doc'));
+    $e('#pe-txt').onclick = () => (syncFromDom(), dl(new Blob([toText(M)], { type: 'text/plain' }), 'resume.txt'));
+    $e('#pe-cp').onclick = () => { syncFromDom(); try { navigator.clipboard.writeText(toText(M)); say('Copied ✅'); } catch (e) { say('Copy failed'); } };
     $e('#pe-reset').onclick = () => { if (!confirm('Delete everything and start again?')) return; try { localStorage.removeItem(KEY); } catch (e) { } M = JSON.parse(JSON.stringify(SAMPLE)); S = { tpl: 'classic', font: 'Georgia', size: 10.5, lh: 1.35, accent: '', margin: 14, page: 'A4', photo: true }; syncUI(); };
     window.addEventListener('resize', fit);
     syncUI();
