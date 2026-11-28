@@ -1,0 +1,50 @@
+/* ===== PJ Dark / Light theme (index + tools + baaki pages) =====
+   Dark mode color-inversion se banta hai, isliye kisi bhi page par bina CSS badle kaam karta hai.
+   Photos / video / iframe / resume paper apne asli rang me rehte hain. */
+html[data-theme="dark"]{
+  filter:invert(1) hue-rotate(180deg) contrast(.9) brightness(.96);
+  background-color:#fff;
+}
+html[data-theme="dark"] img,
+html[data-theme="dark"] picture,
+html[data-theme="dark"] video,
+html[data-theme="dark"] canvas,
+html[data-theme="dark"] iframe,
+html[data-theme="dark"] embed,
+html[data-theme="dark"] object,
+html[data-theme="dark"] [style*="background-image"],
+html[data-theme="dark"] .paper,
+html[data-theme="dark"] .doc,
+html[data-theme="dark"] .pre-profile-photo{
+  filter:invert(1) hue-rotate(180deg);
+}
+/* nested images (e.g. photo inside .paper) dobara ulta na hon */
+html[data-theme="dark"] .paper img,html[data-theme="dark"] .doc img,
+html[data-theme="dark"] .paper canvas,html[data-theme="dark"] .doc canvas,
+html[data-theme="dark"] [style*="background-image"] img{filter:none}
+
+/* toggle button */
+.pj-theme-btn{
+  position:fixed;left:16px;bottom:16px;z-index:2147483000;
+  width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.25);
+  display:grid;place-items:center;cursor:pointer;padding:0;
+  background:#0f172a;color:#fcd34d;box-shadow:0 8px 22px rgba(0,0,0,.3);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.pj-theme-btn:hover{transform:translateY(-2px) scale(1.06)}
+.pj-theme-btn:focus-visible{outline:3px solid #60a5fa;outline-offset:2px}
+.pj-theme-btn svg{width:22px;height:22px;fill:currentColor;display:block}
+.pj-theme-btn .i-sun{display:none}
+html[data-theme="dark"] .pj-theme-btn{
+  background:#fff7e0;color:#b45309;border-color:rgba(0,0,0,.15);
+  filter:invert(1) hue-rotate(180deg); /* dark me button apne asli rang me dikhe */
+}
+html[data-theme="dark"] .pj-theme-btn .i-moon{display:none}
+html[data-theme="dark"] .pj-theme-btn .i-sun{display:block}
+@media(max-width:720px){.pj-theme-btn{left:12px;bottom:12px;width:42px;height:42px}}
+@media print{
+  html[data-theme="dark"]{filter:none!important;background:#fff!important}
+  html[data-theme="dark"] img,html[data-theme="dark"] .paper,html[data-theme="dark"] .doc{filter:none!important}
+  .pj-theme-btn{display:none!important}
+}
+@media(prefers-reduced-motion:reduce){.pj-theme-btn{transition:none}}
