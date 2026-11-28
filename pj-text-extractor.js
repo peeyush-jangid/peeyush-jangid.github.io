@@ -104,16 +104,19 @@
 
   /* ---------- OCR engine (worker is reused between pages / files) ---------- */
   let worker = null, workerLang = '', logFn = () => { };
-  async function getWorker(lang, ctx) {
+  async function getWorker(o, ctx) {
     await needOcr();
-    if (worker && workerLang === lang) return worker;
+    const key = o.lang + (o.hq ? '|hq' : '');
+    if (worker && workerLang === key) return worker;
     if (worker) { try { await worker.terminate(); } catch (e) { } worker = null; }
     ctx.say('OCR engine + language data load ho raha hai… (pehli baar thoda time lagta hai)');
-    worker = await Tesseract.createWorker(lang, 1, { logger: m => logFn(m) });
-    workerLang = lang; return worker;
+    const make = hq => Tesseract.createWorker(o.lang, 1, Object.assign({ logger: m => logFn(m) }, hq ? { langPath: 'https://tessdata.projectnaptha.com/4.0.0' } : {}));
+    try { worker = await make(o.hq); }
+    catch (e) { if (!o.hq) throw e; ctx.say('High-accuracy data load nahi hua, normal model use kar raha hoon…'); worker = await make(false); }
+    workerLang = key; return worker;
   }
   async function ocrCanvas(c, o, ctx) {
-    const w = await getWorker(o.lang, ctx);
+    const w = await getWorker(o, ctx);
     await w.setParameters({ tessedit_pageseg_mode: o.psm, preserve_interword_spaces: '1' });
     logFn = m => { if (m.status === 'recognizing text') { ctx.sub(m.progress); ctx.say('Text padh raha hoon… ' + Math.round(m.progress * 100) + '%'); } };
     const r = await Promise.race([w.recognize(c), ctx.cancelP]);
@@ -271,7 +274,7 @@
 
   /* ---------- the tool ---------- */
   add('office', 'text-extractor', '📝', 'File to Text Extractor', 'PDF, Word, PowerPoint ya photo se poora text nikaalein (25 languages, OCR) – edit karein, copy ya download karein.', el => {
-    const S = Object.assign({ langs: ['eng', 'hin'], enh: 'auto', rot: '0', psm: '3', scan: 'auto', range: '', labels: false, notes: false, layout: false, hyph: true }, loadS());
+    const S = Object.assign({ langs: ['eng', 'hin'], enh: 'auto', rot: '0', psm: '3', scan: 'auto', range: '', labels: false, notes: false, layout: false, hyph: true, hq: true }, loadS());
     const sel = (id, label, opts, v) => `<label class="fld"><span>${label}</span><select id="${id}">${opts.map(o => `<option value="${o[0]}"${String(o[0]) === String(v) ? ' selected' : ''}>${o[1]}</option>`).join('')}</select></label>`;
     const chk = (id, label, v) => `<label style="display:flex;gap:8px;align-items:center;font-weight:400"><input type="checkbox" id="${id}" style="width:auto"${v ? ' checked' : ''}> ${label}</label>`;
     el.innerHTML = `
@@ -292,7 +295,7 @@
     <details open><summary>⚙️ Advanced settings (language, image quality, PDF options)</summary>
       <div class="fld wide" style="margin-bottom:14px"><span>Photo / scanned PDF me kaun si language hai? (ek ya kai chunein)</span>
         <div id="tx-langs" style="display:flex;flex-wrap:wrap;gap:6px;font-weight:400">${LANGS.map(l => `<label class="chip" style="cursor:pointer;display:inline-flex;gap:5px;align-items:center;margin:0"><input type="checkbox" value="${l[0]}" style="width:auto"${S.langs.includes(l[0]) ? ' checked' : ''}>${l[1]}</label>`).join('')}</div>
-        <small>Zyada languages = slow OCR. Sirf wahi chunein jo image me hain. Normal PDF / Word / PPT ka text kisi bhi language me apne aap aata hai.</small></div>
+        <small>Hindi-zyada documents me kabhi-kabhi sirf <b>Hindi</b> tick karke (English untick) behtar result milta hai. Zyada languages = slow OCR. Sirf wahi chunein jo image me hain. Normal PDF / Word / PPT ka text kisi bhi language me apne aap aata hai.</small></div>
       <div class="form">
         ${sel('tx-enh', '🖼 Image enhancement (OCR se pehle)', [['auto', 'Auto enhance (recommended)'], ['strong', 'Strong – black & white (dhundhli / phaki photo)'], ['none', 'Original (koi change nahi)']], S.enh)}
         ${sel('tx-rot', '🔄 Image rotate (agar ulti / side me hai)', [['0', 'Normal'], ['90', '90° clockwise'], ['180', '180°'], ['270', '90° anti-clockwise']], S.rot)}
@@ -304,6 +307,7 @@
           ${chk('tx-notes', 'PPT ke speaker notes bhi lein', S.notes)}
           ${chk('tx-layout', 'Columns / tables ko TAB se alag rakhein (PDF)', S.layout)}
           ${chk('tx-hyph', 'Line-end hyphen waale words jodein', S.hyph)}
+          ${chk('tx-hq', '🎯 High accuracy OCR models (Hindi ke liye zaroori – zyada download, slow)', S.hq)}
         </div></div>
       </div>
     </details>
@@ -319,9 +323,9 @@
     const getO = () => ({
       lang: [...el.querySelectorAll('#tx-langs input:checked')].map(i => i.value).join('+') || 'eng',
       enh: $f('#tx-enh').value, rot: +$f('#tx-rot').value, psm: $f('#tx-psm').value, scan: $f('#tx-scan').value, range: $f('#tx-range').value.trim(),
-      labels: $f('#tx-lab').checked, notes: $f('#tx-notes').checked, layout: $f('#tx-layout').checked, hyph: $f('#tx-hyph').checked
+      labels: $f('#tx-lab').checked, notes: $f('#tx-notes').checked, layout: $f('#tx-layout').checked, hyph: $f('#tx-hyph').checked, hq: $f('#tx-hq').checked
     });
-    const persist = () => { const o = getO(); saveS({ langs: o.lang.split('+'), enh: o.enh, rot: String(o.rot), psm: o.psm, scan: o.scan, range: o.range, labels: o.labels, notes: o.notes, layout: o.layout, hyph: o.hyph }); };
+    const persist = () => { const o = getO(); saveS({ langs: o.lang.split('+'), enh: o.enh, rot: String(o.rot), psm: o.psm, scan: o.scan, range: o.range, labels: o.labels, notes: o.notes, layout: o.layout, hyph: o.hyph, hq: o.hq }); };
     el.querySelectorAll('details input, details select').forEach(i => i.addEventListener('change', persist));
 
     /* ----- bulk bar (copy all / download all / clear) ----- */
