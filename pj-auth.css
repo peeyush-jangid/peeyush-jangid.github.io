@@ -70,3 +70,9 @@
 .pjA-tabs button.on{background:#2563eb;border-color:#2563eb;color:#fff}
 .pjA-box input:disabled{opacity:.6;cursor:not-allowed}
 @media(max-width:560px){.pjA-drawer.pjA-box{max-width:100%;border-radius:0}}
+
+/* back to portfolio */
+.pjA-back{border:1px solid #cbd5e1;border-radius:99px;padding:6px 14px;font-weight:600;font-size:.82rem;white-space:nowrap;color:inherit}
+.pjA-back:hover{border-color:#2563eb;color:#2563eb}
+:root[data-hub="dark"] .pjA-back{border-color:#2a3470}
+@media(max-width:820px){.pjA-back{padding:4px 10px;font-size:.74rem}}
