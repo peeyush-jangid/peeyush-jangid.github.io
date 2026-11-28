@@ -16,6 +16,7 @@
     <div class="grp">Analytics</div>
     <a href="#visitors"><span class="i">◔</span>Visitors</a>
     <a href="#users"><span class="i">☺</span>Registered users</a>
+    <a href="#toolusers"><span class="i">⚑</span>Tool Users (Sign-ups)</a>
   </nav>
   <div class="me"><div class="av">P</div><div>Peeyush<small>Owner account</small></div></div>
   <a class="cta admin-back" href="index.html">← Back to portfolio</a>
@@ -45,6 +46,7 @@
         <a href="#certs"><span>✦</span>Certificates</a><a href="#published"><span>▤</span>Published files</a>
         <a href="#tools"><span>⚒</span>Tools Manager</a><a href="#visitors"><span>◔</span>Visitors</a>
         <a href="#users"><span>☺</span>Registered users</a>
+        <a href="#toolusers"><span>⚑</span>Tool Users</a>
       </div>
     </section>
 
@@ -92,6 +94,14 @@
       <div id="v-panel" style="display:none"><div id="v-out"></div><div style="display:flex;flex-wrap:wrap;gap:.5rem;align-items:center"><button id="v-refresh" type="button" class="u-primary">🔄 Refresh visitors</button><label style="display:inline-flex;align-items:center;gap:.4rem;margin:0 .5rem .5rem 0;font-size:.85rem;font-weight:400"><input id="v-auto" type="checkbox" checked style="width:auto;margin:0"> Auto-refresh (30s)</label><span id="v-updated" class="u-who" style="margin-bottom:.5rem"></span></div><p><a href="https://analytics.google.com/" target="_blank" rel="noopener">Detailed reports: Google Analytics ↗</a></p></div>
     </section>
 
+    <section class="panel span2" id="tu-root" data-view="toolusers">
+      <div class="ph"><div><h2>Tool Users (Sign-ups)</h2><p>Tools Hub par register hue sabhi users ki poori details.</p></div></div>
+      <p class="file-hint" id="tu-note">Pehle <a href="#users">Registered users</a> section me owner account se sign in karo, phir yahan "Load users" dabao.</p>
+      <div class="row-btns" style="margin:0 0 12px"><button id="tu-load" class="admin-button" type="button">Load users</button><button id="tu-csv" class="admin-refresh" type="button">Download CSV</button><input id="tu-q" type="text" placeholder="Search name, email, mobile, city…" style="max-width:300px;margin:0"></div>
+      <div id="tu-count" class="file-hint"></div>
+      <div id="tu-list"></div>
+    </section>
+
     <section class="panel se-users" id="u-root" data-view="users">
 <style>.se-users .u-note{color:var(--muted);font-size:.9rem;margin:0 0 1rem}.se-users .u-primary{background:linear-gradient(90deg,#b98f4f,#efd08f)!important;color:#1a1205!important;font-weight:700;border:0!important}.u-top{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;justify-content:space-between;margin-bottom:.8rem}.u-who{font-size:.8rem;color:var(--muted);word-break:break-all}.u-folder{border:1px solid var(--line);border-radius:14px;margin:.6rem 0;background:var(--inset)}.u-folder summary{cursor:pointer;padding:.8rem 1rem;display:flex;flex-wrap:wrap;gap:.4rem 1rem;justify-content:space-between}.u-folder summary span{color:var(--gt);word-break:break-all}.u-body{padding:0 1rem 1rem}.u-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-bottom:.8rem;word-break:break-all}.u-grid small,.u-logins small{display:block;color:var(--muted);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}.u-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem;padding:.35rem 0;border-top:1px solid var(--line);font-size:.88rem}</style>
       <div class="ph"><div><h2>Registered users</h2><p>Every sign-up / sign-in on the website is saved here automatically, one folder per user.</p></div></div>
@@ -104,7 +114,7 @@
   <div id="status" class="admin-status" aria-live="polite"></div>
 </div>
 </div></main>
-<script src="firebase-config.js"></script><script type="module" src="users.js"></script><script type="module" src="visitors.js"></script><script src="admin.js"></script><script src="admin-certs.js"></script><script src="editor.js"></script><script src="admin-tools-manager.js"></script>
+<script src="firebase-config.js"></script><script src="pj-auth-config.js"></script><script type="module" src="users.js"></script><script type="module" src="visitors.js"></script><script type="module" src="admin-toolusers.js"></script><script src="admin.js"></script><script src="admin-certs.js"></script><script src="editor.js"></script><script src="admin-tools-manager.js"></script>
 <script>
 (function(){
   var $=function(i){return document.getElementById(i)},cols=document.querySelector('.cols');
