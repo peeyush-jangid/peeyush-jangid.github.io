@@ -13,7 +13,7 @@ window.PJ_AUTH = {
   emailjs: {
     publicKey: "",
     serviceId: "service_kboz44w",
-    templateId: ""
+    templateId: "template_dlquxjg"
   },
   /* Jab tak EmailJS keys nahi bharte, OTP screen par dikhega (sirf testing ke liye). */
   demoOtpWhenNoEmailJs: true,
