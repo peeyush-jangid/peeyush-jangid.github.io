@@ -138,7 +138,7 @@
         return fetch('https://api.emailjs.com/api/v1.0/email/send', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ service_id: E.serviceId, template_id: E.templateId, user_id: E.publicKey, template_params: { to_email: em, to_name: name, otp: code } })
-        }).then(function (r) { if (!r.ok) throw new Error('Email send failed'); setMsg('rOtpMsg', 'OTP ' + em + ' par bhej diya gaya hai (10 minute valid).', 'ok'); });
+        }).then(function (r) { if (!r.ok) return r.text().then(function (t) { throw new Error('Email send failed (' + r.status + '): ' + t.slice(0, 160)); }); setMsg('rOtpMsg', 'OTP ' + em + ' par bhej diya gaya hai (10 minute valid).', 'ok'); });
       }
       if (C.demoOtpWhenNoEmailJs) { setMsg('rOtpMsg', 'DEMO mode – aapka OTP: ' + code + ' (EmailJS keys bharne par email aayega)', 'ok'); return; }
       throw new Error('EmailJS configure nahi hai.');
