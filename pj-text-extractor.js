@@ -108,6 +108,7 @@
     throw new Error('Yeh file type support nahi hai. PDF, DOCX, PPTX ya image upload karein.');
   }
 
+  const LANGS = [['eng', 'English'], ['hin', 'हिन्दी Hindi'], ['mar', 'मराठी Marathi'], ['guj', 'ગુજરાતી Gujarati'], ['pan', 'ਪੰਜਾਬੀ Punjabi'], ['ben', 'বাংলা Bengali'], ['tam', 'தமிழ் Tamil'], ['tel', 'తెలుగు Telugu'], ['kan', 'ಕನ್ನಡ Kannada'], ['mal', 'മലയാളം Malayalam'], ['urd', 'اردو Urdu'], ['san', 'संस्कृत Sanskrit'], ['nep', 'नेपाली Nepali'], ['ara', 'العربية Arabic'], ['chi_sim', '中文 Chinese (Simp.)'], ['chi_tra', '中文 Chinese (Trad.)'], ['jpn', '日本語 Japanese'], ['kor', '한국어 Korean'], ['rus', 'Русский Russian'], ['fra', 'Français French'], ['deu', 'Deutsch German'], ['spa', 'Español Spanish'], ['por', 'Português Portuguese'], ['ita', 'Italiano Italian'], ['tha', 'ไทย Thai']];
   const fmtSize = b => b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB';
   const counts = s => { const w = (s.match(/\S+/g) || []).length; return w + ' words · ' + s.length + ' characters'; };
 
@@ -121,8 +122,9 @@
         <input id="tx-file" type="file" multiple accept=".pdf,.docx,.pptx,.txt,image/*" hidden>
       </label>
       <div class="form" style="margin-top:16px">
-        <label class="fld"><span>Photo / scanned PDF ki language</span>
-          <select id="tx-lang"><option value="eng">English</option><option value="hin+eng">Hindi + English</option><option value="hin">Hindi</option></select></label>
+        <div class="fld wide"><span>Photo / scanned PDF me kaun si language hai? (ek ya kai chunein – Hindi + English pehle se select hai)</span>
+          <div id="tx-langs" style="display:flex;flex-wrap:wrap;gap:6px;font-weight:400">${LANGS.map(l => `<label class="chip" style="cursor:pointer;display:inline-flex;gap:5px;align-items:center;margin:0"><input type="checkbox" value="${l[0]}" style="width:auto" ${l[0] === 'eng' || l[0] === 'hin' ? 'checked' : ''}>${l[1]}</label>`).join('')}</div>
+          <small>Jitni zyada languages chunenge, OCR utna slow hoga. Sirf wahi chunein jo image me hain. PDF / Word / PPT ka digital text har language me apne aap aata hai.</small></div>
         <label class="fld"><span>Options</span>
           <div style="display:flex;flex-direction:column;gap:6px;font-weight:400">
             <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="tx-lab" style="width:auto"> Page / Slide ke labels add karein</label>
@@ -143,7 +145,7 @@
       if (busy) return toast('Pehle wali file process ho rahi hai…');
       files = [...files]; if (!files.length) return;
       busy = true;
-      const o = { say, lang: $f('#tx-lang').value, labels: $f('#tx-lab').checked, notes: $f('#tx-notes').checked, scan: $f('#tx-scan').checked };
+      const o = { say, lang: [...el.querySelectorAll('#tx-langs input:checked')].map(i => i.value).join('+') || 'eng', labels: $f('#tx-lab').checked, notes: $f('#tx-notes').checked, scan: $f('#tx-scan').checked };
       for (const f of files) {
         say(`"${f.name}" padh raha hoon…`);
         const card = document.createElement('div'); card.className = 'card';
