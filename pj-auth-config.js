@@ -11,7 +11,7 @@ window.PJ_AUTH = {
   /* EmailJS (emailjs.com): Account > Public Key, Email Services > Service ID, Email Templates > Template ID.
      Template variables: {{to_email}}, {{to_name}}, {{otp}} */
   emailjs: {
-    publicKey: "",
+    publicKey: "LseLZHwL5hoL1c3jl",
     serviceId: "service_kboz44w",
     templateId: "template_dlquxjg"
   },
