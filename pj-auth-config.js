@@ -12,7 +12,7 @@ window.PJ_AUTH = {
      Template variables: {{to_email}}, {{to_name}}, {{otp}} */
   emailjs: {
     publicKey: "",
-    serviceId: "",
+    serviceId: "service_kboz44w",
     templateId: ""
   },
   /* Jab tak EmailJS keys nahi bharte, OTP screen par dikhega (sirf testing ke liye). */
