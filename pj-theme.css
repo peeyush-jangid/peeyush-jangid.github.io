@@ -5,6 +5,9 @@ html[data-theme="dark"]{
   filter:invert(1) hue-rotate(180deg) contrast(.9) brightness(.96);
   background-color:#fff;
 }
+
+/* Media + photos: dobara ulta karke asli rang wapas.
+   !important isliye ki style.css ke koi bhi specific rule isse override na kar sake. */
 html[data-theme="dark"] img,
 html[data-theme="dark"] picture,
 html[data-theme="dark"] video,
@@ -15,13 +18,24 @@ html[data-theme="dark"] object,
 html[data-theme="dark"] [style*="background-image"],
 html[data-theme="dark"] .paper,
 html[data-theme="dark"] .doc,
-html[data-theme="dark"] .pre-profile-photo{
-  filter:invert(1) hue-rotate(180deg);
+html[data-theme="dark"] .profile-photo,
+html[data-theme="dark"] .hvac-hero-image,
+html[data-theme="dark"] .pre-profile-photo,
+html[data-theme="dark"] .tico,
+html[data-theme="dark"] .logo{
+  filter:invert(1) hue-rotate(180deg) !important;
 }
-/* nested images (e.g. photo inside .paper) dobara ulta na hon */
+
+/* Jinke andar image hai (container pehle se ulta ho chuka), un images ko dobara na chhedo */
 html[data-theme="dark"] .paper img,html[data-theme="dark"] .doc img,
 html[data-theme="dark"] .paper canvas,html[data-theme="dark"] .doc canvas,
-html[data-theme="dark"] [style*="background-image"] img{filter:none}
+html[data-theme="dark"] [style*="background-image"] img,
+html[data-theme="dark"] .tico img,
+html[data-theme="dark"] .logo img,
+html[data-theme="dark"] picture img{filter:none !important}
+
+/* Hero card ki 3D tilt/float animation filter ke saath conflict na kare */
+html[data-theme="dark"] .hero-panel{animation:none !important}
 
 /* toggle button */
 .pj-theme-btn{
