@@ -894,21 +894,82 @@ a.card.file{position:relative;padding-right:80px}
 
 <!-- Sign up / Sign in -->
 <div id="auth">
+  <div class="aw">
+    <aside class="ahero" aria-hidden="false">
+      <div class="alogo"><span class="pjb">PJ</span><div><b>PEEYUSH JANGID</b><small>Your Personal Digital Workspace</small></div></div>
+      <h2>Welcome to<br><em>Peeyush Jangid</em> App</h2>
+      <p class="ahs">Work Smarter <i>•</i> Achieve More</p>
+      <ul class="afeat"><li><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2M14 4c3-1.5 6-1 7-1 0 1 .5 4-1 7l-6 6-5-5z"/><circle cx="15" cy="9" r="1.5"/></svg></span>Access Powerful Tools</li><li><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>Use Peeyush AI Assistant</li><li><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></span>Manage Your Files</li><li><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span>Secure &amp; Reliable</li></ul>
+      <p class="atag">Your Success<br><span>Our Priority</span></p>
+    </aside>
   <div class="acard">
-    <div class="brand"><img src="icons/icon-192.png" alt="" width="76" height="76"><h1>Peeyush Kumar Jangid</h1><p>HVAC Project Engineer · Jaipur</p></div>
-    <div class="seg" id="aseg"><button class="on" data-t="up" type="button">Create account</button><button data-t="in" type="button">Sign in</button></div>
-    <form id="af" novalidate>
-      <div id="nameRow"><label for="an">Full name</label><input id="an" autocomplete="name"></div>
-      <div id="phoneRow"><label for="aph">Mobile number *</label><div class="ccrow"><select id="acc" aria-label="Country code"></select><input id="aph" type="tel" autocomplete="tel-national" inputmode="numeric" placeholder="Mobile number"></div></div>
-      <label for="ae">Email</label><input id="ae" type="email" autocomplete="email" inputmode="email">
-      <label for="ap">Password (min 6 characters)</label><input id="ap" type="password" autocomplete="new-password">
+    <div class="atop"><span class="pjb">PJ</span><div><b>PEEYUSH JANGID</b><small>Your Personal Digital Workspace</small></div></div>
+    <div class="seg" id="aseg"><button class="on" data-t="up" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0114 0M19 8v6M16 11h6"/></svg>Create Account</button><button data-t="in" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15 3h3a3 3 0 013 3v12a3 3 0 01-3 3h-3M10 17l5-5-5-5M15 12H3"/></svg>Sign In</button></div>
+    <div class="atitle"><span class="ati"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0114 0M19 8v6M16 11h6"/></svg></span><h1 id="atitle">Create Your Account</h1><p id="asubt">Join Peeyush Jangid App and explore amazing features.</p></div>
+    <form id="af" novalidate data-mode="up">
+      <div class="fprog up-only" aria-hidden="true"><div class="fbar"><i id="afill"></i></div><small id="apct">0% complete</small></div>
+
+      <div class="fsec up-only" id="nameRow">
+        <div class="fhead "><span class="fic">👤</span><div><b>Aapki details</b><small>Apna poora naam likhein</small></div><i>1</i></div>
+        <input id="an" type="hidden">
+        <div class="g2">
+          <div><label for="afn">First name <em>*</em></label><input id="afn" autocomplete="given-name" maxlength="40" placeholder="Peeyush"></div>
+          <div><label for="aln">Last name <em>*</em></label><input id="aln" autocomplete="family-name" maxlength="40" placeholder="Jangid"></div>
+        </div>
+        <label for="amn">Middle name <span class="opt">(optional)</span></label><input id="amn" autocomplete="additional-name" maxlength="40" placeholder="Kumar">
+      </div>
+
+      <div class="fsec" id="contactSec">
+        <div class="fhead up-only"><span class="fic">📱</span><div><b>Contact details</b><small>Mobile aur email, email par OTP aayega</small></div><i>2</i></div>
+        <div id="phoneRow"><label for="aph">Mobile number <em>*</em> <span class="opt">(country code ke saath)</span></label><div class="ccrow"><select id="acc" aria-label="Country code"></select><input id="aph" type="tel" autocomplete="tel-national" inputmode="numeric" placeholder="Mobile number"></div></div>
+        <label for="ae">Email address <em>*</em></label><input id="ae" type="email" autocomplete="email" inputmode="email" placeholder="aap@example.com">
+        <p class="fnote" id="aemailNote">📧 Account banane ke baad is email par <b>6-digit OTP</b> aayega, usse email verify hoga.</p>
+      </div>
+
+      <div id="profRows">
+        <div class="fsec">
+          <div class="fhead "><span class="fic">🎯</span><div><b>Aap kaun hain?</b><small>Ek chunein, taaki hum aapko behtar guide kar sakein</small></div><i>3</i></div>
+          <div class="occgrid" id="occGrid" role="radiogroup" aria-label="Occupation"><button type="button" class="occ" data-v="Student"><span>🎓</span>Student</button><button type="button" class="occ" data-v="Job seeker"><span>💼</span>Job seeker</button><button type="button" class="occ" data-v="Working professional"><span>🏢</span>Working professional</button><button type="button" class="occ" data-v="HVAC / Site engineer"><span>🛠️</span>HVAC / Site engineer</button><button type="button" class="occ" data-v="Business owner"><span>📈</span>Business owner</button><button type="button" class="occ" data-v="Recruiter / Employer"><span>🤝</span>Recruiter / Employer</button><button type="button" class="occ" data-v="Freelancer"><span>💻</span>Freelancer</button><button type="button" class="occ" data-v="Teacher / Trainer"><span>📚</span>Teacher / Trainer</button><button type="button" class="occ" data-v="Other"><span>✨</span>Other</button></div>
+          <div style="display:none"><label for="aocc">Main kaun hoon *</label><select id="aocc"><option value="">Select karein</option><option>Student</option><option>Job seeker</option><option>Working professional</option><option>HVAC / Site engineer</option><option>Business owner</option><option>Recruiter / Employer</option><option>Freelancer</option><option>Teacher / Trainer</option><option>Other</option></select></div>
+          <label class="plabel">App kis purpose se use karna hai? <em>*</em> <span class="opt">(ek ya zyada)</span></label>
+          <div class="pills" id="apurp">
+          <label><input type="checkbox" value="Free tools"><span>🧰 Free tools</span></label>
+          <label><input type="checkbox" value="AI assistant"><span>✨ AI assistant</span></label>
+          <label><input type="checkbox" value="Notes and study"><span>📚 Notes / padhai</span></label>
+          <label><input type="checkbox" value="Job or career"><span>💼 Job / career</span></label>
+          <label><input type="checkbox" value="Hire or job offer"><span>🤝 Hire / job offer</span></label>
+          <label><input type="checkbox" value="HVAC work"><span>🛠️ HVAC kaam</span></label>
+          <label><input type="checkbox" value="Files and documents"><span>📄 Files</span></label>
+          <label><input type="checkbox" value="Other"><span>Other</span></label>
+        </div>
+        </div>
+        <div class="fsec">
+          <div class="fhead "><span class="fic">📍</span><div><b>Aapki location</b><small>Country, state aur city</small></div><i>4</i></div>
+          <label for="actry">Country <em>*</em></label><select id="actry"></select>
+          <div class="g2">
+            <div><label for="ast">State / Province <em>*</em></label><select id="ast"></select><input id="ast2" autocomplete="address-level1" maxlength="60" placeholder="State / Province" style="display:none"></div>
+            <div><label for="acity">City <em>*</em></label><input id="acity" autocomplete="address-level2" maxlength="60" placeholder="Aapka shehar"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fsec" id="pwSec">
+        <div class="fhead up-only"><span class="fic">🔒</span><div><b>Password</b><small>Kam se kam 6 characters</small></div><i>5</i></div>
+        <label for="ap">Password <em class="up-only">*</em></label>
+        <div class="pw"><input id="ap" type="password" autocomplete="new-password" placeholder="Password"><button type="button" class="eye" data-eye="ap" aria-label="Password dikhayein"><svg class="e2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.9 10.9 0 0112 20C5 20 1 12 1 12a18 18 0 014.1-5M9.9 4.2A10 10 0 0112 4c7 0 11 8 11 8a18 18 0 01-2.2 3.2M1 1l22 22M14.1 14.1A3 3 0 019.9 9.9"/></svg><svg class="e1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+        <div class="meter up-only" id="pmeter"><i></i><i></i><i></i><i></i><span id="pmtxt">Password strength</span></div>
+        <div id="cpRow"><label for="acp">Confirm password <em>*</em></label><div class="pw"><input id="acp" type="password" autocomplete="new-password" placeholder="Password dobara likhein"><button type="button" class="eye" data-eye="acp" aria-label="Password dikhayein"><svg class="e2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.9 10.9 0 0112 20C5 20 1 12 1 12a18 18 0 014.1-5M9.9 4.2A10 10 0 0112 4c7 0 11 8 11 8a18 18 0 01-2.2 3.2M1 1l22 22M14.1 14.1A3 3 0 019.9 9.9"/></svg><svg class="e1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div><p class="fnote" id="pmatch"></p></div>
+      </div>
+
       <label style="display:flex;gap:10px;align-items:flex-start;color:var(--ink);font-weight:500;font-size:.86rem;line-height:1.5;margin:16px 0 4px;cursor:pointer"><input type="checkbox" id="aterms" style="width:18px;height:18px;min-height:0;padding:0;margin:2px 0 0;flex:none"><span>I agree to the <a href="../terms.html" target="_blank" rel="noopener" style="color:var(--brand)">Terms &amp; Conditions</a> and <a href="../privacy.html" target="_blank" rel="noopener" style="color:var(--brand)">Privacy Policy</a>. *</span></label>
       <p class="err" id="aerr" role="alert"></p>
       <button class="btn pri" id="asub" type="submit">Create account</button>
-      <div id="gwrap" style="display:none"><div class="or">or</div><button class="btn" id="agoogle" type="button">Continue with Google</button></div>
+            <div id="gwrap" style="display:none"><div class="or">or</div><button class="btn" id="agoogle" type="button"><svg width="22" height="22" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7A14.5 14.5 0 019.5 24c0-1.6.3-3.2.8-4.7l-7.9-6.1A24 24 0 000 24c0 3.9.9 7.5 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>Continue with Google</button></div>
+      <p class="trust"><svg viewBox="0 0 24 24" fill="#16a34a"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5z"/><path d="M8.5 12l2.5 2.5 4.5-5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Your data is safe and secure</p>
       <button class="lnk" id="aforgot" type="button" style="display:none">Forgot password?</button>
     </form>
     <p class="note" style="text-align:center" id="amode"></p>
+  </div>
   </div>
 </div>
 
@@ -1014,6 +1075,9 @@ a.card.file{position:relative;padding-right:80px}
     <div class="account-detail"><span>Full name</span><b id="profileFullName">—</b></div>
     <div class="account-detail"><span>Email address</span><b id="profileEmail">—</b></div>
     <div class="account-detail"><span>Mobile number</span><b id="profilePhone">—</b></div>
+    <div class="account-detail"><span>I am a</span><b id="profileOcc">—</b></div>
+    <div class="account-detail"><span>Use purpose</span><b id="profilePurp">—</b></div>
+    <div class="account-detail"><span>Location</span><b id="profileLoc">—</b></div>
     <button class="btn pri" type="button" data-close-account-modal>Done</button>
   </div>
 </div>
@@ -1529,7 +1593,7 @@ a.card.file{position:relative;padding-right:80px}
   var cfg=window.FIREBASE_CONFIG&&window.FIREBASE_CONFIG.apiKey?window.FIREBASE_CONFIG:null,mode='up',fbp;
   var me=null;
   function fmt(d){return d?new Date(d).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):'-'}
-  function lu(e,x){return{name:x.name,email:e,photo:x.photo||'',phone:x.phone||'',status:x.status||'active',provider:'This device',created:x.created,last:x.last}}
+  function lu(e,x){return{name:x.name,email:e,photo:x.photo||'',phone:x.phone||'',occupation:x.occupation||'',purpose:x.purpose||[],country:x.country||'',state:x.state||'',city:x.city||'',status:x.status||'active',provider:'This device',created:x.created,last:x.last}}
   var CC=[['+91','India'],['+1','USA / Canada'],['+44','United Kingdom'],['+971','UAE'],['+966','Saudi Arabia'],['+974','Qatar'],['+968','Oman'],['+965','Kuwait'],['+973','Bahrain'],['+61','Australia'],['+64','New Zealand'],['+65','Singapore'],['+60','Malaysia'],['+977','Nepal'],['+975','Bhutan'],['+94','Sri Lanka'],['+880','Bangladesh'],['+92','Pakistan'],['+93','Afghanistan'],['+49','Germany'],['+33','France'],['+39','Italy'],['+34','Spain'],['+31','Netherlands'],['+41','Switzerland'],['+46','Sweden'],['+353','Ireland'],['+7','Russia / Kazakhstan'],['+81','Japan'],['+82','South Korea'],['+86','China'],['+852','Hong Kong'],['+66','Thailand'],['+62','Indonesia'],['+63','Philippines'],['+84','Vietnam'],['+20','Egypt'],['+27','South Africa'],['+234','Nigeria'],['+254','Kenya'],['+55','Brazil'],['+52','Mexico'],['+90','Turkey'],['+98','Iran'],['+964','Iraq'],['+962','Jordan'],['+961','Lebanon']];
   ['acc','pcc'].forEach(function(id){var el=$(id);if(el)el.innerHTML=CC.map(function(c){return '<option value="'+c[0]+'">'+c[1]+' ('+c[0]+')</option>'}).join('')});
   /* Returns an international number like +919876543210, or '' when invalid. cc = selected country code. */
@@ -1669,26 +1733,26 @@ a.card.file{position:relative;padding-right:80px}
       if(p.status==='deactivated'){
         return f.m.signOut(f.a).then(function(){setUser(null);mode='in';drawMode();note('This account is deactivated. Contact Peeyush to reactivate it.')});
       }
-      var x=fu(u);x.uid=u.uid;x.phone=u.phoneNumber||p.phone||'';x.photo=p.photo||x.photo;x.status=p.status||'active';x.verified=x.verified||!!p.emailOtpOk;
+      var x=fu(u);x.uid=u.uid;x.phone=u.phoneNumber||p.phone||'';x.occupation=p.occupation||'';x.purpose=p.purpose||[];x.country=p.country||'';x.state=p.state||'';x.city=p.city||'';x.photo=p.photo||x.photo;x.status=p.status||'active';x.verified=x.verified||!!p.emailOtpOk;
       setUser(x);
     });
   }
   function afterSignup(e){mode='in';drawMode();$('ae').value=e;$('ap').value='';note('Account created. Sign in to continue.',1)}
   var API={
-    up:function(n,e,p,ph){
+    up:function(n,e,p,ph,x){x=x||{};
       if(cfg){hold=true;return fb().then(function(f){
         return f.m.createUserWithEmailAndPassword(f.a,e,p).then(function(c){
           return f.m.updateProfile(c.user,{displayName:n}).then(function(){
-            return f.fs.setDoc(uref(f,c.user.uid),{name:n,email:e,phone:ph,photo:'',status:'active',provider:'Email & password',createdAt:f.fs.serverTimestamp(),lastLogin:f.fs.serverTimestamp(),source:'app'});
+            return f.fs.setDoc(uref(f,c.user.uid),{name:n,firstName:x.firstName||'',middleName:x.middleName||'',lastName:x.lastName||'',email:e,phone:ph,countryCode:x.countryCode||'',occupation:x.occupation||'',purpose:x.purpose||[],country:x.country||'',state:x.state||'',city:x.city||'',photo:'',status:'active',provider:'Email & password',createdAt:f.fs.serverTimestamp(),lastLogin:f.fs.serverTimestamp(),source:'app'});
           }).then(function(){
             return f.fs.addDoc(f.fs.collection(f.db,'users',c.user.uid,'logins'),{event:'NEW SIGN-UP',provider:'Email & password',at:f.fs.serverTimestamp(),device:devInfo()});
           }).catch(function(er){if(window.console)console.warn('Could not save user record',er)})
           .then(function(){return (EJS_ON?Promise.resolve():f.m.sendEmailVerification(c.user)).catch(function(er){if(window.console)console.warn('verification email failed',er);window.__verr=(er&&er.code)||'unknown'})})
-          .then(function(){hold=false;notifyOwner('NEW SIGN-UP',{Name:n,Email:e,Phone:ph,Method:'Email & password'});return enter(f,c.user).then(function(){showWelcome(n)})});
+          .then(function(){hold=false;notifyOwner('NEW SIGN-UP',{Name:n,Email:e,Phone:ph,Occupation:x.occupation,Purpose:(x.purpose||[]).join(', '),Location:[x.city,x.state,x.country].filter(Boolean).join(', '),Method:'Email & password'});return enter(f,c.user).then(function(){showWelcome(n)})});
         });
       }).catch(function(x){hold=false;throw x})}
       var u=db.get(); if(u[e])return Promise.reject({code:'exists'}); if(p.length<6)return Promise.reject({code:'short'});
-      return hash(p).then(function(h){u[e]={name:n,phone:ph,photo:'',status:'active',h:h,created:Date.now()};db.set(u);afterSignup(e);showWelcome(n)});
+      return hash(p).then(function(h){u[e]={name:n,phone:ph,occupation:x.occupation||'',purpose:x.purpose||[],country:x.country||'',state:x.state||'',city:x.city||'',photo:'',status:'active',h:h,created:Date.now()};db.set(u);afterSignup(e);showWelcome(n)});
     },
     in:function(e,p){
       if(cfg)return fb().then(function(f){return f.m.signInWithEmailAndPassword(f.a,e,p).then(function(c){return checkAndRecord(f,c.user,'Email & password',false)})});
@@ -1704,7 +1768,7 @@ a.card.file{position:relative;padding-right:80px}
   function drawMode(){
     var up=mode==='up';
     $('nameRow').style.display=up?'block':'none';
-    $('phoneRow').style.display=up?'block':'none';
+    $('phoneRow').style.display=up?'block':'none';['profRows','cpRow','aemailNote'].forEach(function(i){var el=$(i);if(el)el.style.display=up?'block':'none'});
     $('asub').textContent=up?'Create account':'Sign in';
     $('ap').autocomplete=up?'new-password':'current-password';
     $('aforgot').style.display=!up&&cfg?'block':'none';
@@ -1712,16 +1776,54 @@ a.card.file{position:relative;padding-right:80px}
     [].forEach.call($('aseg').children,function(b){b.classList.toggle('on',b.dataset.t===mode)});
   }
   $('aseg').addEventListener('click',function(e){if(e.target.dataset.t){mode=e.target.dataset.t;drawMode()}});
+
+  /* ---------- extra sign-up details ---------- */
+  var COUNTRIES=[['India','+91'],['United States','+1'],['Canada','+1'],['United Kingdom','+44'],['United Arab Emirates','+971'],['Saudi Arabia','+966'],['Qatar','+974'],['Oman','+968'],['Kuwait','+965'],['Bahrain','+973'],['Australia','+61'],['New Zealand','+64'],['Singapore','+65'],['Malaysia','+60'],['Nepal','+977'],['Bhutan','+975'],['Sri Lanka','+94'],['Bangladesh','+880'],['Pakistan','+92'],['Afghanistan','+93'],['Germany','+49'],['France','+33'],['Italy','+39'],['Spain','+34'],['Netherlands','+31'],['Ireland','+353'],['Switzerland','+41'],['Sweden','+46'],['Russia','+7'],['China','+86'],['Japan','+81'],['South Korea','+82'],['Indonesia','+62'],['Thailand','+66'],['Philippines','+63'],['Vietnam','+84'],['South Africa','+27'],['Nigeria','+234'],['Kenya','+254'],['Egypt','+20'],['Turkey','+90'],['Brazil','+55'],['Mexico','+52'],['Other','']];
+  var STATES=['Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal','Andaman and Nicobar Islands','Chandigarh','Dadra and Nagar Haveli and Daman and Diu','Delhi','Jammu and Kashmir','Ladakh','Lakshadweep','Puducherry'];
+  (function(){
+    var c=$('actry'),st=$('ast'),st2=$('ast2');if(!c)return;
+    c.innerHTML=COUNTRIES.map(function(x){return '<option'+(x[0]==='India'?' selected':'')+'>'+x[0]+'</option>'}).join('');
+    function drawState(){
+      var ind=c.value==='India';
+      st.style.display=ind?'':'none';st2.style.display=ind?'none':'';
+      if(ind)st.innerHTML='<option value="">State chunein</option>'+STATES.map(function(x){return '<option>'+x+'</option>'}).join('');
+    }
+    c.addEventListener('change',function(){
+      var m=COUNTRIES.filter(function(x){return x[0]===c.value})[0];
+      if(m&&m[1]&&$('acc')){$('acc').value=m[1]}
+      drawState();
+    });
+    drawState();
+  })();
+  function titleCase(t){return String(t||'').trim().replace(/\s+/g,' ').toLowerCase().replace(/(^|[\s'-])([a-z\u00C0-\u024F\u0900-\u097F])/g,function(m,a,b){return a+b.toUpperCase()})}
+  /* returns an error string, or an object with the extra details */
+  function collectSignup(){
+    var NAME=/^[A-Za-z\u00C0-\u024F\u0900-\u097F][A-Za-z\u00C0-\u024F\u0900-\u097F .'-]*$/;
+    var fn=titleCase($('afn').value),mn=titleCase($('amn').value),ln=titleCase($('aln').value);
+    if(!fn||!NAME.test(fn))return 'Enter your first name (letters only).';
+    if(mn&&!NAME.test(mn))return 'Middle name me sirf letters likhein.';
+    if(!ln||!NAME.test(ln))return 'Enter your last name (letters only).';
+    var occ=$('aocc').value;if(!occ)return 'Select karein ki aap kaun hain (Student, Job seeker, etc.).';
+    var purp=[].map.call(document.querySelectorAll('#apurp input:checked'),function(x){return x.value});
+    if(!purp.length)return 'App use karne ka kam se kam ek purpose chunein.';
+    var country=$('actry').value,state=country==='India'?$('ast').value:$('ast2').value.trim(),city=titleCase($('acity').value);
+    if(!country)return 'Country chunein.';
+    if(!state)return 'State / Province chunein ya likhein.';
+    if(!city)return 'Apna city likhein.';
+    if($('ap').value!==$('acp').value)return 'Password aur Confirm password match nahi kar rahe.';
+    var full=[fn,mn,ln].filter(Boolean).join(' ');
+    return {name:full,firstName:fn,middleName:mn,lastName:ln,occupation:occ,purpose:purp,country:country,state:state,city:city,countryCode:$('acc').value};
+  }
   $('af').addEventListener('submit',function(ev){
     ev.preventDefault();
     if(!$('aterms').checked){$('aerr').style.color='';return $('aerr').textContent='Please agree to the Terms & Conditions and Privacy Policy to continue.'}
     var n=$('an').value.trim(),e=$('ae').value.trim().toLowerCase(),p=$('ap').value,ph=normPhone($('aph').value,$('acc').value);
-    if(mode==='up'&&!n)return $('aerr').textContent='Enter your full name.';
+    var X=null;if(mode==='up'){X=collectSignup();if(typeof X==='string')return $('aerr').textContent=X;n=X.name}
     if(mode==='up'&&!ph)return $('aerr').textContent='Enter a valid mobile number with the correct country code.';
     if(!/^\S+@\S+\.\S+$/.test(e))return $('aerr').textContent='Enter a valid email address.';
     if(p.length<6)return $('aerr').textContent='Use at least 6 characters for the password.';
     $('aerr').textContent='';$('aerr').style.color=''; $('asub').disabled=true;
-    (mode==='up'?API.up(n,e,p,ph):API.in(e,p)).catch(function(x){$('aerr').textContent=msg(x)}).then(function(){$('asub').disabled=false});
+    (mode==='up'?API.up(n,e,p,ph,X):API.in(e,p)).catch(function(x){$('aerr').textContent=msg(x)}).then(function(){$('asub').disabled=false});
   });
   $('aforgot').addEventListener('click',function(){
     var e=$('ae').value.trim(); if(!e)return $('aerr').textContent='Enter your email first.';
@@ -1957,7 +2059,7 @@ a.card.file{position:relative;padding-right:80px}
     var u=me||{};
     $('profileFullName').textContent=u.name||'—';
     $('profileEmail').textContent=u.email||'—';
-    $('profilePhone').textContent=u.phone||'Not added';
+    $('profilePhone').textContent=u.phone||'Not added';$('profileOcc').textContent=u.occupation||'—';$('profilePurp').textContent=(u.purpose&&u.purpose.length)?u.purpose.join(', '):'—';$('profileLoc').textContent=[u.city,u.state,u.country].filter(Boolean).join(', ')||'—';
     var av=$('accountProfileAvatar');
     if(u.photo){av.innerHTML='<img src="'+esc(u.photo)+'" alt="Profile photo">'}
     else{av.textContent=(u.name||u.email||'P').charAt(0).toUpperCase()}
@@ -2410,6 +2512,178 @@ nav{grid-template-columns:repeat(7,1fr)}
     var cur='start';[].forEach.call(body.querySelectorAll('.ht-sec'),function(s){if(s.offsetTop-body.offsetTop<=body.scrollTop+60)cur=s.id.slice(3)});
     [].forEach.call(jump.children,function(b){var on=b.dataset.ht===cur;b.classList.toggle('on',on);if(on&&b.scrollIntoView)jump.scrollLeft=b.offsetLeft-20});
   },{passive:true});
+})();
+</script>
+
+<style id="pj-signup-extra">
+#auth{justify-content:flex-start;overflow:auto;-webkit-overflow-scrolling:touch}
+#auth .acard{margin:auto 0}
+#af .opt{font-weight:500;color:var(--mute);font-size:.72rem}
+#af .fnote{margin:6px 2px 2px;font-size:.76rem;color:var(--mute);line-height:1.5}
+#af select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel2,transparent);color:var(--ink);font:inherit;font-size:16px}
+#af .ccrow select{width:42%}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}
+.pills label{margin:0;display:block;cursor:pointer}
+.pills input{position:absolute;opacity:0;width:1px;height:1px;min-height:0;padding:0}
+.pills span{display:inline-block;padding:8px 12px;border:1.5px solid var(--line);border-radius:99px;font-size:.8rem;font-weight:600;color:var(--ink);background:var(--panel2,transparent);transition:.15s}
+.pills input:checked+span{background:var(--brand);color:#fff;border-color:var(--brand)}
+.pills input:focus-visible+span{outline:2px solid var(--brand);outline-offset:2px}
+</style>
+
+<style id="pj-auth-design">
+#auth .acard{max-width:520px}
+#auth form{padding:18px 18px 22px;border-radius:26px}
+.bperks{display:flex;justify-content:center;flex-wrap:wrap;gap:7px;margin-top:14px}
+.bperks span{font-size:.74rem;font-weight:700;padding:5px 11px;border-radius:99px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+#af[data-mode="in"] .up-only{display:none!important}
+.fprog{margin:2px 2px 14px}.fbar{height:7px;border-radius:9px;background:var(--panel2);overflow:hidden;border:1px solid var(--line)}
+.fbar i{display:block;height:100%;width:0;border-radius:9px;background:var(--grad);transition:width .35s}
+.fprog small{display:block;margin-top:6px;font-size:.72rem;font-weight:700;color:var(--mute);text-align:right}
+#af .fsec{margin:0 0 14px;padding:14px 14px 16px;border:1px solid var(--line);border-radius:20px;background:color-mix(in srgb,var(--panel2) 70%,var(--panel))}
+#af[data-mode="in"] .fsec{padding:0;border:0;background:none;margin:0}
+.fhead{display:flex;align-items:center;gap:11px;margin-bottom:6px}
+.fhead b{display:block;font-size:.98rem}.fhead small{display:block;color:var(--mute);font-size:.75rem;line-height:1.35;margin-top:1px}
+.fhead .fic{flex:none;width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-size:20px;background:color-mix(in srgb,var(--brand) 12%,var(--panel));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--brand) 25%,transparent)}
+.fhead i{margin-left:auto;font-style:normal;font-size:.7rem;font-weight:800;color:var(--mute);width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;flex:none}
+#af .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#af .g2>div{min-width:0}
+@media(max-width:420px){#af .g2{grid-template-columns:1fr}}
+#af label em{color:#ef4444;font-style:normal}
+#af .plabel{margin-top:18px}
+.occgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:8px;margin-top:10px}
+.occ{display:flex;align-items:center;gap:8px;padding:11px 12px;border:1.5px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);font:inherit;font-size:.8rem;font-weight:650;text-align:left;cursor:pointer;transition:.15s}
+.occ span{font-size:18px}.occ:active{transform:scale(.97)}
+.occ.on{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,var(--panel));color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 16%,transparent)}
+.pw{position:relative}.pw input{padding-right:48px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:38px;height:38px;border:0;border-radius:10px;background:none;font-size:18px;cursor:pointer;opacity:.7}
+.eye.on{opacity:1}
+.meter{display:flex;gap:5px;align-items:center;margin-top:9px}
+.meter i{flex:1;height:5px;border-radius:5px;background:var(--line);transition:background .2s}
+.meter span{flex:none;margin-left:6px;font-size:.72rem;font-weight:700;color:var(--mute);min-width:98px;text-align:right}
+.meter[data-l="1"] i:nth-child(-n+1){background:#ef4444}.meter[data-l="2"] i:nth-child(-n+2){background:#f59e0b}
+.meter[data-l="3"] i:nth-child(-n+3){background:#84cc16}.meter[data-l="4"] i{background:#16a34a}
+#pmatch.ok{color:#16a34a}#pmatch.bad{color:#ef4444}
+.trust{text-align:center;font-size:.76rem;color:var(--mute);margin:12px 0 0}
+#af #aemailNote{padding:9px 11px;border-radius:12px;background:color-mix(in srgb,var(--brand) 8%,var(--panel));margin-top:10px}
+</style>
+<script>
+(function(){
+  var af=document.getElementById('af'),seg=document.getElementById('aseg');if(!af||!seg)return;
+  var $=function(i){return document.getElementById(i)};
+  function mode(){var on=seg.querySelector('.on');af.dataset.mode=on&&on.dataset.t==='in'?'in':'up'}
+  new MutationObserver(mode).observe(seg,{attributes:true,subtree:true,attributeFilter:['class']});mode();
+
+  /* occupation chips <-> hidden select */
+  var sel=$('aocc'),grid=$('occGrid');
+  grid.addEventListener('click',function(e){var b=e.target.closest('.occ');if(!b)return;sel.value=b.dataset.v;sel.dispatchEvent(new Event('change',{bubbles:true}));sync()});
+  function sync(){[].forEach.call(grid.children,function(b){var on=b.dataset.v===sel.value;b.classList.toggle('on',on);b.setAttribute('role','radio');b.setAttribute('aria-checked',on)});progress()}
+
+  /* show / hide password */
+  af.addEventListener('click',function(e){var b=e.target.closest('[data-eye]');if(!b)return;var i=$(b.dataset.eye);i.type=i.type==='password'?'text':'password';b.classList.toggle('on',i.type==='text')});
+
+  /* strength + match */
+  function strength(v){var n=0;if(v.length>=6)n++;if(v.length>=9)n++;if(/[A-Z]/.test(v)&&/[a-z]/.test(v))n++;if(/\d/.test(v)&&/[^A-Za-z0-9]|[A-Za-z]/.test(v))n++;if(v.length<6)n=Math.min(n,1);return v?Math.max(1,n):0}
+  var names=['Password strength','Weak','Okay','Good','Strong'];
+  function pw(){var v=$('ap').value,l=strength(v),m=$('pmeter');m.dataset.l=l;$('pmtxt').textContent=names[l];
+    var c=$('acp').value,t=$('pmatch');if(!c){t.textContent='';t.className='fnote'}else if(c===v){t.textContent='✓ Password match ho gaya';t.className='fnote ok'}else{t.textContent='Password match nahi ho raha';t.className='fnote bad'}progress()}
+  $('ap').addEventListener('input',pw);$('acp').addEventListener('input',pw);
+
+  /* completion progress */
+  function progress(){
+    if(af.dataset.mode==='in')return;
+    var st=$('actry').value==='India'?$('ast').value:$('ast2').value.trim();
+    var chk=[$('afn').value.trim(),$('aln').value.trim(),$('aph').value.trim(),$('ae').value.trim(),sel.value,
+      af.querySelector('#apurp input:checked'),$('actry').value,st,$('acity').value.trim(),$('ap').value.length>=6,$('acp').value&&$('acp').value===$('ap').value,$('aterms').checked];
+    var n=chk.filter(Boolean).length,pct=Math.round(n/chk.length*100);
+    $('afill').style.width=pct+'%';$('apct').textContent=pct+'% complete';
+  }
+  af.addEventListener('input',progress);af.addEventListener('change',progress);
+  setTimeout(function(){sync();pw();},400);
+})();
+</script>
+
+<style id="pj-auth-mock">
+/* ===== layout ===== */
+#auth{padding:0!important;justify-content:flex-start!important;align-items:stretch!important;overflow:auto;background:var(--bg)!important}
+#auth .aw{width:100%;max-width:1160px;margin:auto;padding:calc(14px + env(safe-area-inset-top,0px)) 14px 90px;display:grid;grid-template-columns:1fr;gap:34px;align-items:start}
+#auth .acard{width:100%;max-width:520px;margin:0 auto!important}
+#auth form{border-radius:26px;box-shadow:0 18px 50px rgba(20,60,140,.14);padding:6px 18px 24px}
+.ahero{display:none}
+.pjb{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:.95rem;letter-spacing:-.02em;color:#fff;background:radial-gradient(circle at 30% 25%,#3b82f6,#1d4ed8 70%);box-shadow:0 0 0 3px rgba(255,255,255,.9),0 6px 18px rgba(37,99,235,.45)}
+.atop{display:flex;align-items:center;gap:12px;padding:6px 4px 14px}
+.atop b{display:block;font-size:.95rem;letter-spacing:.01em}.atop small{display:block;color:var(--mute);font-size:.72rem;margin-top:1px}
+/* mobile wave */
+#auth::after{content:"";position:fixed;left:0;right:0;bottom:0;height:90px;z-index:0;pointer-events:none;background:radial-gradient(120% 100% at 50% 130%,#1d4ed8 0 52%,transparent 53%),radial-gradient(90% 80% at 15% 130%,#38bdf8 0 48%,transparent 49%)}
+#auth .aw{position:relative;z-index:1}
+
+/* ===== tabs ===== */
+#aseg{margin:4px 0 20px!important;padding:5px!important;gap:6px;border-radius:18px!important;background:color-mix(in srgb,#2563eb 9%,var(--panel2))!important;border:1px solid color-mix(in srgb,#2563eb 18%,var(--line))!important}
+#aseg button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:46px;border-radius:14px!important;font-size:.9rem!important;font-weight:700!important;color:var(--ink)!important;background:none!important;box-shadow:none!important}
+#aseg button svg{width:20px;height:20px;flex:none}#aseg button *{pointer-events:none}
+#aseg button.on{color:#fff!important;background:linear-gradient(135deg,#1d6bff,#1347d6)!important;box-shadow:0 8px 20px rgba(29,107,255,.4)!important}
+.atitle{text-align:center;margin:0 0 16px}
+.atitle .ati{display:inline-grid;place-items:center;width:34px;height:34px;color:#2563eb;vertical-align:middle;margin-right:6px}.atitle .ati svg{width:30px;height:30px}
+.atitle h1{display:inline;font-size:1.5rem;font-weight:800;vertical-align:middle}
+.atitle p{margin:8px 0 0;color:var(--mute);font-size:.9rem;line-height:1.5}
+
+/* ===== inputs with icons ===== */
+#af input:not([type=checkbox]),#af select{min-height:50px;border-radius:13px;border:1.5px solid color-mix(in srgb,#2563eb 20%,var(--line));background-color:color-mix(in srgb,#2563eb 4%,var(--panel2));background-repeat:no-repeat;background-position:14px center;background-size:20px;padding-left:46px}
+#afn,#aln,#amn{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237b8aa5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='8' r='4'/><path d='M4 21a8 8 0 0116 0'/></svg>")}#ae{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237b8aa5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='5' width='18' height='14' rx='2'/><path d='M3 7l9 6 9-6'/></svg>")}#ap,#acp{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237b8aa5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V7a4 4 0 018 0v4'/></svg>")}
+#acc{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237b8aa5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z'/></svg>");padding-left:44px!important}#acity,#ast2{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237b8aa5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z'/><circle cx='12' cy='10' r='2.5'/></svg>")}#actry,#ast{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237b8aa5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><path d='M3 12h18M12 3a14 14 0 010 18 14 14 0 010-18'/></svg>")}
+#aph{background-image:none;padding-left:14px}
+#af .ccrow select{width:40%;max-width:170px}
+#af input:focus,#af select:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.16)}
+#af .pills input{padding:0;min-height:0;background:none}
+.eye{color:var(--mute);opacity:1!important}.eye svg{width:21px;height:21px}.eye .e1{display:none}.eye.on .e1{display:block}.eye.on .e2{display:none}.eye.on{color:#2563eb}
+
+/* ===== sections: halka look ===== */
+#af .fsec{background:none;border:0;border-top:1px dashed color-mix(in srgb,#2563eb 22%,var(--line));border-radius:0;padding:16px 0 4px;margin:0}
+#af #nameRow{border-top:0;padding-top:4px}
+#af .fhead .fic{width:36px;height:36px;font-size:18px}
+.fprog{margin-top:4px}
+
+/* ===== buttons ===== */
+#asub{min-height:54px;border-radius:15px;font-size:1.02rem;background:linear-gradient(135deg,#1d6bff,#1244d0)!important;box-shadow:0 12px 26px rgba(29,107,255,.42)!important;margin-top:14px}
+#asub::after{content:"→";margin-left:10px;font-size:1.2rem}
+#agoogle{min-height:52px;border-radius:15px;background:#fff!important;color:#111827!important;border:1.5px solid #d8e0ee!important;font-weight:700;box-shadow:0 4px 14px rgba(20,40,80,.08)}
+#agoogle:hover{border-color:#2563eb!important;color:#111827!important}
+.trust{display:flex;align-items:center;justify-content:center;gap:7px;font-size:.78rem;color:var(--mute);margin:14px 0 0!important}.trust svg{width:17px;height:17px}
+
+/* ===== desktop: dark blue hero + white card ===== */
+@media(min-width:900px){
+  #auth{background:radial-gradient(900px 600px at 20% 10%,#1e3fae 0,transparent 60%),radial-gradient(700px 600px at 100% 100%,#0b5bd3 0,transparent 55%),linear-gradient(160deg,#050b2e,#06143f 55%,#031033)!important;color:#fff}
+  #auth::after{display:none}
+  #auth .aw{grid-template-columns:1fr 500px;gap:60px;padding:40px 28px 60px;align-items:center;min-height:100vh}
+  .atop{display:none}.ahero{display:block}
+  #auth .acard{max-width:500px;margin:0!important}
+  #auth form{box-shadow:0 30px 80px rgba(0,0,40,.55)}
+  #auth .acard{background:var(--panel);border-radius:30px;padding:18px 18px 4px;box-shadow:0 30px 80px rgba(0,0,40,.55)}
+  #auth form{box-shadow:none;border:0;padding:0 2px 18px;background:none}
+  #auth .note{color:var(--mute)}
+  #auth .acard,#auth .acard h1,#auth .acard b{color:var(--ink)}
+  #auth .acard #aseg button.on{color:#fff}
+}
+.ahero .alogo{display:flex;align-items:center;gap:14px;margin-bottom:60px}.ahero .alogo b{display:block;font-size:1.05rem;letter-spacing:.02em}.ahero .alogo small{display:block;font-size:.8rem;opacity:.8;margin-top:2px}
+.ahero .pjb{width:60px;height:60px;font-size:1.3rem;background:radial-gradient(circle at 30% 25%,#1e3a8a,#0a1a5c 70%);box-shadow:0 0 0 3px #3b82f6,0 0 28px rgba(59,130,246,.7)}
+.ahero h2{margin:0;font-size:3rem;line-height:1.1;font-weight:800;letter-spacing:-.03em;color:#fff}
+.ahero h2 em{font-style:normal;color:#22d3ee}
+.ahs{margin:18px 0 30px;font-size:1.3rem;opacity:.95}.ahs i{font-style:normal;margin:0 8px;opacity:.7}
+.afeat{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.afeat li{display:flex;align-items:center;gap:16px;font-size:1.08rem;font-weight:500}
+.afeat li span{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:#fff;background:radial-gradient(circle at 30% 25%,#3b82f6,#1d4ed8);box-shadow:0 0 0 2px rgba(255,255,255,.35),0 0 20px rgba(59,130,246,.55)}
+.afeat li svg{width:22px;height:22px}
+.atag{margin:42px 0 0;font:italic 600 2rem/1.05 "Brush Script MT","Segoe Script","Snell Roundhand",cursive;color:#e8efff;transform:rotate(-6deg);transform-origin:left;width:max-content}
+.atag span{display:inline-block;margin-left:34px;padding-bottom:8px;border-bottom:4px solid #f5b301;border-radius:3px}
+@media(prefers-reduced-motion:no-preference){.ahero{animation:pjIn .6s ease-out}}@keyframes pjIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+</style>
+<script>
+(function(){
+  var seg=document.getElementById('aseg');if(!seg)return;
+  var t=document.getElementById('atitle'),sb=document.getElementById('asubt');
+  function upd(){var on=seg.querySelector('.on'),inn=on&&on.dataset.t==='in';
+    t.textContent=inn?'Welcome Back':'Create Your Account';
+    sb.textContent=inn?'Sign in to continue to Peeyush Jangid App.':'Join Peeyush Jangid App and explore amazing features.'}
+  new MutationObserver(upd).observe(seg,{attributes:true,subtree:true,attributeFilter:['class']});upd();
 })();
 </script>
 </body>
