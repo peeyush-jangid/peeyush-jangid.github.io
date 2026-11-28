@@ -243,12 +243,160 @@
     if (!el) { el = document.createElement('div'); el.id = 'pjAnav'; el.className = 'pjA-user'; box.insertBefore(el, box.firstChild); }
     if (user) {
       var n = (profile && profile.fullName) || user.displayName || user.email, ph = profile && profile.photo;
-      el.innerHTML = (ph ? '<img src="' + ph + '" alt="">' : '<span class="pjA-av">' + esc(n.charAt(0).toUpperCase()) + '</span>') +
-        '<button type="button" id="pjAout">Logout</button>';
-      $('#pjAout').onclick = function () { loadFb().then(function (f) { return f.A.signOut(f.auth); }).then(function () { location.hash = '#/'; toast('Logout ho gaye'); }); };
+      el.innerHTML = '<button type="button" class="pjA-avbtn" id="pjAav" title="My Account" aria-label="My Account">' +
+        (ph ? '<img src="' + esc(ph) + '" alt="">' : esc(n.charAt(0).toUpperCase())) + '</button>';
+      $('#pjAav').onclick = function () { drShow('profile'); };
     } else {
       el.innerHTML = '<button type="button" class="pjA-navbtn" id="pjAin">Sign In</button>';
       $('#pjAin').onclick = function () { show('log'); };
+    }
+    if (dr && !dr.hidden) { if (user) drRender(); else drHide(); }
+  }
+
+  /* ---------- Profile sidebar ---------- */
+  var dr, drView = 'profile', secTab = 'change';
+  var MENU = [['profile', '👤', 'My Profile'], ['settings', '⚙️', 'Account Settings'], ['security', '🔒', 'Security & Password'], ['tools', '🧰', 'My Tools'], ['logout', '🚪', 'Logout']];
+  function fmtDate(t) { try { return t && t.toDate ? t.toDate().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '–'; } catch (e) { return '–'; } }
+  function chipsSel(name, a, sel) {
+    sel = sel || [];
+    return a.map(function (x) { return '<label><input type="checkbox" name="' + name + '" value="' + esc(x) + '"' + (sel.indexOf(x) > -1 ? ' checked' : '') + '>' + esc(x) + '</label>'; }).join('');
+  }
+  function drBuild() {
+    dr = document.createElement('div'); dr.className = 'pjA-dov'; dr.hidden = true;
+    dr.innerHTML = '<aside class="pjA-drawer pjA-box" role="dialog" aria-label="Account menu"><button class="pjA-x" id="pjDx" type="button" aria-label="Close">×</button><div class="pjA-dhead" id="pjDh"></div><nav class="pjA-dnav" id="pjDn"></nav><div class="pjA-dbody" id="pjDb"></div></aside>';
+    document.body.appendChild(dr);
+    dr.addEventListener('mousedown', function (e) { if (e.target === dr) drHide(); });
+    $('#pjDx').onclick = drHide;
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && dr && !dr.hidden) drHide(); });
+  }
+  function drShow(v) { if (!user) return show('log'); if (!dr) drBuild(); drView = v || 'profile'; drRender(); dr.hidden = false; document.body.style.overflow = 'hidden'; }
+  function drHide() { if (dr) dr.hidden = true; document.body.style.overflow = ''; }
+  function doLogout() {
+    loadFb().then(function (f) { return f.A.signOut(f.auth); }).then(function () { drHide(); location.hash = '#/'; toast('Logout ho gaye'); });
+  }
+  function goTools() {
+    drHide();
+    var sc = function () { var e = document.getElementById('toolsGrid'); if (e) e.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    var h = location.hash; if (h && h !== '#/' && h !== '#') { location.hash = '#/'; setTimeout(sc, 350); } else sc();
+  }
+  function drRender() {
+    var p = profile || {}, nm = p.fullName || user.displayName || user.email;
+    $('#pjDh').innerHTML = '<div class="pjA-dav">' + (p.photo ? '<img src="' + esc(p.photo) + '" alt="">' : esc(nm.charAt(0).toUpperCase())) + '</div><div><b>' + esc(nm) + '</b><small>' + esc(user.email) + '</small></div>';
+    $('#pjDn').innerHTML = MENU.map(function (m) {
+      return '<button type="button" data-m="' + m[0] + '" class="' + (m[0] === drView ? 'on' : '') + (m[0] === 'logout' ? ' out' : '') + '"><span>' + m[1] + '</span>' + m[2] + '</button>';
+    }).join('');
+    Array.prototype.forEach.call(document.querySelectorAll('#pjDn button'), function (b) {
+      b.onclick = function () {
+        var m = b.getAttribute('data-m');
+        if (m === 'logout') return doLogout();
+        if (m === 'tools') return goTools();
+        drView = m; drRender();
+      };
+    });
+    var body = $('#pjDb');
+    if (drView === 'settings') drSettings(body, p);
+    else if (drView === 'security') drSecurity(body);
+    else drProfile(body, p);
+  }
+  function drProfile(body, p) {
+    var rows = [['Full name', p.fullName || user.displayName], ['Email', user.email], ['Mobile', p.mobile], ['Country', p.country], ['State', p.state], ['City', p.city],
+    ['User category', (p.categories || []).join(', ')], ['Purpose', (p.purposes || []).join(', ')], ['Member since', fmtDate(p.createdAt)]];
+    body.innerHTML = '<h3>My Profile</h3>' + rows.map(function (r) { return '<div class="pjA-prow"><small>' + r[0] + '</small><span>' + esc(r[1] || '–') + '</span></div>'; }).join('') +
+      '<button type="button" class="pjA-btn big" id="pjEdit" style="margin-top:14px">Edit Profile</button>';
+    $('#pjEdit').onclick = function () { drView = 'settings'; drRender(); };
+  }
+  function drSettings(body, p) {
+    var phNew = '';
+    body.innerHTML = '<h3>Account Settings</h3><form id="pjSF" novalidate><div class="pjA-g">' +
+      '<div><label>First Name <i>*</i></label><input type="text" id="sF" value="' + esc(p.firstName) + '"></div>' +
+      '<div><label>Middle Name</label><input type="text" id="sM" value="' + esc(p.middleName) + '"></div>' +
+      '<div class="full"><label>Last Name <i>*</i></label><input type="text" id="sL" value="' + esc(p.lastName) + '"></div>' +
+      '<div class="full"><label>Email ID</label><input type="email" value="' + esc(user.email) + '" disabled></div>' +
+      '<div class="full"><label>Mobile Number <i>*</i></label><input type="tel" id="sMob" value="' + esc(p.mobile) + '"></div>' +
+      '<div class="full"><label>Profile Photo</label><div class="pjA-photo"><img id="sImg" alt="" src="' + esc(p.photo || 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==') + '"><input type="file" id="sPh" accept="image/*"></div></div>' +
+      '<div><label>Country <i>*</i></label><select id="sC">' + opts(COUNTRIES, 'Select country') + '</select></div>' +
+      '<div><label>State <i>*</i></label><input type="text" id="sS" list="pjAStates2" value="' + esc(p.state) + '"><datalist id="pjAStates2"></datalist></div>' +
+      '<div class="full"><label>City <i>*</i></label><input type="text" id="sCi" value="' + esc(p.city) + '"></div>' +
+      '<div class="full"><label>User Category <i>*</i></label><div class="pjA-chips">' + chipsSel('scat', CATS, p.categories) + '</div></div>' +
+      '<div class="full"><label>Purpose of Using Tools <i>*</i></label><div class="pjA-chips">' + chipsSel('spur', PURPOSES, p.purposes) + '</div></div>' +
+      '</div><div class="pjA-msg" id="pjSMsg"></div><button type="submit" class="pjA-btn big" id="pjSSave" style="margin-top:10px">Save Changes</button></form>';
+    if (p.country) $('#sC').value = p.country;
+    function fillStates() { $('#pjAStates2').innerHTML = $('#sC').value === 'India' ? STATES_IN.map(function (s) { return '<option value="' + esc(s) + '">'; }).join('') : ''; }
+    fillStates(); $('#sC').onchange = fillStates;
+    $('#sPh').onchange = function () {
+      var f = $('#sPh').files[0]; phNew = ''; if (!f) return;
+      if (!/^image\//.test(f.type)) return setMsg('pjSMsg', 'Sirf image file chunein.', 'err');
+      var img = new Image(), url = URL.createObjectURL(f);
+      img.onload = function () {
+        var s = 256, c = document.createElement('canvas'), m = Math.min(img.width, img.height); c.width = c.height = s;
+        c.getContext('2d').drawImage(img, (img.width - m) / 2, (img.height - m) / 2, m, m, 0, 0, s, s);
+        phNew = c.toDataURL('image/jpeg', .82); $('#sImg').src = phNew; URL.revokeObjectURL(url);
+      };
+      img.src = url;
+    };
+    $('#pjSF').onsubmit = function (e) {
+      e.preventDefault();
+      var d = { firstName: $('#sF').value.trim(), middleName: $('#sM').value.trim(), lastName: $('#sL').value.trim(), mobile: $('#sMob').value.replace(/[\s-]/g, ''),
+        country: $('#sC').value, state: $('#sS').value.trim(), city: $('#sCi').value.trim(), categories: checked('scat'), purposes: checked('spur') }, err = '';
+      if (!d.firstName || !d.lastName) err = 'First aur Last name zaroori hai.';
+      else if (!/^\+?\d{7,15}$/.test(d.mobile)) err = 'Sahi mobile number daaliye (7–15 digits).';
+      else if (!d.country || !d.state || !d.city) err = 'Country, State aur City chuniye.';
+      else if (!d.categories.length) err = 'Kam se kam ek User Category chuniye.';
+      else if (!d.purposes.length) err = 'Kam se kam ek Purpose chuniye.';
+      if (err) return setMsg('pjSMsg', err, 'err');
+      d.fullName = [d.firstName, d.middleName, d.lastName].filter(Boolean).join(' ');
+      if (phNew) d.photo = phNew;
+      var btn = $('#pjSSave'); btn.disabled = true; setMsg('pjSMsg', 'Save ho raha hai…');
+      loadFb().then(function (f) {
+        return f.A.updateProfile(user, { displayName: d.fullName }).catch(function () { })
+          .then(function () { return f.F.updateDoc(f.F.doc(f.db, C.usersCollection || 'toolUsers', user.uid), d); });
+      }).then(function () {
+        for (var k in d) profile = profile || {}, profile[k] = d[k];
+        paintNav(); toast('Profile update ho gaya'); drView = 'profile'; drRender();
+      }).catch(function (er) { setMsg('pjSMsg', nice(er), 'err'); btn.disabled = false; });
+    };
+  }
+  function drSecurity(body) {
+    body.innerHTML = '<h3>Security &amp; Password</h3>' +
+      '<div class="pjA-tabs"><button type="button" data-t="change" class="' + (secTab === 'change' ? 'on' : '') + '">Change Password</button><button type="button" data-t="link" class="' + (secTab === 'link' ? 'on' : '') + '">Forgot Password</button></div>' +
+      (secTab === 'change'
+        ? '<form id="pjPF" novalidate><div class="pjA-g"><div class="full"><label>Current Password</label><input type="password" id="pC" autocomplete="current-password"></div>' +
+        '<div class="full"><label>New Password</label><input type="password" id="pN" autocomplete="new-password" placeholder="Min 8 characters"></div>' +
+        '<div class="full"><label>Confirm New Password</label><input type="password" id="pN2" autocomplete="new-password"></div></div>' +
+        '<div class="pjA-msg" id="pjPMsg"></div><button type="submit" class="pjA-btn big" id="pjPGo" style="margin-top:10px">Update Password</button>' +
+        '<p class="pjA-sw">Current password yaad nahi? <a id="pjToLink">Email par reset link bhejein</a></p></form>'
+        : '<div class="pjA-prow"><small>Reset link is email par jayega</small><span>' + esc(user.email) + '</span></div>' +
+        '<p class="pjA-sub" style="margin-top:12px">Link par click karke aap naya password set kar sakte hain.</p>' +
+        '<div class="pjA-msg" id="pjPMsg"></div><button type="button" class="pjA-btn big" id="pjLinkGo">Send Reset Link</button>' +
+        '<p class="pjA-sw"><a id="pjToChange">Current password se badlein</a></p>');
+    Array.prototype.forEach.call(document.querySelectorAll('.pjA-tabs button'), function (b) { b.onclick = function () { secTab = b.getAttribute('data-t'); drRender(); }; });
+    if (secTab === 'change') {
+      $('#pjToLink').onclick = function () { secTab = 'link'; drRender(); };
+      $('#pjPF').onsubmit = function (e) {
+        e.preventDefault();
+        var c = $('#pC').value, n = $('#pN').value, n2 = $('#pN2').value, err = '';
+        if (!c) err = 'Current password daaliye.';
+        else if (n.length < 8) err = 'Naya password kam se kam 8 characters ka ho.';
+        else if (n !== n2) err = 'New aur Confirm password match nahi karte.';
+        else if (n === c) err = 'Naya password purane se alag hona chahiye.';
+        if (err) return setMsg('pjPMsg', err, 'err');
+        var btn = $('#pjPGo'); btn.disabled = true; setMsg('pjPMsg', 'Update ho raha hai…');
+        loadFb().then(function (f) {
+          return f.A.reauthenticateWithCredential(user, f.A.EmailAuthProvider.credential(user.email, c)).then(function () { return f.A.updatePassword(user, n); });
+        }).then(function () { setMsg('pjPMsg', '✔ Password badal gaya.', 'ok'); toast('Password update ho gaya'); $('#pjPF').reset(); btn.disabled = false; })
+          .catch(function (er) {
+            var code = (er && er.code) || '';
+            setMsg('pjPMsg', (code === 'auth/wrong-password' || code === 'auth/invalid-credential') ? 'Current password galat hai.' : nice(er), 'err'); btn.disabled = false;
+          });
+      };
+    } else {
+      $('#pjToChange').onclick = function () { secTab = 'change'; drRender(); };
+      $('#pjLinkGo').onclick = function () {
+        var btn = $('#pjLinkGo'); btn.disabled = true; setMsg('pjPMsg', 'Link bheja ja raha hai…');
+        loadFb().then(function (f) { return f.A.sendPasswordResetEmail(f.auth, user.email); })
+          .then(function () { setMsg('pjPMsg', '✔ Reset link ' + user.email + ' par bhej diya. Inbox/Spam check karein.', 'ok'); })
+          .catch(function (er) { setMsg('pjPMsg', nice(er), 'err'); }).then(function () { setTimeout(function () { btn.disabled = false; }, 30000); });
+      };
     }
   }
 

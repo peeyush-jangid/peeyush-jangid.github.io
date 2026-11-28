@@ -38,3 +38,35 @@
 .pjA-otp{display:none}
 .pjA-otp.on{display:block}
 @media(max-width:560px){.pjA-g{grid-template-columns:1fr}.pjA-box{padding:22px 16px}}
+
+/* ---- avatar button + profile sidebar ---- */
+.pjA-avbtn{width:38px;height:38px;border-radius:50%;border:2px solid #fff;padding:0;cursor:pointer;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;font:inherit;font-weight:700;font-size:.95rem;display:grid;place-items:center;overflow:hidden;box-shadow:0 2px 8px #0003;transition:.15s}
+.pjA-avbtn:hover{transform:scale(1.07)}
+.pjA-avbtn img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.pjA-dov{position:fixed;inset:0;z-index:210;background:rgba(5,8,22,.55);backdrop-filter:blur(3px);display:flex;justify-content:flex-end}
+.pjA-dov[hidden]{display:none!important}
+.pjA-drawer.pjA-box{width:100%;max-width:400px;height:100%;margin:0;border-radius:20px 0 0 20px;padding:22px 20px 28px;overflow-y:auto;animation:pjASlide .22s ease-out}
+@keyframes pjASlide{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+.pjA-dhead{display:flex;align-items:center;gap:12px;margin:4px 0 16px;padding-right:30px}
+.pjA-dhead b{display:block;font-size:1.02rem}
+.pjA-dhead small{display:block;color:#64748b;font-size:.8rem;word-break:break-all}
+.pjA-dav{flex:none;width:56px;height:56px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;font-weight:700;font-size:1.4rem;display:grid;place-items:center}
+.pjA-dav img{width:100%;height:100%;object-fit:cover}
+.pjA-dnav{display:flex;flex-direction:column;gap:4px;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:10px 0;margin-bottom:16px}
+:root[data-hub="dark"] .pjA-dnav{border-color:#2a3470}
+.pjA-dnav button{display:flex;align-items:center;gap:12px;border:0;background:transparent;color:inherit;font:inherit;font-size:.92rem;font-weight:500;text-align:left;padding:10px 12px;border-radius:10px;cursor:pointer}
+.pjA-dnav button:hover{background:rgba(37,99,235,.1)}
+.pjA-dnav button.on{background:rgba(37,99,235,.16);color:#2563eb;font-weight:600}
+:root[data-hub="dark"] .pjA-dnav button.on{color:#9db7ff}
+.pjA-dnav button.out{color:#dc2626}
+.pjA-dnav button span{width:22px;text-align:center}
+.pjA-dbody h3{margin:0 0 12px;font-size:1.1rem}
+.pjA-prow{display:flex;flex-direction:column;padding:9px 0;border-bottom:1px solid #eef2f7}
+:root[data-hub="dark"] .pjA-prow{border-color:#1d2750}
+.pjA-prow small{color:#64748b;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em}
+.pjA-prow span{font-size:.92rem;word-break:break-word}
+.pjA-tabs{display:flex;gap:6px;margin-bottom:14px}
+.pjA-tabs button{flex:1;border:1px solid #cbd5e1;background:transparent;color:inherit;font:inherit;font-size:.82rem;font-weight:600;padding:8px 6px;border-radius:99px;cursor:pointer}
+.pjA-tabs button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.pjA-box input:disabled{opacity:.6;cursor:not-allowed}
+@media(max-width:560px){.pjA-drawer.pjA-box{max-width:100%;border-radius:0}}
