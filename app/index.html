@@ -1162,6 +1162,11 @@ a.card.file{position:relative;padding-right:80px}
   <div class="pane" id="p-certs"><div id="certs"></div></div>
 </section>
 
+<section class="view" id="v-ai">
+  <iframe id="aiFrame" title="Peeyush AI" data-src="../ai.html" allow="microphone; clipboard-write; web-share" loading="lazy"></iframe>
+  <p class="note" style="text-align:center"><a href="../ai.html" target="_blank" rel="noopener">AI nahi khul raha? Naye tab me kholein &#8599;</a></p>
+</section>
+
 <section class="view" id="v-contact">
   <span class="skills-kicker">LET’S CONNECT</span><h1>Contact</h1>
   <div class="seg" data-seg="contact"><button class="on" data-t="reach" type="button">Reach me</button><button data-t="offer" type="button">Job offer</button><button data-t="apply" type="button">Apply</button></div>
@@ -1415,6 +1420,7 @@ a.card.file{position:relative;padding-right:80px}
   <a href="#skills"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Skills</a>
   <a href="#files"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>Files</a>
   <a href="#tools"><svg viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M8.5 7h7M8.5 12h.01M12 12h.01M15.5 12h.01M8.5 16h.01M12 16h.01M15.5 16h.01"/></svg>Tools</a>
+  <a href="#ai"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M18.5 15l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg>AI</a>
   <a href="#contact"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0"/></svg>Contact</a>
 </nav>
 
@@ -1422,7 +1428,7 @@ a.card.file{position:relative;padding-right:80px}
 (function(){
   var $=function(i){return document.getElementById(i)};
   /* ---------- routing ---------- */
-  var tabs=['home','career','skills','files','tools','contact'];
+  var tabs=['home','career','skills','files','tools','ai','contact'];
   function show(){
     var h=(location.hash||'#home').slice(1); if(tabs.indexOf(h)<0)h='home';
     tabs.forEach(function(t){$('v-'+t).classList.toggle('on',t===h)});
@@ -2328,5 +2334,21 @@ window.calcDuct2=calcDuct2;window.eff=eff;window.calcVfd=calcVfd;window.w2=w2;wi
   addEventListener('hashchange',function(){tabs.style.display=''});
 })();
 </script>
+
+<style id="pj-ai-tab">
+nav{grid-template-columns:repeat(7,1fr)}
+@media(min-width:760px){nav{width:680px}}
+#v-ai{padding:0}
+#aiFrame{display:block;width:100%;height:calc(100dvh - var(--top) - var(--bot) - 92px);min-height:440px;border:0;border-radius:16px;background:#03030f;color-scheme:dark}
+@media(min-width:760px){#aiFrame{height:calc(100dvh - 230px);max-width:560px;margin:0 auto}}
+</style>
+<script>
+(function(){
+  var f=document.getElementById('aiFrame');
+  function load(){if(location.hash==='#ai'&&f&&!f.src)f.src=f.dataset.src}
+  addEventListener('hashchange',load);load();
+})();
+</script>
+<script src="notify.js?v=1" defer></script>
 </body>
 </html>
