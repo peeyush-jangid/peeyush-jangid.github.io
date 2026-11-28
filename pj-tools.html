@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#060a1f">
+<meta name="theme-color" content="#050816">
 <title>Peeyush Tools Hub – Free Online Tools</title>
 <meta name="description" content="Free online calculators, PDF tools, resume maker, HVAC tools, office utilities and AI assistant – all in one place.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,25 +12,41 @@
 <link rel="stylesheet" href="pj-pro.css">
 <link rel="stylesheet" href="pj-vs.css">
 <link rel="stylesheet" href="pj-hub.css">
-<script>(function(){var r=document.documentElement,t=null;try{t=localStorage.getItem('pj-hub-theme')}catch(e){}
-if(t!=='light'&&t!=='dark'){t=(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark'}
-r.setAttribute('data-hub',t)})();</script>
+<script>(function(){try{var t=localStorage.getItem('pj-hub-theme');document.documentElement.setAttribute('data-hub',t==='light'?'light':'dark')}catch(e){document.documentElement.setAttribute('data-hub','dark')}})();</script>
 </head>
 <body class="hub">
 
 <header class="nav noprint">
   <div class="wrap navin">
-    <a class="brand" href="#/" id="brand"><span class="logo"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset=".5" stop-color="#6366f1"/><stop offset="1" stop-color="#c026d3"/></linearGradient></defs><path d="M12 56 L22 8 H40 C52 8 58 15 56 26 C54 37 45 42 34 42 H28 L24 56 Z M31 18 L28 32 H35 C40 32 44 29 45 25 C46 21 43 18 39 18 Z" fill="url(#lg)" fill-rule="evenodd"/><path d="M6 48 C20 50 36 46 50 36" stroke="#22d3ee" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/></svg></span><span>Peeyush <b>Tools Hub</b></span></a>
+    <a class="brand" href="#/" id="brand"><span class="logo">🔧</span><span>Peeyush <b>Tools Hub</b></span></a>
     <nav>
       <a class="on" href="#/">🏠 Home</a>
-      <div class="dd"><button type="button" id="navTools" data-dd>Tools ▾</button><div class="dd-menu"><a data-go="#toolsGrid">All Tools</a><a data-go="#hubPopular">Popular Tools</a></div></div>
-      <div class="dd"><button type="button" data-dd>Categories ▾</button><div class="dd-menu" id="ddCats"></div></div>
-      <a href="index.html#about">About</a>
+      <div class="dd">
+        <button type="button" class="dd-btn">Tools ▾</button>
+        <div class="dd-menu">
+          <button type="button" data-go="toolsGrid">All Tools</button>
+          <button type="button" data-go="hubPop">Popular Tools</button>
+        </div>
+      </div>
+      <div class="dd">
+        <button type="button" class="dd-btn">Categories ▾</button>
+        <div class="dd-menu">
+          <button type="button" data-q="AI">AI Assistant</button>
+          <button type="button" data-q="PDF">Document Tools</button>
+          <button type="button" data-q="Calculator">Calculators</button>
+          <button type="button" data-q="Excel">Office Tools</button>
+          <button type="button" data-q="Image">Image Tools</button>
+          <button type="button" data-q="Video">Video Tools</button>
+          <button type="button" data-q="Interview">Education</button>
+          <button type="button" data-q="Resume">Productivity</button>
+        </div>
+      </div>
+      <a href="index.html#about" id="navTools">About</a>
       <a href="index.html#contact">Contact</a>
     </nav>
     <div class="hub-actions">
-      <button class="hub-theme" id="hubTheme" type="button" aria-label="Switch dark / light mode">🌙</button>
-      <a class="hub-my" href="#toolsGrid"><span>👤</span>My Tools</a>
+      <button class="hub-theme" id="hubTheme" type="button" aria-label="Switch light / dark mode">🌙</button>
+      <a class="hub-my" href="#/" data-go="toolsGrid">👤 My<br>Tools</a>
     </div>
   </div>
 </header>
@@ -41,36 +57,34 @@ r.setAttribute('data-hub',t)})();</script>
     <div class="hub-hero noprint">
       <div class="hub-hero-grid">
         <div>
-          <span class="hub-pill">⚡ All-in-One Toolkit</span>
+          <span class="hub-badge">⚡ All-in-One Toolkit</span>
           <h1>Everything You Need,<br><span class="hub-grad">In One Place</span></h1>
           <p class="hub-sub">Powerful free tools to make your everyday work easier.</p>
           <div class="hub-search">
-            <span class="ic" aria-hidden="true">🔍</span>
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
             <input id="q" type="search" placeholder="Search for tools... (e.g. PDF, Calculator, AI)" autocomplete="off">
-            <button type="button" id="hubSearchBtn">Search ➤</button>
+            <button type="button" id="hubSearchBtn">Search <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg></button>
           </div>
-          <a id="explore" href="#toolsGrid" hidden>Explore</a>
+          <a id="explore" href="#/" hidden>Explore</a>
         </div>
         <div class="hub-art" aria-hidden="true">
-          <div class="glow"></div>
           <div class="orbit"></div>
           <svg class="lap" viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <linearGradient id="hs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e1b6e"/><stop offset="1" stop-color="#6d28d9"/></linearGradient>
-              <linearGradient id="hb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2e8ff"/><stop offset="1" stop-color="#8d98d4"/></linearGradient>
-              <linearGradient id="hp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#67e8f9"/><stop offset="1" stop-color="#c084fc"/></linearGradient>
+              <linearGradient id="hs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1b1a6b"/><stop offset="1" stop-color="#6d28d9"/></linearGradient>
+              <linearGradient id="hb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d7defa"/><stop offset="1" stop-color="#8590cf"/></linearGradient>
             </defs>
-            <path d="M92 24 L330 14 Q346 14 348 30 L360 190 L84 196 Z" fill="#0b1030" stroke="#a5b4fc" stroke-width="3"/>
+            <path d="M92 24 L330 14 Q346 14 348 30 L360 190 L84 196 Z" fill="#0b1030" stroke="#9aa9ff" stroke-width="3"/>
             <path d="M102 34 L324 25 L348 180 L96 186 Z" fill="url(#hs)"/>
-            <text x="214" y="128" text-anchor="middle" font-family="Poppins,sans-serif" font-weight="800" font-size="96" fill="url(#hp)" transform="rotate(-3 214 110)">P</text>
+            <text x="214" y="128" text-anchor="middle" font-family="Poppins,sans-serif" font-weight="800" font-size="92" fill="#fff" transform="rotate(-3 214 110)">P</text>
             <path d="M60 204 L372 196 L408 240 Q408 252 392 252 L48 258 Q30 258 34 244 Z" fill="url(#hb)"/>
             <path d="M120 214 L330 209 L346 226 L108 230 Z" fill="#2b3370" opacity=".85"/>
           </svg>
-          <div class="hub-tile t1">PDF</div>
-          <div class="hub-tile t2">X</div>
-          <div class="hub-tile t3">W</div>
-          <div class="hub-tile t4">&lt;/&gt;</div>
-          <div class="hub-tile t5">🖼️</div>
+          <div class="hub-tile pdf">PDF</div>
+          <div class="hub-tile xl">X</div>
+          <div class="hub-tile wd">W</div>
+          <div class="hub-tile cd">&lt;/&gt;</div>
+          <div class="hub-tile sm">📄</div>
         </div>
       </div>
     </div>
@@ -83,22 +97,27 @@ r.setAttribute('data-hub',t)})();</script>
     </div>
 
     <div class="hub-sec noprint" id="hubCats">
-      <div class="hub-sec-head"><h2>▦ Explore Categories</h2><a class="hub-viewall" data-go="#toolsGrid">View All Categories →</a></div>
-      <div class="hub-cats" id="hubCatGrid">
-        <button type="button" class="hub-cat c1" data-q="AI"><span class="ic">🤖</span><b>AI Assistant</b><small>Chat, Improve, Create</small><i class="go">→</i></button>
-        <button type="button" class="hub-cat c2" data-q="PDF"><span class="ic">📄</span><b>Document Tools</b><small>PDF, Word, Excel</small><i class="go">→</i></button>
-        <button type="button" class="hub-cat c3" data-q="Calculator"><span class="ic">🧮</span><b>Calculators</b><small>Math &amp; More</small><i class="go">→</i></button>
-        <button type="button" class="hub-cat c4" data-q="Excel"><span class="ic">💼</span><b>Office Tools</b><small>Work Smarter</small><i class="go">→</i></button>
-        <button type="button" class="hub-cat c5" data-q="Image"><span class="ic">🖼️</span><b>Image Tools</b><small>Convert &amp; Compress</small><i class="go">→</i></button>
-        <button type="button" class="hub-cat c6" data-q="Video"><span class="ic">🎬</span><b>Video Tools</b><small>Edit &amp; Convert</small><i class="go">→</i></button>
-        <button type="button" class="hub-cat c7" data-q="Interview"><span class="ic">🎓</span><b>Education</b><small>Learn &amp; Practice</small><i class="go">→</i></button>
-        <button type="button" class="hub-cat c8" data-q="Resume"><span class="ic">📈</span><b>Productivity</b><small>Be More Productive</small><i class="go">→</i></button>
+      <div class="hub-sec-head"><h2>▦ Explore Categories</h2><button type="button" class="hub-viewall" data-go="toolsGrid">View All Categories →</button></div>
+      <div class="hub-cats">
+        <button type="button" class="hub-cat k1" data-q="AI"><svg class="ci" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="12" rx="3.5"/><circle cx="9" cy="14" r="1.2"/><circle cx="15" cy="14" r="1.2"/><path d="M12 8V4M9.5 4h5M2 13v2M22 13v2"/></svg><b>AI Assistant</b><small>Chat, Improve, Create</small><span class="go">→</span></button>
+        <button type="button" class="hub-cat k2" data-q="PDF"><svg class="ci" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg><b>Document Tools</b><small>PDF, Word, Excel</small><span class="go">→</span></button>
+        <button type="button" class="hub-cat k3" data-q="Calculator"><svg class="ci" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2.5"/><rect x="8" y="5" width="8" height="4" rx="1"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01M16 17h.01" stroke-width="2.6"/></svg><b>Calculators</b><small>Math &amp; More</small><span class="go">→</span></button>
+        <button type="button" class="hub-cat k4" data-q="Excel"><svg class="ci" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2.5"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16M2 13h20"/></svg><b>Office Tools</b><small>Work Smarter</small><span class="go">→</span></button>
+        <button type="button" class="hub-cat k5" data-q="Image"><svg class="ci" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg><b>Image Tools</b><small>Convert &amp; Compress</small><span class="go">→</span></button>
+        <button type="button" class="hub-cat k6" data-q="Video"><svg class="ci" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4z"/></svg><b>Video Tools</b><small>Edit &amp; Convert</small><span class="go">→</span></button>
+        <button type="button" class="hub-cat k7" data-q="Interview"><svg class="ci" viewBox="0 0 24 24"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5M22 10v6"/></svg><b>Education</b><small>Learn &amp; Practice</small><span class="go">→</span></button>
+        <button type="button" class="hub-cat k8" data-q="Resume"><svg class="ci" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg><b>Productivity</b><small>Be More Productive</small><span class="go">→</span></button>
       </div>
     </div>
 
-    <div class="hub-sec noprint" id="hubPopular">
-      <div class="hub-sec-head"><h2>🔥 Popular Tools</h2>
-        <div class="hub-tabs" id="hubTabs"><button type="button" class="on" data-tab="all">★ Popular</button><button type="button" data-tab="trending">🔥 Trending</button><button type="button" data-tab="new">✦ New</button></div>
+    <div class="hub-sec noprint" id="hubPop">
+      <div class="hub-sec-head">
+        <h2>🔥 Popular Tools</h2>
+        <div class="hub-tabs" role="tablist">
+          <button type="button" class="hub-tab on" data-tab="all">★ Popular</button>
+          <button type="button" class="hub-tab" data-tab="trending">🔥 Trending</button>
+          <button type="button" class="hub-tab" data-tab="new">✦ New</button>
+        </div>
       </div>
       <div class="hub-pop">
         <div class="hub-card p1" data-tags="popular"><span class="badge">★ Popular</span><div class="ti">📝</div><div><h3>File to Text Extractor</h3><p>Extract text from PDF, Word and images.</p><button type="button" class="hub-open" data-q="Text Extractor">Open Tool →</button></div></div>
@@ -121,34 +140,41 @@ r.setAttribute('data-hub',t)})();</script>
 </main>
 
 <footer class="foot noprint">
-  <div class="hub-foot">
-    <div class="hub-foot-in">
-      <div>
-        <div class="fb"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M12 56 L22 8 H40 C52 8 58 15 56 26 C54 37 45 42 34 42 H28 L24 56 Z M31 18 L28 32 H35 C40 32 44 29 45 25 C46 21 43 18 39 18 Z" fill="url(#lg)" fill-rule="evenodd"/></svg><span>Peeyush <b>Tools Hub</b></span></div>
-        <p>Smart Tools. Smarter You.</p>
-      </div>
-      <div>
-        <h4>Quick Links</h4>
-        <ul><li><a href="#/">Home</a></li><li><a data-go="#toolsGrid" href="#toolsGrid">Tools</a></li><li><a data-go="#hubCats" href="#hubCats">Categories</a></li><li><a href="index.html#about">About</a></li><li><a href="index.html#contact">Contact</a></li></ul>
-      </div>
-      <div>
-        <h4>Follow Us</h4>
-        <div class="hub-soc">
-          <a href="https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/" target="_blank" rel="noopener" aria-label="LinkedIn" style="background:#0a66c2">in</a>
-          <a href="https://github.com/peeyush-jangid" target="_blank" rel="noopener" aria-label="GitHub" style="background:#24292f">GH</a>
-          <a href="https://wa.me/919928579369" target="_blank" rel="noopener" aria-label="WhatsApp" style="background:#16a34a">✆</a>
-          <a href="mailto:peeyush.jangid@outlook.com" aria-label="Email" style="background:#7c3aed">✉</a>
-        </div>
-      </div>
-      <div>
-        <h4>Subscribe for Updates</h4>
-        <form class="hub-sub-form" id="hubSub"><input type="email" id="hubSubEmail" placeholder="Enter your email" required aria-label="Email address"><button type="submit">Subscribe</button></form>
-        <div class="hub-sub-msg" id="hubSubMsg" role="status"></div>
-        <p>Get the latest tools and updates.</p>
+  <div class="hub-foot-grid">
+    <div>
+      <div class="hub-foot-brand"><span class="lg">P</span><span>Peeyush <b>Tools Hub</b></span></div>
+      <p class="hub-foot-tag">Smart Tools. Smarter You.</p>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <div class="hub-links">
+        <a href="#/">Home</a>
+        <a data-go="toolsGrid">Tools</a>
+        <a data-go="hubCats">Categories</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#contact">Contact</a>
       </div>
     </div>
-    <div class="hub-foot-bot">© <span id="yr"></span> Peeyush Tools Hub. All rights reserved. &nbsp;|&nbsp; Made with 💖 by <b>Peeyush Jangid</b></div>
+    <div>
+      <h4>Follow Us</h4>
+      <div class="hub-social">
+        <a class="s-in" href="https://www.linkedin.com/in/peeyush-kumar-jangid-37aa8139a/" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+        <a class="s-gh" href="https://github.com/peeyush-jangid" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
+        <a class="s-wa" href="https://wa.me/919928579369" target="_blank" rel="noopener" aria-label="WhatsApp">✆</a>
+        <a class="s-ml" href="mailto:peeyush.jangid@outlook.com" aria-label="Email">✉</a>
+      </div>
+    </div>
+    <div>
+      <h4>Subscribe for Updates</h4>
+      <form class="hub-sub-form" id="hubSub">
+        <input type="email" id="hubSubEmail" placeholder="Enter your email" required autocomplete="email">
+        <button type="submit">Subscribe</button>
+      </form>
+      <p class="hub-sub-msg" id="hubSubMsg">Get the latest tools and updates.</p>
+    </div>
   </div>
+  <div class="hub-foot-bottom">© <span id="yr"></span> Peeyush Tools Hub. All rights reserved. | Made with <span style="color:#f43f5e">♥</span> by <b>Peeyush Jangid</b>
+    <span class="priv">All tools run in your browser – your data never leaves your device.</span></div>
 </footer>
 <div id="toast" class="toast"></div>
 
@@ -181,68 +207,63 @@ r.setAttribute('data-hub',t)})();</script>
 <script src="pj-lang.js" defer></script>
 
 <script>
-/* Hub design helpers: light/dark toggle, dropdowns, category + search + "Open Tool" shortcuts, tabs, subscribe */
+/* Hub design helpers: light/dark toggle, dropdowns, category/search/"Open Tool" shortcuts, tabs, subscribe */
 (function(){
   var root=document.documentElement, q=document.getElementById('q'), tbtn=document.getElementById('hubTheme');
-  var meta=document.querySelector('meta[name="theme-color"]');
-  function paint(){ var l=root.getAttribute('data-hub')==='light'; tbtn.textContent=l?'☀️':'🌙'; if(meta) meta.content=l?'#f2f5ff':'#060a1f'; }
+  function paint(){ var l=root.getAttribute('data-hub')==='light'; tbtn.textContent=l?'☀️':'🌙'; var m=document.querySelector('meta[name="theme-color"]'); if(m) m.content=l?'#f3f5ff':'#050816'; }
   tbtn.addEventListener('click',function(){
     var n=root.getAttribute('data-hub')==='light'?'dark':'light';
     root.setAttribute('data-hub',n); try{localStorage.setItem('pj-hub-theme',n)}catch(e){} paint();
   }); paint();
 
-  function goTo(sel){ var g=document.querySelector(sel); if(g) g.scrollIntoView({behavior:'smooth',block:'start'}); }
+  function scrollTo(id){ var e=document.getElementById(id); if(e) e.scrollIntoView({behavior:'smooth',block:'start'}); }
+  function go(id){
+    var h=location.hash; if(h && h!=='#/' && h!=='#'){ location.hash='#/'; setTimeout(function(){ scrollTo(id); },350); } else scrollTo(id);
+  }
   function setQuery(v){ q.value=v; q.dispatchEvent(new Event('input',{bubbles:true})); }
   function firstCard(){ return document.querySelector('#toolsGrid a[href^="#/"]') || document.querySelector('#toolsGrid [data-id]') || document.querySelector('#toolsGrid .card'); }
+  function closeDD(){ document.querySelectorAll('.dd.open').forEach(function(d){ d.classList.remove('open'); }); }
 
-  /* dropdowns */
-  var ddCats=document.getElementById('ddCats');
-  document.querySelectorAll('.hub-cat').forEach(function(b){
-    var a=document.createElement('a'); a.textContent=b.querySelector('b').textContent; a.dataset.q=b.dataset.q; ddCats.appendChild(a);
-    b.addEventListener('click',function(){ setQuery(b.dataset.q); goTo('#toolsGrid'); });
-  });
-  document.querySelectorAll('[data-dd]').forEach(function(btn){
-    btn.addEventListener('click',function(e){ e.stopPropagation(); var d=btn.parentNode, o=d.classList.contains('open');
-      document.querySelectorAll('.dd.open').forEach(function(x){x.classList.remove('open')}); if(!o) d.classList.add('open'); });
-  });
+  document.querySelectorAll('.dd-btn').forEach(function(b){ b.addEventListener('click',function(e){
+    e.stopPropagation(); var d=b.parentNode, o=d.classList.contains('open'); closeDD(); if(!o) d.classList.add('open');
+  }); });
+  document.addEventListener('click',closeDD);
+
   document.addEventListener('click',function(e){
-    var a=e.target.closest('[data-go]'); if(a){ e.preventDefault(); goTo(a.dataset.go); }
-    var c=e.target.closest('#ddCats a'); if(c){ setQuery(c.dataset.q); goTo('#toolsGrid'); }
-    document.querySelectorAll('.dd.open').forEach(function(x){x.classList.remove('open')});
+    var g=e.target.closest('[data-go]'); if(g){ e.preventDefault(); closeDD(); go(g.dataset.go); }
   });
-
-  /* search */
-  document.getElementById('hubSearchBtn').addEventListener('click',function(){ q.dispatchEvent(new Event('input',{bubbles:true})); goTo('#toolsGrid'); });
-  q.addEventListener('keydown',function(e){ if(e.key==='Enter') goTo('#toolsGrid'); });
-
-  /* popular cards */
+  document.getElementById('hubSearchBtn').addEventListener('click',function(){ q.dispatchEvent(new Event('input',{bubbles:true})); go('toolsGrid'); });
+  q.addEventListener('keydown',function(e){ if(e.key==='Enter') go('toolsGrid'); });
+  document.querySelectorAll('.hub-cat,.dd-menu [data-q]').forEach(function(b){ b.addEventListener('click',function(){ closeDD(); setQuery(b.dataset.q); go('toolsGrid'); }); });
   document.querySelectorAll('.hub-open').forEach(function(b){ b.addEventListener('click',function(){
     setQuery(b.dataset.q);
-    setTimeout(function(){ var c=firstCard(); if(c) c.click(); else goTo('#toolsGrid'); },200);
-  }); });
-  document.querySelectorAll('#hubTabs button').forEach(function(t){ t.addEventListener('click',function(){
-    document.querySelectorAll('#hubTabs button').forEach(function(x){x.classList.toggle('on',x===t)});
-    var k=t.dataset.tab;
-    document.querySelectorAll('.hub-card').forEach(function(c){ c.hidden = !(k==='all' || c.dataset.tags.indexOf(k)>-1); });
+    setTimeout(function(){ var c=firstCard(); if(c) c.click(); else go('toolsGrid'); },200);
   }); });
 
-  /* subscribe: sends the email to the site owner (same FormSubmit route the site already uses) */
-  document.getElementById('hubSub').addEventListener('submit',function(e){
-    e.preventDefault();
-    var em=document.getElementById('hubSubEmail'), msg=document.getElementById('hubSubMsg');
-    msg.style.color='#cfd8ff'; msg.textContent='Sending…';
-    fetch('https://formsubmit.co/ajax/peeyush.jangid@outlook.com',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({_subject:'Tools Hub subscriber',Email:em.value,Page:location.href})})
-      .then(function(r){ return r.json(); })
-      .then(function(j){ if(j&&(j.success===true||j.success==='true')){ msg.style.color='#86efac'; msg.textContent='Thanks for subscribing!'; em.value=''; } else throw 0; })
-      .catch(function(){ msg.style.color='#fca5a5'; msg.textContent='Could not subscribe right now. Please try again.'; });
-  });
+  /* Popular / Trending / New tabs */
+  document.querySelectorAll('.hub-tab').forEach(function(t){ t.addEventListener('click',function(){
+    document.querySelectorAll('.hub-tab').forEach(function(x){ x.classList.toggle('on',x===t); });
+    document.querySelectorAll('.hub-card').forEach(function(c){ c.hidden = t.dataset.tab!=='all' && c.dataset.tags!==t.dataset.tab; });
+  }); });
 
-  /* real tool count, once the app has rendered the cards */
+  /* real tool count once cards are rendered */
   setTimeout(function(){
     var n=document.querySelectorAll('#toolsGrid a[href^="#/"]').length;
     if(n>0) document.getElementById('hubCount').textContent=n+'+';
   },1200);
+
+  /* Subscribe: sent to site owner via Web3Forms (same key as the portfolio forms) */
+  document.getElementById('hubSub').addEventListener('submit',function(e){
+    e.preventDefault();
+    var em=document.getElementById('hubSubEmail'), msg=document.getElementById('hubSubMsg'), fd=new FormData();
+    fd.append('access_key','8ea43a97-57b9-4eea-a7dd-9256bdec0f98');
+    fd.append('subject','New subscriber — Peeyush Tools Hub'); fd.append('from_name','Peeyush Tools Hub');
+    fd.append('Subscriber Email',em.value);
+    msg.textContent='Please wait…';
+    fetch('https://api.web3forms.com/submit',{method:'POST',body:fd}).then(function(r){return r.json();}).then(function(j){
+      if(j.success){ msg.textContent='Thank you! You are subscribed.'; em.value=''; } else throw 0;
+    }).catch(function(){ msg.textContent='Could not subscribe right now. Please try again.'; });
+  });
 })();
 </script>
 </body>
